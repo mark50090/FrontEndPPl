@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Toolbar from '../views/Toolbar.vue'
+import Inbox from '../views/Inbox.vue'
+import CreateDocument from '../views/CreateDocument.vue'
+import Setting from '../views/Setting.vue'
 
 Vue.use(VueRouter)
 
@@ -9,9 +12,26 @@ export default new VueRouter({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'Home',
-      component: Home
+      path: '',
+      name: 'Toolbar',
+      component: Toolbar,
+      children: [
+        {
+          path: '/inbox',
+          name: 'inbox',
+          component: Inbox
+        },
+        {
+          path: '/create',
+          name: 'create',
+          component: CreateDocument
+        },
+        {
+          path: '/setting',
+          name: 'setting',
+          component: Setting
+        }
+      ]
     },
   ]
 })
