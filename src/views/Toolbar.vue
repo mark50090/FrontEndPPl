@@ -4,6 +4,10 @@
     <v-row class="toolbar-row toolbar-block">
       <v-toolbar elevation="1" class="main-toolbar">
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-toolbar-title class="toolbar-logo-block">
+          <img height="40px" src="../assets/bot_logo.png" class="mt-1">
+          <span class="ml-1 web-name display-pc-only">Digital Workflow</span>
+        </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items class="toolbar-biz-block">
           <v-autocomplete outlined hide-details dense auto-select-first color="rgb(102, 101, 101)" prepend-inner-icon="mdi-briefcase" class="biz-box"></v-autocomplete>
@@ -94,6 +98,18 @@
     padding-right: 0% !important;
   }
 
+  .toolbar-logo-block {
+    padding-left: 1% !important;
+  }
+
+  .web-name {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 19px;
+    font-weight: bold;
+    vertical-align: super;
+    color: #0f3852;
+  }
+
   .toolbar-biz-block {
     align-items: center;
   }
@@ -164,6 +180,14 @@
   /*========================================*/
 
   @media only screen and (max-width:600px){ /*css for mobile screen*/
+    .toolbar-logo-block {
+      padding-left: 0% !important;
+    }
+
+    .biz-box {
+      width: 198px;
+    }
+
     .toolbar-menu-btn {
       padding-left: 3% !important;
       padding-right: 2% !important;
