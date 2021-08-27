@@ -10,10 +10,10 @@
         <v-tab-item>
           <v-row class="mt-1 inbox-row">
             <v-col cols="12" md="4" lg="4" class="px-0 pb-0">
-              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-box search-btn-block">
+              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-box search-btn-block" v-model="keyword" @keyup.enter="postdata()">
                 <template v-slot:append-outer>
-                  <v-btn outlined color="#9e9e9e" class="search-btn">
-                    <v-icon>mdi-magnify</v-icon>
+                  <v-btn outlined color="#9e9e9e" class="search-btn" @click="postdata()">
+                    <v-icon >mdi-magnify</v-icon>
                   </v-btn>
                 </template>
               </v-text-field>
@@ -86,6 +86,11 @@
 <script>
   export default {
     data: () => ({
+      tax_id:'',
+      keyword:'',
+      status:'',
+      lim:'',
+      owned: false,
       tab: null,
       doc_status_list: ['ทั้งหมด', 'รออนุมัติ', 'อนุมัติแล้ว', 'กำลังดำเนินการ', 'ปฏิเสธอนุมัติ', 'รอดำเนินการ'],
       doc_status: 'ทั้งหมด',
@@ -102,11 +107,28 @@
       ]
     }),
     mounted() {
-
+      this.getdata()
+      this.postdata()
     },
     methods: {
-      
+      getdata() {
+        this.tax_id = sessionStorage.getItem("tax_id")
+      },
+      async postdata (tax_id,keyword,status,lim,offset,owned) {
+      try {
+        var { data } = await this.axios.post('https://uatpaperless.one.th/api3/transaction/api/v1/searchTransaction', {
+          tax_id: "",
+          keyword: "",
+          status: "",
+          lim: 10,
+          offset: 0,
+          owned: false
+        })
+      } catch (error) {
+        console.log(error)
+      }
     }
+  }
   }
 </script>
 
