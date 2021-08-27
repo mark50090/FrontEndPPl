@@ -117,8 +117,8 @@
       async postdata (tax_id,keyword,status,lim,offset,owned) {
       try {
         var { data } = await this.axios.post('https://uatpaperless.one.th/api3/transaction/api/v1/searchTransaction', {
-          tax_id: "",
-          keyword: "",
+          tax_id: this.tax_id,
+          keyword: this.keyword,
           status: "",
           lim: 10,
           offset: 0,
