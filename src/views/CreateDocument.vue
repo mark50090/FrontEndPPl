@@ -3,7 +3,14 @@
     <v-card outlined class="mb-1 mx-1 create-doc-page">
       <v-row class="create-row">
         <v-col cols="12" md="6" lg="6">
-          pdf
+          <div>
+            {{currentPage}} / {{pageCount}}
+            <pdf
+              src="https://cdn.mozilla.net/pdfjs/tracemonkey.pdf"
+              @num-pages="pageCount = $event"
+              @page-loaded="currentPage = $event"
+            ></pdf>
+          </div>
         </v-col>
         <v-col cols="12" md="6" lg="6">
           create
@@ -13,19 +20,7 @@
   </div>
 </template>
 
-<script>
-  export default {
-    data: () => ({
 
-    }),
-    mounted() {
-
-    },
-    methods: {
-
-    }
-  }
-</script>
 
 <style>
   .create-doc-page {
