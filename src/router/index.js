@@ -4,6 +4,7 @@ import Toolbar from '../views/Toolbar.vue'
 import Inbox from '../views/Inbox.vue'
 import CreateDocument from '../views/CreateDocument.vue'
 import Setting from '../views/Setting.vue'
+import Landing from '../views/Landing.vue'
 
 Vue.use(VueRouter)
 
@@ -33,5 +34,11 @@ export default new VueRouter({
         }
       ]
     },
+    {
+      path: '/landing', //landing page from bot to web view
+      name: 'landing',
+      component: Landing,
+      props:route => ({ ...route.query }) //collected query after question mark ex. landing?shared_token=...
+    }
   ]
 })
