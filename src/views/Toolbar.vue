@@ -69,6 +69,16 @@
             <v-list-item-title class="menu-title">รายการที่ส่ง</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item to="/report" active-class="menu-active menu-icon-svg-active">
+          <v-list-item-icon>
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="rgba(0, 0, 0, 0.54)" d="M2 12H4V17H20V12H22V17C22 18.11 21.11 19 20 19H4C2.9 19 2 18.11 2 17V12M12 15L17.55 9.54L16.13 8.13L13 11.25V2H11V11.25L7.88 8.13L6.46 9.55L12 15Z" />
+            </svg>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title class="menu-title">รายงานเอกสาร</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <!-- Main Content -->
@@ -206,9 +216,14 @@
     color: white !important;
   }
 
+  .menu-icon-svg-active > .v-list-item__icon > svg > path {
+    fill: white !important;
+  }
+
   .menu-title {
     font-family: 'Sarabun', sans-serif;
     font-size: 14px !important;
+    line-height: 24px !important;
   }
 
   .main-content {
