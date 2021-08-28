@@ -246,11 +246,11 @@
             </v-row>
             <v-divider></v-divider>
             <v-row class="detail-row">
-              <v-col cols="auto" md="auto" lg="auto" class="pa-2">
+              <!--<v-col cols="auto" md="auto" lg="auto" class="pa-2">
                 <v-btn outlined color="#757575">
                   <v-icon>mdi-stamper</v-icon>
                 </v-btn>
-              </v-col>
+              </v-col>-->
               <v-spacer></v-spacer>
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-2 py-2">
                 <v-icon>mdi-draw</v-icon>
