@@ -62,7 +62,7 @@
             </v-btn-toggle>
           </v-row>
           <v-row class="inbox-row">
-            <v-data-table fixed-header :loading="false" :headers="inbox_header" :items="inbox_data" class="inbox-table inbox-table-border inbox-table-header hide-inbox-table-progress inbox-table-data">
+            <v-data-table fixed-header :loading="false" :headers="inbox_header" :items="inbox_data" @click:row="goToDocumentDetail()" class="inbox-table inbox-table-border inbox-table-header hide-inbox-table-progress inbox-table-data">
               <template v-slot:loading> <!-- loading data in table -->
                 <v-row align="center" justify="center" class="inbox-row inbox-data-load-block">
                   <img width="100px" src="../assets/loader.gif" class="inbox-load">
@@ -105,7 +105,9 @@
 
     },
     methods: {
-      
+      goToDocumentDetail() {
+        this.$router.push('/inbox/detail')
+      }
     }
   }
 </script>

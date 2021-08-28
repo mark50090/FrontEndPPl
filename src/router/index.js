@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Toolbar from '../views/Toolbar.vue'
 import Inbox from '../views/Inbox.vue'
+import DocumentDetail from '../views/DocumentDetail.vue'
 import CreateDocument from '../views/CreateDocument.vue'
 import Setting from '../views/Setting.vue'
 
@@ -20,6 +21,11 @@ export default new VueRouter({
           path: '/inbox',
           name: 'inbox',
           component: Inbox
+        },
+        {
+          path: '/inbox/detail',
+          name: 'document_detail',
+          component: DocumentDetail
         },
         {
           path: '/create',
