@@ -62,7 +62,7 @@
             </v-btn-toggle>
           </v-row>
           <v-row class="inbox-row">
-            <v-data-table fixed-header :loading="false" :headers="inbox_header" :items="inbox_data" class="inbox-table inbox-table-border inbox-table-header hide-inbox-table-progress inbox-table-data">
+            <v-data-table fixed-header :loading="false" :headers="inbox_header" :items="inbox_data" @click:row="goToDocumentDetail()" class="inbox-table inbox-table-border inbox-table-header hide-inbox-table-progress inbox-table-data">
               <template v-slot:loading> <!-- loading data in table -->
                 <v-row align="center" justify="center" class="inbox-row inbox-data-load-block">
                   <img width="100px" src="../assets/loader.gif" class="inbox-load">
@@ -111,24 +111,27 @@
       this.postdata()
     },
     methods: {
+      goToDocumentDetail() {
+        this.$router.push('/inbox/detail')
+      },
       getdata() {
         this.tax_id = sessionStorage.getItem("tax_id")
       },
       async postdata (tax_id,keyword,status,lim,offset,owned) {
-      try {
-        var { data } = await this.axios.post('https://uatpaperless.one.th/api3/transaction/api/v1/searchTransaction', {
-          tax_id: "",
-          keyword: "",
-          status: "",
-          lim: 10,
-          offset: 0,
-          owned: false
-        })
-      } catch (error) {
-        console.log(error)
+        try {
+          var { data } = await this.axios.post('https://uatpaperless.one.th/api3/transaction/api/v1/searchTransaction', {
+            tax_id: "",
+            keyword: "",
+            status: "",
+            lim: 10,
+            offset: 0,
+            owned: false
+          })
+        } catch (error) {
+          console.log(error)
+        }
       }
     }
-  }
   }
 </script>
 
