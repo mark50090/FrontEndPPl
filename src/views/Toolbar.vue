@@ -1,6 +1,9 @@
 <template>
-  <div>
+  <div v-if="isReady">
     <!-- Top Toolbar -->
+    <v-overlay absolute :value="loading_overlay" color="white" opacity="0.5">
+      <v-progress-circular :size="50" color="light-green" indeterminate></v-progress-circular>
+    </v-overlay>
     <v-row class="toolbar-row toolbar-block">
       <v-toolbar elevation="1" class="main-toolbar">
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
@@ -10,7 +13,7 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items class="toolbar-biz-block">
-          <v-autocomplete outlined hide-details dense auto-select-first color="rgb(102, 101, 101)" prepend-inner-icon="mdi-briefcase" class="biz-box"></v-autocomplete>
+          <v-autocomplete outlined hide-details dense auto-select-first color="rgb(102, 101, 101)" prepend-inner-icon="mdi-briefcase" class="biz-box" v-model="selectedBiz" :items="business" item-text="first_name_th" item-value="id_card_num" return-object></v-autocomplete>
           <v-divider vertical class="mx-2 my-auto toolbar-divider"></v-divider>
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
@@ -18,10 +21,10 @@
                 <v-icon large color="#666565">mdi-account-circle</v-icon>
                 <div class="ml-4 display-pc-only">
                   <v-row class="toolbar-row username">
-                    สมมติ กิตติศัพท์สกุล
+                    {{firstname }}{{lastname}}
                   </v-row>
                   <v-row class="toolbar-row user-email">
-                    sommud.gi@one.th
+                    {{thai_email}}
                   </v-row>
                 </div>
                 <v-icon color="#666565" class="toolbar-menu-icon">mdi-menu-down</v-icon>
@@ -76,12 +79,49 @@
 </template>
 
 <script>
+  import { EventBus } from '../EventBus'
   export default {
     data: () => ({
-      drawer: null
+      drawer: null,
+      firstname: '',
+      lastname: '',
+      thai_email: '',
+      business: [],
+      isReady: false,
+      loading_overlay: false,
+      selectedBiz: ''
     }),
+    mounted(){
+      this.getUserDetail().then(()=>{ // set defualt business to the 1st of item in business list
+        this.selectedBiz = this.business[0]
+      })
+      EventBus.$on('loadingOverlay', this.changeLoading)
+      this.isReady = true
+    },
     methods: {
-
+      changeLoading(isLoad) {
+        this.loading_overlay = isLoad
+      },
+      async getUserDetail(){ // get user detail to show name, email and business list
+        try {
+          var url = '/citizen/api/v1/detail'
+          var { data } = await this.axios.get(this.$api_url + url)
+          if(data) {
+            this.firstname = data.data.first_name_th
+            this.lastname = data.data.last_name_th
+            this.thai_email = data.data.thai_email
+            data.data.biz_detail.forEach(element => {
+              this.business.push(...element.getbiz)
+            });
+            // this.loading_overlay = false
+          }else{
+            // this.loading_overlay = false
+          }
+        } catch (error) {
+          console.log(error);
+          // this.loading_overlay = false
+        }
+      },
     }
   }
 </script>
