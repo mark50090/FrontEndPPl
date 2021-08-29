@@ -62,7 +62,7 @@
             </v-btn-toggle>
           </v-row>
           <v-row class="inbox-row">
-            <v-data-table fixed-header :loading="false" :headers="inbox_header" :options.sync="optionsTransaction" :server-items-length="totalItemsTransaction" :items="inbox_data" class="inbox-table inbox-table-border inbox-table-header hide-inbox-table-progress inbox-table-data">
+            <v-data-table fixed-header :loading="false" :headers="inbox_header" @click:row="goToDocumentDetail()" :options.sync="optionsTransaction" :server-items-length="totalItemsTransaction" :items="inbox_data" class="inbox-table inbox-table-border inbox-table-header hide-inbox-table-progress inbox-table-data">
               <template v-slot:loading> <!-- loading data in table -->
                 <v-row align="center" justify="center" class="inbox-row inbox-data-load-block">
                   <img width="100px" src="../assets/loader.gif" class="inbox-load">
@@ -122,6 +122,9 @@
       this.getdata()
     },
     methods: {
+      goToDocumentDetail() {
+        this.$router.push('/inbox/detail')
+      },
       getdata() {
         this.tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num //เรียกใช้ค่า id_card_num ของบริษัทที่เลือก จากตัวแปร selected_business ใน session storage
       },
