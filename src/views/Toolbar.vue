@@ -13,7 +13,7 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items class="toolbar-biz-block">
-          <v-autocomplete outlined hide-details dense auto-select-first color="rgb(102, 101, 101)" prepend-inner-icon="mdi-briefcase" class="biz-box" v-model="selectedBiz" :items="business" item-text="first_name_th" item-value="id_card_num" return-object></v-autocomplete>
+          <v-autocomplete outlined hide-details dense auto-select-first color="rgb(102, 101, 101)" prepend-inner-icon="mdi-briefcase" class="biz-box" v-model="selectedBiz" :items="business" @change="changeBiz" item-text="first_name_th" item-value="id_card_num" return-object></v-autocomplete>
           <v-divider vertical class="mx-2 my-auto toolbar-divider"></v-divider>
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
@@ -21,7 +21,7 @@
                 <v-icon large color="#666565">mdi-account-circle</v-icon>
                 <div class="ml-4 display-pc-only">
                   <v-row class="toolbar-row username">
-                    {{firstname }}{{lastname}}
+                    {{firstname}} {{lastname}}
                   </v-row>
                   <v-row class="toolbar-row user-email">
                     {{thai_email}}
@@ -94,6 +94,7 @@
     mounted(){
       this.getUserDetail().then(()=>{ // set defualt business to the 1st of item in business list
         this.selectedBiz = this.business[0]
+        this.changeBiz()
       })
       EventBus.$on('loadingOverlay', this.changeLoading)
       this.isReady = true
@@ -122,6 +123,9 @@
           // this.loading_overlay = false
         }
       },
+      changeBiz(){
+        sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
+      }
     }
   }
 </script>

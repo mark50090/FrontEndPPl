@@ -7,6 +7,7 @@ import vuetify from './plugins/vuetify'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { Api } from "./api/axiosInstant";
+import './filters/dateFilters'
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
