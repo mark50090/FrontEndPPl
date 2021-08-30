@@ -23,7 +23,7 @@
             </v-row>
           </template>
           <template v-slot:[`item.action`]="{ item }"> <!-- view / export excel column -->
-            <v-btn icon color="#4CAF50"> <!-- view report button -->
+            <v-btn icon color="#4CAF50" @click="viewReport()"> <!-- view report button -->
               <v-icon>mdi-eye-outline</v-icon>
             </v-btn>
             <v-btn icon color="#4CAF50" class="ml-7"> <!-- export excel button -->
@@ -55,7 +55,9 @@
 
     },
     methods: {
-
+      viewReport() {
+        this.$router.push('/report/view')
+      }
     }
   }
 </script>
