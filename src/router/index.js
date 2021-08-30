@@ -5,6 +5,7 @@ import Inbox from '../views/Inbox.vue'
 import DocumentDetail from '../views/DocumentDetail.vue'
 import CreateDocument from '../views/CreateDocument.vue'
 import DocumentReport from '../views/DocumentReport.vue'
+import ReportDetail from '../views/ReportDetail.vue'
 import Setting from '../views/Setting.vue'
 import Landing from '../views/Landing.vue'
 
@@ -38,6 +39,11 @@ export default new VueRouter({
           path: '/report',
           name: 'report',
           component: DocumentReport
+        },
+        {
+          path: '/report/view',
+          name: 'view_report',
+          component: ReportDetail
         },
         {
           path: '/setting',
