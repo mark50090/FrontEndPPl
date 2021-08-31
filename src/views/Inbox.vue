@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-1">
+  <div v-if="isReady" class="pt-1">
     <v-card outlined class="mb-1 mx-1 px-4 pt-2 inbox-page">
       <v-row class="inbox-row">
         <v-tabs color="#4caf50" v-model="tab">
@@ -10,9 +10,9 @@
         <v-tab-item>
           <v-row class="mt-1 inbox-row">
             <v-col cols="12" md="4" lg="4" class="px-0 pb-0">
-              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-box search-btn-block" v-model="keyword" @keyup.enter="searchTransaction(),countTransaction()">
+              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-box search-btn-block" v-model="keyword" @keyup.enter="searchTransaction()">
                 <template v-slot:append-outer>
-                  <v-btn outlined color="#9e9e9e" class="search-btn" @click="searchTransaction(),countTransaction()">
+                  <v-btn outlined color="#9e9e9e" class="search-btn" @click="searchTransaction()">
                     <v-icon >mdi-magnify</v-icon>
                   </v-btn>
                 </template>
@@ -87,6 +87,7 @@
 </template>
 
 <script>
+import { EventBus } from '../EventBus'
   export default {
     data: () => ({
       tax_id:'',
@@ -120,13 +121,14 @@
         itemsPerPage: 10
         },
       totalItemsTransaction: 0,
-      typeDocument:[],
-      selectedTypeDocs:''
-      
+      typeDocument:[{name: 'ทั้งหมด', _id: "", detail: ""}],
+      selectedTypeDocs: {name: 'ทั้งหมด', _id: "", detail: ""},
+      isReady: false,
     }),
     mounted() {
       this.getdata()
       this.searchTransaction()
+      EventBus.$emit('loadingOverlay', true)
     },
     watch:{
       "optionsTransaction.page"(newValue,oldValue){
@@ -191,31 +193,36 @@
             tax_id : this.tax_id,
             keyword: this.keyword,
             status: status,
+            flow_id: this.selectedTypeDocs._id,
             lim: itemsPerPage,
             offset: (page-1)*itemsPerPage || 0,
             owned: false
           })
           if(data.status){
             var res = data.result
-            this.count_transaction_total = res.total
-            this.count_transaction_approved = res.approved
-            this.count_transaction_waiting = res.waiting
-            this.count_transaction_rejected = res.rejected
-            this.count_transaction_inprogress = res.inprogress
-            this.count_transaction_incoming = res.incoming
+            this.count_transaction_total = res.total.toString()
+            this.count_transaction_approved = res.approved.toString()
+            this.count_transaction_waiting = res.waiting.toString()
+            this.count_transaction_rejected = res.rejected.toString()
+            this.count_transaction_inprogress = res.inprogress.toString()
+            this.count_transaction_incoming = res.incoming.toString()
           }
           this.changeTotalItem()
+          this.isReady = true
+          EventBus.$emit('loadingOverlay', false)
         } catch (error) {
+          this.isReady = true
+          EventBus.$emit('loadingOverlay', false)
           console.log(error);
         }
       },
       changeTotalItem(){
-        if(this.document_status == 'all') this.totalItemsTransaction = this.count_transaction_total
-        else if(this.document_status == 'approved') this.totalItemsTransaction = this.count_transaction_approved
-        else if(this.document_status == 'waiting') this.totalItemsTransaction = this.count_transaction_waiting
-        else if(this.document_status == 'rejected') this.totalItemsTransaction = this.count_transaction_rejected
-        else if(this.document_status == 'inprogress') this.totalItemsTransaction = this.count_transaction_inprogress
-        else if(this.document_status == 'incoming') this.totalItemsTransaction = this.count_transaction_incoming
+        if(this.document_status == 'all') this.totalItemsTransaction = parseInt(this.count_transaction_total)
+        else if(this.document_status == 'approved') this.totalItemsTransaction = parseInt(this.count_transaction_approved)
+        else if(this.document_status == 'waiting') this.totalItemsTransaction = parseInt(this.count_transaction_waiting)
+        else if(this.document_status == 'rejected') this.totalItemsTransaction = parseInt(this.count_transaction_rejected)
+        else if(this.document_status == 'inprogress') this.totalItemsTransaction = parseInt(this.count_transaction_inprogress)
+        else if(this.document_status == 'incoming') this.totalItemsTransaction = parseInt(this.count_transaction_incoming)
       },
       async getTypeDocs() { 
         try {
@@ -232,7 +239,7 @@
       },
       searchTypeDocs(){
         this.searchTransaction()
-        this.countTransaction()
+        // this.countTransaction()
       }
     }
   }
