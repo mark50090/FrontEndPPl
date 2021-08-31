@@ -135,6 +135,7 @@
       },
       changeBiz(){
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
+        EventBus.$emit('changeBiz')
       }
     }
   }
