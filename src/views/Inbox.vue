@@ -21,7 +21,7 @@
             <v-spacer></v-spacer>
             <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 doc-type-title">ประเภทเอกสาร</v-col>
             <v-col cols="7" md="4" lg="4" class="px-0 pb-0">
-              <v-autocomplete outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" class="type-doc-box type-doc-dropdown-icon"></v-autocomplete>
+              <v-autocomplete outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" class="type-doc-box type-doc-dropdown-icon" v-model="selectedTypeDocs" :items="typeDocument" @change="searchTypeDocs" item-text="name" item-value="_id" return-object></v-autocomplete>
             </v-col>
             <!-- filter document status for mobile only -->
             <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 doc-type-title display-mobile-only">สถานะเอกสาร</v-col>
@@ -30,34 +30,34 @@
             </v-col>
           </v-row>
           <v-row class="mt-5 inbox-row all-doc-header">
-            เอกสารทั้งหมด {{count_transaction_total}}
+            เอกสารทั้งหมด {{count_transaction_total}} 
           </v-row>
           <!-- filter document status for pc only -->
           <v-row class="mt-5 inbox-row display-pc-only">
             <v-btn-toggle mandatory background-color="white" v-model="document_status" @change="searchTransaction" class="status-doc-block">
               <v-btn outlined tile value="all" class="status-doc-btn">
                 ทั้งหมด
-                <v-badge inline dark color="black" content="800"><span slot="badge"> {{count_transaction_total}} </span></v-badge>
+                <v-badge inline dark color="black" :content="count_transaction_total"></v-badge>
               </v-btn>
               <v-btn outlined tile value="waiting" class="status-doc-btn">
                 รออนุมัติ
-                <v-badge inline light color="#F8F27C" content="300" class="status-doc-num"><span slot="badge"> {{count_transaction_waiting}} </span></v-badge>
+                <v-badge inline light color="#F8F27C" :content="count_transaction_waiting" class="status-doc-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="approved" class="status-doc-btn">
                 อนุมัติแล้ว
-                <v-badge inline light color="#AFDEA9" content="30" class="status-doc-num"><span slot="badge"> {{count_transaction_approved}} </span></v-badge>
+                <v-badge inline light color="#AFDEA9" :content="count_transaction_approved" class="status-doc-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="inprogress" class="status-doc-btn">
-                กำลังดำเนินการ
-                <v-badge inline light color="#6EC4D6" content="30" class="status-doc-num"><span slot="badge"> {{count_transaction_inprogress}} </span></v-badge>
+                กำลังดำเนินการ 
+                <v-badge inline light color="#6EC4D6" :content="count_transaction_inprogress" class="status-doc-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="rejected" class="status-doc-btn">
                 ปฏิเสธอนุมัติ
-                <v-badge inline light color="#F49393" content="30" class="status-doc-num"><span slot="badge"> {{count_transaction_rejected}} </span></v-badge>
+                <v-badge inline light color="#F49393" :content="count_transaction_rejected" class="status-doc-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="incoming" class="status-doc-btn">
                 รอดำเนินการ
-                <v-badge inline light color="#FCCD5A" content="30" class="status-doc-num"><span slot="badge"> {{count_transaction_incoming}} </span></v-badge>
+                <v-badge inline light color="#FCCD5A" :content="count_transaction_incoming" class="status-doc-num"></v-badge>
               </v-btn>
             </v-btn-toggle>
           </v-row>
@@ -73,10 +73,10 @@
               </template>
               <template v-slot:[`item.document_status_text`]="{ item }"> <!-- document status column -->
                 <v-chip color="#F8F27C" v-if="item.document_status_text == 'waiting'">รออนุมัติ</v-chip> <!--สถานะ รออนุมัติ -->
-                <!-- <v-chip color="#AFDEA9">อนุมัติแล้ว</v-chip>--> <!--สถานะ อนุมัติแล้ว -->
-                <!--<v-chip color="#6EC4D6">กำลังดำเนินการ</v-chip>--> <!--สถานะ กำลังดำเนินการ -->
-                <!--<v-chip color="#F49393">ปฏิเสธอนุมัติ</v-chip>--> <!--สถานะ ปฏิเสธอนุมัติ -->
-                <!--<v-chip color="#FCCD5A">รอดำเนินการ</v-chip> สถานะ รอดำเนินการ -->
+                <v-chip color="#AFDEA9" v-if="item.document_status_text == 'approved'">อนุมัติแล้ว</v-chip> <!--สถานะ อนุมัติแล้ว -->
+                <v-chip color="#6EC4D6" v-if="item.document_status_text == 'inprogress'">กำลังดำเนินการ</v-chip> <!--สถานะ กำลังดำเนินการ -->
+                <v-chip color="#F49393" v-if="item.document_status_text == 'rejected'">ปฏิเสธอนุมัติ</v-chip> <!--สถานะ ปฏิเสธอนุมัติ -->
+                <v-chip color="#FCCD5A" v-if="item.document_status_text == 'incoming'">รอดำเนินการ</v-chip> <!--สถานะ รอดำเนินการ -->
               </template>
             </v-data-table>
           </v-row>
@@ -105,8 +105,8 @@
       count_transaction_rejected: 0,
       count_transaction_incoming: 0,
       inbox_header: [
-        {text: 'ผู้ส่ง', align: 'start', sortable: true, value: 'sender'},
-        {text: 'ประเภท', align: 'start', sortable: true, value: 'doc_type'},
+        {text: 'ผู้ส่ง', align: 'start', sortable: true, value: 'sender_name'},
+        {text: 'ประเภท', align: 'start', sortable: true, value: 'flow_detail.name'},
         {text: 'เลขที่เอกสาร', align: 'start', sortable: true, value: 'document_id'},
         {text: 'รายละเอียด', align: 'start', sortable: false, value: 'detail'},
         {text: 'สถานะ', align: 'center', sortable: true, value: 'document_status_text'},
@@ -117,9 +117,13 @@
       ],
       optionsTransaction: {},
       totalItemsTransaction: 0,
+      typeDocument:[],
+      selectedTypeDocs:''
+      
     }),
     mounted() {
       this.getdata()
+      
     },
     methods: {
       goToDocumentDetail() {
@@ -127,6 +131,7 @@
       },
       getdata() {
         this.tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num //เรียกใช้ค่า id_card_num ของบริษัทที่เลือก จากตัวแปร selected_business ใน session storage
+        this.getTypeDocs()
       },
       async searchTransaction(status) { // ใช้แค่ params status เพราะตัวอื่นเรียกค่าจาก this ได้
         this.inbox_data = [] //clear data in table
@@ -137,6 +142,7 @@
             tax_id: this.tax_id, //ต้องทดสอบอีกครั้งว่า ถ้าเปลี่ยน business แล้วค่านี้จะเปลี่ยนด้วยไหม (เพราะ set tax_id แค่ตอน mounted) ปกติจะเรียก get session มาใส่ในนี้โดยตรงเลย
             keyword: this.keyword, //คำในช่องค้นหา
             status: status, //params status ที่เก็บมา
+            flow_id: this.selectedTypeDocs._id,
             lim: itemsPerPage, //เปลี่ยนค่าให้รองรับกับ footer ของตาราง (จำนวนข้อมูลต่อหน้าตาราง 1 หน้า)
             offset: (page-1)*itemsPerPage || 0, // ค่าเริ่มต้นของข้อมูลในหน้าตารางนั้นๆ เช่นหน้าที่ 1 เริ่มข้อมูลที่อาเรย์ 0, หน้าที่ 2 เริ่มข้อมูลที่อาเรย์ 10(ในกรณีที่ itemsPerpage = 10)
             owned: false // เป็นค่าคงที่
@@ -185,6 +191,23 @@
         else if(this.document_status == 'rejected') this.totalItemsTransaction = this.count_transaction_rejected
         else if(this.document_status == 'inprogress') this.totalItemsTransaction = this.count_transaction_inprogress
         else if(this.document_status == 'incoming') this.totalItemsTransaction = this.count_transaction_incoming
+      },
+      async getTypeDocs() { 
+        try {
+          var url = '/flowdata/api/v1/getAllFlow?tax_id='
+          var { data } = await this.axios.get(this.$api_url + url + this.tax_id)
+          if(data){ 
+            data.result.forEach(element => { 
+                  this.typeDocument.push(element)
+            })
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      searchTypeDocs(){
+        this.searchTransaction()
+        this.countTransaction()
       }
     }
   }
