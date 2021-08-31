@@ -129,6 +129,7 @@ import { EventBus } from '../EventBus'
       this.getdata()
       this.searchTransaction()
       EventBus.$emit('loadingOverlay', true)
+      EventBus.$on('changeBiz', this.changeBiz)
     },
     watch:{
       "optionsTransaction.page"(newValue,oldValue){
@@ -146,11 +147,14 @@ import { EventBus } from '../EventBus'
     },
 
     methods: {
+      emitLoading(isLoad) {
+        EventBus.$emit('loadingOverlay', isLoad)
+      },
       goToDocumentDetail() {
         this.$router.push('/inbox/detail')
       },
       getdata() {
-        this.tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num //เรียกใช้ค่า id_card_num ของบริษัทที่เลือก จากตัวแปร selected_business ใน session storage
+        // this.tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num //เรียกใช้ค่า id_card_num ของบริษัทที่เลือก จากตัวแปร selected_business ใน session storage
         this.getTypeDocs()
       },
       async searchTransaction(filter = {}) { // ใช้แค่ params status เพราะตัวอื่นเรียกค่าจาก this ได้
@@ -165,8 +169,10 @@ import { EventBus } from '../EventBus'
         // var status = this.document_status
         // if(status == 'all') status = "" //status ทั้งหมด ต้องยิง body เป็น ""
         try {
+          var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+          this.emitLoading(true)
           var { data } = await this.axios.post(this.$api_url + '/transaction/api/v1/searchTransaction', { //ตั้งค่าตัวแปร host ไว้แล้ว เรียกใช้เป็น this.$api_url ได้เลย
-            tax_id: this.tax_id, //ต้องทดสอบอีกครั้งว่า ถ้าเปลี่ยน business แล้วค่านี้จะเปลี่ยนด้วยไหม (เพราะ set tax_id แค่ตอน mounted) ปกติจะเรียก get session มาใส่ในนี้โดยตรงเลย
+            tax_id: tax_id, //ต้องทดสอบอีกครั้งว่า ถ้าเปลี่ยน business แล้วค่านี้จะเปลี่ยนด้วยไหม (เพราะ set tax_id แค่ตอน mounted) ปกติจะเรียก get session มาใส่ในนี้โดยตรงเลย
             keyword: this.keyword, //คำในช่องค้นหา
             status: status == 'all' ? '': status, //params status ที่เก็บมา
             flow_id: this.selectedTypeDocs._id,
@@ -183,14 +189,17 @@ import { EventBus } from '../EventBus'
         } catch (error) {
           console.log(error)
         }
+        this.emitLoading(false)
       },
       async countTransaction(){
         var status = ""
         if(this.document_status == 'all') status = ""
         const { page, itemsPerPage } = this.optionsTransaction
         try {
+          var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+          this.emitLoading(true)
           var { data } = await this.axios.post(this.$api_url + '/transaction/api/v1/countTransaction', {
-            tax_id : this.tax_id,
+            tax_id : tax_id,
             keyword: this.keyword,
             status: status,
             flow_id: this.selectedTypeDocs._id,
@@ -209,12 +218,10 @@ import { EventBus } from '../EventBus'
           }
           this.changeTotalItem()
           this.isReady = true
-          EventBus.$emit('loadingOverlay', false)
         } catch (error) {
           this.isReady = true
-          EventBus.$emit('loadingOverlay', false)
-          console.log(error);
         }
+        this.emitLoading(false)
       },
       changeTotalItem(){
         if(this.document_status == 'all') this.totalItemsTransaction = parseInt(this.count_transaction_total)
@@ -227,7 +234,8 @@ import { EventBus } from '../EventBus'
       async getTypeDocs() { 
         try {
           var url = '/flowdata/api/v1/getAllFlow?tax_id='
-          var { data } = await this.axios.get(this.$api_url + url + this.tax_id)
+          var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+          var { data } = await this.axios.get(this.$api_url + url + tax_id)
           if(data){ 
             data.result.forEach(element => { 
                   this.typeDocument.push(element)
@@ -240,6 +248,10 @@ import { EventBus } from '../EventBus'
       searchTypeDocs(){
         this.searchTransaction()
         // this.countTransaction()
+      },
+      changeBiz(){
+        this.searchTransaction()
+        this.getTypeDocs()
       }
     }
   }

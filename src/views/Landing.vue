@@ -28,7 +28,7 @@ export default {
         })
         this.$apiConfig.setToken(data.data.access_token)
         this.$apiConfig.setRefreshToken(data.data.refresh_token)
-        this.$router.push({ path: '/inbox' })
+        this.$router.push({ path: '/' })
       } catch (error) {
         console.log(error);
       }
