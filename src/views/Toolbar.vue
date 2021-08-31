@@ -13,7 +13,7 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items class="toolbar-biz-block">
-          <v-autocomplete outlined hide-details dense auto-select-first color="rgb(102, 101, 101)" prepend-inner-icon="mdi-briefcase" class="biz-box" v-model="selectedBiz" :items="business" item-text="first_name_th" item-value="id_card_num" return-object></v-autocomplete>
+          <v-autocomplete outlined hide-details dense auto-select-first color="rgb(102, 101, 101)" prepend-inner-icon="mdi-briefcase" class="biz-box" v-model="selectedBiz" :items="business" @change="changeBiz" item-text="first_name_th" item-value="id_card_num" return-object></v-autocomplete>
           <v-divider vertical class="mx-2 my-auto toolbar-divider"></v-divider>
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
@@ -21,7 +21,7 @@
                 <v-icon large color="#666565">mdi-account-circle</v-icon>
                 <div class="ml-4 display-pc-only">
                   <v-row class="toolbar-row username">
-                    {{firstname }}{{lastname}}
+                    {{firstname}} {{lastname}}
                   </v-row>
                   <v-row class="toolbar-row user-email">
                     {{thai_email}}
@@ -69,6 +69,16 @@
             <v-list-item-title class="menu-title">รายการที่ส่ง</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item to="/report" active-class="menu-active menu-icon-svg-active">
+          <v-list-item-icon>
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="rgba(0, 0, 0, 0.54)" d="M2 12H4V17H20V12H22V17C22 18.11 21.11 19 20 19H4C2.9 19 2 18.11 2 17V12M12 15L17.55 9.54L16.13 8.13L13 11.25V2H11V11.25L7.88 8.13L6.46 9.55L12 15Z" />
+            </svg>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title class="menu-title">รายงานเอกสาร</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <!-- Main Content -->
@@ -94,6 +104,7 @@
     mounted(){
       this.getUserDetail().then(()=>{ // set defualt business to the 1st of item in business list
         this.selectedBiz = this.business[0]
+        this.changeBiz()
       })
       EventBus.$on('loadingOverlay', this.changeLoading)
       this.isReady = true
@@ -122,6 +133,9 @@
           // this.loading_overlay = false
         }
       },
+      changeBiz(){
+        sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
+      }
     }
   }
 </script>
@@ -206,9 +220,14 @@
     color: white !important;
   }
 
+  .menu-icon-svg-active > .v-list-item__icon > svg > path {
+    fill: white !important;
+  }
+
   .menu-title {
     font-family: 'Sarabun', sans-serif;
     font-size: 14px !important;
+    line-height: 24px !important;
   }
 
   .main-content {

@@ -53,7 +53,7 @@ class Api {
       async config => {
         if (this._access_token) {
           config.headers = { 
-            'Authorization': `Bearer ${this._access_token}`
+            'Authorization': `Bearer ${this._access_token}` //set token when consumed API
           }
         }
         return config;
