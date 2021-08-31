@@ -86,7 +86,7 @@
                 <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn">ดาวน์โหลด PDF</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from inbox page -->
-                <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn">
+                <v-btn @click="optionFormMail()" depressed x-small dark color="#4CAF50" class="download-pdf-btn">
                   <v-icon small>mdi-email-send-outline</v-icon>
                   <span class="ml-2">SEND EMAIL</span>
                 </v-btn>
@@ -246,11 +246,11 @@
             </v-row>
             <v-divider></v-divider>
             <v-row class="detail-row">
-              <!--<v-col cols="auto" md="auto" lg="auto" class="pa-2">
-                <v-btn outlined color="#757575">
+              <!-- <v-col cols="auto" md="auto" lg="auto" class="pa-2">
+                <v-btn outlined @click="gostamp()" color="#757575">
                   <v-icon>mdi-stamper</v-icon>
                 </v-btn>
-              </v-col>-->
+              </v-col> -->
               <v-spacer></v-spacer>
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-2 py-2">
                 <v-icon>mdi-draw</v-icon>
@@ -272,11 +272,20 @@
         </v-col>
       </v-row>
     </v-card>
+    <StampModal/>
+    <showFormMail/>
   </div>
 </template>
 
 <script>
+import { EventBus } from '../EventBus'
+import StampModal from '../components/StampModal'
+import showFormMail from '../components/SendMail'
   export default {
+    components: {
+      StampModal,
+      showFormMail
+    },
     data: () => ({
       document_detail_tab: null,
       document_description: 'อธิบายอะไรก็ไม่รู้',
@@ -287,6 +296,12 @@
 
     },
     methods: {
+      optionFormMail() {
+        EventBus.$emit('FormMail')
+      },
+      gostamp() {
+        EventBus.$emit('stamp')
+      },
       back() {
         this.$router.push('/inbox')
       }
