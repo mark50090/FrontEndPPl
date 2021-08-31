@@ -62,7 +62,7 @@
             </v-btn-toggle>
           </v-row>
           <v-row class="inbox-row">
-            <v-data-table fixed-header :loading="false" :headers="inbox_header" @click:row="goToDocumentDetail()" :options.sync="optionsTransaction" :server-items-length="totalItemsTransaction" :items="inbox_data" class="inbox-table inbox-table-border inbox-table-header hide-inbox-table-progress inbox-table-data">
+            <v-data-table fixed-header :loading="false" :headers="inbox_header" @click:row="goToDocumentDetail($event._id)" :options.sync="optionsTransaction" :server-items-length="totalItemsTransaction" :items="inbox_data" class="inbox-table inbox-table-border inbox-table-header hide-inbox-table-progress inbox-table-data">
               <template v-slot:loading> <!-- loading data in table -->
                 <v-row align="center" justify="center" class="inbox-row inbox-data-load-block">
                   <img width="100px" src="../assets/loader.gif" class="inbox-load">
@@ -150,7 +150,8 @@ import { EventBus } from '../EventBus'
       emitLoading(isLoad) {
         EventBus.$emit('loadingOverlay', isLoad)
       },
-      goToDocumentDetail() {
+      goToDocumentDetail(id) {
+        sessionStorage.setItem('transaction_id', id)
         this.$router.push('/inbox/detail')
       },
       getdata() {

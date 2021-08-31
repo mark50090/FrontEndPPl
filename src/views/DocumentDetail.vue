@@ -14,11 +14,11 @@
                 </v-col>
                 <v-spacer></v-spacer>
                 <v-col cols="auto" md="auto" lg="auto" align-self="center" class="py-2">
-                  <v-btn icon x-small color="white">
+                  <v-btn icon x-small color="white" @click="change_page_fn('prev')">
                     <v-icon size="16">mdi-arrow-left</v-icon>
                   </v-btn>
-                  <span class="mx-1 pdf-page">30 / 30</span>
-                  <v-btn icon x-small color="white">
+                  <span class="mx-1 pdf-page">{{ page }} / {{ page_count }}</span>
+                  <v-btn icon x-small color="white" @click="change_page_fn('next')">
                     <v-icon size="16">mdi-arrow-right</v-icon>
                   </v-btn>
                 </v-col>
@@ -33,6 +33,13 @@
             <v-card-text class="px-1 pb-1">
               <v-row align="center" justify="center" class="mt-1 detail-row pdf-block">
                 <!-- pdf -->
+                <pdf
+                  :src="pdf_src"
+                  @num-pages="page_count = $event"
+                  :page="page"
+                  style="width: 90%"
+                  ref="pdfComponent"
+                />
               </v-row>
             </v-card-text>
           </v-card>
@@ -46,7 +53,7 @@
                 <b>Doc ID</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-0 pb-0 doc-detail-title">
-                TP-63000000329
+                {{ doc_details.document_id }}
               </v-col>
             </v-row>
             <v-row class="detail-row">
@@ -54,7 +61,7 @@
                 <b>ชื่อไฟล์</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
-                เอกสารทดสอบการ Upload.pdf
+                {{ doc_details.file_name }}
               </v-col>
             </v-row>
             <v-row class="detail-row">
@@ -62,7 +69,7 @@
                 <b>ชื่อผู้ส่ง</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
-                อากาโมโต้ โอะเมเดะโต (agamoto.om@one.th)
+                อากาโมโต้ โอะเมเดะโต ({{doc_details.createdBy}})
               </v-col>
             </v-row>
             <v-row class="detail-row">
@@ -78,7 +85,7 @@
                 <b>รายละเอียด</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
-                บลาๆ เอกสารอื่นๆ อีกมากมายก่ายกอง 
+                {{ doc_details.detail }}
               </v-col>
             </v-row>
             <v-row class="detail-row">
@@ -203,10 +210,10 @@
                       <v-btn depressed dark block color="#4CAF50" class="attach-file-btn">แนบไฟล์</v-btn>
                     </v-col>
                   </v-row>
-                  <template> <!-- each attach file -->
-                    <v-row class="px-2 detail-row">
+                  <template v-for="(item,index) in attachment_file"> <!-- each attach file -->
+                    <v-row class="px-2 detail-row" :key="`${index}_attachment`">
                       <v-col cols="7" md="7" lg="7" align-self="start" class="px-0 pt-1 pb-0 attached-file-name">
-                        เอกสารที่เกี่ยวข้อง.pdf
+                        {{ item.filename }}
                       </v-col>
                       <v-spacer></v-spacer>
                       <v-col cols="2" md="1" lg="1" align-self="start" class="px-0 pt-1 pb-0 text-center">
@@ -220,7 +227,7 @@
                         </v-btn>
                       </v-col>
                     </v-row>
-                    <v-divider class="mx-2"></v-divider>
+                    <v-divider class="mx-2" :key="`${index}_attachment_divider`"></v-divider>
                   </template>
                 </v-tab-item>
               </v-tabs-items>
@@ -281,19 +288,30 @@
 import { EventBus } from '../EventBus'
 import StampModal from '../components/StampModal'
 import showFormMail from '../components/SendMail'
+import pdf from 'vue-pdf'
   export default {
     components: {
       StampModal,
-      showFormMail
+      showFormMail,
+      pdf
     },
     data: () => ({
       document_detail_tab: null,
       document_description: 'อธิบายอะไรก็ไม่รู้',
       ca_switch: true,
-      all_sign_type: ['Default', 'Sign Pad']
+      all_sign_type: ['Default', 'Sign Pad'],
+      page_count: 0,
+      page: 1,
+      doc_details: {},
+      attachment_file: [],
+      pdf_src: '',
+      token: '',
+      transaction_id: ''
     }),
     mounted() {
-
+      this.token = sessionStorage.getItem('access_token')
+      this.transaction_id = sessionStorage.getItem('transaction_id')
+      this.get_detail_fn()
     },
     methods: {
       optionFormMail() {
@@ -304,6 +322,54 @@ import showFormMail from '../components/SendMail'
       },
       back() {
         this.$router.push('/inbox')
+      },
+      change_page_fn(type) {
+        switch (type) {
+          case 'next':
+            if(this.page < this.page_count)
+              this.page++
+            break
+          case 'prev':
+            if(this.page > 1)
+              this.page--
+            break
+      
+        }
+      },
+      async get_detail_fn() {
+        try {
+          const url = `/transaction/api/v1/showdetail?transaction_id=${this.transaction_id}`
+          const config = {
+            Authorization: `Bearer ${this.token}`
+          }
+          const { data } = await this.axios.get(`${this.$api_url}${url}`, config)
+          if (data.status) {
+            const doc_data = data.data[0]
+            this.doc_details.document_id = doc_data.document_id
+            this.doc_details.createdBy = doc_data.createdBy
+            this.doc_details.detail = doc_data.detail
+            this.doc_details.createdAt = doc_data.createdAt
+            this.doc_details.file_name = doc_data.file_name
+            this.pdf_src = `data:application/pdf;base64,${data.data[1].pdfbase}`
+            this.get_attachment_file_fn()
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      async get_attachment_file_fn() {
+        try {
+          const url = `/file-component/api/getListFile?transaction_id=${this.transaction_id}`
+          const config = {
+            Authorization: `Bearer ${this.token}`
+          }
+          const { data } = await this.axios.get(`${this.$api_url}${url}`, config)
+          if (data.status) {
+            this.attachment_file = data.data
+          }
+        } catch (error) {
+          console.log(error)
+        }
       }
     }
   }
