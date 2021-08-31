@@ -34,7 +34,7 @@
           </v-row>
           <!-- filter document status for pc only -->
           <v-row class="mt-5 inbox-row display-pc-only">
-            <v-btn-toggle mandatory background-color="white" v-model="document_status" @change="searchTransaction" class="status-doc-block">
+            <v-btn-toggle mandatory background-color="white" v-model="document_status" class="status-doc-block">
               <v-btn outlined tile value="all" class="status-doc-btn">
                 ทั้งหมด
                 <v-badge inline dark color="black" content="800"><span slot="badge"> {{count_transaction_total}} </span></v-badge>
@@ -97,7 +97,7 @@
       tab: null,
       doc_status_list: ['ทั้งหมด', 'รออนุมัติ', 'อนุมัติแล้ว', 'กำลังดำเนินการ', 'ปฏิเสธอนุมัติ', 'รอดำเนินการ'],
       //["","waiting","approved","inprogress","rejected","incoming"]
-      document_status: 'ทั้งหมด',
+      document_status: 'all',
       count_transaction_total: 0,
       count_transaction_waiting: 0,
       count_transaction_approved: 0,
@@ -115,12 +115,31 @@
       inbox_data: [
         // {sender: 'คนดีย์ สิ้นชีวาลัย', doc_type: 'ใบเบิกเงินค่ารักษาพยาบาล', document_id: 'OTHER-63000000214', detail: 'ขอเบิกค่าถอนฟันหน่อยนะ', document_status_text: '', updateAt: '30/12/2020'},
       ],
-      optionsTransaction: {},
+      optionsTransaction: {
+        page:1,
+        itemsPerPage: 10
+        },
       totalItemsTransaction: 0,
     }),
     mounted() {
       this.getdata()
+      this.searchTransaction()
     },
+    watch:{
+      "optionsTransaction.page"(newValue,oldValue){
+          if (newValue != 1) 
+            this.searchTransaction({page:newValue}).then(data => {})
+        },
+      "optionsTransaction.itemsPerPage"(newValue,oldValue){
+          this.optionsTransaction.page = 1
+          this.searchTransaction({page:1, itemsPerPage:newValue}).then(data => {})
+        },
+      "document_status"(newValue,oldValue){
+        this.optionsTransaction.page = 1
+        this.searchTransaction({status:newValue}).then(data => {})
+      }
+    },
+
     methods: {
       goToDocumentDetail() {
         this.$router.push('/inbox/detail')
@@ -128,15 +147,22 @@
       getdata() {
         this.tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num //เรียกใช้ค่า id_card_num ของบริษัทที่เลือก จากตัวแปร selected_business ใน session storage
       },
-      async searchTransaction(status) { // ใช้แค่ params status เพราะตัวอื่นเรียกค่าจาก this ได้
+      async searchTransaction(filter = {}) { // ใช้แค่ params status เพราะตัวอื่นเรียกค่าจาก this ได้
+        const { page, itemsPerPage, status } = {
+            page: this.optionsTransaction.page,
+            itemsPerPage: this.optionsTransaction.itemsPerPage,
+            status: this.document_status,
+            ...filter
+          } //set options ของ data-table
+
         this.inbox_data = [] //clear data in table
-        if(status == 'all') status = "" //status ทั้งหมด ต้องยิง body เป็น ""
-        const { page, itemsPerPage } = this.optionsTransaction //set options ของ data-table
+        // var status = this.document_status
+        // if(status == 'all') status = "" //status ทั้งหมด ต้องยิง body เป็น ""
         try {
           var { data } = await this.axios.post(this.$api_url + '/transaction/api/v1/searchTransaction', { //ตั้งค่าตัวแปร host ไว้แล้ว เรียกใช้เป็น this.$api_url ได้เลย
             tax_id: this.tax_id, //ต้องทดสอบอีกครั้งว่า ถ้าเปลี่ยน business แล้วค่านี้จะเปลี่ยนด้วยไหม (เพราะ set tax_id แค่ตอน mounted) ปกติจะเรียก get session มาใส่ในนี้โดยตรงเลย
             keyword: this.keyword, //คำในช่องค้นหา
-            status: status, //params status ที่เก็บมา
+            status: status == 'all' ? '': status, //params status ที่เก็บมา
             lim: itemsPerPage, //เปลี่ยนค่าให้รองรับกับ footer ของตาราง (จำนวนข้อมูลต่อหน้าตาราง 1 หน้า)
             offset: (page-1)*itemsPerPage || 0, // ค่าเริ่มต้นของข้อมูลในหน้าตารางนั้นๆ เช่นหน้าที่ 1 เริ่มข้อมูลที่อาเรย์ 0, หน้าที่ 2 เริ่มข้อมูลที่อาเรย์ 10(ในกรณีที่ itemsPerpage = 10)
             owned: false // เป็นค่าคงที่
