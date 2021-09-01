@@ -8,7 +8,7 @@
           </v-btn>
         </v-col>
         <v-col cols="9" md="8" lg="8" class="px-0 report-detail-header">
-          <b>รายงานสรุปรายละเอียดการดำเนินการเอกสาร ชื่อเอกสาร</b>
+          <b>รายงานสรุปรายละเอียดการดำเนินการเอกสาร {{doc_type}}</b>
         </v-col>
         <v-spacer></v-spacer>
         <v-col cols="12" md="auto" lg="auto" class="pr-0 export-report-btn-block">
@@ -38,11 +38,13 @@
     data: () => ({
       report_header: [],
       report_data: [],
-      url: ""
+      url: "",
+      doc_type: ""
     }),
     mounted(){
       this.getTemplateFormReport()
       this.url = JSON.parse(sessionStorage.getItem('selected_template_report')).url
+      this.doc_type = JSON.parse(sessionStorage.getItem('selected_template_report')).doc_type
     },
     methods: {
        async getTemplateFormReport(){ // get user detail to show name, email and business list
