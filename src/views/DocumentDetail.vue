@@ -77,7 +77,7 @@
                 <b>ส่งเมื่อ</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
-                30 พฤศจิกายน 2564 08:00:30
+                {{ doc_details.createdAt | fulldate}}
               </v-col>
             </v-row>
             <v-row class="detail-row">
@@ -263,19 +263,26 @@
                 <v-icon>mdi-draw</v-icon>
               </v-col>
               <v-col cols="4" md="3" lg="3" class="px-0 py-2">
-                <v-select dense outlined hide-details color="#4CAF50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="all_sign_type" class="sign-type sign-type-box sign-type-dropdown-icon"></v-select>
+                <v-select dense outlined hide-details color="#4CAF50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="all_sign_type" v-model="sign_type" class="sign-type sign-type-box sign-type-dropdown-icon"></v-select>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" class="pr-0 py-2">
-                <v-btn depressed small color="#1D9BDE" :disabled="false" class="clear-sign-btn">ล้างค่า</v-btn>
+                <v-btn depressed small color="#1D9BDE" :disabled="false" class="clear-sign-btn" @click="clearSignature()">ล้างค่า</v-btn>
               </v-col>
               <v-spacer></v-spacer>
             </v-row>
             <v-row justify="center" align="center" class="detail-row">
               <v-col cols="10" md="7" lg="7" align-self="center" class="pa-0 sign-block">
                 <!-- sign pad -->
+                <v-img
+                  v-if="sign_type == 'Default'"
+                  :src="default_sign"
+                  contain
+                  height="150px"
+                />
+                <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }"></vueSignature>
               </v-col>
             </v-row>
-          </v-card> 
+          </v-card>
         </v-col>
       </v-row>
     </v-card>
@@ -289,29 +296,47 @@ import { EventBus } from '../EventBus'
 import StampModal from '../components/StampModal'
 import showFormMail from '../components/SendMail'
 import pdf from 'vue-pdf'
+import vueSignature from 'vue-signature'
   export default {
     components: {
       StampModal,
       showFormMail,
-      pdf
+      pdf,
+      vueSignature
     },
     data: () => ({
       document_detail_tab: null,
       document_description: 'อธิบายอะไรก็ไม่รู้',
       ca_switch: true,
       all_sign_type: ['Default', 'Sign Pad'],
+      sign_type: 'Default',
       page_count: 0,
       page: 1,
       doc_details: {},
       attachment_file: [],
       pdf_src: '',
       token: '',
-      transaction_id: ''
+      transaction_id: '',
+      default_sign: '',
+      signature_option:{
+        penColor: 'rgb(13, 38, 154)',
+        backgroundColor: 'rgb(255,255,255)'
+      },
+      padStatus: false,
+      axios_pending: 0
     }),
     mounted() {
       this.token = sessionStorage.getItem('access_token')
       this.transaction_id = sessionStorage.getItem('transaction_id')
       this.get_detail_fn()
+      this.get_attachment_file_fn()
+      this.get_signature_default()
+    },
+    watch:{
+      axios_pending (val) {
+        if (val > 0) EventBus.$emit('loadingOverlay', true)
+        else EventBus.$emit('loadingOverlay', false)
+      }
     },
     methods: {
       optionFormMail() {
@@ -337,12 +362,14 @@ import pdf from 'vue-pdf'
         }
       },
       async get_detail_fn() {
-        try {
-          const url = `/transaction/api/v1/showdetail?transaction_id=${this.transaction_id}`
-          const config = {
-            Authorization: `Bearer ${this.token}`
-          }
-          const { data } = await this.axios.get(`${this.$api_url}${url}`, config)
+        const url = `/transaction/api/v1/showdetail?transaction_id=${this.transaction_id}`
+        const config = {
+          Authorization: `Bearer ${this.token}`
+        }
+        this.axios_pending++
+        this.axios.get(`${this.$api_url}${url}`, config)
+        .then((response) => {
+          const data = response.data
           if (data.status) {
             const doc_data = data.data[0]
             this.doc_details.document_id = doc_data.document_id
@@ -351,26 +378,72 @@ import pdf from 'vue-pdf'
             this.doc_details.createdAt = doc_data.createdAt
             this.doc_details.file_name = doc_data.file_name
             this.pdf_src = `data:application/pdf;base64,${data.data[1].pdfbase}`
-            this.get_attachment_file_fn()
           }
-        } catch (error) {
+        })
+        .catch((error) => {
           console.log(error)
-        }
+        })
+        .then(() => {
+          this.axios_pending--
+        })
       },
       async get_attachment_file_fn() {
-        try {
-          const url = `/file-component/api/getListFile?transaction_id=${this.transaction_id}`
-          const config = {
-            Authorization: `Bearer ${this.token}`
-          }
-          const { data } = await this.axios.get(`${this.$api_url}${url}`, config)
+        const url = `/file-component/api/getListFile?transaction_id=${this.transaction_id}`
+        const config = {
+          Authorization: `Bearer ${this.token}`
+        }
+        this.axios_pending++
+        this.axios.get(`${this.$api_url}${url}`, config)
+        .then((response) => {
+          const data = response.data
           if (data.status) {
             this.attachment_file = data.data
           }
-        } catch (error) {
+        })
+        .catch((error) => {
           console.log(error)
+        })
+        .then(() => {
+          this.axios_pending--
+        })
+      },
+      async get_signature_default() {
+        const url = '/signature/api/v1/image?credentialId=DEFAULT'
+        const config = {
+          Authorization: `Bearer ${this.token}`
         }
+        this.axios_pending++
+        this.axios.get(`${this.$api_url}${url}`, config)
+        .then((response) => {
+          const data = response.data
+          if (data.status) {
+            if (data.data[0]) this.default_sign = `data:image/png;base64,${data.data[0]}`
+            else {
+              this.sign_type = 'Sign Pad'
+              this.all_sign_type = ['Sign Pad']
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+        .then(() => {
+          this.axios_pending--
+        })
+      },
+      onBegin() {
+        this.padStatus = true
+      },
+      onEnd() {
+      },
+      clearSignature() {
+        if(this.sign_type === 'Sign Pad')
+        this.$refs.signaturePad.clear()
+        this.padStatus = false
       }
+    },
+    beforeDestroy() {
+      sessionStorage.removeItem('transaction_id')
     }
   }
 </script>
