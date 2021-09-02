@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-1">
+  <div v-if="isReady" class="pt-1">
     <v-card outlined class="mb-1 mx-1 px-4 pt-2 inbox-page">
       <v-row class="inbox-row">
         <v-tabs color="#4caf50" v-model="tab">
@@ -10,9 +10,9 @@
         <v-tab-item>
           <v-row class="mt-1 inbox-row">
             <v-col cols="12" md="4" lg="4" class="px-0 pb-0">
-              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-box search-btn-block" v-model="keyword" @keyup.enter="searchTransaction(),countTransaction()">
+              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-box search-btn-block" v-model="keyword" @keyup.enter="searchTransaction()">
                 <template v-slot:append-outer>
-                  <v-btn outlined color="#9e9e9e" class="search-btn" @click="searchTransaction(),countTransaction()">
+                  <v-btn outlined color="#9e9e9e" class="search-btn" @click="searchTransaction()">
                     <v-icon >mdi-magnify</v-icon>
                   </v-btn>
                 </template>
@@ -21,7 +21,7 @@
             <v-spacer></v-spacer>
             <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 doc-type-title">ประเภทเอกสาร</v-col>
             <v-col cols="7" md="4" lg="4" class="px-0 pb-0">
-              <v-autocomplete outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" class="type-doc-box type-doc-dropdown-icon"></v-autocomplete>
+              <v-autocomplete outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" class="type-doc-box type-doc-dropdown-icon" v-model="selectedTypeDocs" :items="typeDocument" @change="searchTypeDocs" item-text="name" item-value="_id" return-object></v-autocomplete>
             </v-col>
             <!-- filter document status for mobile only -->
             <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 doc-type-title display-mobile-only">สถานะเอกสาร</v-col>
@@ -30,39 +30,39 @@
             </v-col>
           </v-row>
           <v-row class="mt-5 inbox-row all-doc-header">
-            เอกสารทั้งหมด {{count_transaction_total}}
+            เอกสารทั้งหมด {{count_transaction_total}} 
           </v-row>
           <!-- filter document status for pc only -->
           <v-row class="mt-5 inbox-row display-pc-only">
-            <v-btn-toggle mandatory background-color="white" v-model="document_status" @change="searchTransaction" class="status-doc-block">
+            <v-btn-toggle mandatory background-color="white" v-model="document_status" class="status-doc-block">
               <v-btn outlined tile value="all" class="status-doc-btn">
                 ทั้งหมด
-                <v-badge inline dark color="black" content="800"><span slot="badge"> {{count_transaction_total}} </span></v-badge>
+                <v-badge inline dark color="black" :content="count_transaction_total"></v-badge>
               </v-btn>
               <v-btn outlined tile value="waiting" class="status-doc-btn">
                 รออนุมัติ
-                <v-badge inline light color="#F8F27C" content="300" class="status-doc-num"><span slot="badge"> {{count_transaction_waiting}} </span></v-badge>
+                <v-badge inline light color="#F8F27C" :content="count_transaction_waiting" class="status-doc-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="approved" class="status-doc-btn">
                 อนุมัติแล้ว
-                <v-badge inline light color="#AFDEA9" content="30" class="status-doc-num"><span slot="badge"> {{count_transaction_approved}} </span></v-badge>
+                <v-badge inline light color="#AFDEA9" :content="count_transaction_approved" class="status-doc-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="inprogress" class="status-doc-btn">
-                กำลังดำเนินการ
-                <v-badge inline light color="#6EC4D6" content="30" class="status-doc-num"><span slot="badge"> {{count_transaction_inprogress}} </span></v-badge>
+                กำลังดำเนินการ 
+                <v-badge inline light color="#6EC4D6" :content="count_transaction_inprogress" class="status-doc-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="rejected" class="status-doc-btn">
                 ปฏิเสธอนุมัติ
-                <v-badge inline light color="#F49393" content="30" class="status-doc-num"><span slot="badge"> {{count_transaction_rejected}} </span></v-badge>
+                <v-badge inline light color="#F49393" :content="count_transaction_rejected" class="status-doc-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="incoming" class="status-doc-btn">
                 รอดำเนินการ
-                <v-badge inline light color="#FCCD5A" content="30" class="status-doc-num"><span slot="badge"> {{count_transaction_incoming}} </span></v-badge>
+                <v-badge inline light color="#FCCD5A" :content="count_transaction_incoming" class="status-doc-num"></v-badge>
               </v-btn>
             </v-btn-toggle>
           </v-row>
           <v-row class="inbox-row">
-            <v-data-table fixed-header :loading="false" :headers="inbox_header" @click:row="goToDocumentDetail()" :options.sync="optionsTransaction" :server-items-length="totalItemsTransaction" :items="inbox_data" class="inbox-table inbox-table-border inbox-table-header hide-inbox-table-progress inbox-table-data">
+            <v-data-table fixed-header :loading="false" :headers="inbox_header" @click:row="goToDocumentDetail($event._id)" :options.sync="optionsTransaction" :server-items-length="totalItemsTransaction" :items="inbox_data" class="inbox-table inbox-table-border inbox-table-header hide-inbox-table-progress inbox-table-data">
               <template v-slot:loading> <!-- loading data in table -->
                 <v-row align="center" justify="center" class="inbox-row inbox-data-load-block">
                   <img width="100px" src="../assets/loader.gif" class="inbox-load">
@@ -73,10 +73,10 @@
               </template>
               <template v-slot:[`item.document_status_text`]="{ item }"> <!-- document status column -->
                 <v-chip color="#F8F27C" v-if="item.document_status_text == 'waiting'">รออนุมัติ</v-chip> <!--สถานะ รออนุมัติ -->
-                <!-- <v-chip color="#AFDEA9">อนุมัติแล้ว</v-chip>--> <!--สถานะ อนุมัติแล้ว -->
-                <!--<v-chip color="#6EC4D6">กำลังดำเนินการ</v-chip>--> <!--สถานะ กำลังดำเนินการ -->
-                <!--<v-chip color="#F49393">ปฏิเสธอนุมัติ</v-chip>--> <!--สถานะ ปฏิเสธอนุมัติ -->
-                <!--<v-chip color="#FCCD5A">รอดำเนินการ</v-chip> สถานะ รอดำเนินการ -->
+                <v-chip color="#AFDEA9" v-if="item.document_status_text == 'approved'">อนุมัติแล้ว</v-chip> <!--สถานะ อนุมัติแล้ว -->
+                <v-chip color="#6EC4D6" v-if="item.document_status_text == 'inprogress'">กำลังดำเนินการ</v-chip> <!--สถานะ กำลังดำเนินการ -->
+                <v-chip color="#F49393" v-if="item.document_status_text == 'rejected'">ปฏิเสธอนุมัติ</v-chip> <!--สถานะ ปฏิเสธอนุมัติ -->
+                <v-chip color="#FCCD5A" v-if="item.document_status_text == 'incoming'">รอดำเนินการ</v-chip> <!--สถานะ รอดำเนินการ -->
               </template>
             </v-data-table>
           </v-row>
@@ -87,6 +87,7 @@
 </template>
 
 <script>
+import { EventBus } from '../EventBus'
   export default {
     data: () => ({
       tax_id:'',
@@ -97,7 +98,7 @@
       tab: null,
       doc_status_list: ['ทั้งหมด', 'รออนุมัติ', 'อนุมัติแล้ว', 'กำลังดำเนินการ', 'ปฏิเสธอนุมัติ', 'รอดำเนินการ'],
       //["","waiting","approved","inprogress","rejected","incoming"]
-      document_status: 'ทั้งหมด',
+      document_status: 'all',
       count_transaction_total: 0,
       count_transaction_waiting: 0,
       count_transaction_approved: 0,
@@ -105,8 +106,8 @@
       count_transaction_rejected: 0,
       count_transaction_incoming: 0,
       inbox_header: [
-        {text: 'ผู้ส่ง', align: 'start', sortable: true, value: 'sender'},
-        {text: 'ประเภท', align: 'start', sortable: true, value: 'doc_type'},
+        {text: 'ผู้ส่ง', align: 'start', sortable: true, value: 'sender_name'},
+        {text: 'ประเภท', align: 'start', sortable: true, value: 'flow_detail.name'},
         {text: 'เลขที่เอกสาร', align: 'start', sortable: true, value: 'document_id'},
         {text: 'รายละเอียด', align: 'start', sortable: false, value: 'detail'},
         {text: 'สถานะ', align: 'center', sortable: true, value: 'document_status_text'},
@@ -115,28 +116,67 @@
       inbox_data: [
         // {sender: 'คนดีย์ สิ้นชีวาลัย', doc_type: 'ใบเบิกเงินค่ารักษาพยาบาล', document_id: 'OTHER-63000000214', detail: 'ขอเบิกค่าถอนฟันหน่อยนะ', document_status_text: '', updateAt: '30/12/2020'},
       ],
-      optionsTransaction: {},
+      optionsTransaction: {
+        page:1,
+        itemsPerPage: 10
+        },
       totalItemsTransaction: 0,
+      typeDocument:[{name: 'ทั้งหมด', _id: "", detail: ""}],
+      selectedTypeDocs: {name: 'ทั้งหมด', _id: "", detail: ""},
+      isReady: false,
     }),
     mounted() {
       this.getdata()
+      this.searchTransaction()
+      EventBus.$emit('loadingOverlay', true)
+      EventBus.$on('changeBiz', this.changeBiz)
     },
+    watch:{
+      "optionsTransaction.page"(newValue,oldValue){
+          if (newValue != 1) 
+            this.searchTransaction({page:newValue}).then(data => {})
+        },
+      "optionsTransaction.itemsPerPage"(newValue,oldValue){
+          this.optionsTransaction.page = 1
+          this.searchTransaction({page:1, itemsPerPage:newValue}).then(data => {})
+        },
+      "document_status"(newValue,oldValue){
+        this.optionsTransaction.page = 1
+        this.searchTransaction({status:newValue}).then(data => {})
+      }
+    },
+
     methods: {
-      goToDocumentDetail() {
+      emitLoading(isLoad) {
+        EventBus.$emit('loadingOverlay', isLoad)
+      },
+      goToDocumentDetail(id) {
+        sessionStorage.setItem('transaction_id', id)
         this.$router.push('/inbox/detail')
       },
       getdata() {
-        this.tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num //เรียกใช้ค่า id_card_num ของบริษัทที่เลือก จากตัวแปร selected_business ใน session storage
+        // this.tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num //เรียกใช้ค่า id_card_num ของบริษัทที่เลือก จากตัวแปร selected_business ใน session storage
+        this.getTypeDocs()
       },
-      async searchTransaction(status) { // ใช้แค่ params status เพราะตัวอื่นเรียกค่าจาก this ได้
+      async searchTransaction(filter = {}) { // ใช้แค่ params status เพราะตัวอื่นเรียกค่าจาก this ได้
+        const { page, itemsPerPage, status } = {
+            page: this.optionsTransaction.page,
+            itemsPerPage: this.optionsTransaction.itemsPerPage,
+            status: this.document_status,
+            ...filter
+          } //set options ของ data-table
+
         this.inbox_data = [] //clear data in table
-        if(status == 'all') status = "" //status ทั้งหมด ต้องยิง body เป็น ""
-        const { page, itemsPerPage } = this.optionsTransaction //set options ของ data-table
+        // var status = this.document_status
+        // if(status == 'all') status = "" //status ทั้งหมด ต้องยิง body เป็น ""
         try {
+          var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+          this.emitLoading(true)
           var { data } = await this.axios.post(this.$api_url + '/transaction/api/v1/searchTransaction', { //ตั้งค่าตัวแปร host ไว้แล้ว เรียกใช้เป็น this.$api_url ได้เลย
-            tax_id: this.tax_id, //ต้องทดสอบอีกครั้งว่า ถ้าเปลี่ยน business แล้วค่านี้จะเปลี่ยนด้วยไหม (เพราะ set tax_id แค่ตอน mounted) ปกติจะเรียก get session มาใส่ในนี้โดยตรงเลย
+            tax_id: tax_id, //ต้องทดสอบอีกครั้งว่า ถ้าเปลี่ยน business แล้วค่านี้จะเปลี่ยนด้วยไหม (เพราะ set tax_id แค่ตอน mounted) ปกติจะเรียก get session มาใส่ในนี้โดยตรงเลย
             keyword: this.keyword, //คำในช่องค้นหา
-            status: status, //params status ที่เก็บมา
+            status: status == 'all' ? '': status, //params status ที่เก็บมา
+            flow_id: this.selectedTypeDocs._id,
             lim: itemsPerPage, //เปลี่ยนค่าให้รองรับกับ footer ของตาราง (จำนวนข้อมูลต่อหน้าตาราง 1 หน้า)
             offset: (page-1)*itemsPerPage || 0, // ค่าเริ่มต้นของข้อมูลในหน้าตารางนั้นๆ เช่นหน้าที่ 1 เริ่มข้อมูลที่อาเรย์ 0, หน้าที่ 2 เริ่มข้อมูลที่อาเรย์ 10(ในกรณีที่ itemsPerpage = 10)
             owned: false // เป็นค่าคงที่
@@ -150,41 +190,69 @@
         } catch (error) {
           console.log(error)
         }
+        this.emitLoading(false)
       },
       async countTransaction(){
         var status = ""
         if(this.document_status == 'all') status = ""
         const { page, itemsPerPage } = this.optionsTransaction
         try {
+          var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+          this.emitLoading(true)
           var { data } = await this.axios.post(this.$api_url + '/transaction/api/v1/countTransaction', {
-            tax_id : this.tax_id,
+            tax_id : tax_id,
             keyword: this.keyword,
             status: status,
+            flow_id: this.selectedTypeDocs._id,
             lim: itemsPerPage,
             offset: (page-1)*itemsPerPage || 0,
             owned: false
           })
           if(data.status){
             var res = data.result
-            this.count_transaction_total = res.total
-            this.count_transaction_approved = res.approved
-            this.count_transaction_waiting = res.waiting
-            this.count_transaction_rejected = res.rejected
-            this.count_transaction_inprogress = res.inprogress
-            this.count_transaction_incoming = res.incoming
+            this.count_transaction_total = res.total.toString()
+            this.count_transaction_approved = res.approved.toString()
+            this.count_transaction_waiting = res.waiting.toString()
+            this.count_transaction_rejected = res.rejected.toString()
+            this.count_transaction_inprogress = res.inprogress.toString()
+            this.count_transaction_incoming = res.incoming.toString()
           }
           this.changeTotalItem()
+          this.isReady = true
         } catch (error) {
-          console.log(error);
+          this.isReady = true
         }
+        this.emitLoading(false)
       },
       changeTotalItem(){
-        if(this.document_status == 'all') this.totalItemsTransaction = this.count_transaction_total
-        else if(this.document_status == 'approved') this.totalItemsTransaction = this.count_transaction_approved
-        else if(this.document_status == 'waiting') this.totalItemsTransaction = this.count_transaction_waiting
-        else if(this.document_status == 'rejected') this.totalItemsTransaction = this.count_transaction_rejected
-        else if(this.document_status == 'inprogress') this.totalItemsTransaction = this.count_transaction_inprogress
-        else if(this.document_status == 'incoming') this.totalItemsTransaction = this.count_transaction_incoming
+        if(this.document_status == 'all') this.totalItemsTransaction = parseInt(this.count_transaction_total)
+        else if(this.document_status == 'approved') this.totalItemsTransaction = parseInt(this.count_transaction_approved)
+        else if(this.document_status == 'waiting') this.totalItemsTransaction = parseInt(this.count_transaction_waiting)
+        else if(this.document_status == 'rejected') this.totalItemsTransaction = parseInt(this.count_transaction_rejected)
+        else if(this.document_status == 'inprogress') this.totalItemsTransaction = parseInt(this.count_transaction_inprogress)
+        else if(this.document_status == 'incoming') this.totalItemsTransaction = parseInt(this.count_transaction_incoming)
+      },
+      async getTypeDocs() { 
+        try {
+          var url = '/flowdata/api/v1/getAllFlow?tax_id='
+          var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+          var { data } = await this.axios.get(this.$api_url + url + tax_id)
+          if(data){ 
+            data.result.forEach(element => { 
+                  this.typeDocument.push(element)
+            })
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      searchTypeDocs(){
+        this.searchTransaction()
+        // this.countTransaction()
+      },
+      changeBiz(){
+        this.searchTransaction()
+        this.getTypeDocs()
       }
     }
   }
