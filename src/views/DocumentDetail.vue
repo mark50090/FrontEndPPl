@@ -31,15 +31,31 @@
               </v-row>
             </v-card-title>
             <v-card-text class="px-1 pb-1">
-              <v-row align="center" justify="center" class="mt-1 detail-row pdf-block">
-                <!-- pdf -->
-                <pdf
-                  :src="pdf_src"
-                  @num-pages="page_count = $event"
-                  :page="page"
-                  style="width: 90%"
-                  ref="pdfComponent"
-                />
+              <v-row align="center" justify="center" class="mt-1 detail-row pdf-block ">
+                <div id="pdfBg_create">
+                  <!-- pdf -->
+                  <pdf
+                    id="pdfDiv"
+                    class="text-center"
+                    :src="pdf_src"
+                    @num-pages="page_count = $event"
+                    @loaded="loadedPDF"
+                    @page-loaded="loaded"
+                    :page="page"
+                    ref="pdfComponent"
+                  />
+                  <div
+                    :id="item.name"
+                    v-for="(item, index) in signArray"
+                    :key="index"
+                  >
+                    <v-row no-gutters justify="center" align="center">
+                      <span v-if="item.show == true" style="color: grey">
+                        ลำดับที่ {{ item.index }}
+                      </span>
+                    </v-row>
+                  </div>
+                </div>
               </v-row>
             </v-card-text>
           </v-card>
@@ -53,7 +69,7 @@
                 <b>Doc ID</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-0 pb-0 doc-detail-title">
-                {{ doc_details.document_id }}
+                {{ doc_details.doc_id }}
               </v-col>
             </v-row>
             <v-row class="detail-row">
@@ -69,7 +85,7 @@
                 <b>ชื่อผู้ส่ง</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
-                อากาโมโต้ โอะเมเดะโต ({{doc_details.createdBy}})
+                {{ doc_details.sender }}
               </v-col>
             </v-row>
             <v-row class="detail-row">
@@ -77,7 +93,7 @@
                 <b>ส่งเมื่อ</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
-                {{ doc_details.createdAt | fulldate}}
+                {{ doc_details.create_at | fulldate}}
               </v-col>
             </v-row>
             <v-row class="detail-row">
@@ -118,39 +134,39 @@
                 <!-- work flow tab -->
                 <v-tab-item>
                   <v-timeline align-top dense>
-                    <v-timeline-item fill-dot icon small color="white"> <!-- each step -->
+                    <v-timeline-item fill-dot icon small color="white" v-for="(item, index) in step_flow" :key="`flow_${index}`"> <!-- each step -->
                       <template v-slot:icon> <!-- icon for each step -->
-                        <!-- <v-icon size="30" color="rgb(251, 192, 45)">mdi-clock-outline</v-icon> --> <!-- waiting for approve (current step) -->
-                        <!--<v-icon size="30" color="#4caf50">mdi-check-circle-outline</v-icon>--> <!-- approved -->
-                        <!--<v-icon size="30" color="#f44336">mdi-close-circle-outline</v-icon>--> <!-- deny -->
-                        <v-icon size="30" color="#9e9e9e">mdi-clock-outline</v-icon> <!-- step not arrive yet -->
+                        <v-icon v-if="item.status == 'W'" size="30" color="rgb(251, 192, 45)">mdi-clock-outline</v-icon> <!-- waiting for approve (current step) -->
+                        <v-icon v-if="item.status == 'Y'" size="30" color="#4caf50">mdi-check-circle-outline</v-icon> <!-- approved -->
+                        <v-icon v-if="item.status == 'R'" size="30" color="#f44336">mdi-close-circle-outline</v-icon> <!-- deny -->
+                        <v-icon v-if="item.status == 'N'" size="30" color="#9e9e9e">mdi-clock-outline</v-icon> <!-- step not arrive yet -->
                       </template>
                       <v-row class="detail-row">
                         <v-col cols="3" md="2" lg="2" align-self="start" class="px-0 py-0 step-doc-title">
-                          ลำดับ 10
+                          ลำดับ {{ index + 1 }}
                         </v-col>
                         <v-col cols="7" md="7" lg="7" align-self="start" class="pl-1 pr-0 py-0">
                           <v-icon small color="#0000008A" class="mr-2">mdi-timer-sand-full</v-icon>
-                          <span class="step-period">462 วัน 21 ชั่วโมง 45 นาที 45 วินาที</span>
+                          <span class="step-period" v-if="item.approver">{{ item.approver.diff || '' }}</span>
                         </v-col>
                         <v-spacer></v-spacer>
-                        <!--<v-col cols="auto" md="auto" lg="auto" class="pl-0 py-0 transfer-permission-btn-block"> <!-- show when it is current step and the owner of step is that user 
+                        <!--<v-col cols="auto" md="auto" lg="auto" class="pl-0 py-0 transfer-permission-btn-block"> <!-- show when it is current step and the owner of step is that user
                           <v-btn depressed fab x-small dark color="#074E80">
                             <v-icon>mdi-account-switch</v-icon>
                           </v-btn>
                         </v-col>-->
                       </v-row>
-                      <v-row class="detail-row"> <!-- each person data -->
+                      <v-row class="detail-row" v-for="(item_name, index_name) in item.name" :key="`flow_name_${index}${index_name}`"> <!-- each person data -->
                         <v-col cols="8" md="5" lg="5" align-self="start" class="px-0 pt-0 pb-1 step-doc-title">
-                          ศักดิ์สิทธิ มาก่อน
-                          <span> (คุณ)</span> <!-- when this name is user's name -->
+                          {{ item_name }}
+                          <span v-if="my_name === item_name"> (คุณ)</span> <!-- when this name is user's name -->
                         </v-col>
                         <v-col cols="auto" md="auto" lg="auto" align-self="start" class="pl-0 pr-1 pt-0 pb-1 step-status-block">
-                          <!--<span class="wait-user-approve-status">รออนุมัติ</span>--> <!-- wait for approve status -->
-                          <!--<span class="approved-status">อนุมัติแล้ว</span>--> <!-- approved status -->
-                          <span class="deny-status">ปฏิเสธอนุมัติ</span> <!-- deny status -->
+                          <span v-if="item.status == 'W'" class="wait-user-approve-status">รออนุมัติ</span> <!-- wait for approve status -->
+                          <span v-if="item.status == 'Y' && item.approver.name_approver == item_name" class="approved-status">อนุมัติแล้ว</span> <!-- approved status -->
+                          <span v-if="item.status == 'R' && item.approver.name_approver == item_name" class="deny-status">ปฏิเสธอนุมัติ</span> <!-- deny status -->
                         </v-col>
-                        <v-col cols="12" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-0 pb-1 time-approve-block"> <!-- show when status is approved or deny -->
+                        <v-col v-if="item.status == 'Y' || item.status == 'R'" cols="12" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-0 pb-1 time-approve-block"> <!-- show when status is approved or deny -->
                           <v-icon small color="black" class="pr-1">mdi-timer-outline</v-icon>
                           <span class="time-approved">2020-02-04 06:44:03</span>
                         </v-col>
@@ -161,28 +177,28 @@
                 <!-- comment tab -->
                 <v-tab-item>
                   <div class="show-comment-block">
-                    <template> <!-- each comment -->
-                      <v-row class="detail-row">
+                    <template v-for="(item_comment, index_comment) in doc_details.comment"> <!-- each comment -->
+                      <v-row class="detail-row" :key="`comment_${index_comment}`">
                         <v-col cols="auto" md="auto" lg="auto" align-self="start" class="px-0 pt-1 pb-0">
                           <v-icon x-large>mdi-account-circle</v-icon>
                         </v-col>
                         <v-col cols="10" md="10" lg="10" align-self="start" class="pl-0 pr-0 pt-1 pb-0">
                           <v-row class="detail-row comment-owner-name">
-                            ยินดี ปรีดา
+                            {{ item_comment.comment_by }}
                           </v-row>
                           <v-row class="mt-3 detail-row">
                             <v-card outlined class="pa-3 comment-box">
-                              <pre class="comment">ฉันคิดๆๆๆ</pre>
+                              <pre class="comment">{{ item_comment.message_comment }}</pre>
                             </v-card>
                           </v-row>
                         </v-col>
                       </v-row>
-                      <v-row align="center" justify="end" class="pr-2 detail-row">
-                        <v-btn icon color="#525659"> <!-- show when it is user's comment -->
+                      <v-row align="center" justify="end" class="pr-2 detail-row" :key="`comment_time_${index_comment}`">
+                        <v-btn icon color="#525659" v-if="item_comment.name == my_name"> <!-- show when it is user's comment -->
                           <v-icon>mdi-delete</v-icon>
                         </v-btn>
-                        <span class="comment-time">24-08-2021 08:00:45</span>
-                      </v-row> 
+                        <span class="comment-time">{{ item_comment.comment_at }}</span>
+                      </v-row>
                     </template>
                   </div>
                   <v-row class="detail-row">
@@ -217,7 +233,7 @@
                       </v-col>
                       <v-spacer></v-spacer>
                       <v-col cols="2" md="1" lg="1" align-self="start" class="px-0 pt-1 pb-0 text-center">
-                        <v-btn @click="optionFormFile()" icon small color="#4CAF50" :disabled="false">
+                        <v-btn @click="optionFormFile(item)" icon small color="#4CAF50" :disabled="false">
                           <v-icon>mdi-eye</v-icon>
                         </v-btn>
                       </v-col>
@@ -236,7 +252,7 @@
           <!-- sign card -->
           <v-card outlined class="mt-1 pb-5"> <!-- show when user have to approve in current step -->
             <v-row class="mt-4 mb-2 px-2 detail-row">
-              <v-textarea dense outlined hide-details no-resize readonly label="คำอธิบาย" rows="2" color="rgb(158,158,158)" v-model="document_description" class="doc-description"></v-textarea>
+              <v-textarea dense outlined hide-details no-resize readonly label="คำอธิบาย" rows="2" color="rgb(158,158,158)" :value="doc_details.detail" class="doc-description"></v-textarea>
             </v-row>
             <v-divider></v-divider>
             <v-row class="detail-row">
@@ -271,7 +287,7 @@
               <v-spacer></v-spacer>
             </v-row>
             <v-row justify="center" align="center" class="detail-row">
-              <v-col cols="10" md="7" lg="7" align-self="center" class="pa-0 sign-block">
+              <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pa-0 sign-block">
                 <!-- sign pad -->
                 <v-img
                   v-if="sign_type == 'Default'"
@@ -301,82 +317,105 @@ import showFromFile from '../components/Attachments'
 import Showpdf from '../components/ShowPdf'
 import pdf from 'vue-pdf'
 import vueSignature from 'vue-signature'
-
-  export default {
-    components: {
-      StampModal,
-      showFormMail,
-      showFromFile,
-      Showpdf,
-      pdf,
-      vueSignature
+export default {
+  components: {
+    StampModal,
+    showFormMail,
+    showFromFile,
+    Showpdf,
+    pdf,
+    vueSignature
+  },
+  data: () => ({
+    document_detail_tab: null,
+    document_description: 'อธิบายอะไรก็ไม่รู้',
+    ca_switch: true,
+    all_sign_type: ['Default', 'Sign Pad'],
+    sign_type: 'Default',
+    page_count: 0,
+    page: 1,
+    doc_details: {},
+    attachment_file: [],
+    pdf_src: '',
+    token: '',
+    transaction_id: '',
+    default_sign: '',
+    signature_option: {
+      penColor: 'rgb(13, 38, 154)',
+      backgroundColor: 'rgb(255,255,255)'
     },
-    data: () => ({
-      document_detail_tab: null,
-      document_description: 'อธิบายอะไรก็ไม่รู้',
-      ca_switch: true,
-      all_sign_type: ['Default', 'Sign Pad'],
-      sign_type: 'Default',
-      page_count: 0,
-      page: 1,
-      doc_details: {},
-      attachment_file: [],
-      pdf_src: '',
-      token: '',
-      transaction_id: '',
-      default_sign: '',
-      signature_option:{
-        penColor: 'rgb(13, 38, 154)',
-        backgroundColor: 'rgb(255,255,255)'
-      },
-      padStatus: false,
-      axios_pending: 0
-    }),
-    mounted() {
-      this.token = sessionStorage.getItem('access_token')
-      this.transaction_id = sessionStorage.getItem('transaction_id')
-      this.get_detail_fn()
-      this.get_attachment_file_fn()
-      this.get_signature_default()
+    padStatus: false,
+    allStatus: [true, true, true],
+    sign_position: [],
+    signArray: [],
+    step_flow: [],
+    my_name: '',
+    axios_pending: 0
+  }),
+  mounted () {
+    this.token = sessionStorage.getItem('access_token')
+    this.transaction_id = sessionStorage.getItem('transaction_id')
+    this.my_name = sessionStorage.getItem('name')
+    this.get_detail_fn()
+    this.get_attachment_file_fn()
+    this.get_signature_default()
+  },
+  watch: {
+    axios_pending (val) {
+      if (val > 0) EventBus.$emit('loadingOverlay', true)
+      else EventBus.$emit('loadingOverlay', false)
+    }
+  },
+  methods: {
+    optionFormMail() {
+      EventBus.$emit('FormMail')
     },
-    watch:{
-      axios_pending (val) {
-        if (val > 0) EventBus.$emit('loadingOverlay', true)
-        else EventBus.$emit('loadingOverlay', false)
+    optionFormFile(file) {
+      console.log(file)
+      const url = `${this.$api_url}/file-component/api/getComponentFile`
+      const config = {
+        Authorization: `Bearer ${this.token}`,
+        responseType: 'blob',
+        params: {
+          file_id: file.file_id
+        }
+      }
+      this.axios_pending++
+      this.axios.get(url, config)
+        .then((response) => {
+          console.log(response.data)
+          EventBus.$emit('FormFile', response.data, file.type, file.filename)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+        .then(() => {
+          this.axios_pending--
+        })
+    },
+    gostamp() {
+      EventBus.$emit('stamp')
+    },
+    gopdf() {
+      EventBus.$emit('showpdf', this.pdf_src)
+    },  
+    back() {
+      this.$router.push('/inbox')
+    },
+    change_page_fn(type) {
+      switch (type) {
+        case 'next':
+          if(this.page < this.page_count)
+            this.page++
+          break
+        case 'prev':
+          if(this.page > 1)
+            this.page--
+          break
       }
     },
-    methods: {
-      optionFormMail() {
-        EventBus.$emit('FormMail')
-      },
-      optionFormFile() {
-        EventBus.$emit('FormFile')
-      },
-      gostamp() {
-        EventBus.$emit('stamp')
-      },
-      
-      gopdf() {
-        EventBus.$emit('showpdf')
-      },  
-      back() {
-        this.$router.push('/inbox')
-      },
-      change_page_fn(type) {
-        switch (type) {
-          case 'next':
-            if(this.page < this.page_count)
-              this.page++
-            break
-          case 'prev':
-            if(this.page > 1)
-              this.page--
-            break
-      
-        }
-      },
-      async get_detail_fn() {
-        const url = `/transaction/api/v1/showdetail?transaction_id=${this.transaction_id}`
+    async get_detail_fn() {
+        const url = `/transaction/api/v1/detailTransaction?transaction_id=${this.transaction_id}`
         const config = {
           Authorization: `Bearer ${this.token}`
         }
@@ -385,13 +424,20 @@ import vueSignature from 'vue-signature'
         .then((response) => {
           const data = response.data
           if (data.status) {
-            const doc_data = data.data[0]
-            this.doc_details.document_id = doc_data.document_id
-            this.doc_details.createdBy = doc_data.createdBy
+            const doc_data = data.data
+            this.doc_details.doc_id = doc_data.doc_id
+            this.doc_details.sender = doc_data.sender
             this.doc_details.detail = doc_data.detail
-            this.doc_details.createdAt = doc_data.createdAt
+            this.doc_details.create_at = doc_data.create_at
             this.doc_details.file_name = doc_data.file_name
-            this.pdf_src = `data:application/pdf;base64,${data.data[1].pdfbase}`
+            this.doc_details.comment = doc_data.comment
+            for (let index = 0; index < doc_data.flow_step.length; index++) {
+              const element = doc_data.flow_step[index]
+              console.log(element)
+              this.sign_position.push(element.sign_position)
+              this.step_flow.push(element)
+            }
+            this.pdf_src = `data:application/pdf;base64,${data.data.pdfbase}`
           }
         })
         .catch((error) => {
@@ -400,14 +446,14 @@ import vueSignature from 'vue-signature'
         .then(() => {
           this.axios_pending--
         })
-      },
-      async get_attachment_file_fn() {
-        const url = `/file-component/api/getListFile?transaction_id=${this.transaction_id}`
-        const config = {
-          Authorization: `Bearer ${this.token}`
-        }
-        this.axios_pending++
-        this.axios.get(`${this.$api_url}${url}`, config)
+    },
+    async get_attachment_file_fn () {
+      const url = `/file-component/api/getListFile?transaction_id=${this.transaction_id}`
+      const config = {
+        Authorization: `Bearer ${this.token}`
+      }
+      this.axios_pending++
+      this.axios.get(`${this.$api_url}${url}`, config)
         .then((response) => {
           const data = response.data
           if (data.status) {
@@ -420,14 +466,14 @@ import vueSignature from 'vue-signature'
         .then(() => {
           this.axios_pending--
         })
-      },
-      async get_signature_default() {
-        const url = '/signature/api/v1/image?credentialId=DEFAULT'
-        const config = {
-          Authorization: `Bearer ${this.token}`
-        }
-        this.axios_pending++
-        this.axios.get(`${this.$api_url}${url}`, config)
+    },
+    async get_signature_default () {
+      const url = '/signature/api/v1/image?credentialId=DEFAULT'
+      const config = {
+        Authorization: `Bearer ${this.token}`
+      }
+      this.axios_pending++
+      this.axios.get(`${this.$api_url}${url}`, config)
         .then((response) => {
           const data = response.data
           if (data.status) {
@@ -444,25 +490,441 @@ import vueSignature from 'vue-signature'
         .then(() => {
           this.axios_pending--
         })
-      },
-      onBegin() {
-        this.padStatus = true
-      },
-      onEnd() {
-      },
-      clearSignature() {
-        if(this.sign_type === 'Sign Pad')
-        this.$refs.signaturePad.clear()
-        this.padStatus = false
+    },
+    onBegin () {
+      this.padStatus = true
+    },
+    onEnd () {
+    },
+    clearSignature () {
+      if (this.sign_type === 'Sign Pad') { this.$refs.signaturePad.clear() }
+      this.padStatus = false
+    },
+    loadedPDF () {
+      this.sign_position = this.sign_position.map((element) => {
+        if (element.sign_page !== 'all') {
+          element.sign_page = (typeof element.sign_page === 'string' ? element.sign_page : element.sign_page.toString()).split(',')
+          for (var i = 0; i < element.sign_page.length; i++) { element.sign_page[i] = +element.sign_page[i] }
+        } else element.sign_page = Array.from({ length: this.page_count }, (_, i) => i + 1)
+        return element
+      })
+      console.log('loaded', this.sign_position)
+      // this.setPreViewImg()
+    },
+    loaded: function (e) {
+      this.reShowSign(this.sign_position)
+    },
+    reShowSign(data) {
+      this.signArray = [];
+      for (let index = 0; index < data.length; index++) {
+        if (index == this.focusNoArr) this.signPage = data[index].sign_page;
+        let step_array = this.signArray.length;
+        this.signArray.push({
+          index: step_array + 1,
+          name: 'draggableDiv' + String(step_array + 1),
+          show: false,
+          sign_page: data[index].sign_page,
+        });
+        setTimeout(() => {
+          if (
+            this.signArray[step_array].sign_page.findIndex(
+              (item) => item == this.page
+            ) >= 0 &&
+            this.allStatus[step_array]
+          ) {
+            this.multiShow(step_array + 1, this.allStatus[index]);
+            this.setPositionSign(
+              this.signArray[index].index,
+              data[index].sign_llx,
+              data[index].sign_lly,
+              data[index].sign_urx,
+              data[index].sign_ury
+            )
+            // this.addEventResize(step_array + 1, this.allStatus[index]);
+          } else {
+            //console.log("sign_page != page", JSON.stringify(data[index]));
+            this.multiShow(step_array + 1, false);
+            this.setPositionSign(
+              this.signArray[index].index,
+              data[index].sign_llx,
+              data[index].sign_lly,
+              data[index].sign_urx,
+              data[index].sign_ury
+            )
+            // this.addEventResize(step_array + 1, false);
+          }
+        }, 100)
       }
     },
-    beforeDestroy() {
-      sessionStorage.removeItem('transaction_id')
+    setPreViewImg () {
+      // console.log("setPreViewImg start");
+      this.signArray = []
+      for (let index = 0; index < this.sign_position.length; index++) {
+        this.createSign()
+      }
+      this.$nextTick(function () {
+        this.changePageSign(this.sign_position)
+      })
+    },
+    changePageSign (data) {
+      for (let index = 0; index < this.sign_position.length; index++) {
+        setTimeout(() => {
+          if (
+            this.signArray[index].sign_page.findIndex(
+              (item) => item == this.page
+            ) >= 0 &&
+            this.allStatus[index]
+          ) {
+            //console.log(this.page, data);
+            this.multiShow(index + 1, this.allStatus[index])
+            this.setPositionSign(
+              this.signArray[index].index,
+              data[index].sign_llx,
+              data[index].sign_lly,
+              data[index].sign_urx,
+              data[index].sign_ury
+            );
+            // this.addEventResize(index + 1, this.allStatus[index])
+          } else {
+            this.multiShow(index + 1, false);
+            this.setPositionSign(
+              this.signArray[index].index,
+              data[index].sign_llx,
+              data[index].sign_lly,
+              data[index].sign_urx,
+              data[index].sign_ury
+            );
+            // this.addEventResize(index + 1, false)
+          }
+        }, 400)
+      }
+    },
+    createSign () {
+      const step_array = this.signArray.length
+      this.signArray.push({
+        index: step_array + 1,
+        name: 'draggableDiv' + String(step_array + 1),
+        show: false,
+        sign_page: this.sign_position[step_array].sign_page
+      })
+      setTimeout(() => {
+        if (
+          this.signArray[step_array].sign_page.findIndex(
+            (item) => item == this.page
+          ) >= 0 &&
+            this.allStatus[step_array]
+        ) {
+          this.multiShow(step_array + 1, this.allStatus[step_array])
+          // this.addEventResize(step_array + 1, this.allStatus[step_array])
+        } else {
+          this.multiShow(step_array + 1, false)
+          // this.addEventResize(step_array + 1, false)
+        }
+      }, 400)
+    },
+    multiShow (index, status) {
+      this.signArray[index - 1].show = status
+      $('#draggableDiv' + index).css('cursor', 'context-menu')
+      $('#draggableDiv' + index).css('position', 'absolute')
+      $('#draggableDiv' + index).css('height', '33px')
+      $('#draggableDiv' + index).css('width', '50px')
+      $('#draggableDiv' + index).css(
+        'background-color',
+        'rgba(83, 186, 71, 0.2)'
+      )
+      $('#draggableDiv' + index).css('border', '1.2px dashed grey')
+      $('#draggableDiv' + index).css('color', 'white')
+      $('#draggableDiv' + index).css('text-align', 'center')
+      $('#draggableDiv' + index).css('margin', '1px')
+      if (status) {
+        $('#draggableDiv' + index).css('display', 'block')
+        $('#draggableDiv' + index).css('z-index', 5)
+        $('#draggableDiv' + index).css('opacity', 1)
+        // this.setSigntemplate(index)
+      } else $('#draggableDiv' + index).css('display', 'none')
+    },
+    setSigntemplate (index) {
+      console.log('setSigntemplate index:', index)
+      this.setPdfAreaMulti(index)
+    },
+    setPdfAreaMulti (index) {
+      // console.log("setPdfAreaMulti index:", index);
+      try {
+        var clientHeight = document.getElementById('pdfDiv').clientHeight
+        var clientWidth = document.getElementById('pdfDiv').clientWidth
+        console.log('width' + clientWidth, 'height' + clientHeight);
+        var element = document.getElementById('pdfDiv')
+        var rect = element.getBoundingClientRect()
+        // element.addEventListener("click", this.mouseIsMoving);
+
+        var elementLeft, elementTop, elementRight, elementBot // x and y
+
+        var scrollTop = document.documentElement.scrollTop
+          ? document.documentElement.scrollTop
+          : document.body.scrollTop
+        var scrollLeft = document.documentElement.scrollLeft
+          ? document.documentElement.scrollLeft
+          : document.body.scrollLeft
+
+        elementTop = rect.top
+        elementLeft = rect.left
+        elementRight = rect.right
+        elementBot = rect.bottom
+
+        var xMin = elementLeft
+        var xMax = elementRight
+        var yMin = elementTop
+        var yMax = elementBot
+        this.getSignAreaMulti(xMin, xMax, yMin, yMax, index)
+      } catch (error) {
+        // console.error("ล้มเหลว", error);
+      }
+    },
+    getSignAreaMulti (xMin, xMax, yMin, yMax, index) {
+      // console.log("getSignAreaMulti index:", index);
+      var element = document.getElementById('draggableDiv' + index)
+      var rect = element.getBoundingClientRect()
+
+      var elementLeft, elementTop, elementRight, elementBot // x and y
+
+      var scrollTop = document.documentElement.scrollTop
+        ? document.documentElement.scrollTop
+        : document.body.scrollTop
+      var scrollLeft = document.documentElement.scrollLeft
+        ? document.documentElement.scrollLeft
+        : document.body.scrollLeft
+      elementTop = rect.top
+      elementLeft = rect.left
+      elementRight = rect.right
+      elementBot = rect.bottom
+
+      // console.log("getSignAreaMulti left " + elementLeft);
+      // console.log("getSignAreaMulti top " + elementTop);
+      // console.log("getSignAreaMulti right " + elementRight);
+      // console.log("getSignAreaMulti bot " + elementBot);
+
+      var xMinSign = elementLeft
+      var xMaxSign = this.stringBefore(elementRight.toString(), '.')
+      var yMinSign = this.stringBefore(elementTop.toString(), '.')
+      var yMaxSign = elementBot
+      this.getSignResultMulti(
+        xMinSign,
+        xMaxSign,
+        xMin,
+        xMax,
+        yMaxSign,
+        yMinSign,
+        yMin,
+        yMax,
+        index
+      )
+    },
+    getSignResultMulti (
+      xMinSign,
+      xMaxSign,
+      xMin,
+      xMax,
+      yMaxSign,
+      yMinSign,
+      yMin,
+      yMax,
+      index
+    ) {
+      // console.log("getSignResultMulti index:", index);
+      // console.log("xMinSign", xMinSign);
+      // console.log("xMin", xMin);
+      // console.log("xMax", xMax);
+      var lly = this.getPercent(yMaxSign, yMin, yMax)
+      var sign_llx = this.getPercent(xMinSign, xMin, xMax)
+      var sign_lly = parseFloat(100 - lly)
+      // console.log("sign_llx", sign_llx);
+      // console.log("sign_lly", sign_lly);
+
+      var sign_urx = this.getPercentAll(xMinSign, xMaxSign, xMin, xMax)
+      var sign_ury = this.getPercentAll(yMinSign, yMaxSign, yMin, yMax)
+      // console.log("sign_urx", sign_urx);
+      // console.log("sign_ury", sign_ury);
+
+      sign_llx = (sign_llx * 0.01).toFixed(3)
+      sign_lly = (sign_lly * 0.01).toFixed(3)
+      sign_urx = (sign_urx * 0.01).toFixed(3)
+      sign_ury = (sign_ury * 0.01).toFixed(3)
+
+      var index_array = parseInt(index) - 1
+      //   this.tempSign[index_array] = {
+      //     sign_llx: sign_llx,
+      //     sign_lly: sign_lly,
+      //     sign_urx: sign_urx,
+      //     sign_ury: sign_ury,
+      //     sign_page: this.signArray[index_array].sign_page,
+      //     status: "incomplete",
+      //   };
+      this.sign_position[index_array] = {
+        sign_llx: sign_llx,
+        sign_lly: sign_lly,
+        sign_urx: sign_urx,
+        sign_ury: sign_ury,
+        sign_page: this.signArray[index_array].sign_page
+      }
+
+      // console.log(this.preData);
+      // console.log(this.signArray);
+    },
+    setPositionSign(index, llx, lly, urx, ury) {
+      console.log('position' + index);
+      //console.log(`llx: ${llx}\nlly: ${lly}\nurx: ${urx}\nury: ${ury}`)
+      var arr_index = index - 1;
+
+      // MainFunction.ShowLog("sign "+index+" row(llx) "+llx)
+      // MainFunction.ShowLog("sign "+index+" column(lly) "+lly)
+      // MainFunction.ShowLog("sign "+index+" row(llx) "+urx)
+      // MainFunction.ShowLog("sign "+index+" column(lly) "+ury)
+
+      var cardWidth = $('#pdfBg_create')[0].getBoundingClientRect().width;
+      var cardHeight = $('#pdfBg_create')[0].getBoundingClientRect().height;
+
+      var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width;
+      var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height;
+
+      // //console.log(cardWidth)
+      // //console.log(cardHeight)
+
+      // //console.log(clientWidth)
+      // //console.log(clientHeight)
+
+      // var clientHeight = clientWidth * 141.5805606367726
+      // clientHeight = parseFloat(clientHeight) / 100
+      // clientHeight = parseFloat(clientHeight.toFixed(2))
+
+      // MainFunction.ShowLog("cardWidth "+cardWidth)
+      // MainFunction.ShowLog("cardHeight "+cardHeight)
+      // MainFunction.ShowLog("clientWidth "+clientWidth)
+      // MainFunction.ShowLog("clientHeight "+clientHeight)
+
+      var _pxdraggableDivHeight = clientHeight * parseFloat(ury);
+      var _pxdraggableDivWidth = clientWidth * parseFloat(urx);
+
+      // var setWidth  =  (parseFloat(cardWidth)  - parseFloat(clientWidth)) / 2
+      // var setHeight =  (parseFloat(cardHeight) - parseFloat(clientHeight)) / 2
+
+      // setWidth  = setWidth  + (clientWidth * llx)
+      // setHeight = setHeight + (clientHeight * lly)
+
+      var setWidth = parseFloat(clientWidth) * llx;
+      var setHeight = parseFloat(clientHeight) * lly;
+
+      // MainFunction.ShowLog("setWidth "+setWidth)
+      // MainFunction.ShowLog("setHeight "+setHeight)
+      document.getElementById('draggableDiv' + index).style.height =
+        _pxdraggableDivHeight.toFixed(2) + 'px';
+      document.getElementById('draggableDiv' + index).style.width =
+        _pxdraggableDivWidth.toFixed(2) + 'px';
+
+      document
+        .getElementById('draggableDiv' + index)
+        .style.removeProperty('top');
+      document.getElementById('draggableDiv' + index).style.left =
+        setWidth + 'px';
+      document.getElementById('draggableDiv' + index).style.bottom =
+        setHeight + 'px';
+      //  document.getElementById("draggableDiv"+index).style.left   =  0 +"px"
+      //  document.getElementById("draggableDiv"+index).style.bottom =  0 +"px"
+
+      //   var cardWidth = $("#pdfBg_create")[0].clientWidth;
+      //   var cardHeight = $("#pdfBg_create")[0].clientHeight;
+
+      //   var clientWidth = $("#pdfDiv")[0].getBoundingClientRect().width;
+      //   var clientHeight = $("#pdfDiv")[0].getBoundingClientRect().height;
+
+      //   //   clientWidth = parseFloat(clientWidth.toFixed(2));
+      //   //   clientHeight = parseFloat(clientHeight.toFixed(2));
+
+      //   var _pxdraggableDivHeight = clientHeight * parseFloat(ury);
+      //   var _pxdraggableDivWidth = clientWidth * parseFloat(urx);
+
+      //   var setWidth = parseFloat(clientWidth) * llx;
+      //   var setHeight = parseFloat(clientHeight) * lly;
+
+      //   //console.log("setWidth", setWidth);
+      //   //console.log("setHeight", setHeight);
+
+      //   var dragWidth = clientWidth * urx;
+      //   var dragHeight = clientHeight * ury;
+
+      //   document.getElementById("draggableDiv" + index).style.height =
+      //     _pxdraggableDivHeight.toFixed(2) + "px";
+      //   document.getElementById("draggableDiv" + index).style.width =
+      //     _pxdraggableDivWidth.toFixed(2) + "px";
+
+      //   document.getElementById("draggableDiv" + index).style.left =
+      //     setWidth.toFixed(2) + "px";
+      //   document.getElementById("draggableDiv" + index).style.bottom =
+      //     setHeight.toFixed(2) + "px";
+
+      //   this.tempSign[arr_index].sign_llx = llx;
+      //   this.tempSign[arr_index].sign_lly = lly;
+      //   this.tempSign[arr_index].sign_urx = urx;
+      //   this.tempSign[arr_index].sign_ury = ury;
+
+      this.sign_position[arr_index].sign_llx = llx;
+      this.sign_position[arr_index].sign_lly = lly;
+      this.sign_position[arr_index].sign_urx = urx;
+      this.sign_position[arr_index].sign_ury = ury;
+      //   //console.log("cardWidth", cardWidth);
+      //   //console.log("cardHeight", cardHeight);
+      //   //console.log("clientWidth", clientWidth);
+      //   //console.log("clientHeight", clientHeight);
+      //   //console.log("dragWidth", dragWidth);
+      //   //console.log("dragHeight", dragHeight);
+    },
+    getPercent (data, min, max) {
+      var itemlength = parseFloat(max) - parseFloat(min)
+      var itemdata = parseFloat(data) - parseFloat(min)
+      var itemresult = (itemdata * 100) / itemlength
+      return parseFloat(itemresult).toFixed(3)
+    },
+    getPercentAll (mindata, maxdata, min, max) {
+      var itemlength = parseInt(max) - parseInt(min)
+      var itemdata = parseInt(maxdata) - parseInt(mindata)
+      var itemresult = (itemdata * 100) / itemlength
+      return parseFloat(itemresult).toFixed(3)
+    },
+    stringBefore (string, item) {
+      var strbefore = string.split(item)[0]
+      return strbefore
     }
+  },
+  beforeDestroy () {
+    sessionStorage.removeItem('transaction_id')
   }
+}
 </script>
 
 <style>
+  #pdfBg_create {
+    position: relative;
+    z-index: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 90%;
+    text-align: center;
+    /* height: 100vh; */
+    /* height: calc(100vh - 148px); */
+    background: #525659;
+    /* padding-top: 10px;
+      padding-bottom: 10px; */
+    /* position: fixed; */
+  }
+
+  #pdfDiv {
+    position: absolute;
+    /* z-index: 1;
+    width: 70vw;
+    max-width: 700px; */
+    /* width:   70%; */
+    /* border: 1px solid black; */
+  }
+
   .detail-page {
     height: calc(100vh - 72px);
   }
@@ -654,7 +1116,8 @@ import vueSignature from 'vue-signature'
   .sign-block {
     border: 1px solid lightgray;
     border-radius: 4px;
-    height: 140px;
+    height: 150px;
+    width: 300px;
     text-align: center;
     align-items: center;
     justify-content: center;
