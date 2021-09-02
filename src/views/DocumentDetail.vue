@@ -24,7 +24,7 @@
                 </v-col>
                 <v-spacer></v-spacer>
                 <v-col cols="auto" md="auto" lg="auto" align-self="center" class="py-0 pr-2">
-                  <v-btn icon large color="white">
+                  <v-btn icon large color="white" @click="gopdf()">
                     <v-icon large>mdi-text-box-search</v-icon>
                   </v-btn>
                 </v-col>
@@ -274,6 +274,7 @@
     </v-card>
     <StampModal/>
     <showFormMail/>
+    <Showpdf/>
   </div>
 </template>
 
@@ -281,10 +282,13 @@
 import { EventBus } from '../EventBus'
 import StampModal from '../components/StampModal'
 import showFormMail from '../components/SendMail'
+import Showpdf from '../components/ShowPdf'
+
   export default {
     components: {
       StampModal,
-      showFormMail
+      showFormMail,
+      Showpdf
     },
     data: () => ({
       document_detail_tab: null,
@@ -302,6 +306,10 @@ import showFormMail from '../components/SendMail'
       gostamp() {
         EventBus.$emit('stamp')
       },
+      
+      gopdf() {
+        EventBus.$emit('showpdf')
+      },  
       back() {
         this.$router.push('/inbox')
       }
