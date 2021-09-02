@@ -117,6 +117,7 @@
           var url = '/citizen/api/v1/detail'
           var { data } = await this.axios.get(this.$api_url + url)
           if(data) {
+            sessionStorage.setItem('name', `${data.data.first_name_th} ${data.data.last_name_th}`)
             this.firstname = data.data.first_name_th
             this.lastname = data.data.last_name_th
             this.thai_email = data.data.thai_email
