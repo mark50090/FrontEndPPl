@@ -210,7 +210,7 @@
                       </v-col>
                       <v-spacer></v-spacer>
                       <v-col cols="2" md="1" lg="1" align-self="start" class="px-0 pt-1 pb-0 text-center">
-                        <v-btn icon small color="#4CAF50" :disabled="false">
+                        <v-btn @click="optionFormFile()" icon small color="#4CAF50" :disabled="false">
                           <v-icon>mdi-eye</v-icon>
                         </v-btn>
                       </v-col>
@@ -274,6 +274,7 @@
     </v-card>
     <StampModal/>
     <showFormMail/>
+    <showFromFile/>
   </div>
 </template>
 
@@ -281,10 +282,12 @@
 import { EventBus } from '../EventBus'
 import StampModal from '../components/StampModal'
 import showFormMail from '../components/SendMail'
+import showFromFile from '../components/Attachments'
   export default {
     components: {
       StampModal,
-      showFormMail
+      showFormMail,
+      showFromFile
     },
     data: () => ({
       document_detail_tab: null,
@@ -298,6 +301,9 @@ import showFormMail from '../components/SendMail'
     methods: {
       optionFormMail() {
         EventBus.$emit('FormMail')
+      },
+      optionFormFile() {
+        EventBus.$emit('FormFile')
       },
       gostamp() {
         EventBus.$emit('stamp')
