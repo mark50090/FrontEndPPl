@@ -97,8 +97,8 @@
       lastname: '',
       thai_email: '',
       business: [],
-      isReady: false,
-      loading_overlay: false,
+      isReady: true,
+      loading_overlay: true,
       selectedBiz: ''
     }),
     mounted(){
@@ -107,7 +107,6 @@
         this.changeBiz()
       })
       EventBus.$on('loadingOverlay', this.changeLoading)
-      this.isReady = true
     },
     methods: {
       changeLoading(isLoad) {
@@ -135,6 +134,9 @@
       },
       changeBiz(){
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
+        EventBus.$emit('changeBiz')
+        this.isReady = true
+        this.$router.push({ path: '/inbox' })
       }
     }
   }

@@ -23,10 +23,10 @@
             </v-row>
           </template>
           <template v-slot:[`item.action`]="{ item }"> <!-- view / export excel column -->
-            <v-btn icon color="#4CAF50" @click="viewReport()"> <!-- view report button -->
+            <v-btn icon color="#4CAF50" @click="viewReport(item)"> <!-- view report button -->
               <v-icon>mdi-eye-outline</v-icon>
             </v-btn>
-            <v-btn icon color="#4CAF50" class="ml-7"> <!-- export excel button -->
+            <v-btn icon color="#4CAF50" class="ml-7" :href="item.url" target="_blank"> <!-- export excel button -->
               <svg style="width:24px;height:24px" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M2 12H4V17H20V12H22V17C22 18.11 21.11 19 20 19H4C2.9 19 2 18.11 2 17V12M12 15L17.55 9.54L16.13 8.13L13 11.25V2H11V11.25L7.88 8.13L6.46 9.55L12 15Z" />
               </svg>
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+  import { EventBus } from '../EventBus'
   export default {
     data: () => ({
       report_table_header: [
@@ -47,16 +48,50 @@
         {text: 'ชื่อประเภทเอกสาร', align: 'start', sortable: true, value: 'doc_type'},
         {text: 'View / Export Excel', align: 'start', sortable: false, value: 'action'},
       ],
-      report_data: [
-        {report_no: 30, shorten_name: 'TE0000', doc_type: 'Test Workflow'}
-      ]
+      report_data: [],
+      keyword: ""
     }),
     mounted(){
-
+      this.searchTemplateForm()
+      EventBus.$on('changeBiz', this.changeBiz)
     },
     methods: {
-      viewReport() {
+      viewReport(item) {
+        sessionStorage.setItem('selected_template_report', JSON.stringify(item))
         this.$router.push('/report/view')
+      },
+      changeBiz() {
+        this.searchTemplateForm()
+      },
+      async searchTemplateForm(){ // get user detail to show name, email and business list
+        try {
+          var url = '/template_form/api/v1/searchTemplateForm'
+          this.report_data = []
+          var { data } = await this.axios.post(this.$api_url + url, {
+              tax_id: JSON.parse(sessionStorage.getItem('selected_business')).id_card_num,
+              keyword: this.keyword
+          })
+          if(data) {
+            var index = 1
+            data.data.forEach(e => {
+              this.report_data.push({
+                report_no: index,
+                shorten_name: e.short_name,
+                doc_type: e.flow_type_name,
+                template_id: e.template_id,
+                flow_id: e.flow_id,
+                url: `${this.$api_url}/template_form/api/v1/getTemplateFormDataExcel?template_id=${e.template_id}&flow_id=${e.flow_id}`
+              })
+              index++
+            })
+            // this.loading_overlay = false
+          }else{
+            // this.loading_overlay = false
+          }
+        } catch (error) {
+          console.log(error);
+          // this.loading_overlay = false
+        }
       }
     }
   }
