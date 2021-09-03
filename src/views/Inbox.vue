@@ -10,9 +10,9 @@
         <v-tab-item>
           <v-row class="mt-1 inbox-row">
             <v-col cols="12" md="4" lg="4" class="px-0 pb-0">
-              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-box search-btn-block" v-model="keyword" @keyup.enter="searchTransaction()">
+              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-box search-btn-block" v-model="keyword" @keyup.enter="searchKeyword()">
                 <template v-slot:append-outer>
-                  <v-btn outlined color="#9e9e9e" class="search-btn" @click="searchTransaction()">
+                  <v-btn outlined color="#9e9e9e" class="search-btn" @click="searchKeyword()">
                     <v-icon >mdi-magnify</v-icon>
                   </v-btn>
                 </template>
@@ -133,7 +133,7 @@ import { EventBus } from '../EventBus'
     },
     watch:{
       "optionsTransaction.page"(newValue,oldValue){
-          if (newValue != 1) 
+          // if (newValue != 1) 
             this.searchTransaction({page:newValue}).then(data => {})
         },
       "optionsTransaction.itemsPerPage"(newValue,oldValue){
@@ -252,6 +252,9 @@ import { EventBus } from '../EventBus'
       changeBiz(){
         this.searchTransaction()
         this.getTypeDocs()
+      },
+      searchKeyword(){
+        this.optionsTransaction.page = 1
       }
     }
   }
