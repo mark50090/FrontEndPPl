@@ -53,7 +53,7 @@
             <v-list-item-title class="menu-title">กล่องเอกสาร</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/create" active-class="menu-active">
+        <v-list-item to="/create" active-class="menu-active" v-if="false">
           <v-list-item-icon>
             <v-icon>mdi-file-edit-outline</v-icon>
           </v-list-item-icon>
@@ -61,7 +61,7 @@
             <v-list-item-title class="menu-title">สร้างเอกสาร</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item active-class="menu-active">
+        <v-list-item active-class="menu-active" v-if="false">
           <v-list-item-icon>
             <v-icon>mdi-send-outline</v-icon>
           </v-list-item-icon>
