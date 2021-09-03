@@ -109,7 +109,7 @@
                 <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="download_pdf_fn">ดาวน์โหลด PDF</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from inbox page -->
-                <v-btn v-if="false" @click="optionFormMail()" depressed x-small dark color="#4CAF50" class="download-pdf-btn">
+                <v-btn @click="optionFormMail()" depressed x-small dark color="#4CAF50" class="download-pdf-btn">
                   <v-icon small>mdi-email-send-outline</v-icon>
                   <span class="ml-2">SEND EMAIL</span>
                 </v-btn>
