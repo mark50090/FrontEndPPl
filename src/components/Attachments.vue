@@ -11,7 +11,7 @@
                   <span>{{ name }}</span>
                 </v-col>
                 
-                <v-col v-if="type == 'pdf'" cols="5" md="4" lg="4" align-self="center" class="px-0 py-1 text-center">
+                <v-col v-if="type == 'PDF'" cols="5" md="4" lg="4" align-self="center" class="px-0 py-1 text-center">
                   <v-btn icon color="white" @click="change_page_fn('prev')">
                     <v-icon>mdi-arrow-left</v-icon>
                   </v-btn>
