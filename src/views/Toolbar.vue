@@ -104,7 +104,9 @@
     mounted(){
       this.getUserDetail().then(()=>{ // set defualt business to the 1st of item in business list
         this.selectedBiz = this.business[0]
-        this.changeBiz()
+        // this.changeBiz()
+        sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
+        this.isReady = true
       })
       EventBus.$on('loadingOverlay', this.changeLoading)
     },
@@ -137,7 +139,7 @@
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
         EventBus.$emit('changeBiz')
         this.isReady = true
-        this.$router.push({ path: '/inbox' })
+        // this.$router.push({ path: '/inbox' })
       }
     }
   }
