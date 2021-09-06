@@ -131,6 +131,9 @@ import { EventBus } from '../EventBus'
       EventBus.$emit('loadingOverlay', true)
       EventBus.$on('changeBiz', this.changeBiz)
     },
+    beforeDestroy() {
+      EventBus.$off('changeBiz')
+    },
     watch:{
       "optionsTransaction.page"(newValue,oldValue){
           // if (newValue != 1) 
@@ -158,7 +161,7 @@ import { EventBus } from '../EventBus'
         // this.tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num //เรียกใช้ค่า id_card_num ของบริษัทที่เลือก จากตัวแปร selected_business ใน session storage
         this.getTypeDocs()
       },
-      async searchTransaction(filter = {}) { // ใช้แค่ params status เพราะตัวอื่นเรียกค่าจาก this ได้
+      async searchTransaction(filter = {}) {
         const { page, itemsPerPage, status } = {
             page: this.optionsTransaction.page,
             itemsPerPage: this.optionsTransaction.itemsPerPage,
@@ -167,15 +170,13 @@ import { EventBus } from '../EventBus'
           } //set options ของ data-table
 
         this.inbox_data = [] //clear data in table
-        // var status = this.document_status
-        // if(status == 'all') status = "" //status ทั้งหมด ต้องยิง body เป็น ""
         try {
           var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
           this.emitLoading(true)
           var { data } = await this.axios.post(this.$api_url + '/transaction/api/v1/searchTransaction', { //ตั้งค่าตัวแปร host ไว้แล้ว เรียกใช้เป็น this.$api_url ได้เลย
             tax_id: tax_id, //ต้องทดสอบอีกครั้งว่า ถ้าเปลี่ยน business แล้วค่านี้จะเปลี่ยนด้วยไหม (เพราะ set tax_id แค่ตอน mounted) ปกติจะเรียก get session มาใส่ในนี้โดยตรงเลย
             keyword: this.keyword, //คำในช่องค้นหา
-            status: status == 'all' ? '': status, //params status ที่เก็บมา
+            status: status == 'all' ? '': status, //เช็คค่าของ status ว่าถ้าเป็น all ให้ยิงเป็นค่าว่าง หรือถ้าไม่ ให้ยิงเป็นค่าของ status เลย
             flow_id: this.selectedTypeDocs._id,
             lim: itemsPerPage, //เปลี่ยนค่าให้รองรับกับ footer ของตาราง (จำนวนข้อมูลต่อหน้าตาราง 1 หน้า)
             offset: (page-1)*itemsPerPage || 0, // ค่าเริ่มต้นของข้อมูลในหน้าตารางนั้นๆ เช่นหน้าที่ 1 เริ่มข้อมูลที่อาเรย์ 0, หน้าที่ 2 เริ่มข้อมูลที่อาเรย์ 10(ในกรณีที่ itemsPerpage = 10)
@@ -254,7 +255,8 @@ import { EventBus } from '../EventBus'
         this.getTypeDocs()
       },
       searchKeyword(){
-        this.optionsTransaction.page = 1
+        if(this.optionsTransaction.page == 1) this.searchTransaction()
+        else this.optionsTransaction.page = 1
       }
     }
   }
