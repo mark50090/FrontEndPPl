@@ -13,7 +13,7 @@ Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.prototype.$apiConfig = new Api(axios);
 
-Vue.prototype.$api_url = 'https://uatpaperless.one.th/api3'
+Vue.prototype.$api_url = 'https://uatpaperless.one.th/api3poc'
 
 new Vue({
   router,
