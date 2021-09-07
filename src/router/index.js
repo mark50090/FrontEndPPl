@@ -8,6 +8,7 @@ import DocumentReport from '../views/DocumentReport.vue'
 import ReportDetail from '../views/ReportDetail.vue'
 import Setting from '../views/Setting.vue'
 import Landing from '../views/Landing.vue'
+import ErrorPage from '../views/ErrorPage.vue'
 
 Vue.use(VueRouter)
 
@@ -57,6 +58,11 @@ export default new VueRouter({
       name: 'landing',
       component: Landing,
       props:route => ({ ...route.query }) //collected query after question mark ex. landing?shared_token=...
+    },
+    {
+      path: '*',
+      name: 'error_page',
+      component: ErrorPage
     }
   ]
 })
