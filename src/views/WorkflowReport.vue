@@ -51,24 +51,23 @@
               />
             </v-row>
           </template>
-          <template v-slot:[`item.action`]="{ item }">
-            <!-- view / export excel column -->
+          <template v-slot:[`item.view`]="{ item }"> <!-- view report button -->
             <v-btn icon color="#4CAF50" @click="viewReport(item)">
-              <!-- view report button -->
               <v-icon>mdi-eye-outline</v-icon>
             </v-btn>
-            <v-btn icon class="ml-4" color="#4CAF50" @click="viewDashboard(item)">
-              <!-- view report button -->
+          </template>
+          <template v-slot:[`item.dashboard`]="{ item }">
+            <v-btn icon color="#4CAF50" @click="viewDashboard(item)"> <!-- view report dashboard button -->
               <v-icon>mdi-view-dashboard</v-icon>
             </v-btn>
+          </template>
+          <template v-slot:[`item.excel`]="{ item }"> <!-- export excel button -->
             <v-btn
               icon
               color="#4CAF50"
-              class="ml-4"
               :href="item.url"
               target="_blank"
             >
-              <!-- export excel button -->
               <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
@@ -102,11 +101,26 @@ export default {
         value: 'workflow_detail'
       },
       {
-        text: 'View / Export Excel',
-        align: 'start',
+        text: 'View',
+        align: 'center',
         sortable: false,
-        value: 'action'
-      }
+        value: 'view',
+        width: '70px'
+      },
+      {
+        text: 'Dashboard',
+        align: 'center',
+        sortable: false,
+        value: 'dashboard',
+        width: '102px'
+      },
+      {
+        text: 'Export Excel',
+        align: 'center',
+        sortable: false,
+        value: 'excel',
+        width: '80px'
+      },
     ],
     workflow_data: [],
     keyword: '',
@@ -199,7 +213,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .report-page {
   height: calc(100vh - 72px);
 }

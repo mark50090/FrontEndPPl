@@ -187,7 +187,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .report-detail-page {
   height: calc(100vh - 72px);
   overflow: auto;
