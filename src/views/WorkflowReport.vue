@@ -2,7 +2,7 @@
   <div class="pt-1">
     <v-card outlined class="mb-1 mx-1 px-4 pt-3 report-page">
       <v-row class="pl-3 report-row report-header">
-        <b>รายงาน Workflow</b>
+        <b>รายงานการใช้งานเอกสาร</b>
       </v-row>
       <v-row class="mt-1 report-row">
         <v-col cols="12" md="6" lg="6" class="px-0 pb-1">
@@ -57,10 +57,14 @@
               <!-- view report button -->
               <v-icon>mdi-eye-outline</v-icon>
             </v-btn>
+            <v-btn icon class="ml-4" color="#4CAF50" @click="viewDashboard(item)">
+              <!-- view report button -->
+              <v-icon>mdi-view-dashboard</v-icon>
+            </v-btn>
             <v-btn
               icon
               color="#4CAF50"
-              class="ml-7"
+              class="ml-4"
               :href="item.url"
               target="_blank"
             >
@@ -122,6 +126,10 @@ export default {
     viewReport (item) {
       sessionStorage.setItem('selected_workflow_report', JSON.stringify(item))
       this.$router.push({ name: 'summary_workflow_view' })
+    },
+    viewDashboard (item) {
+      sessionStorage.setItem('selected_workflow_report', JSON.stringify(item))
+      this.$router.push({ name: 'summary_workflow_dashboard' })
     },
     changeBiz () {
       this.getAllFlow()

@@ -10,6 +10,7 @@ import Setting from '../views/Setting.vue'
 import Landing from '../views/Landing.vue'
 import WorkflowReport from '../views/WorkflowReport.vue'
 import WorkflowDetail from '../views/WorkflowDetail.vue'
+import WorkflowDashboard from '../views/WorkflowDashboard.vue'
 
 Vue.use(VueRouter)
 
@@ -61,6 +62,11 @@ export default new VueRouter({
           path: '/summary_workflow/view',
           name: 'summary_workflow_view',
           component: WorkflowDetail
+        },
+        {
+          path: '/summary_workflow/dashboard',
+          name: 'summary_workflow_dashboard',
+          component: WorkflowDashboard
         }
       ]
     },
