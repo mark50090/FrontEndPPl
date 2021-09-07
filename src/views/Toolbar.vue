@@ -53,7 +53,7 @@
             <v-list-item-title class="menu-title">กล่องเอกสาร</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/create" active-class="menu-active" v-if="false">
+        <v-list-item to="/create" active-class="menu-active">
           <v-list-item-icon>
             <v-icon>mdi-file-edit-outline</v-icon>
           </v-list-item-icon>
@@ -107,7 +107,7 @@
       lastname: '',
       thai_email: '',
       business: [],
-      isReady: true,
+      isReady: false,
       loading_overlay: true,
       selectedBiz: ''
     }),
@@ -136,13 +136,13 @@
             data.data.biz_detail.forEach(element => {
               this.business.push(...element.getbiz)
             });
-            // this.loading_overlay = false
+            this.loading_overlay = false
           }else{
-            // this.loading_overlay = false
+            this.loading_overlay = false
           }
         } catch (error) {
           console.log(error);
-          // this.loading_overlay = false
+          this.loading_overlay = false
         }
       },
       changeBiz(){
