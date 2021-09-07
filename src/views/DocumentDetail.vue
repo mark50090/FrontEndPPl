@@ -106,16 +106,16 @@
             </v-row>
             <v-row class="detail-row">
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
-                <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn">ดาวน์โหลด PDF</v-btn>
+                <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="download_pdf_fn">ดาวน์โหลด PDF</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from inbox page -->
-                <v-btn @click="optionFormMail()" depressed x-small dark color="#4CAF50" class="download-pdf-btn">
+                <v-btn v-if="false" @click="optionFormMail()" depressed x-small dark color="#4CAF50" class="download-pdf-btn">
                   <v-icon small>mdi-email-send-outline</v-icon>
                   <span class="ml-2">SEND EMAIL</span>
                 </v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
-                <v-btn depressed x-small dark color="error" class="download-pdf-btn">ยกเลิกเอกสาร</v-btn>
+                <v-btn v-if="false" depressed x-small dark color="error" class="download-pdf-btn">ยกเลิกเอกสาร</v-btn>
               </v-col>
             </v-row>
           </v-card>
@@ -147,7 +147,7 @@
                         </v-col>
                         <v-col cols="7" md="7" lg="7" align-self="start" class="pl-1 pr-0 py-0">
                           <v-icon small color="#0000008A" class="mr-2">mdi-timer-sand-full</v-icon>
-                          <span class="step-period" v-if="item.approver">{{ item.approver.diff || '' }}</span>
+                          <span class="step-period">{{ item.diff || '' }}</span>
                         </v-col>
                         <v-spacer></v-spacer>
                         <!--<v-col cols="auto" md="auto" lg="auto" class="pl-0 py-0 transfer-permission-btn-block"> <!-- show when it is current step and the owner of step is that user
@@ -166,9 +166,9 @@
                           <span v-if="item.status == 'Y' && item.approver.name_approver == item_name" class="approved-status">อนุมัติแล้ว</span> <!-- approved status -->
                           <span v-if="item.status == 'R' && item.approver.name_approver == item_name" class="deny-status">ปฏิเสธอนุมัติ</span> <!-- deny status -->
                         </v-col>
-                        <v-col v-if="item.status == 'Y' || item.status == 'R'" cols="12" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-0 pb-1 time-approve-block"> <!-- show when status is approved or deny -->
+                        <v-col v-if="(item.status == 'Y' || item.status == 'R') && item.approver.name_approver == item_name" cols="12" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-0 pb-1 time-approve-block"> <!-- show when status is approved or deny -->
                           <v-icon small color="black" class="pr-1">mdi-timer-outline</v-icon>
-                          <span class="time-approved">2020-02-04 06:44:03</span>
+                          <span class="time-approved">{{ item.approver.time_approver }}</span>
                         </v-col>
                       </v-row>
                     </v-timeline-item>
@@ -194,14 +194,14 @@
                         </v-col>
                       </v-row>
                       <v-row align="center" justify="end" class="pr-2 detail-row" :key="`comment_time_${index_comment}`">
-                        <v-btn icon color="#525659" v-if="item_comment.name == my_name"> <!-- show when it is user's comment -->
+                        <v-btn icon color="#525659" v-if="item_comment.comment_by == my_name && false"> <!-- show when it is user's comment -->
                           <v-icon>mdi-delete</v-icon>
                         </v-btn>
                         <span class="comment-time">{{ item_comment.comment_at }}</span>
                       </v-row>
                     </template>
                   </div>
-                  <v-row class="detail-row">
+                  <v-row class="detail-row" v-if="check_sign && false">
                     <v-col cols="10" md="11" lg="11" class="pl-2 pr-0 py-1">
                       <v-textarea dense outlined hide-details no-resize rows="2" row-height="16" placeholder="ระบุข้อความ" color="#4CAF50" class="write-comment-box"></v-textarea>
                     </v-col>
@@ -214,7 +214,7 @@
                 </v-tab-item>
                 <!-- attach file tab -->
                 <v-tab-item>
-                  <v-row class="detail-row"> <!-- show when it is current step and the owner of step is that user -->
+                  <v-row class="detail-row" v-if="check_sign && false"> <!-- show when it is current step and the owner of step is that user -->
                     <v-col cols="10" md="10" lg="10" align-self="start" class="pl-0 pr-0 py-1 ">
                       <v-file-input dense outlined counter multiple show-size small-chips placeholder="เลือกไฟล์" color="#4CAF50" class="attach-file-box">
                         <template v-slot:selection="{ text }">
@@ -233,12 +233,12 @@
                       </v-col>
                       <v-spacer></v-spacer>
                       <v-col cols="2" md="1" lg="1" align-self="start" class="px-0 pt-1 pb-0 text-center">
-                        <v-btn @click="optionFormFile(item)" icon small color="#4CAF50" :disabled="false">
+                        <v-btn @click="optionFormFile(item)" icon small color="#4CAF50" :disabled="chack_disable_preview_attachment_fn(item.type)">
                           <v-icon>mdi-eye</v-icon>
                         </v-btn>
                       </v-col>
                       <v-col cols="2" md="2" lg="2" align-self="start" class="px-0 pt-1 pb-0 text-center">
-                        <v-btn icon small color="#4CAF50">
+                        <v-btn icon small color="#4CAF50" @click="download_attachment_fn(item.file_id)">
                           <v-icon>mdi-download</v-icon>
                         </v-btn>
                       </v-col>
@@ -250,7 +250,7 @@
             </v-card-text>
           </v-card>
           <!-- sign card -->
-          <v-card outlined class="mt-1 pb-5"> <!-- show when user have to approve in current step -->
+          <v-card outlined class="mt-1 pb-5" v-if="check_sign"> <!-- show when user have to approve in current step -->
             <v-row class="mt-4 mb-2 px-2 detail-row">
               <v-textarea dense outlined hide-details no-resize readonly label="คำอธิบาย" rows="2" color="rgb(158,158,158)" :value="doc_details.detail" class="doc-description"></v-textarea>
             </v-row>
@@ -261,10 +261,10 @@
               </v-col>
               <v-spacer></v-spacer>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-1 py-2">
-                <v-btn depressed color="#1CC6A9" :disabled="false" class="approve-btn">อนุมัติ</v-btn>
+                <v-btn v-if="false" depressed color="#1CC6A9" :disabled="false" class="approve-btn">อนุมัติ</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-2 py-2">
-                <v-btn depressed dark color="error" class="approve-btn">ปฏิเสธ</v-btn>
+                <v-btn v-if="false" depressed dark color="error" class="approve-btn">ปฏิเสธ</v-btn>
               </v-col>
             </v-row>
             <v-divider></v-divider>
@@ -334,7 +334,9 @@ export default {
     sign_type: 'Default',
     page_count: 0,
     page: 1,
-    doc_details: {},
+    doc_details: {
+      document_status: null
+    },
     attachment_file: [],
     pdf_src: '',
     token: '',
@@ -350,15 +352,20 @@ export default {
     signArray: [],
     step_flow: [],
     my_name: '',
-    axios_pending: 0
+    axios_pending: 0,
+    check_sign: false,
+    last_step: 0
   }),
+  computed: {
+  },
   mounted () {
+    console.log(this.check_sign)
     this.token = sessionStorage.getItem('access_token')
     this.transaction_id = sessionStorage.getItem('transaction_id')
     this.my_name = sessionStorage.getItem('name')
     this.get_detail_fn()
     this.get_attachment_file_fn()
-    this.get_signature_default()
+    this.get_signature_default_fn()
   },
   watch: {
     axios_pending (val) {
@@ -414,6 +421,20 @@ export default {
           break
       }
     },
+    chack_disable_preview_attachment_fn (type) {
+      const allow = 'jpg,jpeg,gif,png,pdf'
+      if (allow.indexOf(type.toLowerCase()) >= 0) return false
+      else return true
+    },
+    download_pdf_fn () {
+      let a = document.createElement('a') // Create <a>
+      a.href = this.pdf_src // Image Base64 Goes here
+      a.download = this.doc_details.file_name // File name Here
+      a.click() // Downloaded file
+    },
+    download_attachment_fn (file_id) {
+       window.open(`${this.$api_url}/file-component/api/downloadFile?file_id=${file_id}`)
+    },
     async get_detail_fn() {
         const url = `/transaction/api/v1/detailTransaction?transaction_id=${this.transaction_id}`
         const config = {
@@ -425,6 +446,16 @@ export default {
           const data = response.data
           if (data.status) {
             const doc_data = data.data
+
+            const find_w = doc_data.flow_step.findIndex((element) => element.status.toLowerCase() === 'w')
+            if (find_w > -1) {
+              this.last_step = find_w
+              const find_name_in_w = doc_data.flow_step[find_w].name.findIndex((element) => element === this.my_name)
+              if (find_name_in_w > -1 && this.$route.name === 'document_detail') this.check_sign = true
+            }else{
+              this.last_step = doc_data.flow_step.length
+            }
+
             this.doc_details.doc_id = doc_data.doc_id
             this.doc_details.sender = doc_data.sender
             this.doc_details.detail = doc_data.detail
@@ -467,7 +498,7 @@ export default {
           this.axios_pending--
         })
     },
-    async get_signature_default () {
+    async get_signature_default_fn () {
       const url = '/signature/api/v1/image?credentialId=DEFAULT'
       const config = {
         Authorization: `Bearer ${this.token}`
@@ -542,7 +573,7 @@ export default {
             )
             // this.addEventResize(step_array + 1, this.allStatus[index]);
           } else {
-            //console.log("sign_page != page", JSON.stringify(data[index]));
+            // console.log("sign_page != page", JSON.stringify(data[index]));
             this.multiShow(step_array + 1, false);
             this.setPositionSign(
               this.signArray[index].index,
@@ -575,7 +606,7 @@ export default {
             ) >= 0 &&
             this.allStatus[index]
           ) {
-            //console.log(this.page, data);
+            // console.log(this.page, data);
             this.multiShow(index + 1, this.allStatus[index])
             this.setPositionSign(
               this.signArray[index].index,
@@ -636,7 +667,8 @@ export default {
       $('#draggableDiv' + index).css('color', 'white')
       $('#draggableDiv' + index).css('text-align', 'center')
       $('#draggableDiv' + index).css('margin', '1px')
-      if (status) {
+      console.log(this.last_step, index)
+      if (status && this.last_step < index) {
         $('#draggableDiv' + index).css('display', 'block')
         $('#draggableDiv' + index).css('z-index', 5)
         $('#draggableDiv' + index).css('opacity', 1)
@@ -772,7 +804,7 @@ export default {
     },
     setPositionSign(index, llx, lly, urx, ury) {
       console.log('position' + index);
-      //console.log(`llx: ${llx}\nlly: ${lly}\nurx: ${urx}\nury: ${ury}`)
+      // console.log(`llx: ${llx}\nlly: ${lly}\nurx: ${urx}\nury: ${ury}`)
       var arr_index = index - 1;
 
       // MainFunction.ShowLog("sign "+index+" row(llx) "+llx)
