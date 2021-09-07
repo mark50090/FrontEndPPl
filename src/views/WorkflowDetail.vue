@@ -8,7 +8,7 @@
           </v-btn>
         </v-col>
         <v-col cols="9" md="8" lg="8" class="px-0 report-detail-header">
-          <b>รายงานสรุปรายละเอียด Workflow {{ workflow_name }}</b>
+          <b>รายงานสรุปการใช้งานเอกสาร {{ workflow_name }}</b>
         </v-col>
         <v-spacer></v-spacer>
         <v-col
