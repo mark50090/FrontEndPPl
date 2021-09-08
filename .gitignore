@@ -24,5 +24,6 @@ pnpm-debug.log*
 
 #ignore docker
 Dockerfile
+dockerfile
 docker-compose.yml
 nginx.conf
