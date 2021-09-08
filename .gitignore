@@ -27,3 +27,4 @@ Dockerfile
 dockerfile
 docker-compose.yml
 nginx.conf
+package-lock.json
