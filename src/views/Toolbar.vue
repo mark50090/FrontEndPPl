@@ -53,7 +53,7 @@
             <v-list-item-title class="menu-title">กล่องเอกสาร</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/create" active-class="menu-active" v-if="false">
+        <v-list-item to="/create" active-class="menu-active">
           <v-list-item-icon>
             <v-icon>mdi-file-edit-outline</v-icon>
           </v-list-item-icon>
@@ -79,6 +79,14 @@
             <v-list-item-title class="menu-title">รายงานเอกสาร</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <!-- <v-list-item to="/summary_workflow" active-class="menu-active">
+          <v-list-item-icon>
+            <v-icon>mdi-file-document</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title class="menu-title">รายงานการใช้งานเอกสาร</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item> -->
       </v-list>
     </v-navigation-drawer>
     <!-- Main Content -->
@@ -97,14 +105,16 @@
       lastname: '',
       thai_email: '',
       business: [],
-      isReady: true,
+      isReady: false,
       loading_overlay: true,
       selectedBiz: ''
     }),
     mounted(){
       this.getUserDetail().then(()=>{ // set defualt business to the 1st of item in business list
         this.selectedBiz = this.business[0]
-        this.changeBiz()
+        // this.changeBiz()
+        sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
+        this.isReady = true
       })
       EventBus.$on('loadingOverlay', this.changeLoading)
     },
@@ -124,20 +134,20 @@
             data.data.biz_detail.forEach(element => {
               this.business.push(...element.getbiz)
             });
-            // this.loading_overlay = false
+            this.loading_overlay = false
           }else{
-            // this.loading_overlay = false
+            this.loading_overlay = false
           }
         } catch (error) {
           console.log(error);
-          // this.loading_overlay = false
+          this.loading_overlay = false
         }
       },
       changeBiz(){
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
         EventBus.$emit('changeBiz')
         this.isReady = true
-        this.$router.push({ path: '/inbox' })
+        // this.$router.push({ path: '/inbox' })
       }
     }
   }

@@ -109,7 +109,7 @@
                 <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="download_pdf_fn">ดาวน์โหลด PDF</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from inbox page -->
-                <v-btn v-if="false" @click="optionFormMail()" depressed x-small dark color="#4CAF50" class="download-pdf-btn">
+                <v-btn @click="optionFormMail()" depressed x-small dark color="#4CAF50" class="download-pdf-btn">
                   <v-icon small>mdi-email-send-outline</v-icon>
                   <span class="ml-2">SEND EMAIL</span>
                 </v-btn>
@@ -197,16 +197,19 @@
                         <v-btn icon color="#525659" v-if="item_comment.comment_by == my_name && false"> <!-- show when it is user's comment -->
                           <v-icon>mdi-delete</v-icon>
                         </v-btn>
+                        <v-btn icon color="#525659" v-if="item_comment.restore" @click="edit_comment_fn"> <!-- show when it is user's comment -->
+                          <v-icon>mdi-restore</v-icon>
+                        </v-btn>
                         <span class="comment-time">{{ item_comment.comment_at }}</span>
                       </v-row>
                     </template>
                   </div>
-                  <v-row class="detail-row" v-if="check_sign && false">
+                  <v-row class="detail-row" v-if="check_sign && comment_status">
                     <v-col cols="10" md="11" lg="11" class="pl-2 pr-0 py-1">
-                      <v-textarea dense outlined hide-details no-resize rows="2" row-height="16" placeholder="ระบุข้อความ" color="#4CAF50" class="write-comment-box"></v-textarea>
+                      <v-textarea dense outlined hide-details no-resize rows="2" row-height="16" placeholder="ระบุข้อความ" color="#4CAF50" class="write-comment-box" v-model="comment"></v-textarea>
                     </v-col>
                     <v-col cols="2" md="1" lg="1" class="px-0 py-1">
-                      <v-btn depressed dark block color="#4CAF50" class="px-1 send-comment-btn">
+                      <v-btn depressed dark block color="#4CAF50" class="px-1 send-comment-btn" @click="add_comment_fn">
                         <v-icon>mdi-send</v-icon>
                       </v-btn>
                     </v-col>
@@ -214,15 +217,15 @@
                 </v-tab-item>
                 <!-- attach file tab -->
                 <v-tab-item>
-                  <v-row class="detail-row" v-if="check_sign && false"> <!-- show when it is current step and the owner of step is that user -->
-                    <v-col cols="10" md="10" lg="10" align-self="start" class="pl-0 pr-0 py-1 ">
-                      <v-file-input dense outlined counter multiple show-size small-chips placeholder="เลือกไฟล์" color="#4CAF50" class="attach-file-box">
-                        <template v-slot:selection="{ text }">
-                          <v-chip small dark close color="#4CAF50">{{ text }}</v-chip>
+                  <v-row class="detail-row" v-if="check_sign"> <!-- show when it is current step and the owner of step is that user -->
+                    <v-col cols="12" md="12" lg="12" align-self="start" class="pl-0 pr-0 py-1 ">
+                      <v-file-input dense outlined counter multiple show-size small-chips placeholder="เลือกไฟล์" color="#4CAF50" class="attach-file-box" v-model="new_attachment_file">
+                        <template v-slot:selection="{ text, index }">
+                          <v-chip small dark close color="#4CAF50" @click:close="removeFileInput(index)">{{ text }}</v-chip>
                         </template>
                       </v-file-input>
                     </v-col>
-                    <v-col cols="2" md="2" lg="2" align-self="start" class="px-1 pt-1 pb-0">
+                    <v-col cols="2" md="2" lg="2" align-self="start" class="px-1 pt-1 pb-0" v-if="false">
                       <v-btn depressed dark block color="#4CAF50" class="attach-file-btn">แนบไฟล์</v-btn>
                     </v-col>
                   </v-row>
@@ -261,10 +264,10 @@
               </v-col>
               <v-spacer></v-spacer>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-1 py-2">
-                <v-btn v-if="false" depressed color="#1CC6A9" :disabled="false" class="approve-btn">อนุมัติ</v-btn>
+                <v-btn depressed color="#1CC6A9" :disabled="false" class="approve-btn" @click="set_approve_fn('approve')">อนุมัติ</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-2 py-2">
-                <v-btn v-if="false" depressed dark color="error" class="approve-btn">ปฏิเสธ</v-btn>
+                <v-btn depressed dark color="error" class="approve-btn" @click="set_approve_fn('reject')">ปฏิเสธ</v-btn>
               </v-col>
             </v-row>
             <v-divider></v-divider>
@@ -302,6 +305,7 @@
         </v-col>
       </v-row>
     </v-card>
+    <canvas id="canvas" width="300" height="150" style="display:none" ></canvas>
     <StampModal/>
     <showFormMail/>
     <showFromFile/>
@@ -337,6 +341,7 @@ export default {
     doc_details: {
       document_status: null
     },
+    new_attachment_file: [],
     attachment_file: [],
     pdf_src: '',
     token: '',
@@ -344,7 +349,7 @@ export default {
     default_sign: '',
     signature_option: {
       penColor: 'rgb(13, 38, 154)',
-      backgroundColor: 'rgb(255,255,255)'
+      backgroundColor: 'rgba(255,255,255,0)'
     },
     padStatus: false,
     allStatus: [true, true, true],
@@ -354,12 +359,13 @@ export default {
     my_name: '',
     axios_pending: 0,
     check_sign: false,
+    comment: '',
+    comment_status: true,
     last_step: 0
   }),
   computed: {
   },
   mounted () {
-    console.log(this.check_sign)
     this.token = sessionStorage.getItem('access_token')
     this.transaction_id = sessionStorage.getItem('transaction_id')
     this.my_name = sessionStorage.getItem('name')
@@ -371,6 +377,15 @@ export default {
     axios_pending (val) {
       if (val > 0) EventBus.$emit('loadingOverlay', true)
       else EventBus.$emit('loadingOverlay', false)
+    },
+    new_attachment_file (val) {
+      for (let index = 0; index < val.length; index++) {
+        const element = val[index]
+        if (element.size > 31457280) {
+          this.removeFileInput(index)
+          alert(`ไม่อนุญาตให้อัปโหลดไฟล์ "${element.name}" เนื่องจากมีขนาดเกิน 30 MB`)
+        }
+      }
     }
   },
   methods: {
@@ -378,7 +393,6 @@ export default {
       EventBus.$emit('FormMail')
     },
     optionFormFile(file) {
-      console.log(file)
       const url = `${this.$api_url}/file-component/api/getComponentFile`
       const config = {
         Authorization: `Bearer ${this.token}`,
@@ -390,7 +404,6 @@ export default {
       this.axios_pending++
       this.axios.get(url, config)
         .then((response) => {
-          console.log(response.data)
           EventBus.$emit('FormFile', response.data, file.type, file.filename)
         })
         .catch((error) => {
@@ -433,15 +446,112 @@ export default {
       a.click() // Downloaded file
     },
     download_attachment_fn (file_id) {
-       window.open(`${this.$api_url}/file-component/api/downloadFile?file_id=${file_id}`)
+      window.open(`${this.$api_url}/file-component/api/downloadFile?file_id=${file_id}`)
+    },
+    convertDateTime () {
+      let datenow = new Date()
+      var todate = new Date(datenow).getDate()
+      var tomonth = new Date(datenow).getMonth() + 1
+      var toyear = new Date(datenow).getFullYear()
+      var toHours = new Date(datenow).getHours()
+      var toMinutes = new Date(datenow).getMinutes()
+      var toSecond = new Date(datenow).getSeconds()
+
+      var date = todate.toString().length == 1 ? '0' + todate.toString() : todate
+      var month = tomonth.toString().length == 1 ? '0' + tomonth.toString() : tomonth
+      var Hours = toHours.toString().length == 1 ? '0' + toHours.toString() : toHours
+      var Minutes = toMinutes.toString().length == 1 ? '0' + toMinutes.toString() : toMinutes
+      var Second = toSecond.toString().length == 1 ? '0' + toSecond.toString() : toSecond
+
+      var setDateTime = toyear + '-' + month + '-' + date + ' ' + Hours + ':' + Minutes + ':' + Second
+
+      return setDateTime
+    },
+    removeFileInput (index) {
+      if (index > -1) {
+        this.new_attachment_file.splice(index, 1)
+      }
+    },
+    add_comment_fn () {
+      let data_comment = {
+        comment_by: this.my_name,
+        comment_at: this.convertDateTime(),
+        message_comment: this.comment,
+        restore: true
+      }
+      this.doc_details.comment.push(data_comment)
+      this.comment_status = false
+    },
+    edit_comment_fn () {
+      this.doc_details.comment.pop()
+      this.comment_status = true
+    },
+    async set_approve_fn(type) {
+      var string_sign, data
+      if (this.sign_type === 'Sign Pad') {
+        string_sign = this.$refs.signaturePad.save().split(',')[1]
+      } else {
+        string_sign = this.default_sign.split(',')[1]
+      }
+      data = {
+        type: type,
+        transaction_id: this.doc_details.transaction_id,
+        document_id: this.doc_details.doc_id,
+        tracking: this.doc_details.tracking,
+        step_index: this.doc_details.step_index,
+        action: this.doc_details.action,
+        string_sign: string_sign,
+        comment: !this.comment_status ? this.comment : null,
+        typesign: 'web'
+      }
+      console.log(data)
+      if (this.new_attachment_file.length > 0) this.upload_attachment()
+      const url = '/transaction/api/v1/updatetransaction'
+      const config = {
+        Authorization: `Bearer ${this.token}`
+      }
+      this.axios_pending++
+      this.axios.put(`${this.$api_url}${url}`, data, config)
+        .then((response) => {
+          console.log(response.data)
+          if (response.data.status) {
+            this.$router.replace({ name: 'inbox' })
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+        .then(() => {
+          this.axios_pending--
+        })
+    },
+    async upload_attachment () {
+      const url = '/file-component/api/saveFile'
+      const config = {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${this.token}`
+      }
+      var formData = new FormData()
+      formData.append('transaction_id', this.transaction_id)
+      for (let index = 0; index < this.new_attachment_file.length; index++) {
+        const element = this.new_attachment_file[index]
+        formData.append('file', element)
+      }
+      this.axios.post(`${this.$api_url}${url}`, formData, config)
+        .then(response => {
+          console.log('input', response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     async get_detail_fn() {
-        const url = `/transaction/api/v1/detailTransaction?transaction_id=${this.transaction_id}`
-        const config = {
-          Authorization: `Bearer ${this.token}`
-        }
-        this.axios_pending++
-        this.axios.get(`${this.$api_url}${url}`, config)
+      const url = `/transaction/api/v1/detailTransaction?transaction_id=${this.transaction_id}`
+      const config = {
+        Authorization: `Bearer ${this.token}`
+      }
+      this.axios_pending++
+      this.axios.get(`${this.$api_url}${url}`, config)
         .then((response) => {
           const data = response.data
           if (data.status) {
@@ -451,20 +561,25 @@ export default {
             if (find_w > -1) {
               this.last_step = find_w
               const find_name_in_w = doc_data.flow_step[find_w].name.findIndex((element) => element === this.my_name)
-              if (find_name_in_w > -1 && this.$route.name === 'document_detail') this.check_sign = true
+              if (find_name_in_w > -1 && this.$route.name === 'document_detail') {
+                this.check_sign = true
+              }
             }else{
               this.last_step = doc_data.flow_step.length
             }
-
+            this.doc_details.transaction_id = doc_data.transaction_id
             this.doc_details.doc_id = doc_data.doc_id
             this.doc_details.sender = doc_data.sender
             this.doc_details.detail = doc_data.detail
+            this.doc_details.tracking = doc_data.tracking
             this.doc_details.create_at = doc_data.create_at
             this.doc_details.file_name = doc_data.file_name
             this.doc_details.comment = doc_data.comment
+            console.log(this.last_step)
+            this.doc_details.step_index = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.step_index : null
+            this.doc_details.action = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.action : null
             for (let index = 0; index < doc_data.flow_step.length; index++) {
               const element = doc_data.flow_step[index]
-              console.log(element)
               this.sign_position.push(element.sign_position)
               this.step_flow.push(element)
             }
@@ -539,23 +654,22 @@ export default {
         } else element.sign_page = Array.from({ length: this.page_count }, (_, i) => i + 1)
         return element
       })
-      console.log('loaded', this.sign_position)
       // this.setPreViewImg()
     },
     loaded: function (e) {
       this.reShowSign(this.sign_position)
     },
     reShowSign(data) {
-      this.signArray = [];
+      this.signArray = []
       for (let index = 0; index < data.length; index++) {
-        if (index == this.focusNoArr) this.signPage = data[index].sign_page;
-        let step_array = this.signArray.length;
+        if (index == this.focusNoArr) this.signPage = data[index].sign_page
+        let step_array = this.signArray.length
         this.signArray.push({
           index: step_array + 1,
           name: 'draggableDiv' + String(step_array + 1),
           show: false,
           sign_page: data[index].sign_page,
-        });
+        })
         setTimeout(() => {
           if (
             this.signArray[step_array].sign_page.findIndex(
@@ -563,7 +677,7 @@ export default {
             ) >= 0 &&
             this.allStatus[step_array]
           ) {
-            this.multiShow(step_array + 1, this.allStatus[index]);
+            this.multiShow(step_array + 1, this.allStatus[index])
             this.setPositionSign(
               this.signArray[index].index,
               data[index].sign_llx,
@@ -574,7 +688,7 @@ export default {
             // this.addEventResize(step_array + 1, this.allStatus[index]);
           } else {
             // console.log("sign_page != page", JSON.stringify(data[index]));
-            this.multiShow(step_array + 1, false);
+            this.multiShow(step_array + 1, false)
             this.setPositionSign(
               this.signArray[index].index,
               data[index].sign_llx,
@@ -606,7 +720,6 @@ export default {
             ) >= 0 &&
             this.allStatus[index]
           ) {
-            // console.log(this.page, data);
             this.multiShow(index + 1, this.allStatus[index])
             this.setPositionSign(
               this.signArray[index].index,
@@ -614,17 +727,17 @@ export default {
               data[index].sign_lly,
               data[index].sign_urx,
               data[index].sign_ury
-            );
+            )
             // this.addEventResize(index + 1, this.allStatus[index])
           } else {
-            this.multiShow(index + 1, false);
+            this.multiShow(index + 1, false)
             this.setPositionSign(
               this.signArray[index].index,
               data[index].sign_llx,
               data[index].sign_lly,
               data[index].sign_urx,
               data[index].sign_ury
-            );
+            )
             // this.addEventResize(index + 1, false)
           }
         }, 400)
@@ -667,7 +780,6 @@ export default {
       $('#draggableDiv' + index).css('color', 'white')
       $('#draggableDiv' + index).css('text-align', 'center')
       $('#draggableDiv' + index).css('margin', '1px')
-      console.log(this.last_step, index)
       if (status && this.last_step < index) {
         $('#draggableDiv' + index).css('display', 'block')
         $('#draggableDiv' + index).css('z-index', 5)
@@ -676,7 +788,6 @@ export default {
       } else $('#draggableDiv' + index).css('display', 'none')
     },
     setSigntemplate (index) {
-      console.log('setSigntemplate index:', index)
       this.setPdfAreaMulti(index)
     },
     setPdfAreaMulti (index) {
@@ -684,7 +795,6 @@ export default {
       try {
         var clientHeight = document.getElementById('pdfDiv').clientHeight
         var clientWidth = document.getElementById('pdfDiv').clientWidth
-        console.log('width' + clientWidth, 'height' + clientHeight);
         var element = document.getElementById('pdfDiv')
         var rect = element.getBoundingClientRect()
         // element.addEventListener("click", this.mouseIsMoving);
@@ -803,20 +913,20 @@ export default {
       // console.log(this.signArray);
     },
     setPositionSign(index, llx, lly, urx, ury) {
-      console.log('position' + index);
+      console.log('position' + index)
       // console.log(`llx: ${llx}\nlly: ${lly}\nurx: ${urx}\nury: ${ury}`)
-      var arr_index = index - 1;
+      var arr_index = index - 1
 
       // MainFunction.ShowLog("sign "+index+" row(llx) "+llx)
       // MainFunction.ShowLog("sign "+index+" column(lly) "+lly)
       // MainFunction.ShowLog("sign "+index+" row(llx) "+urx)
       // MainFunction.ShowLog("sign "+index+" column(lly) "+ury)
 
-      var cardWidth = $('#pdfBg_create')[0].getBoundingClientRect().width;
-      var cardHeight = $('#pdfBg_create')[0].getBoundingClientRect().height;
+      var cardWidth = $('#pdfBg_create')[0].getBoundingClientRect().width
+      var cardHeight = $('#pdfBg_create')[0].getBoundingClientRect().height
 
-      var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width;
-      var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height;
+      var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
+      var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
 
       // //console.log(cardWidth)
       // //console.log(cardHeight)
@@ -833,8 +943,8 @@ export default {
       // MainFunction.ShowLog("clientWidth "+clientWidth)
       // MainFunction.ShowLog("clientHeight "+clientHeight)
 
-      var _pxdraggableDivHeight = clientHeight * parseFloat(ury);
-      var _pxdraggableDivWidth = clientWidth * parseFloat(urx);
+      var _pxdraggableDivHeight = clientHeight * parseFloat(ury)
+      var _pxdraggableDivWidth = clientWidth * parseFloat(urx)
 
       // var setWidth  =  (parseFloat(cardWidth)  - parseFloat(clientWidth)) / 2
       // var setHeight =  (parseFloat(cardHeight) - parseFloat(clientHeight)) / 2
@@ -842,23 +952,23 @@ export default {
       // setWidth  = setWidth  + (clientWidth * llx)
       // setHeight = setHeight + (clientHeight * lly)
 
-      var setWidth = parseFloat(clientWidth) * llx;
-      var setHeight = parseFloat(clientHeight) * lly;
+      var setWidth = parseFloat(clientWidth) * llx
+      var setHeight = parseFloat(clientHeight) * lly
 
       // MainFunction.ShowLog("setWidth "+setWidth)
       // MainFunction.ShowLog("setHeight "+setHeight)
       document.getElementById('draggableDiv' + index).style.height =
-        _pxdraggableDivHeight.toFixed(2) + 'px';
+        _pxdraggableDivHeight.toFixed(2) + 'px'
       document.getElementById('draggableDiv' + index).style.width =
-        _pxdraggableDivWidth.toFixed(2) + 'px';
+        _pxdraggableDivWidth.toFixed(2) + 'px'
 
       document
         .getElementById('draggableDiv' + index)
-        .style.removeProperty('top');
+        .style.removeProperty('top')
       document.getElementById('draggableDiv' + index).style.left =
-        setWidth + 'px';
+        setWidth + 'px'
       document.getElementById('draggableDiv' + index).style.bottom =
-        setHeight + 'px';
+        setHeight + 'px'
       //  document.getElementById("draggableDiv"+index).style.left   =  0 +"px"
       //  document.getElementById("draggableDiv"+index).style.bottom =  0 +"px"
 
@@ -898,10 +1008,10 @@ export default {
       //   this.tempSign[arr_index].sign_urx = urx;
       //   this.tempSign[arr_index].sign_ury = ury;
 
-      this.sign_position[arr_index].sign_llx = llx;
-      this.sign_position[arr_index].sign_lly = lly;
-      this.sign_position[arr_index].sign_urx = urx;
-      this.sign_position[arr_index].sign_ury = ury;
+      this.sign_position[arr_index].sign_llx = llx
+      this.sign_position[arr_index].sign_lly = lly
+      this.sign_position[arr_index].sign_urx = urx
+      this.sign_position[arr_index].sign_ury = ury
       //   //console.log("cardWidth", cardWidth);
       //   //console.log("cardHeight", cardHeight);
       //   //console.log("clientWidth", clientWidth);
