@@ -79,14 +79,14 @@
             <v-list-item-title class="menu-title">รายงานเอกสาร</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <!-- <v-list-item to="/summary_workflow" active-class="menu-active">
+        <v-list-item to="/summary_workflow" active-class="menu-active">
           <v-list-item-icon>
             <v-icon>mdi-file-document</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title class="menu-title">รายงานการใช้งานเอกสาร</v-list-item-title>
           </v-list-item-content>
-        </v-list-item> -->
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <!-- Main Content -->

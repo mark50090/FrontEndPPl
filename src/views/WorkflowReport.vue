@@ -120,7 +120,7 @@ export default {
         sortable: false,
         value: 'excel',
         width: '80px'
-      },
+      }
     ],
     workflow_data: [],
     keyword: '',
@@ -149,7 +149,6 @@ export default {
       this.getAllFlow()
     },
     async getAllFlow () {
-      console.log('getAllFlow_workflow')
       this.workflow_data = []
       this.axios_pending++
       try {
@@ -161,12 +160,12 @@ export default {
         if (data) {
           data.result.forEach((element, index) => {
             this.workflow_data.push({
+              workflow_id: element._id,
               workflow_no: index + 1,
               workflow_name: element.name,
               workflow_detail: element.detail
             })
           })
-          console.log(data)
         }
       } catch (error) {
         console.log(error)
