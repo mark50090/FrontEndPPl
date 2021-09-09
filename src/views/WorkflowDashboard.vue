@@ -12,7 +12,7 @@
                   </v-toolbar>
                   <v-card height="73" flat>
                     <v-layout wrap fill-height justify-center="" align-baseline>
-                      <span style="font-size: 34px">481</span>
+                      <span style="font-size: 34px" v-text="count_all_doc"></span>
                     </v-layout>
                   </v-card>
                 </v-card>
@@ -32,20 +32,20 @@
                     <v-spacer></v-spacer>
                     <v-icon medium color="#67c25d">mdi-file-document</v-icon>
                     &nbsp;&nbsp;
-                    <span>481</span>
+                    <span v-text="count_all_doc"></span>
                   </v-toolbar>
                   <v-card flat>
                     <v-layout wrap fill-height justify-center="" align-baseline>
                       <div class="py-2">
                         <span style="font-size: 16px"
-                          >เอกสารกำลังดำเนินการ : 1</span
+                          >เอกสารกำลังดำเนินการ : 0</span
                         ><br />
-                        <span style="font-size: 16px">เอกสารอนุมัติ : 452</span
+                        <span style="font-size: 16px">เอกสารอนุมัติ : 0</span
                         ><br />
                         <span style="font-size: 16px"
-                          >เอกสารปฏิเสธอนุมัติ : 22</span
+                          >เอกสารปฏิเสธอนุมัติ : 0</span
                         ><br />
-                        <span style="font-size: 16px">เอกสารถูกยกเลิก : 6</span
+                        <span style="font-size: 16px">เอกสารถูกยกเลิก : 0</span
                         ><br />
                         <span style="font-size: 16px">เอกสารถูกลบ : 0</span
                         ><br />
@@ -75,22 +75,58 @@
 </template>
 
 <script>
-import { EventBus } from "../EventBus";
+import { EventBus } from '../EventBus'
 export default {
   data: () => ({
     axios_pending: 0,
+    count_all_doc: 0,
+    workflow_name: '',
+    workflow_id: '',
+    token: ''
   }),
-  mounted() {
-    EventBus.$emit("loadingOverlay", false);
+  mounted () {
+    EventBus.$emit('loadingOverlay', false)
+    const selected_workflow_report = JSON.parse(
+      sessionStorage.getItem('selected_workflow_report')
+    )
+    if (!selected_workflow_report) {
+      this.$router.replace({ name: 'summary_workflow' })
+      return
+    }
+    this.workflow_name = selected_workflow_report.workflow_name
+    this.workflow_id = selected_workflow_report.workflow_id
+    this.token = sessionStorage.getItem('access_token')
+    this.getCountFlowTransaction()
   },
   watch: {
-    axios_pending(val) {
-      if (val > 0) EventBus.$emit("loadingOverlay", true);
-      else EventBus.$emit("loadingOverlay", false);
-    },
+    axios_pending (val) {
+      if (val > 0) EventBus.$emit('loadingOverlay', true)
+      else EventBus.$emit('loadingOverlay', false)
+    }
   },
-  methods: {},
-};
+  methods: {
+    async getCountFlowTransaction () {
+      const url = `${this.$api_url}/report/api/v1/count_flow_transaction?flow_id=${this.workflow_id}`
+      const config = {
+        Authorization: `Bearer ${this.token}`
+      }
+      this.axios_pending++
+      try {
+        var { data } = await this.axios.get(url, config)
+        if (data) {
+          this.count_all_doc = data.result
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.axios_pending--
+      }
+    }
+  },
+  beforeDestroy () {
+    sessionStorage.removeItem('selected_workflow_report')
+  }
+}
 </script>
 
 <style scoped>

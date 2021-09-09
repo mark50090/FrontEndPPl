@@ -42,9 +42,12 @@
       <v-row class="report-detail-row report-detail-table-block">
         <v-data-table
           fixed-header
-          :loading="false"
+          :loading="axios_pending > 0"
           :headers="report_header"
           :items="report_data"
+          :server-items-length="count_doc"
+          :options.sync="optionsTransaction"
+          :footer-props="optionFooter"
           class="
             report-detail-table
             report-detail-table-border
@@ -53,6 +56,9 @@
             report-detail-data-table
           "
         >
+          <template v-slot:[`item.step`]="{ item }" >
+            <span v-html="item.step"></span>
+          </template>
           <template v-slot:loading>
             <!-- loading data in table -->
             <v-row
@@ -84,97 +90,136 @@ export default {
       },
       {
         text: 'ประเภทเอกสาร',
-        value: ''
+        value: 'flow_name'
       },
       {
         text: 'เลขที่เอกสาร',
-        value: ''
+        value: 'document_id'
       },
       {
         text: 'รายละเอียด',
-        value: ''
+        value: 'detail'
       },
       {
         text: 'สถานะเอกสาร',
-        value: ''
+        value: 'document_status'
       },
       {
         text: 'ผู้ส่งเอกสาร',
-        value: ''
+        value: 'sender_name'
       },
       {
         text: 'วันที่ส่ง',
-        value: ''
+        value: 'send_date'
       },
       {
         text: 'ระยะเวลาดำเนินการ',
-        value: ''
+        value: 'step'
       },
       {
         text: 'ระยะเวลาทั้งหมดที่เอกสารถูกดำเนินการ',
-        value: ''
+        value: 'completed_time'
       },
       {
         text: 'ระยะเวลาตั้งแต่เอกสารถูกนำเข้าถึงลำดับล่าสุด',
-        value: ''
+        value: 'process_time'
       }
-
     ],
     report_data: [],
+    optionsTransaction: {
+      page: 1,
+      itemsPerPage: 10
+    },
+    optionFooter: {
+      'items-per-page-options': [5, 10, 15, 20]
+    },
+    count_doc: 0,
     url: '',
-    workflow_name: ''
+    workflow_name: '',
+    workflow_id: '',
+    token: '',
+    axios_pending: 0
   }),
+  watch: {
+    "optionsTransaction.page" () {
+      this.getReportFlow()
+      this.getCountFlowTransaction()
+    },
+    "optionsTransaction.itemsPerPage" () {
+      this.getReportFlow()
+      this.getCountFlowTransaction()
+    }
+  },
   mounted () {
     //   this.getTemplateFormReport()
     //   this.url = JSON.parse(sessionStorage.getItem('selected_template_report')).url
-    this.workflow_name = JSON.parse(
+    const selected_workflow_report = JSON.parse(
       sessionStorage.getItem('selected_workflow_report')
-    ).workflow_name
+    )
+    if (!selected_workflow_report) {
+      this.$router.replace({ name: 'summary_workflow' })
+      return
+    }
+    this.workflow_name = selected_workflow_report.workflow_name
+    this.workflow_id = selected_workflow_report.workflow_id
+    this.token = sessionStorage.getItem('access_token')
+    this.getReportFlow()
+    this.getCountFlowTransaction()
   },
   methods: {
-    async getTemplateFormReport () {
-      // get user detail to show name, email and business list
+    async getCountFlowTransaction () {
+      const url = `${this.$api_url}/report/api/v1/count_flow_transaction?flow_id=${this.workflow_id}`
+      const config = {
+        Authorization: `Bearer ${this.token}`
+      }
+      this.axios_pending++
       try {
-        var url = '/template_form/api/v1/getTemplateFormReport'
-        this.report_header = [
-          {
-            text: 'ลำดับที่',
-            sortable: false,
-            value: 'index',
-            width: '100px'
-          }
-        ]
-        this.report_data = []
-        var { data } = await this.axios.post(this.$api_url + url, {
-          template_id: JSON.parse(
-            sessionStorage.getItem('selected_template_report')
-          ).template_id,
-          flow_id: JSON.parse(
-            sessionStorage.getItem('selected_template_report')
-          ).flow_id
-        })
+        var { data } = await this.axios.get(url, config)
         if (data) {
-          data.result.header.forEach((e) => {
-            this.report_header.push({
-              text: e.text,
-              sortable: false,
-              value: e.key,
-              width: '200px'
-            })
-          })
-          var index = 1
-          data.result.body.forEach((e) => {
-            e.index = index
-            this.report_data.push(e)
-            index++
-          })
-          // this.loading_overlay = false
-        } else {
-          // this.loading_overlay = false
+          this.count_doc = data.result
         }
       } catch (error) {
         console.log(error)
-        // this.loading_overlay = false
+      } finally {
+        this.axios_pending--
+      }
+    },
+    async getReportFlow () {
+      this.axios_pending++
+      try {
+        var url = '/report/api/v1/report_flow_transaction'
+        const body = {
+          flow_id: this.workflow_id,
+          lim: this.optionsTransaction.itemsPerPage,
+          offset: (this.optionsTransaction.page - 1) * this.optionsTransaction.itemsPerPage
+        }
+        const config = {
+          Authorization: `Bearer ${this.token}`
+        }
+        this.report_data = []
+        var { data } = await this.axios.post(this.$api_url + url, body, config)
+        if (data) {
+          if (this.report_data.length === 0)
+            data.result.forEach((e, index) => {
+              this.report_data.push({
+                index: (this.optionsTransaction.page - 1) * this.optionsTransaction.itemsPerPage + index + 1,
+                flow_name: e.flow_name,
+                document_id: e.document_id,
+                detail: e.detail,
+                document_status: e.document_status,
+                sender_name: e.sender_name,
+                send_date: e.send_date,
+                step: e.step.replaceAll('\n', '<br/>'),
+                completed_time: e.completed_time,
+                process_time: e.process_time
+              })
+            })
+        } else {
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.axios_pending--
       }
     },
     back () {
