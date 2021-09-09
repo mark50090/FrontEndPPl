@@ -8,6 +8,7 @@ import DocumentReport from '../views/DocumentReport.vue'
 import ReportDetail from '../views/ReportDetail.vue'
 import Setting from '../views/Setting.vue'
 import Landing from '../views/Landing.vue'
+import SentBoxList from '../views/SentBoxList.vue'
 import ErrorPage from '../views/ErrorPage.vue'
 import WorkflowReport from '../views/WorkflowReport.vue'
 import WorkflowDetail from '../views/WorkflowDetail.vue'
@@ -53,6 +54,11 @@ export default new VueRouter({
           path: '/setting',
           name: 'setting',
           component: Setting
+        },
+        {
+          path: '/sent_box',
+          name: 'sent_box',
+          component: SentBoxList
         },
         {
           path: '/summary_workflow',
