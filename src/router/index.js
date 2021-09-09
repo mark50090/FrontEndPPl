@@ -61,6 +61,11 @@ export default new VueRouter({
           component: SentBoxList
         },
         {
+          path: '/sent_box/detail',
+          name: 'sent_box_detail',
+          component: DocumentDetail
+        },
+        {
           path: '/summary_workflow',
           name: 'summary_workflow',
           component: WorkflowReport

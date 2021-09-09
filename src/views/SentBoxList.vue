@@ -1,7 +1,7 @@
 <template>
   <div class="pt-1">
-    <v-card outlined class="mb-1 mx-1 px-4 pt-2 sentbox-page">
-          <v-row class="mt-1 sentbox-row">
+    <v-card outlined class="mb-1 mx-1 px-4 sentbox-page">
+          <v-row class="sentbox-row">
             <v-col cols="12" md="4" lg="4" class="px-0 pb-0">
               <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-sent-box search-sentbox-btn-block">
                 <template v-slot:append-outer>
@@ -21,10 +21,10 @@
               <v-select outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="sent_box_select" class="status-doc-sentbox sent-box-dropdown-icon"></v-select>
             </v-col>
           </v-row>
-          <v-row class="mt-5 sentbox-row alldoc-sent-header">
+          <v-row class="mt-2 sentbox-row alldoc-sent-header">
             เอกสารทั้งหมด 5 
           </v-row>
-          <v-row class="mt-5 sentbox-row display-pc-only">
+          <v-row class="mt-3 sentbox-row display-pc-only">
             <v-btn-toggle mandatory background-color="white" class="status-sent-block">
               <v-btn outlined tile value="all" class="status-sentbox-btn">
                 ทั้งหมด
@@ -53,7 +53,7 @@
             </v-btn-toggle>
           </v-row>
           <v-row class="sentbox-row">
-            <v-data-table fixed-header :loading="false" :headers="sentbox_table_header" :items="sentbox_data" class="sentbox-table sentbox-table-border sentbox-table-header hide-sentbox-table-progress sentbox-table-data" :footer-props="{'items-per-page-options': [5, 10, 15, 20]}">
+            <v-data-table fixed-header :loading="false" :headers="sentbox_table_header" :items="sentbox_data" @click:row="goToSentDetail()" class="sentbox-table sentbox-table-border sentbox-table-header hide-sentbox-table-progress sentbox-table-data" :footer-props="{'items-per-page-options': [5, 10, 15, 20]}">
               <template v-slot:loading> <!-- loading data in table -->
                 <v-row align="center" justify="center" class="sentbox-row sentbox-data-load-block">
                   <img width="100px" src="../assets/loader.gif" class="sentbox-load">
@@ -105,7 +105,9 @@
     },
 
     methods: {
-
+      goToSentDetail() {
+        this.$router.push('/sent_box/detail')
+      }
     }
   }
 </script>
@@ -202,7 +204,7 @@
   }
 
   .sentbox-table.v-data-table > .v-data-table__wrapper {
-    height: calc(100vh - 323px);
+    height: calc(100vh - 287px);
     overflow: auto;
   }  
 
@@ -248,7 +250,7 @@
     }
 
     .sentbox-table.v-data-table > .v-data-table__wrapper {
-      height: calc(100vh - 400px);
+      height: calc(100vh - 374px);
     }
 
     .sentbox-data-load-block {
