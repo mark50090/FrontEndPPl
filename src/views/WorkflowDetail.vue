@@ -22,8 +22,7 @@
             dark
             color="#4CAF50"
             class="export-report-detail-btn"
-            :href="url"
-            target="_blank"
+            @click="exportExcel"
           >
             <svg
               style="width: 24px; height: 24px"
@@ -224,6 +223,10 @@ export default {
     },
     back () {
       this.$router.push({ name: 'summary_workflow' })
+    },
+    exportExcel () {
+      if (this.$device.windows) window.open(`${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${this.workflow_id}`)
+      else window.open(`https://chat-develop.one.th/deeplink-redirect/?url=${`${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${this.workflow_id}`}`)
     }
   },
   beforeDestroy () {

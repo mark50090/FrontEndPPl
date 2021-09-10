@@ -36,20 +36,7 @@
                   </v-toolbar>
                   <v-card flat>
                     <v-layout wrap fill-height justify-center="" align-baseline>
-                      <div class="py-2">
-                        <span style="font-size: 16px"
-                          >เอกสารกำลังดำเนินการ : 0</span
-                        ><br />
-                        <span style="font-size: 16px">เอกสารอนุมัติ : 0</span
-                        ><br />
-                        <span style="font-size: 16px"
-                          >เอกสารปฏิเสธอนุมัติ : 0</span
-                        ><br />
-                        <span style="font-size: 16px">เอกสารถูกยกเลิก : 0</span
-                        ><br />
-                        <span style="font-size: 16px">เอกสารถูกลบ : 0</span
-                        ><br />
-                      </div>
+                      <apexcharts type="pie" width="100%" :options="chartOptions" :series="series" ></apexcharts>
                     </v-layout>
                   </v-card>
                 </v-card>
@@ -76,10 +63,64 @@
 
 <script>
 import { EventBus } from '../EventBus'
+import VueApexCharts from 'vue-apexcharts'
 export default {
+  components: {
+    apexcharts: VueApexCharts
+  },
   data: () => ({
     axios_pending: 0,
     count_all_doc: 0,
+    series: [0, 0, 0, 0],
+    chartOptions: {
+      labels: ['Inprogress', 'Approved', 'Reject', 'Cancle', 'Delete'],
+      dataLabels: {
+        enabled: true,
+        formatter: function (val, opts) {
+          return opts.w.config.series[opts.seriesIndex]
+        }
+      },
+      chart: {
+        toolbar: {
+          show: false
+        },
+        fontFamily: 'Sarabun, Arial, sans-serif',
+        animations: {
+          enabled: true,
+          easing: 'easeinout',
+          speed: 700,
+          animateGradually: {
+            enabled: true,
+            delay: 100
+          },
+          dynamicAnimation: {
+            enabled: true,
+            speed: 700
+          }
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true
+          }
+        }
+      },
+      colors: [
+        '#008FFB',
+        '#00E396',
+        '#FF4560',
+        '#FEB019',
+        '#757575'
+      ],
+      plotOptions: {
+        bar: {
+          columnWidth: '40%',
+          distributed: true,
+          dataLabels: {
+            position: 'top'
+          }
+        }
+      }
+    },
     workflow_name: '',
     workflow_id: '',
     token: ''
@@ -96,7 +137,7 @@ export default {
     this.workflow_name = selected_workflow_report.workflow_name
     this.workflow_id = selected_workflow_report.workflow_id
     this.token = sessionStorage.getItem('access_token')
-    this.getCountFlowTransaction()
+    this.getSummaryFlowTransaction()
   },
   watch: {
     axios_pending (val) {
@@ -105,8 +146,8 @@ export default {
     }
   },
   methods: {
-    async getCountFlowTransaction () {
-      const url = `${this.$api_url}/report/api/v1/count_flow_transaction?flow_id=${this.workflow_id}`
+    async getSummaryFlowTransaction () {
+      const url = `${this.$api_url}/report/api/v1/summary_flow_transaction?flow_id=${this.workflow_id}`
       const config = {
         Authorization: `Bearer ${this.token}`
       }
@@ -114,7 +155,9 @@ export default {
       try {
         var { data } = await this.axios.get(url, config)
         if (data) {
-          this.count_all_doc = data.result
+          const result = data.result
+          this.count_all_doc = result.total_count
+          this.series = [result.inprogress_count, result.approve_count, result.reject_count, result.cancel_count, result.delete_count]
         }
       } catch (error) {
         console.log(error)
