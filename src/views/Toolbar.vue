@@ -61,14 +61,14 @@
             <v-list-item-title class="menu-title">สร้างเอกสาร</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <!-- <v-list-item to="/sent_box" active-class="menu-active">
+        <v-list-item to="/sent_box" active-class="menu-active">
           <v-list-item-icon>
             <v-icon>mdi-send-outline</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title class="menu-title">รายการที่ส่ง</v-list-item-title>
           </v-list-item-content>
-        </v-list-item> -->
+        </v-list-item>
         <v-list-item to="/report" active-class="menu-active menu-icon-svg-active">
           <v-list-item-icon>
             <svg style="width:24px;height:24px" viewBox="0 0 24 24">
