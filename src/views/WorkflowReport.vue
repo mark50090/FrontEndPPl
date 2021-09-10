@@ -65,8 +65,7 @@
             <v-btn
               icon
               color="#4CAF50"
-              :href="item.url"
-              target="_blank"
+              @click="exportExcel(item.workflow_id)"
             >
               <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
                 <path
@@ -147,6 +146,10 @@ export default {
     },
     changeBiz () {
       this.getAllFlow()
+    },
+    exportExcel (id) {
+      if (this.$device.windows) window.open(`${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${id}`)
+      else window.open(`https://chat-develop.one.th/deeplink-redirect/?url=${`${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${id}`}`)
     },
     async getAllFlow () {
       this.workflow_data = []

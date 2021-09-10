@@ -10,11 +10,15 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { Api } from "./api/axiosInstant";
 import './filters/dateFilters'
+import device from "vue-device-detector"
+import VueApexCharts from 'vue-apexcharts'
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(VueSweetalert2)
-Vue.prototype.$apiConfig = new Api(axios);
+Vue.prototype.$apiConfig = new Api(axios)
+Vue.use(device)
+Vue.use(VueApexCharts)
 
 Vue.prototype.$api_url = 'https://uatpaperless.one.th/api3'
 
