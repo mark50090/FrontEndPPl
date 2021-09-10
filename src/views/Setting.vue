@@ -1,7 +1,277 @@
 <template>
-  <div>
-    setting
-  </div>
+ <div class="pt-2 pl-2 pr-2" >
+   <v-card outlined class="screen-height screen-height-mobile ">
+     <v-card-title class ="h-heading py-3">
+       <b>
+       ตั้งค่าข้อมูลทั่วไป
+       </b>
+     </v-card-title>
+     <v-divider></v-divider>
+     <v-card-text class ="h-heading pa-0">
+         
+         <v-row class="font-all">
+           <v-col  cols="5"
+            md="2"
+            lg="2"
+            class=" py-4 pl-4 all-font-color"
+            align-self="center"
+            >
+           ชื่อ
+           </v-col>
+           <v-col class=" py-4 pr-2">
+            <span class="all-font-color">
+           จักรกรินทร์ ปงแก้ว
+            </span>
+            <span class="font-light-color"> - Jakarin Pongkaew </span>
+           </v-col>
+         </v-row>
+         <v-divider></v-divider>
+          <v-row class="font-all">
+           <v-col  cols="5"
+            md="2"
+            lg="2"
+            class="py-4 pl-4 all-font-color"
+            >
+           ชื่อผู้ใช้
+           </v-col>
+           <v-col
+           class="all-font-color py-4 pr-2">
+           jakarinpo
+           </v-col>
+         </v-row>
+         <v-divider></v-divider>
+         <v-row class="font-all">
+           <v-col  cols="5"
+            md="2"
+            lg="2"
+            class="py-4 pl-4 all-font-color"
+            >
+           OneEmail
+           </v-col>
+           <v-col
+           class="all-font-color py-4 pr-2">
+           jakarin.po@one.th
+           </v-col>
+         </v-row>
+         <v-divider></v-divider>
+         <v-row class="font-all">
+           <v-col  cols="5"
+            md="2"
+            lg="2"
+            class="py-4 pl-4 all-font-color"
+            align-self="center">
+            
+           ลายเซ็นเริ่มต้น
+           </v-col>
+           
+           <v-col cols="4"
+            md="5"
+            lg="5" 
+            align-self="center"
+            class="py-4  all-font-color"
+            ><v-icon class="ic-status-point" size="16" color="#9e9e9e" >mdi-circle</v-icon> <!--FOR NOT FOUND-->
+            <!-- <v-icon size="16" class="ic-status-point" color="#8BC34A">mdi-circle</v-icon>  --> <!--FOR READY-->
+           Not Found <!-- or Ready-->
+           </v-col>
+           
+
+           <v-col align-self="center"
+              cols="3"
+              md="5"
+              lg="5"
+              class="position-btn-mobile"
+              >
+             <v-btn depressed
+             dark
+             color="#67C25D"
+             small
+             
+           ><v-icon size="16" >mdi-cog</v-icon>
+           </v-btn>
+           </v-col>
+         </v-row>
+         <v-divider></v-divider>
+         <v-row class="font-all">
+           <v-col  cols="5" 
+            md="2"
+            lg="2"
+            class=" pl-4 all-font-color font-def-position font-def-position-mobile"
+            >
+           Default Business
+           </v-col>
+           <!-- Default Business when it's not in editing mode -->
+            <v-col 
+            align-self="center"
+            class="pa-0" 
+            >
+            <v-row class="font-all">
+            <v-col cols="12 "
+            md="6"
+            lg="6"
+            class="  all-font-color def-ic-status-point def-ic-status-point-mobile"
+            align-self="center">
+            <!--<v-icon class="ic-status-point" size="16" color="#9e9e9e" >mdi-circle</v-icon> --><!--FOR NOT FOUND-->
+            <v-icon size="16" class="ic-status-point" color="#8BC34A">mdi-circle</v-icon>  <!--FOR READY -->
+           อินเทอร์เน็ตประเทศไทย <!-- or Not Found -->
+              </v-col>
+           <v-col align-self="center"
+              cols="12"
+              md="6"
+              lg="6"
+              class="def-btn-status-point-mobile def-btn-status-point"
+              >
+             <v-btn depressed
+             dark
+             color="#67C25D"
+             small
+             
+           ><v-icon size="16" >mdi-cog</v-icon>
+           </v-btn>
+           </v-col> 
+           
+            </v-row>
+           </v-col> 
+           <!-- Default Business when it's  in editing mode -->
+             <!--<v-col  
+            align-self="center"
+            class="pa-0" 
+            >
+            <v-row class="font-all">
+              <v-col 
+              cols="12 "
+              md="6"
+              lg="6"
+              class="position-dropdown-mobile">
+              <v-autocomplete
+              class="font-dropdown ic-dropdown text-dropdown"
+              append-icon="mdi-chevron-down"
+              auto-select-first
+              outlined
+              dense
+              hide-details
+              color="#67C25D"
+              ></v-autocomplete>
+              </v-col>
+           <v-col
+              cols="auto"
+              md="auto"
+              lg="auto"
+              class="pr-0 position-btn-mobile-cancel"
+              align-self="center">
+             <v-btn  depressed
+             color="#757575"
+             small
+             dark
+             >
+
+             ยกเลิก</v-btn>
+           </v-col>
+           <v-col cols="auto"
+              md="auto"
+              lg="auto"
+              class=" "
+              align-self="center">
+             <v-btn  depressed
+             color="#67C25D"
+             small
+             dark
+             >
+
+             บันทึก</v-btn>
+             
+            </v-col>
+            </v-row>
+           </v-col>-->  
+         </v-row>
+         <v-divider></v-divider>
+         <v-row class="font-all">
+           <v-col  cols="5"
+            md="2"
+            lg="2"
+            class="py-4 pl-4 all-font-color"
+            >
+           Works
+           </v-col>
+           <v-col class="font-all pl-4 pr-2 pt-4 all-font-color">
+             <ul>
+               <li class="pb-2">
+                 อินเทอร์เน็ตประเทศไทย 
+               </li>
+             </ul>
+           </v-col>
+         </v-row>
+         <v-divider></v-divider>
+         <v-row class="font-all">
+           <v-col  cols="12"
+            md="2"
+            lg="2"
+            class="pt-4 pl-4 all-font-color position-setup-notifications position-setup-notifications-mobile"
+            >
+           ตั้งค่าการแจ้งเตือน
+           </v-col>
+           <v-col class="pa-0 ">
+            <v-row class="font-all">
+                <v-col cols="5"
+                md="2"
+                lg="2" 
+                class="pl-4 pt-3 "
+                align-self="center">
+                <v-switch class="mt-0 pt-0 "
+                inset
+                label="Email"
+                hide-details    
+              ></v-switch>
+              </v-col>
+               <v-col class="pt-3 px-0"
+              cols="4"
+              md="5"
+              lg="5">
+                <v-text-field 
+                outlined 
+                hide-details 
+                dense  
+                :filled="true"
+                :disabled="true"
+                class="search-box-write" 
+                color="#67C25D" >
+              </v-text-field>
+
+              
+              </v-col> 
+              <v-col
+              cols="auto"
+              md="auto"
+              lg="auto" 
+              class="px-0 pt-3">
+              <v-btn outlined  color="rgb(158,158,158)" class="search-btn-write px-0 bg-btn-pencil"> <!-- button of email when it's not in editing mode-->
+                  <v-icon small  >mdi-lead-pencil</v-icon>
+              </v-btn>
+              <!-- <template> <!-- button of email when it's  in editing mode 
+              <v-btn  outlined tile 
+                      class="close-btn-write px-0"
+                      color="#909399">
+                    <v-icon small >mdi-close</v-icon>
+                  </v-btn>
+                  <v-btn  outlined   
+                     class="check-btn-write px-0"
+                     color="#909399">
+                <v-icon small >mdi-check</v-icon>
+                  </v-btn> 
+              </template> -->
+              </v-col>
+               </v-row>
+               <v-row class="font-all pl-4 pb-5"
+               ><v-switch class="mt-0 pt-0"
+                inset
+                label="OneChat"
+                hide-details
+              ></v-switch></v-row>
+   
+           </v-col>
+         </v-row>
+      </v-card-text>
+   </v-card>
+ </div>  
 </template>
 
 <script>
@@ -19,5 +289,136 @@
 </script>
 
 <style>
+.h-heading{
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px !important;
+  
+}
+.font-dropdown{
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13px !important;
+
+  
+}
+.s-cancel{
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px !important;
+
+}
+.check-btn-write{
+    background-color: #f5f7fa;
+    border-start-start-radius: 0px;
+    border-end-start-radius: 0px;
+    height: 40px !important;
+    min-width: 40px !important;
+    border-left: 0px;
+
+}
+.close-btn-write{
+    background-color: #f5f7fa;
+    height: 40px !important;
+    min-width: 40px !important;
+    border-right: 0px;
+
+
+}
+.search-box-write {
+    border-end-end-radius: 0px !important;
+    border-start-end-radius: 0px !important;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+  }
+.search-btn-write  {
+    border-start-start-radius: 0px;
+    border-end-start-radius: 0px;
+    height: 40px !important;
+    min-width: 40px !important;
+}
+.font-all{
+  width: 100%;
+  margin: 0% !important;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px !important;
+}
+.all-font-color{
+  color: black;
+}
+.font-light-color{
+  color: #808080;
+}
+.ic-status-point{
+  vertical-align: text-bottom !important; 
+}
+.def-ic-status-point{
+ padding-bottom: 1.5% !important;
+ padding-top: 1.5%;
+
+}
+.def-btn-status-point{
+ padding-bottom: 1.5% !important;
+ padding-top: 1.5%;
+
+}
+.font-def-position {
+ padding-bottom: 1.5% !important;
+ padding-top: 1.5%;
+ align-self: center;
+
+}
+
+.ic-dropdown .theme--light.v-icon {
+    color: rgba(0, 0, 0, 0.54) !important;
+}
+.text-dropdown.v-text-field.v-text-field--enclosed:not(.v-text-field--rounded) > .v-input__control > .v-input__slot{
+  padding-right: 0% !important;
+  padding-left: 2% !important;
+}
+.screen-height {
+    max-height: calc(100vh - 80px);
+    overflow: auto;
+  }
+.position-setup-notifications {
+  padding-bottom: 1.5% !important;
+}  
+.bg-btn-pencil{
+  background: rgba(0, 0, 0, 0.06)
+}
+
+/*========================================*/
+
+  @media only screen and (max-width:600px){ /*css for mobile screen*/
+
+  .def-ic-status-point-mobile{
+ padding-bottom: 0% !important;
+  padding-top: 9% ;
+}
+ .font-def-position-mobile {
+  padding-bottom: 3% !important;
+  padding-top: 5%;
+  align-self: start
+ }
+ .def-btn-status-point-mobile{
+ padding-bottom: 3% !important;
+ padding-top: 3%;
+ text-align: right;
+
+}
+.position-btn-mobile{
+  text-align: right;
+}
+.position-btn-mobile-cancel{
+  margin-left: 23% ;
+}
+.position-dropdown-mobile{
+  padding-bottom: 0% !important;
+}
+.screen-height-mobile  {
+  max-height: calc(100vh - 70px); 
+}
+.position-setup-notifications-mobile {
+  padding-bottom: 0% !important;
+}  
+
+}
 
 </style>
