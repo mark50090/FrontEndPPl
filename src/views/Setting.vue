@@ -59,20 +59,20 @@
               <v-col cols="8" md="5" lg="5" class="px-0 pt-4">
                 <v-autocomplete dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-chevron-down" class="font-dropdown ic-dropdown select-stamp-box"></v-autocomplete>
               </v-col>
-              <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pt-4 edit-stamp-btn-block">
+              <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pt-4 pr-0 edit-stamp-btn-block">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
-                    <v-btn outlined small color="#67C25D" v-on="on" class="edit-stamp-btn">
+                    <v-btn outlined small color="#67C25D" v-on="on" @click="openEditStamp()" class="edit-stamp-btn">
                       <v-icon size="16">mdi-cog</v-icon>
                     </v-btn>
                   </template>
                   <span>แก้ไขตราประทับเริ่มต้น</span>
                 </v-tooltip>
               </v-col>
-              <v-col cols="auto" md="auto" lg="auto" align-self="center" class="px-0 pt-4">
+              <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pr-0 pt-4 add-stamp-btn-block">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
-                    <v-btn depressed dark small color="#67C25D" v-on="on" class="edit-stamp-btn">
+                    <v-btn depressed dark small color="#67C25D" v-on="on" @click="openAddStamp()" class="edit-stamp-btn">
                       <v-icon size="16">mdi-plus</v-icon>
                     </v-btn>
                   </template>
@@ -166,6 +166,7 @@
         </v-row>
       </v-card-text>
       <SignatureModal/>
+      <DefaultStampModal/>
     </v-card>
  </div>  
 </template>
@@ -173,10 +174,12 @@
 <script>
   import { EventBus } from '../EventBus'
   import SignatureModal from '../components/DefaultSignatureModal.vue'
+  import DefaultStampModal from '../components/DefaultStampModal.vue'
 
   export default {
     components: {
-      SignatureModal
+      SignatureModal,
+      DefaultStampModal
     },
     data: () => ({
 
@@ -187,6 +190,12 @@
     methods: {
       openSetDefaultSignature() {
         EventBus.$emit('DefaultSignature')
+      },
+      openAddStamp() {
+        EventBus.$emit('DefaultStamp','add')
+      },
+      openEditStamp() {
+        EventBus.$emit('DefaultStamp','edit')
       }
     }
   }
@@ -314,7 +323,6 @@
   }
 
   .edit-stamp-btn-block {
-    padding-right: 2% !important;
     padding-left: 3% !important;
   }
 
@@ -322,6 +330,10 @@
     padding-left: 0% !important;
     padding-right: 0% !important;
     min-width: 27px !important;
+  }
+
+  .add-stamp-btn-block {
+    padding-left: 3% !important;
   }
 
   .show-stamp-block {
