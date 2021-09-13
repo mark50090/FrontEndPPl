@@ -61,7 +61,7 @@
             <v-list-item-title class="menu-title">สร้างเอกสาร</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item active-class="menu-active" v-if="false">
+        <v-list-item to="/sent_box" active-class="menu-active">
           <v-list-item-icon>
             <v-icon>mdi-send-outline</v-icon>
           </v-list-item-icon>
@@ -79,14 +79,12 @@
             <v-list-item-title class="menu-title">รายงานเอกสาร</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/summary_workflow" active-class="menu-active menu-icon-svg-active">
+        <v-list-item to="/summary_workflow" active-class="menu-active">
           <v-list-item-icon>
-            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-              <path fill="rgba(0, 0, 0, 0.54)" d="M2 12H4V17H20V12H22V17C22 18.11 21.11 19 20 19H4C2.9 19 2 18.11 2 17V12M12 15L17.55 9.54L16.13 8.13L13 11.25V2H11V11.25L7.88 8.13L6.46 9.55L12 15Z" />
-            </svg>
+            <v-icon>mdi-file-document</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title class="menu-title">รายงาน Workflow</v-list-item-title>
+            <v-list-item-title class="menu-title">รายงานการใช้งานเอกสาร</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

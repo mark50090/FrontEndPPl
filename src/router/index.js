@@ -8,8 +8,11 @@ import DocumentReport from '../views/DocumentReport.vue'
 import ReportDetail from '../views/ReportDetail.vue'
 import Setting from '../views/Setting.vue'
 import Landing from '../views/Landing.vue'
+import SentBoxList from '../views/SentBoxList.vue'
+import ErrorPage from '../views/ErrorPage.vue'
 import WorkflowReport from '../views/WorkflowReport.vue'
 import WorkflowDetail from '../views/WorkflowDetail.vue'
+import WorkflowDashboard from '../views/WorkflowDashboard.vue'
 
 Vue.use(VueRouter)
 
@@ -53,6 +56,16 @@ export default new VueRouter({
           component: Setting
         },
         {
+          path: '/sent_box',
+          name: 'sent_box',
+          component: SentBoxList
+        },
+        {
+          path: '/sent_box/detail',
+          name: 'sent_box_detail',
+          component: DocumentDetail
+        },
+        {
           path: '/summary_workflow',
           name: 'summary_workflow',
           component: WorkflowReport
@@ -61,6 +74,11 @@ export default new VueRouter({
           path: '/summary_workflow/view',
           name: 'summary_workflow_view',
           component: WorkflowDetail
+        },
+        {
+          path: '/summary_workflow/dashboard',
+          name: 'summary_workflow_dashboard',
+          component: WorkflowDashboard
         }
       ]
     },
@@ -69,6 +87,11 @@ export default new VueRouter({
       name: 'landing',
       component: Landing,
       props:route => ({ ...route.query }) //collected query after question mark ex. landing?shared_token=...
+    },
+    {
+      path: '*',
+      name: 'error_page',
+      component: ErrorPage
     }
   ]
 })

@@ -420,7 +420,7 @@ export default {
       EventBus.$emit('showpdf', this.pdf_src)
     },  
     back() {
-      this.$router.push('/inbox')
+      this.$router.back();
     },
     change_page_fn(type) {
       switch (type) {
