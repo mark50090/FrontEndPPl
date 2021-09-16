@@ -27,6 +27,23 @@ Vue.use(VueApexCharts)
 Vue.prototype.$api_url = 'https://uatpaperless.one.th/api3'
 Vue.component('vue-draggable-resizable', VueDraggableResizable)
 
+Vue.prototype.$eform_api = 'https://eform.one.th/eform_api/api/v1'
+Vue.prototype.$eform_api_v2 = 'https://eform.one.th/eform_api/api/v2'
+Vue.prototype.$eform_api_v3 = 'https://eform.one.th/eform_api/api/v3'
+Vue.prototype.$eform_api_paperless = 'https://paperless.one.th/paper_less/api/v1'
+Vue.prototype.$eform_api_tracking = 'https://paperless.one.th'
+Vue.prototype.$eform_api_paperless_v2 = 'https://paperless.one.th/paper_less/api/v2'
+Vue.prototype.$eform_api_paperless_storage = 'https://paperless.one.th/paper_less'
+Vue.prototype.$eform_api_paperless_v3 = 'https://paperless.one.th/paper_less/api/v3'
+Vue.prototype.$eform_api_v4 = 'https://eform.one.th/eform_api/api/v4'
+Vue.prototype.$eform_api_paperless_v4 = 'https://paperless.one.th/paper_less/api/v4'
+Vue.prototype.$eform_api_v5 = 'https://eform.one.th/eform_api/api/v5'
+Vue.prototype.$base_url = 'https://digitalflow_dev.one.th/'
+Vue.prototype.$eform_api_v6 = 'https://eform.one.th/eform_api/api/v6'
+Vue.prototype.$eform_node_api_v6 = 'https://eform.one.th/node_api/api/v6'
+Vue.prototype.$eform_node_api = 'https://eform.one.th/node_api/api/v1'
+Vue.prototype.$eform_node_api_v3 = 'https://eform.one.th/node_api/api/v3'
+
 new Vue({
   router,
   store,
