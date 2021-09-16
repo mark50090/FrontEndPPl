@@ -98,7 +98,6 @@ export default new VueRouter({
           path: '/form',
           name: 'form',
           component: FormInputList
->>>>>>> src/router/index.js
         }
       ]
     },
