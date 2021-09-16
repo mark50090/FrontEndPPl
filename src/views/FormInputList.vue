@@ -81,7 +81,7 @@ import { EventBus } from '../EventBus'
 <style>
   .front-insert-doc {
     font-family: 'Sarabun', sans-serif;
-    font-size: 14px;
+    font-size: 14px !important;
   }
 
   .formdoc-page {
