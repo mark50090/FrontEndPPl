@@ -70,7 +70,7 @@
               <v-list-item-title class="menu-title">อัพโหลดเอกสารอนุมัติ</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
+          <v-list-item to="/form" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
             <v-list-item-icon class="icon-sub-menu">
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>

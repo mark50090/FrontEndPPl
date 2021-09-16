@@ -84,7 +84,7 @@ export default new VueRouter({
         },
         {
 
-          path: '/form/input',
+          path: '/form/short_form',
           name: 'question_form',
           component: QuestionForm
         },
