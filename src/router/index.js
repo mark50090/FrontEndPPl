@@ -13,6 +13,7 @@ import ErrorPage from '../views/ErrorPage.vue'
 import WorkflowReport from '../views/WorkflowReport.vue'
 import WorkflowDetail from '../views/WorkflowDetail.vue'
 import WorkflowDashboard from '../views/WorkflowDashboard.vue'
+import CreateTemplate from '../views/eform/Create_Template.vue'
 
 Vue.use(VueRouter)
 
@@ -79,6 +80,11 @@ export default new VueRouter({
           path: '/summary_workflow/dashboard',
           name: 'summary_workflow_dashboard',
           component: WorkflowDashboard
+        },
+        {
+          path: '/template/create_template',
+          name: 'create_template',
+          component: CreateTemplate
         }
       ]
     },
