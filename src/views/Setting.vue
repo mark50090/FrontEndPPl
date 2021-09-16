@@ -51,6 +51,44 @@
         </v-row>
         <v-divider></v-divider>
         <v-row class="font-all">
+          <v-col cols="5" md="2" lg="2" class="pt-6 pl-4 all-font-color">
+            ตราประทับเริ่มต้น
+          </v-col>
+          <v-col class="pa-0">
+            <v-row class="font-all">
+              <v-col cols="8" md="5" lg="5" class="px-0 pt-4">
+                <v-autocomplete dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-chevron-down" class="font-dropdown ic-dropdown select-stamp-box"></v-autocomplete>
+              </v-col>
+              <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pt-4 pr-0 edit-stamp-btn-block">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn outlined small color="#67C25D" v-on="on" @click="openEditStamp()" class="edit-stamp-btn">
+                      <v-icon size="16">mdi-cog</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>แก้ไขตราประทับเริ่มต้น</span>
+                </v-tooltip>
+              </v-col>
+              <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pr-0 pt-4 add-stamp-btn-block">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn depressed dark small color="#67C25D" v-on="on" @click="openAddStamp()" class="edit-stamp-btn">
+                      <v-icon size="16">mdi-plus</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>เพิ่มตราประทับเริ่มต้น</span>
+                </v-tooltip>
+              </v-col>
+            </v-row>
+            <v-row class="font-all show-stamp-block">
+              <v-col cols="12" md="5" lg="5" align-self="center" class="mb-4 pa-0 show-stamp-box">
+                <!-- stamp -->
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-divider></v-divider>
+        <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class=" pl-4 all-font-color font-def-position font-def-position-mobile">
             Default Business
           </v-col>
@@ -124,13 +162,11 @@
                 </template>  -->
               </v-col>
             </v-row>
-            <v-row class="font-all pl-4 pb-5">
-              <v-switch class="mt-0 pt-0" inset label="OneChat" hide-details></v-switch> <!-- one chat noti switch -->
-            </v-row>
           </v-col>
         </v-row>
       </v-card-text>
       <SignatureModal/>
+      <DefaultStampModal/>
     </v-card>
  </div>  
 </template>
@@ -138,10 +174,12 @@
 <script>
   import { EventBus } from '../EventBus'
   import SignatureModal from '../components/DefaultSignatureModal.vue'
+  import DefaultStampModal from '../components/DefaultStampModal.vue'
 
   export default {
     components: {
-      SignatureModal
+      SignatureModal,
+      DefaultStampModal
     },
     data: () => ({
 
@@ -152,6 +190,12 @@
     methods: {
       openSetDefaultSignature() {
         EventBus.$emit('DefaultSignature')
+      },
+      openAddStamp() {
+        EventBus.$emit('DefaultStamp','add')
+      },
+      openEditStamp() {
+        EventBus.$emit('DefaultStamp','edit')
       }
     }
   }
@@ -211,6 +255,22 @@
 .ic-status-point{
   vertical-align: text-bottom !important; 
 }
+
+.select-stamp-box.v-text-field input {
+  line-height: 22px !important;
+}
+
+.show-stamp-box {
+  height: 140px;
+  border: 1.2px dashed grey;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
 .def-ic-status-point{
  padding-bottom: 1.5% !important;
  padding-top: 1.5%;
@@ -246,38 +306,55 @@
 /*========================================*/
 
   @media only screen and (max-width:600px){ /*css for mobile screen*/
-
   .def-ic-status-point-mobile{
- padding-bottom: 0% !important;
-  padding-top: 9% ;
-}
- .font-def-position-mobile {
+  padding-bottom: 0% !important;
+    padding-top: 9% ;
+  }
+  .font-def-position-mobile {
+    padding-bottom: 3% !important;
+    padding-top: 5%;
+    align-self: start
+  }
+  .def-btn-status-point-mobile{
   padding-bottom: 3% !important;
-  padding-top: 5%;
-  align-self: start
- }
- .def-btn-status-point-mobile{
- padding-bottom: 3% !important;
- padding-top: 3%;
- text-align: right;
-
-}
-.position-btn-mobile{
+  padding-top: 3%;
   text-align: right;
-}
-.position-btn-mobile-cancel{
-  margin-left: 23% ;
-}
-.position-dropdown-mobile{
-  padding-bottom: 0% !important;
-}
-.screen-height-mobile  {
-  max-height: calc(100vh - 70px); 
-}
-.position-setup-notifications-mobile {
-  padding-bottom: 0% !important;
-}  
 
+  }
+
+  .edit-stamp-btn-block {
+    padding-left: 3% !important;
+  }
+
+  .edit-stamp-btn {
+    padding-left: 0% !important;
+    padding-right: 0% !important;
+    min-width: 27px !important;
+  }
+
+  .add-stamp-btn-block {
+    padding-left: 3% !important;
+  }
+
+  .show-stamp-block {
+    padding-right: 3%;
+  }
+
+  .position-btn-mobile{
+    text-align: right;
+  }
+  .position-btn-mobile-cancel{
+    margin-left: 23% ;
+  }
+  .position-dropdown-mobile{
+    padding-bottom: 0% !important;
+  }
+  .screen-height-mobile  {
+    max-height: calc(100vh - 70px); 
+  }
+  .position-setup-notifications-mobile {
+    padding-bottom: 0% !important;
+  }  
 }
 
 </style>

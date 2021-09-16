@@ -18,7 +18,7 @@
             </v-col>
             <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 front-sentbox-title display-mobile-only">สถานะเอกสาร</v-col>
             <v-col cols="7" md="4" lg="4" class="px-0 pb-0 display-mobile-only">
-              <v-select outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="doc_status_list" class="status-doc-sentbox sent-box-dropdown-icon"></v-select>
+              <v-select outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="sent_box_select" class="status-doc-sentbox sent-box-dropdown-icon"></v-select>
             </v-col>
           </v-row>
           <v-row class="mt-2 sentbox-row alldoc-sent-header">

@@ -43,7 +43,7 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col cols="12" sm="6" class="pl-sm-4 pt-4 pt-sm-0">
+          <!-- <v-col cols="12" sm="6" class="pl-sm-4 pt-4 pt-sm-0">
             <v-card outlined height="100%">
               <v-toolbar color="white" dense flat>
                 <span>หัวข้อ1</span>
@@ -54,7 +54,7 @@
                 </v-layout>
               </v-card>
             </v-card>
-          </v-col>
+          </v-col> -->
         </v-row>
       </v-col>
     </v-row>

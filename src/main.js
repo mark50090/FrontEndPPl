@@ -10,6 +10,10 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { Api } from "./api/axiosInstant";
 import './filters/dateFilters'
+import VueDraggableResizable from 'vue-draggable-resizable/src/index'
+// import 'vue-draggable-resizable/src/components/vue-draggable-resizable.css'
+
+Vue.component('vue-draggable-resizable', VueDraggableResizable)
 import device from "vue-device-detector"
 import VueApexCharts from 'vue-apexcharts'
 
@@ -21,6 +25,7 @@ Vue.use(device)
 Vue.use(VueApexCharts)
 
 Vue.prototype.$api_url = 'https://uatpaperless.one.th/api3'
+Vue.component('vue-draggable-resizable', VueDraggableResizable)
 
 Vue.prototype.$eform_api = 'https://eform.one.th/eform_api/api/v1'
 Vue.prototype.$eform_api_v2 = 'https://eform.one.th/eform_api/api/v2'

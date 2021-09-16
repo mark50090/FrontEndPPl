@@ -14,6 +14,9 @@ import WorkflowReport from '../views/WorkflowReport.vue'
 import WorkflowDetail from '../views/WorkflowDetail.vue'
 import WorkflowDashboard from '../views/WorkflowDashboard.vue'
 import CreateTemplate from '../views/eform/Create_Template.vue'
+import QuestionForm from '../views/QuestionForm.vue'
+import FormInputList from '../views/FormInputList.vue'
+
 
 Vue.use(VueRouter)
 
@@ -85,6 +88,17 @@ export default new VueRouter({
           path: '/template/create_template',
           name: 'create_template',
           component: CreateTemplate
+        },
+        {
+          path: '/form/short_form',
+          name: 'question_form',
+          component: QuestionForm
+        },
+        {
+          path: '/form',
+          name: 'form',
+          component: FormInputList
+>>>>>>> src/router/index.js
         }
       ]
     },
