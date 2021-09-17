@@ -111,12 +111,16 @@
     }),
     mounted(){
       this.getUserDetail().then(()=>{ // set defualt business to the 1st of item in business list
-        this.selectedBiz = this.business[0]
+        if(!(sessionStorage.getItem('selected_business'))) this.selectedBiz = this.business[0]
         // this.changeBiz()
+        else this.selectedBiz = JSON.parse(sessionStorage.getItem('selected_business'))
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
         this.isReady = true
       })
       EventBus.$on('loadingOverlay', this.changeLoading)
+    },
+    beforeDestroy(){
+      sessionStorage.selected_business = ''
     },
     methods: {
       changeLoading(isLoad) {
