@@ -8764,7 +8764,7 @@ export default {
   text-transform: capitalize;
 }
 
-.theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active).disable-create-menu, .theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-icon, .theme--light.v-tabs > .v-tabs-bar .v-tab--disabled {
+.theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active).disable-create-menu {
   color: #9c9a9a !important;
 }
 
@@ -8810,7 +8810,7 @@ export default {
   border: solid 1px #E0E0E0;
 }
 
-.paper-menu-bar .v-toolbar__content, .v-toolbar__extension {
+.paper-menu-bar .v-toolbar__content {
   padding-left: 0%;
   padding-right: 0%;
 }
@@ -9859,10 +9859,10 @@ export default {
   font-size: 16px;
 }
 
-.v-text-field--outlined > .v-input__control > .v-input__slot  {
+/* .v-text-field--outlined > .v-input__control > .v-input__slot  {
   height: 30px !important;
   padding: 0px !important;
-}
+} */
 
 .permission-data-all-title {
   font-family: 'Sarabun', sans-serif;
@@ -10785,10 +10785,10 @@ export default {
   font-size: 16px;
 }
 
-.v-text-field--outlined > .v-input__control > .v-input__slot  {
+/* .v-text-field--outlined > .v-input__control > .v-input__slot  {
   height: 30px !important;
   padding: 0px !important;
-}
+} */
 
 .body-card {
   height: calc(92vh - 74px);
@@ -10923,7 +10923,7 @@ export default {
   min-width: 32px;
 }
 
-.theme--light.v-btn.v-btn--disabled .v-icon, .theme--light.v-btn.v-btn--disabled .v-btn__loading .icon-drag {
+.theme--light.v-btn.v-btn--disabled .v-btn__loading .icon-drag {
   color: #1b9900 !important;
 }
 

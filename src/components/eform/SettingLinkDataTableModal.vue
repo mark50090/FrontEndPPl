@@ -1,5 +1,4 @@
 <template>
-  <v-container>
     <v-dialog max-width="90%" persistent scrollable v-model="dialog_link_datatable">
       <v-card>
         <v-overlay :value="notReady" absolute opacity="0.3" class="loading-content">
@@ -85,7 +84,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-container>
 </template>
 <script>
   import { EventBus } from '../../EventBus'
