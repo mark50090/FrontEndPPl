@@ -1,5 +1,4 @@
 <template>
-  <v-container>
     <v-dialog v-model="dialog_change_permission_temp" persistent max-width="700px">
       <v-card>
         <v-card-title elevation="4" class="dialog_title">
@@ -28,7 +27,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-container>
 </template>
 
 <script>

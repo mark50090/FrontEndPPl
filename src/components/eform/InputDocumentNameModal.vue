@@ -1,5 +1,4 @@
 <template>
-  <v-container>
     <v-dialog v-model="dialog" max-width="650px" scrollable persistent>
       <v-card>
         <v-overlay :value="notReady" absolute opacity="0.3" class="loading-content">
@@ -115,7 +114,6 @@
         </v-card-actions>      
       </v-card>
     </v-dialog>
-  </v-container>
 </template>
 
 <script>
