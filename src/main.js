@@ -24,8 +24,8 @@ Vue.prototype.$apiConfig = new Api(axios)
 Vue.use(device)
 Vue.use(VueApexCharts)
 
-// Vue.prototype.$api_url = 'https://uatpaperless.one.th/api3'
-Vue.prototype.$api_url = 'http://localhost:8808'
+Vue.prototype.$api_url = 'https://uatpaperless.one.th/api3'
+// Vue.prototype.$api_url = 'http://localhost:8808'
 Vue.component('vue-draggable-resizable', VueDraggableResizable)
 
 Vue.prototype.$eform_api = 'https://eform.one.th/eform_api/api/v1'
