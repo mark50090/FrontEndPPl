@@ -109,11 +109,10 @@ import { EventBus } from '../EventBus'
         this.sending_email = this.sending_email_array.join(",")
         try {
           this.emitLoading(true)
-          var url = '/sendmail/api/v1/send'
+          var id = sessionStorage.transaction_id
+          var url = `/sendmail/api/v1/send?transaction_id=${id}`
           var {data} = await this.axios.post(this.$api_url + url,{
-            email : this.sending_email,
-            subject : "test",
-            data : "test"
+            to : this.sending_email,
           })
           if(data.message){
             this.$swal({
