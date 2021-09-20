@@ -16,9 +16,9 @@ import WorkflowDashboard from '../views/WorkflowDashboard.vue'
 import CreateTemplate from '../views/eform/Create_Template.vue'
 import QuestionForm from '../views/QuestionForm.vue'
 import FormInputList from '../views/FormInputList.vue'
+import ApprovalList from '../views/ApprovalList.vue'
 import ShowTemplate from '../views/eform/Show_Template.vue'
 import PreviewTemplate from '../views/eform/Preview_Template.vue'
-
 
 Vue.use(VueRouter)
 
@@ -100,6 +100,11 @@ export default new VueRouter({
           path: '/form',
           name: 'form',
           component: FormInputList
+        },
+        {
+          path: '/flow',
+          name: 'flow',
+          component: ApprovalList
         },
         {
           path: '/form/input',

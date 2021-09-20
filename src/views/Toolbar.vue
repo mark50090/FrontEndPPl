@@ -114,7 +114,7 @@
               <v-list-item-title class="menu-title">จัดการรูปแบบเอกสาร</v-list-item-title>
             </v-list-item-content>
           </template>
-          <v-list-item to="/test_page" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
+          <v-list-item to="/flow" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
             <v-list-item-icon class="icon-sub-menu">
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
