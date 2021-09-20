@@ -15,7 +15,7 @@ import WorkflowDetail from '../views/WorkflowDetail.vue'
 import WorkflowDashboard from '../views/WorkflowDashboard.vue'
 import QuestionForm from '../views/QuestionForm.vue'
 import FormInputList from '../views/FormInputList.vue'
-
+import ApprovalList from '../views/ApprovalList.vue'
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -92,6 +92,11 @@ export default new VueRouter({
           path: '/form',
           name: 'form',
           component: FormInputList
+        },
+        {
+          path: '/flow',
+          name: 'flow',
+          component: ApprovalList
         }
       ]
     },
