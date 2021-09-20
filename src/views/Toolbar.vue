@@ -122,7 +122,7 @@
               <v-list-item-title class="menu-title">สร้างรูปแบบอนุมัติ</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
+          <v-list-item to="/template" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
             <v-list-item-icon class="icon-sub-menu">
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
@@ -213,7 +213,7 @@
         }
       },
       checkDocStyleMenu() {
-        if((this.$route.name == 'flow') || (this.$route.name == 'create_form')) {
+        if((this.$route.name == 'flow') || (this.$route.name == 'template')) {
           this.open_doc_style_menu = true
           this.doc_style_active_class = 'menu-create-doc-active'
         } else {
