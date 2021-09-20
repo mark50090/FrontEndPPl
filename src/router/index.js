@@ -13,9 +13,13 @@ import ErrorPage from '../views/ErrorPage.vue'
 import WorkflowReport from '../views/WorkflowReport.vue'
 import WorkflowDetail from '../views/WorkflowDetail.vue'
 import WorkflowDashboard from '../views/WorkflowDashboard.vue'
+import CreateTemplate from '../views/eform/Create_Template.vue'
 import QuestionForm from '../views/QuestionForm.vue'
 import FormInputList from '../views/FormInputList.vue'
 import ApprovalList from '../views/ApprovalList.vue'
+import ShowTemplate from '../views/eform/Show_Template.vue'
+import PreviewTemplate from '../views/eform/Preview_Template.vue'
+
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -83,7 +87,11 @@ export default new VueRouter({
           component: WorkflowDashboard
         },
         {
-
+          path: '/template/create_template',
+          name: 'create_template',
+          component: CreateTemplate
+        },
+        {
           path: '/form/short_form',
           name: 'question_form',
           component: QuestionForm
@@ -97,6 +105,16 @@ export default new VueRouter({
           path: '/flow',
           name: 'flow',
           component: ApprovalList
+        },
+        {
+          path: '/form/input',
+          name: 'show_template',
+          component: ShowTemplate
+        },
+        {
+          path: '/form/preview',
+          name: 'preview_template',
+          component: PreviewTemplate
         }
       ]
     },
