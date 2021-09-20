@@ -18,6 +18,7 @@ import QuestionForm from '../views/QuestionForm.vue'
 import FormInputList from '../views/FormInputList.vue'
 import ShowTemplate from '../views/eform/Show_Template.vue'
 import PreviewTemplate from '../views/eform/Preview_Template.vue'
+import TemplateList from '../views/TemplateList.vue'
 
 
 Vue.use(VueRouter)
@@ -110,6 +111,11 @@ export default new VueRouter({
           path: '/form/preview',
           name: 'preview_template',
           component: PreviewTemplate
+        },
+        {
+          path: '/template',
+          name: 'template',
+          component: TemplateList
         }
       ]
     },
