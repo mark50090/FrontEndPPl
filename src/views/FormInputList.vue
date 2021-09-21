@@ -3,7 +3,7 @@
     <v-card outlined class="mb-1 mx-1 px-4 formdoc-page">
           <v-row class="formdoc-row">
             <v-col cols="12" md="6" lg="6" class="px-0 pb-0">
-              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-formdoc search-formdoc-btn-block" v-model="keyword">
+              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-formdoc search-formdoc-btn-block" v-model="keyword" v-on:keyup.enter="searchKeyword()">
                 <template v-slot:append-outer>
                   <v-btn outlined color="#9e9e9e" class="search-formdoc-btn" @click="searchKeyword()">
                     <v-icon >mdi-magnify</v-icon>

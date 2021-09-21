@@ -2278,7 +2278,7 @@ export default {
     code_template: "",
     version_template: "0",
     error_file_name_msg: '',
-    template_code: "",
+    template_id: "",
     isStucture: false,
     choice: null,
     template_privacy: 'PRIVATE',
@@ -3029,6 +3029,7 @@ export default {
       this.changeBusiness()
     }
     EventBus.$on('changeBiz',this.changeBusiness)
+    this.digitalWorkflowLoad()
     // EventBus.$on('changeBiz',this.pplLoadTemplate)
     EventBus.$on('changeBiz',this.digitalWorkflowLoad)
     EventBus.$on('changeBiz',this.getRole)
@@ -3799,7 +3800,7 @@ export default {
         this.notReady = false
         if (err.response != null) {
           if (err.response.status == 401) {
-            this.$router.push('/login')
+            this.$router.push('/notfound')
           }
         } else {
           console.log(err.message)
@@ -3827,7 +3828,7 @@ export default {
         this.notReady = false
         if (err.response != null) {
           if (err.response.status == 401) {
-            this.$router.push('/login')
+            this.$router.push('/notfound')
           }
         } else {
           console.log(err.message)
@@ -3891,13 +3892,13 @@ export default {
     },
     getData() {
       this.option = JSON.parse(sessionStorage.getItem('option'))
-      this.template_code = this.option.template_code
-      this.getTemplate(this.option.template_code)
+      this.template_id = this.option.template_id
+      this.getTemplate(this.option.template_id)
     },
-    async getTemplate(template_code) {
+    async getTemplate(template_id) {
       var template = {}
       try {
-        var { data } = await this.axios.get(this.$api_url + '/template_form/api/v1/getTemplateFormById?template_id=' + template_code)
+        var { data } = await this.axios.get(this.$api_url + '/template_form/api/v1/getTemplateFormById?template_id=' + template_id)
         template = data.data
         this.template_privacy = template.permission_template
         this.template_type = template.structure_template_type
@@ -3943,18 +3944,6 @@ export default {
         } else {
           this.docUseDate = template.datetime_use.substr(0, 10)
         }
-        if(template.template_paperless_code) {
-          // await this.pplLoadTemplate() //Load Template
-          this.selectedDocumentType = this.getDocumentType(template.template_paperless_code[0].code)
-          this.selected_ppltemplate = template.template_paperless_code[0].code
-          this.note_paperless = template.description_template
-          if(!this.selectedDocumentType && template.template_paperless_code[0].document_type) {
-            var selectedType = this.documentTypes.find(item => item.value == template.template_paperless_code[0].document_type)
-            if(selectedType) {
-              this.selectedDocumentType = selectedType
-            }
-          }
-        }
         if(template.paperless_data) {
           this.paperless_data = template.paperless_data
         } 
@@ -3966,7 +3955,7 @@ export default {
         this.notReady = false
         if (err.response != null) {
           if (err.response.status == 401) {
-            this.$router.push('/login')
+            this.$router.push('/notfound')
           }
         } else {
           console.log(err.message)
@@ -7440,12 +7429,29 @@ export default {
 
       saveArray.push(comp)
       if(this.template_name != "") {
-        this.res_saveArray = saveArray
-        var isReady = this.checkDuplicationObjectName()
-        if(isReady == 'ready') {
-          this.sendData()
-        } else {
-          // await this.moveToPage(this.keepPage)
+        if(this.selected_ppltemplate) {
+          this.res_saveArray = saveArray
+          var isReady = this.checkDuplicationObjectName()
+          if(isReady == 'ready') {
+            this.sendData()
+          } else {
+            // await this.moveToPage(this.keepPage)
+          }
+        } else{
+          this.$swal({
+            type: 'error',
+            html: '<span class="alert-error"><b>กรุณาเลือก Worflow ของเอกสาร</b></span>',
+            showCloseButton: true,
+            showConfirmButton: false,
+            background: 'white',
+            customClass:{
+              popup: 'border-error'
+            },
+            position: 'top',
+            timer: 3000,
+            backdrop: false,
+            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+          })
         }
       } else {
         this.name_template_error = true
@@ -7993,7 +7999,7 @@ export default {
                   backdrop: false,
                   closeButtonHtml: '<span class="close-alert">&times;</span>'
                 })
-                // this.$router.push({ 'path': '/use_template'})
+                this.$router.push({ 'path': '/template'})
               } else {
                 this.$swal({
                   type: 'error',
@@ -8024,7 +8030,7 @@ export default {
         try {
               this.notReady = true
               var temp_name = this.template_name
-              var temp_code = this.template_code
+              var temp_code = this.template_id
               var business = ""
               var res = ""
               if(JSON.parse(sessionStorage.getItem('selected_business')).id) {
@@ -8084,7 +8090,7 @@ export default {
                 backdrop: false,
                 closeButtonHtml: '<span class="close-alert">&times;</span>'
               })
-              // this.$router.push({ 'path': '/use_template'})
+              this.$router.push({ 'path': '/template'})
             } else {
               this.$swal({
                 type: 'error',
