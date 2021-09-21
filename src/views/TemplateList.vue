@@ -3,9 +3,9 @@
     <v-card outlined class="mx-1 px-4 pt-2 templateform-page">
       <v-row class="templateform-row">
             <v-col cols="12" md="6" lg="6" class="px-0 pb-0">
-              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-templateform search-templateform-btn-block">
+              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-templateform search-templateform-btn-block" v-model="keyword" v-on:keyup.enter="searchKeyword()">
                 <template v-slot:append-outer>
-                  <v-btn outlined color="#9e9e9e" class="search-templateform-btn">
+                  <v-btn outlined color="#9e9e9e" class="search-templateform-btn" @click="searchKeyword()">
                     <v-icon >mdi-magnify</v-icon>
                   </v-btn>
                 </template>
@@ -14,15 +14,15 @@
           </v-row>
           <v-row class="templateform-row">
             <v-col cols="12" md="auto" lg="auto" align-self="center" class="pb-0 pl-0 templateform-header">
-              แบบฟอร์มทั้งหมด 1
+              แบบฟอร์มทั้งหมด {{totalItemsTemplate}}
             </v-col>
             <v-spacer></v-spacer>
             <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pb-0 px-0">
-                  <v-btn color="#67C25D" dark depressed class="front-btn-templateform"><v-icon left>mdi-plus</v-icon>สร้างแบบฟอร์ม</v-btn>
+                  <v-btn color="#67C25D" dark depressed class="front-btn-templateform" @click="createTemplate()"><v-icon left>mdi-plus</v-icon>สร้างแบบฟอร์ม</v-btn>
             </v-col>
-            <v-col cols="6" md="auto" lg="auto" class="pb-0 pl-2 pr-0">
+            <!-- <v-col cols="6" md="auto" lg="auto" class="pb-0 pl-2 pr-0">
                   <v-btn color="#67C25D" dark outlined class="front-btn-templateform"><v-icon left>mdi-inbox-arrow-down-outline</v-icon>นำเข้าแบบฟอร์ม</v-btn>
-            </v-col>
+            </v-col> -->
           </v-row>
           <v-row class="table-top-spacer templateform-row">
             <v-data-table fixed-header :loading="false" :headers="templateform_table_header" :items="templateform_data" 
@@ -35,14 +35,14 @@
               </template>
               <template v-slot:[`item.templateform_status`]="{ item }">
                 <v-row no-gutters class="templateform-row">
-                  <v-col cols="auto" md="auto" lg="auto" align-self="center"> <!-- form status for ready form -->
+                  <v-col v-if="item.templateform_status" cols="auto" md="auto" lg="auto" align-self="center"> <!-- form status for ready form -->
                     <v-icon size="16" color="#8BC34A" class="mr-1 mb-1">mdi-circle</v-icon>
                       พร้อมใช้งาน
                   </v-col>
-                  <!-- <v-col cols="auto" md="auto" lg="auto" align-self="center"> <!-- form status for not ready form 
+                  <v-col v-else cols="auto" md="auto" lg="auto" align-self="center"> <!-- form status for not ready form -->
                     <v-icon size="16" color="error" class="mr-1 mb-1">mdi-circle</v-icon>
                       ไม่พร้อมใช้งาน
-                  </v-col> -->
+                  </v-col>
                 </v-row>
               </template>
               <template v-slot:[`item.templateform_dowm`]="{ item }">
@@ -53,7 +53,7 @@
                     </v-btn>
                   </template>
                   <v-list dense>
-                   <v-list-item>
+                   <v-list-item @click="selectTemplate(item)">
                       <v-list-item-icon>
                           <v-icon color="#4CAF50">mdi-pencil</v-icon>
                         </v-list-item-icon>
@@ -63,7 +63,7 @@
                           </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item> 
-                    <v-list-item>
+                    <!-- <v-list-item>
                       <v-list-item-icon>
                           <v-icon color="#4CAF50">mdi-open-in-new</v-icon>
                         </v-list-item-icon>
@@ -72,8 +72,8 @@
                             Export
                           </v-list-item-title>
                         </v-list-item-content>
-                    </v-list-item> 
-                    <v-list-item>
+                    </v-list-item>  -->
+                    <v-list-item @click="deletTemplate(item)">
                       <v-list-item-icon>
                           <v-icon color="#4CAF50">mdi-delete</v-icon>
                         </v-list-item-icon>
@@ -106,19 +106,114 @@ import { EventBus } from '../EventBus'
         {text: 'สถานะ', align: 'start', sortable: true, value: 'templateform_status'},
         {text: '', align: 'center', sortable: false, value: 'templateform_dowm'}
       ],
-     templateform_data: [
-        {
-            templateform_no: '1',
-            templateform_name: 'TEST-DEV',
-            templateform_codedoc: 'TEST-1112',
-            templateform_department: 'Outsoure',
-            templateform_fullname: 'ธวัชชัย หนองรวง',
-            templateform_date: '2021-09-20 12:30:32',
-            templateform_status: 'approved'
+     templateform_data: [],
+      formdoc_data: [],
+      optionsTemplate: {
+        page:1,
+        itemsPerPage: 10
+      },
+      totalItemsTemplate: 0,
+      keyword: ""
+    }),
+    mounted() {
+      this.searchTemplate()
+      EventBus.$emit('loadingOverlay', true)
+      EventBus.$on('changeBiz', this.changeBiz)
+    },
+    methods: { 
+      emitLoading(isLoad) {
+        EventBus.$emit('loadingOverlay', isLoad)
+      },
+      async searchTemplate(filter = {}) {
+        const { page, itemsPerPage, status } = {
+            page: this.optionsTemplate.page,
+            itemsPerPage: this.optionsTemplate.itemsPerPage,
+            ...filter
+          } 
+
+        this.templateform_data = [] 
+        try {
+          var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+          this.emitLoading(true)
+          var { data } = await this.axios.post(this.$api_url + '/template_form/api/v1/searchTemplate', { 
+            tax_id: tax_id, 
+            keyword: this.keyword,
+            lim: itemsPerPage, 
+            offset: (page-1)*itemsPerPage || 0, 
+          })
+          if(data.status){
+            let index = 1
+            data.result.forEach(element => { 
+              this.templateform_data.push({
+                templateform_no: index,
+                templateform_name: element.template_name,
+                templateform_codedoc: element.code_template,
+                templateform_department: element.department,
+                templateform_fullname: '',
+                templateform_date: '',
+                templateform_status: true,
+                template_id: element.template_id
+              })
+              index++
+            })
+          }
+          this.countTemplate()
+        } catch (error) {
+          console.log(error)
         }
-     ],
-      totalItemsTemplate: 0
-    })
+        this.emitLoading(false)
+      },
+      changeBiz(){
+        this.searchTemplate()
+      },
+      async countTemplate(){
+        try {
+          var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+          this.emitLoading(true)
+          var { data } = await this.axios.post(this.$api_url + '/template_form/api/v1/countTemplate', {
+            tax_id : tax_id,
+            keyword: this.keyword
+          })
+          if(data.status){
+            this.totalItemsTemplate = data.result
+          }
+          this.changeTotalItem()
+          this.isReady = true
+        } catch (error) {
+          this.isReady = true
+        }
+        this.emitLoading(false)
+      },
+      searchKeyword(){
+        if(this.optionsTemplate.page == 1) this.searchTemplate()
+        else this.optionsTemplate.page = 1
+      },
+      createTemplate() {
+        sessionStorage.setItem('page_action', 'create')
+        this.$router.push({ 'path': '/template/create_template'})
+      },
+      selectTemplate(item) {
+        let tempOption = {
+          template_id: item.template_id,
+        }
+        sessionStorage.setItem('option',JSON.stringify(tempOption))
+        sessionStorage.setItem('page_action', 'edit')
+        this.$router.push({ 'path': '/template/create_template'})
+      },
+      async deletTemplate(item) {
+        try {
+          var { data } = await this.axios.get(this.$api_url + '/template_form/api/v1/delete_template_form?template_id=' + item.template_id)
+          if(data.message == 'success') {
+          //Alert ลบสำเร็จ
+          } else {
+            //Alert ลบไม่สำเร็จ
+          }
+          this.searchKeyword()
+        } catch(e) {
+          //Alert ลบไม่สำเร็จ
+        }
+      }
+    }
   }
 </script>
 

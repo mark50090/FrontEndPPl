@@ -1622,7 +1622,7 @@
       async reserveEform(eform_id) {
         if(eform_id) {
           try {
-            var { data } = await this.axios.post(this.$api + '/permission_view_eform',
+            var { data } = await this.axios.post(this.$eform_api + '/permission_view_eform',
             {
                 e_id: eform_id,
                 status:"view",
@@ -1642,7 +1642,7 @@
       async returnEform(eform_id) {
         // if(eform_id) {
         //   try {
-        //     var { data } = await this.axios.post(this.$api + '/permission_view_eform',
+        //     var { data } = await this.axios.post(this.$eform_api + '/permission_view_eform',
         //     {
         //         e_id: eform_id,
         //         status:"close"
@@ -1829,7 +1829,7 @@
       async getPublicTemplate(template_id) {
         // var template = {}
         // try {
-        //   var { data } = await this.axios.get(ApiConverterFunction.convertDoctorApi(this.$api) + '/template_guest?template=' + template_id)
+        //   var { data } = await this.axios.get(ApiConverterFunction.convertDoctorApi(this.$eform_api) + '/template_guest?template=' + template_id)
         //   this.notReady = false
         //   if(data.result == 'OK') {
         //     template = data.data
@@ -1925,7 +1925,7 @@
         await this.getTemplateExtent(eform_id)
         var template = {}
         try {
-          var { data } = await this.axios.get(this.$api_v6 + '/upload_eform?eform_id=' + eform_id + '&status_draft=' + this.option.statusDraft)
+          var { data } = await this.axios.get(this.$eform_api_v6 + '/upload_eform?eform_id=' + eform_id + '&status_draft=' + this.option.statusDraft)
           this.notReady = false
           if(data.result == 'OK') {
             template = data.data
@@ -2148,7 +2148,7 @@
       },
       async readTemplateData(token) {
         try {
-          var { data } = await this.axios.post(this.$node_api + '/read_data',{
+          var { data } = await this.axios.post(this.$eform_node_api + '/read_data',{
             token: token
           })
           if(data.result == 'OK') {
@@ -2227,7 +2227,7 @@
         var template = []
         try {
           this.onImport = true
-          var { data } = await this.axios.get(this.$api_v6+ '/upload_eform?doc_number=' + doc_no)
+          var { data } = await this.axios.get(this.$eform_api_v6+ '/upload_eform?doc_number=' + doc_no)
           this.notReady = false
           this.dialogRefDoc = false
           if(data.result == 'OK') {
@@ -2385,11 +2385,11 @@
       async getOtherService(doc_no,serviceName, isImportInRow, selectedRow) {
         var path = ""
         if(serviceName == 'cvm') {
-          path = ApiConverterFunction.convertDoctorApi(this.$api) + "/data_from_cvm?cvm_id=" + doc_no
+          path = ApiConverterFunction.convertDoctorApi(this.$eform_api) + "/data_from_cvm?cvm_id=" + doc_no
         } else if(serviceName == 'so') {
-          path = ApiConverterFunction.convertDoctorApi(this.$node_api) + "/data_from_erp?so_number=" + doc_no
+          path = ApiConverterFunction.convertDoctorApi(this.$eform_node_api) + "/data_from_erp?so_number=" + doc_no
         } else if(serviceName == 'invoice') {
-          path = ApiConverterFunction.convertDoctorApi(this.$node_api) + "/data_bank_statement?invoice=" + doc_no
+          path = ApiConverterFunction.convertDoctorApi(this.$eform_node_api) + "/data_bank_statement?invoice=" + doc_no
         }
         var template = []
         if(doc_no) {
@@ -2489,7 +2489,7 @@
       },
       async getTemplateExtent(eform_id) {
         try {
-          var { data } = await this.axios.get(this.$api + '/template_for_revert?eform_id=' + eform_id)
+          var { data } = await this.axios.get(this.$eform_api + '/template_for_revert?eform_id=' + eform_id)
           this.ext_template = data.data
         } catch (error) {
           console.log(error.message)
@@ -7324,7 +7324,7 @@
         //   } else {
         //     url = '/object_template'
         //   }
-        //   var { data } = await this.axios.post(this.$api + url,
+        //   var { data } = await this.axios.post(this.$eform_api + url,
         //   { 
         //     object_temp: {
         //       template_array: template_array,
@@ -7371,10 +7371,10 @@
           var template_prop = this.setTemplateProperty(this.template_option)
           var sendingHtml = await this.genHtml()
           this.notReady = true
-          var url = this.$api_v6 + '/upload_eform'
+          var url = this.$eform_api_v6 + '/upload_eform'
           var speacailForm = this.$speacailForm
           if(speacailForm.includes(this.template_option.template_id)) {
-            url = this.$node_api + "/create_eform"
+            url = this.$eform_node_api + "/create_eform"
           }
           var { data } = await this.axios.post(url,
           { 
@@ -7546,7 +7546,7 @@
         try {
           this.notReady = true
           var { data } = await this.axios.post(
-            ApiConverterFunction.convertDoctorApi(this.$api_v2) + "/attract_file",
+            ApiConverterFunction.convertDoctorApi(this.$eform_api_v2) + "/attract_file",
             formData)
           this.notReady = false
           if(data.result == "OK") {
@@ -7597,7 +7597,7 @@
       async sendInsertChat(e_id) {
         try {
           this.notReady = true
-          var { data } = await this.axios.post(this.$api + "/send_chat_signing",
+          var { data } = await this.axios.post(this.$eform_api + "/send_chat_signing",
             { 
               e_id: e_id
             })
@@ -7651,7 +7651,7 @@
       async summitReject(eId) {
         try {
           this.notReady = true
-          var { data } = await this.axios.put(this.$api_v6 + '/upload_eform',
+          var { data } = await this.axios.put(this.$eform_api_v6 + '/upload_eform',
           {
             e_id: eId,
             status:"reject"
@@ -7734,7 +7734,7 @@
       },
       async disableButton(e_id) {
         try {
-          var { data } = await this.axios.post(this.$api + "/disble_button",
+          var { data } = await this.axios.post(this.$eform_api + "/disble_button",
             {
               e_id: e_id
             })
@@ -7745,7 +7745,7 @@
       async backStep(backStepTarget) {
         try {
           this.notReady = true
-          var { data } = await this.axios.put(this.$api_v6 + '/upload_eform',
+          var { data } = await this.axios.put(this.$eform_api_v6 + '/upload_eform',
           { 
             e_id: this.template_option.e_id,
             document_name: this.template_option.document_name,
@@ -7829,7 +7829,7 @@
         this.dialogImport = false
         this.notReady = true
         try {
-          var { data } = await this.axios.post(this.$api_v2 + '/import_template_excel',
+          var { data } = await this.axios.post(this.$eform_api_v2 + '/import_template_excel',
           formData)
           this.notReady = false
           if(data.messageER != 'ER') {
@@ -7846,7 +7846,7 @@
         this.dialogImageUpload = false
         this.notReady = true
         try {
-          var { data } = await this.axios.post(this.$api + '/upload_image',
+          var { data } = await this.axios.post(this.$eform_api + '/upload_image',
           formData,
           {
             headers: {
@@ -7884,7 +7884,7 @@
           var imageLink = this.objectArray[this.selected_array][this.selected_object].value
           this.objectArray[this.selected_array][this.selected_object].value = ''
           try {
-            var { data } = await this.axios.post(this.$api + '/del_image',
+            var { data } = await this.axios.post(this.$eform_api + '/del_image',
             {
               url:imageLink
             })
@@ -8159,7 +8159,7 @@
       },
       async getCvmList() {
         try{
-          var { data } = await this.axios.get(this.$api + '/list_cvmid')
+          var { data } = await this.axios.get(this.$eform_api + '/list_cvmid')
           if(data.result == 'OK') {
             this.cvmArray = data.messageText
           }
@@ -8169,7 +8169,7 @@
       },
       async getSoList() {
         try{
-          var { data } = await this.axios.get(this.$node_api + '/list_sonumber')
+          var { data } = await this.axios.get(this.$eform_node_api + '/list_sonumber')
           if(data.result == 'OK') {
             this.soArray = data.messageText
           }
@@ -8180,7 +8180,7 @@
       async getInvoiceList() {
         try{
           this.notReady = true
-          var { data } = await this.axios.get(this.$node_api + '/list_invoice',
+          var { data } = await this.axios.get(this.$eform_node_api + '/list_invoice',
           {
             headers: {
               'Authorization': 'Bearer ' + sessionStorage.getItem("one_access_token")
@@ -8197,7 +8197,7 @@
       async getCusList() {
         try{
           this.notReady = true
-          var { data } = await this.axios.get(this.$node_api + '/list_cusid')
+          var { data } = await this.axios.get(this.$eform_node_api + '/list_cusid')
           this.notReady = false
           if(data.result == 'OK') {
             this.cusArray = data.messageText
@@ -8209,7 +8209,7 @@
       async getInvioceFromCus(value, obj_name) {
         try{
           if(value) {
-            var { data } = await this.axios.get(this.$node_api + '/data_customer?cus_id=' + value)
+            var { data } = await this.axios.get(this.$eform_node_api + '/data_customer?cus_id=' + value)
             if(data.result == 'OK') {
               var holdDropdown = this.objectArray['dropdownbox'].filter(item => item.style.autoChoices && item.style.autoChoicesSelect == 'invoice' && item.style.refAutoChoices == obj_name)
               holdDropdown.forEach(e => {
@@ -8236,11 +8236,11 @@
         var url = ""
         var resArray = []
         if(type == 'pro_th' || type == 'pro_en') {
-          url = ApiConverterFunction.convertDoctorApi(this.$api) + '/thailand_provinces'
+          url = ApiConverterFunction.convertDoctorApi(this.$eform_api) + '/thailand_provinces'
         } else if(type == 'dis_th' || type == 'dis_en') {
-          url = ApiConverterFunction.convertDoctorApi(this.$api) + '/thailand_provinces?provinces_id=' + value
+          url = ApiConverterFunction.convertDoctorApi(this.$eform_api) + '/thailand_provinces?provinces_id=' + value
         } else if(type == 'subdis_th' || type == 'subdis_en') {
-          url = ApiConverterFunction.convertDoctorApi(this.$api) + '/thailand_provinces?amphure_id=' + value
+          url = ApiConverterFunction.convertDoctorApi(this.$eform_api) + '/thailand_provinces?amphure_id=' + value
         }
         try {
           var { data } = await this.axios.get(url)
@@ -8268,7 +8268,7 @@
       async getLeaderInfo(taxId) {
         try {
           var res = []
-          var { data } = await this.axios.post(this.$api + '/get_parent',
+          var { data } = await this.axios.post(this.$eform_api + '/get_parent',
           {
             "tax_id":taxId
           })
@@ -8608,7 +8608,7 @@
         var eform_id = this.option.eform_id
         if(eform_id) {
           try {
-            var { data } = await this.axios.post(this.$api + '/pdf_for_eform',
+            var { data } = await this.axios.post(this.$eform_api + '/pdf_for_eform',
             {
                 e_id: eform_id
             })
