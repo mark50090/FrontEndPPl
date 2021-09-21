@@ -3764,7 +3764,7 @@ export default {
 }
 
 .btn-savedraft{
-  color: #1b9900 !important;
+  color: #4CAF50 !important;
 }
 
 .comment-part {

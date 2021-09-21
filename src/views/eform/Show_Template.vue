@@ -1,52 +1,46 @@
 <template>
-  <div class="content-show-tem2 plane-show-tem2">
-    <v-overlay :value="notReady" absolute opacity="0.3" z-index="14" class="loading-content">
-      <!-- <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> -->
-      <v-progress-linear indeterminate rounded height="15" :background-color="color_loading_bar_bg" :color="color_loading_bar" class="loading-bar"></v-progress-linear>
+  <div>
+    <v-overlay :value="notReady" absolute opacity="0.3" z-index="9">
+      <img width="100px" src="../../assets/loader.gif" class="loading-circle">
     </v-overlay>
     <v-toolbar flat class="create-menu-bar"> <!-- top bar -->
-      <v-btn v-if="!isPublic" v text class="px-0 back-show-btn" @click="backToUseTemp()">
-        <v-icon large :color="color_icon_chevron_left">mdi-chevron-left</v-icon>
-        <b>{{ textLang.tabMenubar.back }}</b>
+      <v-btn v-if="!isPublic" text class="px-0 back-show-btn" @click="backToUseTemp()">
+        <v-icon large color="#4CAF50">mdi-chevron-left</v-icon>
+        <b>ออกจากแบบฟอร์มนี้</b>
       </v-btn>
       <v-spacer></v-spacer>
       <!-- button for web -->
-      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="yellow accent-4" class="send-back-btn-icon send-back-btn hidden-sm-and-down" @click="openReverse()">
+      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="yellow accent-4" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
         <v-icon>mdi-reply</v-icon>
         <span class="btn-return-edit">{{ textLang.tabMenubar.return_edit }}</span>
       </v-btn>
-      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn hidden-sm-and-down" @click="openReject()">
+      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
         <v-icon>mdi-file-excel-outline</v-icon>
         <span class="btn-reject-doc save-draft-word">{{ textLang.tabMenubar.reject_doc }}</span>
       </v-btn>
-      <v-btn v-if="!isPublic && isOwner && isFlowDoc" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn hidden-sm-and-down" @click="openCancel()">
+      <v-btn v-if="!isPublic && isOwner && isFlowDoc" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
         <v-icon>mdi-file-cancel-outline</v-icon>
         <span class="btn-cancel-doc">{{ textLang.tabMenubar.cancel_doc }}</span>
       </v-btn>
-      <!-- <v-btn v-if="isSendStep && !isComplete" depressed large dark :color="color_btn_background" class="send-doc-btn" @click="openDocName()">
-        <v-icon class="mr-2">mdi-file-move</v-icon>
-        {{ textLang.tabMenubar.file }}
-      </v-btn>
-      <v-badge left overlap color="red" class="mr-2 hidden-sm-and-down">
-        <span v-if="attachedFiles.length" slot="badge">{{ attachedFiles.length }}</span>
+      <!-- <v-badge bordered left overlap color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mr-2 display-pc-only">
         <v-btn v-if="!(isSendStep && !isComplete)" outlined rounded large color="grey lighten-1" class="send-back-btn-icon send-back-btn" @click="openAttachFile()">
           <v-icon>mdi-text-box-search-outline</v-icon>
           <span class="btn-view-attachment save-draft-word">{{ textLang.tabMenubar.view_attachment }}</span>
         </v-btn>
       </v-badge> -->
-      <v-btn v-if="(!isSendStep || isComplete) && isSelf" outlined rounded large color="grey lighten-1" class="send-back-btn-icon send-back-btn hidden-sm-and-down" @click="save(false, true)">
-        <v-icon>mdi-file-document</v-icon>
+      <v-btn v-if="(!isSendStep || isComplete) && isSelf" outlined rounded large color="#4CAF50" class="send-back-btn-icon send-back-btn display-pc-only" @click="save(false, true)">
+        <v-icon>mdi-file-search-outline</v-icon>
         <span class="btn-review-ex save-draft-word">{{ textLang.tabMenubar.review_ex }}</span>
       </v-btn>
-      <!-- <v-btn v-if="(!isSendStep || isComplete) && isSelf" depressed rounded large dark :color="color_savedraft" class="btn-savedraft send-back-btn-icon send-back-btn hidden-sm-and-down" @click="save(true)">
+      <!-- <v-btn v-if="(!isSendStep || isComplete) && isSelf" depressed rounded large color="#C2EB81" class="btn-savedraft send-back-btn-icon send-back-btn display-pc-only" @click="save(true)">
         <v-icon>mdi-file-hidden</v-icon>
         <span class="btn-expan-word save-draft-word">{{ textLang.tabMenubar.save_draft }}</span>
       </v-btn> -->
-      <v-btn v-if="(!isSendStep || isComplete) && isSelf" depressed large dark :color="color_btn_background" class="preview-btn" @click="save(false, false)">{{ textLang.tabMenubar.save_doc_btn }}</v-btn>
+      <v-btn v-if="(!isSendStep || isComplete) && isSelf" depressed large dark color="#4CAF50" class="preview-btn" @click="save(false, false)">{{ textLang.tabMenubar.save_doc_btn }}</v-btn>
 
       <v-menu offset-y z-index="13" v-if="!isPublic && !isSendStep && false">
         <template v-slot:activator="{ on }">
-           <v-btn v-on="on" depressed large color="grey lighten-2" class="pr-2 pl-3 hidden-sm-and-down more-en">
+           <v-btn v-on="on" depressed large color="grey lighten-2" class="ml-2 pr-2 pl-3 display-pc-only more-en">
             {{ textLang.tabMenubar.more }}
             <v-icon>mdi-menu-down</v-icon>
           </v-btn>
@@ -57,7 +51,7 @@
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogImport = true">
-            <v-list-item-icon><v-icon class="import-excel-icon">mdi-login</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon>mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="AddAttachFile()">
@@ -85,11 +79,11 @@
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
           </v-list-item>
           <v-list-item @click="downloadFromEid()">
-            <v-list-item-icon><v-icon class="mr-2">mdi-inbox-arrow-down</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon>mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isSendBack && isSendFirst && isEmailStep" @click="openPermissionTransference()">
-            <v-list-item-icon><v-icon class="mr-2">mdi-human-greeting-proximity</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon>mdi-human-greeting-proximity</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.transfer_title }}</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -97,95 +91,90 @@
       <!-- button for mobile -->
       <v-menu offset-y z-index="13">
         <template v-slot:activator="{ on }">
-          <v-btn v-if="!isPublic && !isSendStep"  icon v-on="on" class="mr-2 hidden-md-and-up">
+          <v-btn v-if="!isPublic && !isSendStep" icon color="#4CAF50" v-on="on" class="display-mobile-only">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
         <v-list>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogRefDoc = true">
-            <v-list-item-icon><v-icon>mdi-package-down</v-icon></v-list-item-icon>
+          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogRefDoc = true">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-package-down</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogImport = true">
-            <v-list-item-icon><v-icon class="import-excel-icon">mdi-login</v-icon></v-list-item-icon>
+          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogImport = true">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="AddAttachFile()">
-            <v-list-item-icon><v-icon>mdi-paperclip</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-paperclip</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_file_menu }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isOnlyForm && isReport" @click="openExportReport()">
-            <v-list-item-icon><v-icon>mdi-account-group</v-icon></v-list-item-icon>
+          <v-list-item v-if="isOnlyForm && isReport && false" @click="openExportReport()">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-account-group</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.export_excel_all_user }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isOnlyForm" @click="openExportMyForm()">
-            <v-list-item-icon><v-icon>mdi-account-arrow-right</v-icon></v-list-item-icon>
+          <v-list-item v-if="isOnlyForm && false" @click="openExportMyForm()">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-account-arrow-right</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.export_excel_myform }}</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="openRefDoc()">
-            <v-list-item-icon><v-icon>mdi-file-eye-outline</v-icon></v-list-item-icon>
+          <v-list-item v-if="false" @click="openRefDoc()">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-file-eye-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.view_ref_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="openAttachFile()">
-            <v-list-item-icon><v-icon>mdi-text-box-search-outline</v-icon></v-list-item-icon>
+          <v-list-item v-if="false" @click="openAttachFile()">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-text-box-search-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">
-              <v-badge color="red" class="show-num-attach-file">
-                <span v-if="attachedFiles.length" slot="badge">{{ attachedFiles.length }}</span>
-                {{ textLang.tabMenubar.view_attachment }} &nbsp;&nbsp;
+              <v-badge bordered inline color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mt-0">
+                {{ textLang.tabMenubar.view_attachment }}
               </v-badge>
             </v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isSendBack && isSendFirst" @click="openReverse()">
-            <v-list-item-icon><v-icon>mdi-reply</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-reply</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.return_edit }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isSendStep && !isComplete" @click="openDocName()">
-            <v-list-item-icon><v-icon>mdi-file-move</v-icon></v-list-item-icon>
-            <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.file }}</v-list-item-title>
-          </v-list-item>
           <v-list-item v-if="isSendBack && isSendFirst" @click="openReject()">
-            <v-list-item-icon><v-icon>mdi-file-excel-outline</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-file-excel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.reject_doc }}</v-list-item-title>
           </v-list-item>
           <v-list-item  v-if="!isPublic && isOwner && isFlowDoc" @click="openCancel()">
-            <v-list-item-icon><v-icon>mdi-file-cancel-outline</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-file-cancel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.cancel_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="save(true, false)"> 
-            <v-list-item-icon><v-icon>mdi-file-hidden</v-icon></v-list-item-icon>
+          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="save(true, false)"> 
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-file-hidden</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.save_draft }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="save(false, true)"> 
-            <v-list-item-icon><v-icon>mdi-file-document</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-file-search-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.review_ex }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isPaperview == true" @click="switchView() && isSimpleFill">
-            <v-list-item-icon><v-icon>mdi-checkbook</v-icon></v-list-item-icon>
+          <v-list-item v-if="(isPaperview == true) && false" @click="switchView() && isSimpleFill">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-checkbook</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.simple_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-else-if="isPaperview == false" @click="switchView() && isSimpleFill">
-            <v-list-item-icon><v-icon>mdi-script-text-outline</v-icon></v-list-item-icon>
+          <v-list-item v-else-if="(isPaperview == false) && false" @click="switchView() && isSimpleFill">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-script-text-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="downloadFromEid()">
-            <v-list-item-icon><v-icon class="mr-2">mdi-inbox-arrow-down</v-icon></v-list-item-icon>
+          <v-list-item v-if="false" @click="downloadFromEid()">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isSendBack && isSendFirst && isEmailStep" @click="openPermissionTransference()">
-            <v-list-item-icon><v-icon class="mr-2">mdi-human-greeting-proximity</v-icon></v-list-item-icon>
+          <v-list-item v-if="isSendBack && isSendFirst && isEmailStep && false" @click="openPermissionTransference()">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-human-greeting-proximity</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.transfer_title }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
     </v-toolbar>
     <v-row class="show-form-block">
-      <v-col v-if="show_page_select == true && isPaperview" cols="0" :md="col_page" :lg="col_page" class="page-select-block hidden-sm-and-down"> <!-- page select -->
-        <v-row v-for="item in pages" :key="item.index">
-          <v-col cols="1" class="num-page-block">
-            <span class="num-page">{{item.index}}</span><br>
+      <v-col v-if="show_page_select == true && isPaperview" cols="0" :md="col_page" :lg="col_page" class="pt-5 select-form-page-block display-pc-only"> <!-- page select -->
+        <v-row v-for="item in pages" :key="item.index" class="input-form-row">
+          <v-col cols="1" class="pa-0 text-center">
+            <span class="num-page-input-form">{{item.index}}</span><br>
             <v-tooltip bottom z-index="18">
               <template v-slot:activator="{ on }">
-                <v-btn v-show="!item.isHide" icon x-small color="#8BC34A" v-on="on" @click="toggleHidePage(item.index)"><v-icon class="mr-1">mdi-eye-outline</v-icon></v-btn>
+                <v-btn v-show="!item.isHide" icon x-small color="#4CAF50" v-on="on" @click="toggleHidePage(item.index)"><v-icon class="mr-1">mdi-eye-outline</v-icon></v-btn>
               </template>
               <span>{{ textLang.tabMenubar.show_page_tootip }}</span>
             </v-tooltip>
@@ -196,7 +185,7 @@
               <span>{{ textLang.tabMenubar.hide_page_tootip }}</span>
             </v-tooltip>
           </v-col>
-          <v-col cols="10" class="page-mini-block" @click="moveToPage(item.index)">
+          <v-col cols="auto" class="pt-0" @click="moveToPage(item.index)">
             <img :id="'mini-page'+item.index"  class="page-mini" :src="item.url_image">
           </v-col>
         </v-row>
@@ -204,13 +193,13 @@
       <v-col v-show="isPaperview" cols="12" :md="col_paper" :lg="col_paper" class="pa-0">
         <v-toolbar dense elevation="2" class="paper-menu-bar"> <!-- paper menu -->
           <!-- toggle page select button -->
-          <v-btn v-if="show_page_select == true" depressed x-small color="grey lighten-2" class="px-0 open-page-select-btn hidden-sm-and-down" @click="togglePageSelect()"><v-icon large>mdi-chevron-left</v-icon></v-btn>
-          <v-btn v-else depressed color="grey lighten-2" class="open-page-select-btn hidden-sm-and-down"  @click="togglePageSelect()">{{ textLang.tabMenubar.open_page }}</v-btn>
+          <v-btn v-if="show_page_select == true" depressed x-small color="grey lighten-2" class="px-0 open-page-select-btn display-pc-only" @click="togglePageSelect()"><v-icon large>mdi-chevron-left</v-icon></v-btn>
+          <v-btn v-else depressed color="grey lighten-2" class="open-page-select-btn display-pc-only"  @click="togglePageSelect()">{{ textLang.tabMenubar.open_page }}</v-btn>
           <v-spacer></v-spacer>
           <!-- zoom button -->
-          <v-btn depressed small color="grey lighten-2" class="hidden-sm-and-down" @click="zoomOut()"><v-icon color="#aaaaaa">mdi-magnify-minus-outline</v-icon></v-btn>
-          <span class="mx-3 zoom-percent hidden-sm-and-down">{{zoom_level}} %</span>
-          <v-btn depressed small color="grey lighten-2" class="hidden-sm-and-down" @click="zoomIn()"><v-icon color="#aaaaaa">mdi-magnify-plus-outline</v-icon></v-btn>
+          <v-btn depressed small color="grey lighten-2" class="display-pc-only" @click="zoomOut()"><v-icon color="#aaaaaa">mdi-magnify-minus-outline</v-icon></v-btn>
+          <span class="mx-3 zoom-percent display-pc-only">{{zoom_level}} %</span>
+          <v-btn depressed small color="grey lighten-2" class="display-pc-only" @click="zoomIn()"><v-icon color="#aaaaaa">mdi-magnify-plus-outline</v-icon></v-btn>
           <!-- page number -->
           <v-btn depressed small color="grey lighten-2" class="ml-6" @click="moveToPage(currentPage-1)"><v-icon color="#aaaaaa">mdi-arrow-left</v-icon></v-btn>
           <span class="mx-3 zoom-percent">{{ textLang.tabMenubar.page }} {{currentPage}}/{{pages.length}}</span>
@@ -228,12 +217,12 @@
           <v-spacer></v-spacer>
           <!-- toggle comment button-->
           <v-btn v-if="show_comment == true && commentAble" depressed x-small color="grey lighten-2" class="px-0 open-page-select-btn" @click="toggleComment()"><v-icon large>mdi-chevron-right</v-icon></v-btn>
-          <v-btn v-else-if="show_comment == false && commentAble" depressed color="grey lighten-2" class="open-page-select-btn show-comment-btn"  @click="toggleComment()">{{ textLang.tabMenubar.show_tab }}<br class="hidden-md-and-up">{{ textLang.tabMenubar.reviews }}</v-btn>
+          <v-btn v-else-if="show_comment == false && commentAble" depressed color="grey lighten-2" class="open-page-select-btn show-comment-btn"  @click="toggleComment()">{{ textLang.tabMenubar.show_tab }}<br class="display-mobile-only">{{ textLang.tabMenubar.reviews }}</v-btn>
         </v-toolbar>
         <v-row justify="center" class="mt-3 temp-name">
           <h3>{{template_name}} <span v-if="doc_name">: {{doc_name}}</span></h3>
         </v-row>
-        <div class="show-paper-block"> <!-- paper plane -->
+        <div class="mt-2 pl-2 pb-2 show-paper-block"> <!-- paper plane -->
           <v-sheet id="workpaper" :elevation="2" color="white" class="main-paper" style="position: relative; padding: 0px;" :width="current_paper_width + 'px'" :height="current_paper_height + 'px'">
             <div :id="item.name" :class="item.name + '-obj'" v-for="item in objectArray['inputbox']" :key="item.name" :style="'position:absolute; height:' + String(item.height) + 'px;opacity:1;display:table-cell;width:'+ String(item.width)+ 'px;top:' + String(item.top-1) + 'px;left:' + String(item.left+1) + 'px;'">
               <v-layout v-show="!item.style.hideDisplay" v-if="!item.hideBysection && item.show && getHideByValue(item.style.hideOption, item.name, item.style.zIndex)" justify-center :style="'text-align:' + item.style.font_align + ';'">
@@ -249,7 +238,7 @@
               </v-layout>
             </div>
             <div :id="item.name" :class="item.name + '-obj'" v-for="item in objectArray['textfield']" :key="item.name" :style="'position:absolute; height:' + String(item.height) + 'px;opacity:1;display:table-cell;width:'+ String(item.width)+ 'px;top:' + String(item.top) + 'px;left:' + String(item.left) + 'px;'">
-              <v-layout class="text-item" v-if="item.show && getHideByValue(item.style.hideOption, item.name, item.style.zIndex)">
+              <v-layout v-if="item.show && getHideByValue(item.style.hideOption, item.name, item.style.zIndex)">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-icon v-if="item.style.hidePreview" small color="red" class="not-show-icon" v-on="on">mdi-eye-off-outline</v-icon>
@@ -276,7 +265,7 @@
               </div>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
-                  <v-btn v-show="item.show && item.style.textAreaValiable.length && getHideByValue(item.style.hideOption, item.name, item.style.zIndex)" text icon :color="color_datemenu" class="textarea-btn" v-on="on" @click="openTextAreaValModal(item)">
+                  <v-btn v-show="item.show && item.style.textAreaValiable.length && getHideByValue(item.style.hideOption, item.name, item.style.zIndex)" text icon color="#4CAF50" class="textarea-btn" v-on="on" @click="openTextAreaValModal(item)">
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
                 </template>
@@ -320,14 +309,14 @@
                         >
                       </template>
                       <v-date-picker
-                        :color="color_datemenu"
+                        color="#4CAF50"
                         :min="item.rangeDate"
                         v-model="item.value"
                         locale="th"
                         @change="item.datemenu = datechange = false, dateChangeName = item.object_name, changeDate(item)"
                       >
                         <v-spacer></v-spacer>
-                        <v-btn text :color="color_datemenu" @click="item.value = '' ,item.datemenu= false">Clear</v-btn>
+                        <v-btn text color="#4CAF50" @click="item.value = '' ,item.datemenu= false">Clear</v-btn>
                       </v-date-picker>
                     </v-menu>
                     <v-menu
@@ -350,14 +339,14 @@
                         >
                       </template>
                       <v-date-picker
-                        :color="color_datemenu"
+                        color="#4CAF50"
                         :min="item.rangeDate"
                         v-model="item.value"
                         locale="en"
                         @change="item.datemenu = datechange = false, dateChangeName = item.object_name, changeDate(item)"
                       >
                         <v-spacer></v-spacer>
-                        <v-btn text :color="color_datemenu" @click="item.value = '' ,item.datemenu= false">Clear</v-btn>
+                        <v-btn text color="#4CAF50" @click="item.value = '' ,item.datemenu= false">Clear</v-btn>
                       </v-date-picker>
                     </v-menu>
                 </div>
@@ -393,7 +382,7 @@
                     >
                   </template>
                   <v-time-picker
-                    :color = "color_datemenu"
+                    color="#4CAF50"
                     v-if="item.datemenu"
                     v-model="item.value"
                     full-width
@@ -439,7 +428,7 @@
                     </template>
                     <span>{{ textLang.tabMenubar.not_show_obj_icon }}</span>
                   </v-tooltip>
-                  <v-combobox dense outlined hide-details :id="item.name+'-input'" :disabled="isSendStep || item.disable" :class="item.name + '-box ' + item.name + '-icon dropdown-icon-block autocomplete-pad'" :placeholder="item.placeholder" :items="item.choices" v-model="item.value" @change="changeDropDownChoice(item)" :style="item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'"></v-combobox>
+                  <v-combobox dense outlined hide-details :id="item.name+'-input'" :disabled="isSendStep || item.disable" :class="item.name + '-box ' + item.name + '-icon dropdown-icon-block autocomplete-pad'" color="black" :placeholder="item.placeholder" :items="item.choices" v-model="item.value" @change="changeDropDownChoice(item)" :style="item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'"></v-combobox>
                 </div>
                 <div v-show="!item.style.hideDisplay" v-if="!item.hideBysection && item.show && getHideByValue(item.style.hideOption, item.name, item.style.zIndex) && item.disable" :id="item.name+'-input'" fill-height justify-center align-center>
                   <input :id="item.name+'-input'" :style="'text-align:' + item.style.font_align + ';box-shadow:' + item.style.boxShadow + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'" disabled class="input-box" single-line dense :placeholder="item.placeholder" v-model="item.show_value">
@@ -554,16 +543,16 @@
                       <td v-show="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.hideDisplay" :class="item.name + '-table'" v-for="c in item.style.table.colsize" :key="c.index" class="object-table" :style="'border:' + item.style.border_size + 'px solid ' + item.style.border_color + ';' + 'width:' + c.size + 'px;' + ' background-color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.background_color">                  
                         <div v-show="getHideByValue(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.hideOption, item.object_name + '_' + 'R' + r.index + 'C' + c.index, item.style.zIndex)" :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name" :style="'color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + '!important;  font-size:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_size + 'px; ' + 'text-overflow: ellipsis; white-space: nowrap;overflow: hidden;' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].font_style + 'width:' + String(Number(c.size)-1) + 'px;'">
                           <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'linkdatabox'">
-                            <v-autocomplete v-if="(!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue) && (!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable) && (typeof dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value] !== 'undefined') && (dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value].text)" :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :class="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-icon dropdown-icon-block'" :readonly="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue" :style="'width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';'" dense outlined hide-details class="dropdown-icon-block autocomplete-pad" :items="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" @input="changeDataTableValue(item.object_name, r.index, c.index ,item.style.table.ccol)"></v-autocomplete>
+                            <v-autocomplete v-if="(!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue) && (!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable) && (typeof dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value] !== 'undefined') && (dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value].text)" :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :class="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-icon dropdown-icon-block'" :readonly="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue" :style="'width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';'" dense outlined hide-details color="black" class="dropdown-icon-block autocomplete-pad" :items="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" @input="changeDataTableValue(item.object_name, r.index, c.index ,item.style.table.ccol)"></v-autocomplete>
                             <input  v-if="(!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue) && (!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable) && (typeof dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value] !== 'undefined') && (!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value].text)" :placeholder="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].placeholder" :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :readonly="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue" :style="'height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + '; box-shadow:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.boxShadow + ';'" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value" hide-details @input="change_calculate(item.object_name + '_' + 'R' + r.index + 'C' + c.index,false)">
                             <div v-if="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :style="'white-space: normal; color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + ';'">{{dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value}}</div>
                           </div>
                           <input :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-input'" v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'inputbox'" :placeholder="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].placeholder" :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :style="'height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + '; box-shadow:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.boxShadow + ';'" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" hide-details @input="toCapital(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index]) ,change_calculate(item.object_name + '_' + 'R' + r.index + 'C' + c.index,false)">
-                          <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'textfield'" :style="'word-break: break-word; height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + '!important;'" outlined single-line hide-details>
+                          <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'textfield'" :style="'word-break: break-word; height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + '!important;'">
                             {{dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value}} 
                           </div>
                           <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'dropdownbox'" :style="'text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + '; color:lightgrey; width:'+ String(Number(c.size) - 1) + 'px;'">
-                            <v-combobox v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" dense outlined hide-details :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable"  :class="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-icon dropdown-icon-block'" :placeholder="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].placeholder" :items="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].choices" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" @change="changeDropDownChoice(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index])"></v-combobox>
+                            <v-combobox v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" dense outlined hide-details :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" color="black"  :class="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-icon dropdown-icon-block'" :placeholder="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].placeholder" :items="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].choices" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" @change="changeDropDownChoice(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index])"></v-combobox>
                             <div v-if="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :style="'white-space: normal; color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + ';'">{{dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value}}</div>
                           </div>
                           <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'checkbox'" :style="'text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';'">
@@ -571,7 +560,7 @@
                             <img v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" :width="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_size + 'px'" src="https://eform.one.th/eform_api/api/v1/view_image?file_name=50214806880_84c82695-0eff-4e1f-9e42-f07d49104a84.png" @click="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value = checkPermission(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index])">
                             <span> {{dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].text}}</span>
                           </div>
-                          <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection &&!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'calculatebox'" :style="'height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + '!important;'" outlined single-line hide-details>
+                          <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection &&!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'calculatebox'" :style="'height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + '!important;'">
                             {{numberToComma(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueShow,true)}}{{dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.suffix}}
                           </div>
                           <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection &&!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'datepickerbox'" fill-height justify-center :style="'text-align:' + item.style.font_align + ';box-shadow:' + item.style.boxShadow + ';'"> 
@@ -594,7 +583,7 @@
                                   >
                                 </template>
                                 <v-date-picker
-                                  :color="color_datemenu"
+                                  color="#4CAF50"
                                   :min="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].rangeDate"
                                   v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value"
                                   locale="th"
@@ -603,7 +592,7 @@
                                     changeDate(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index])"
                                 >
                                   <v-spacer></v-spacer>
-                                  <v-btn text :color="color_datemenu" @click="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value = '' ,dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value = '',  dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].datemenu= false">Clear</v-btn>
+                                  <v-btn text color="#4CAF50" @click="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value = '' ,dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value = '',  dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].datemenu= false">Clear</v-btn>
                                 </v-date-picker>
                               </v-menu>
                               <v-menu
@@ -625,7 +614,7 @@
                                   >
                                 </template>
                                 <v-date-picker
-                                  :color="color_datemenu"
+                                  color="#4CAF50"
                                   :min="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].rangeDate"
                                   v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value"
                                   locale="en"
@@ -634,7 +623,7 @@
                                     changeDate(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index])"
                                 >
                                   <v-spacer></v-spacer>
-                                  <v-btn text :color="color_datemenu" @click="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value = '', dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value = '' ,dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].datemenu= false">Clear</v-btn>
+                                  <v-btn text color="#4CAF50" @click="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value = '', dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value = '' ,dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].datemenu= false">Clear</v-btn>
                                 </v-date-picker>
                               </v-menu>
                           </div>
@@ -661,7 +650,7 @@
                                 >
                               </template>
                               <v-time-picker
-                                :color = "color_datemenu"
+                                color="#4CAF50"
                                 v-if="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].datemenu"
                                 v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value"
                                 full-width
@@ -684,9 +673,6 @@
                       </td>
                     </tr>
                   </table>
-                  <v-btn color="secondary" fab depressed x-small disabled v-if="item.selected" class="button-drag">
-                    <v-icon class="icon-drag">mdi-arrow-all</v-icon>
-                  </v-btn>
                 </div>     
               </div>
               <div :id="item.name" v-for="item in objectArray['line']" :key="item.name" :style="'position:absolute; height:' + String(item.height) + 'px;opacity:1;display:table-cell;width:'+ String(item.width)+ 'px;top:' + String(item.top) + 'px;left:' + String(item.left) + 'px;'">
@@ -818,25 +804,24 @@
     <!-- <SignaturePadModal/> -->
 
     <!-- Import Image Modal -->
-    <v-dialog v-model="dialogImageUpload" persistent max-width="600px">
+    <v-dialog v-model="dialogImageUpload" persistent max-width="500px">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-         <b> {{ textLang.text_dialog.insert_picture }} </b>
+        <v-card-title>
+         <span class="input-form-modal-header">{{ textLang.text_dialog.insert_picture }}</span>
+         <v-spacer></v-spacer>
+          <v-btn icon dark small color="black" @click="dialogImageUpload = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
         </v-card-title>
-        <v-card-text class="pa-10">
-          <v-row justify="center" align="center">
-            <v-col cols="12" md="2" lg="2" class="excel-file-title">
-              {{ textLang.text_dialog.image }}
-            </v-col>
-            <v-col cols="12" md="9" lg="9">
-              <v-file-input dense outlined single-line hide-details :color="color_img" :placeholder="textLang.text_dialog.select_img" accept="image/*" class="file-input" id="file" v-model="uploadImage"></v-file-input>
-            </v-col>
+        <v-card-text class="pt-3">
+          <v-row class="input-form-row">
+            <v-file-input dense outlined hide-details color="#4CAF50" :placeholder="textLang.text_dialog.select_img" accept="image/*" class="insert-image-file" id="file" v-model="uploadImage"></v-file-input>
           </v-row>
         </v-card-text>
-        <v-card-actions class="pt-0 pb-12">
+        <v-card-actions class="pb-6">
           <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialogImageUpload = false">{{ textLang.text_dialog.cancle }}</v-btn>
-          <v-btn depressed large :color="color_import" class="px-7 ml-4 save-setting-btn save-modal-font-btn" @click="imageUpload()" >{{ textLang.text_dialog.insert_picture }}</v-btn>
+          <v-btn outlined color="#4CAF50" class="px-10 mr-4 insert-image-btn-modal" @click="dialogImageUpload = false">{{ textLang.text_dialog.cancle }}</v-btn>
+          <v-btn depressed dark color="#4CAF50" class="px-5 ml-4 insert-image-btn-modal" @click="imageUpload()" >{{ textLang.text_dialog.insert_picture }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -1552,7 +1537,7 @@
           $('#mini-page' + exPage).css("outline-color", "")
           $('#mini-page' + exPage).css("outline-style", "")
           this.currentPage = pnum
-          $('#mini-page' + this.currentPage).css("outline-color", this.color_mini_page)
+          $('#mini-page' + this.currentPage).css("outline-color", '#4CAF50')
           $('#mini-page' + this.currentPage).css("outline-style", "solid")
           this.objectType.forEach(e => {
             this.objectArray[e].forEach( e2 => {
@@ -1562,13 +1547,13 @@
                 if(e == 'textareabox' || e == 'texteditorbox' || e == 'inputbox' || e == 'datepickerbox'
                 || e == 'timebox' || e == 'dropdownbox' || (e == 'inputimagebox' && !e2.value)) {
                   if(e2.textHl) {
-                    e2.style.boxShadow = "1px 1px 1px 1px " + this.color_box_shadow
-                    $('#' + e2.name + '-input').css("box-shadow", "1px 1px 1px 1px " + this.color_box_shadow)
+                    e2.style.boxShadow = "1px 1px 1px 1px #4CAF50"
+                    $('#' + e2.name + '-input').css("box-shadow", "1px 1px 1px 1px #4CAF50")
                   }              
                 } else if(e == 'checkbox' ) {
                   if(e2.textHl) {
-                    e2.style.boxShadow = "1px 1px 1px 1px " + this.color_box_shadow
-                    $('#' + e2.name + '-input').css("box-shadow", "1px 1px 1px 1px " + this.color_box_shadow)
+                    e2.style.boxShadow = "1px 1px 1px 1px #4CAF50"
+                    $('#' + e2.name + '-input').css("box-shadow", "1px 1px 1px 1px #4CAF50")
                   }
                 }
               } else {
@@ -1584,7 +1569,7 @@
           if(Object.keys(this.dataTableObjectArray).length) {
             Object.keys(this.dataTableObjectArray).forEach(k => {
               if(this.dataTableObjectArray[k].textHl && this.dataTableObjectArray[k].page == this.currentPage) {
-                this.dataTableObjectArray[k].style.boxShadow =  "1px 1px 1px 1px " + this.color_box_shadow
+                this.dataTableObjectArray[k].style.boxShadow =  "1px 1px 1px 1px #4CAF50"
               } else {
                 this.dataTableObjectArray[k].style.boxShadow =  "0"
               }
@@ -3751,7 +3736,7 @@
           if(e.page == this.currentPage) {
             $("#" + e.name).css("z-index", e.style.zIndex)
             e.show = true
-            $('#' + e.name + '-input').css("box-shadow", "1px 1px 1px 1px " + this.color_box_shadow)
+            $('#' + e.name + '-input').css("box-shadow", "1px 1px 1px 1px #4CAF50")
           } else {
             $("#" + e.name).css("z-index", 1)
           }
@@ -3773,7 +3758,7 @@
           if(e.page == this.currentPage) {
             e.show = true
             $("#" + e.name).css("z-index", e.style.zIndex)
-            $('#' + e.name + '-input').css("box-shadow", "1px 1px 1px 1px " + this.color_box_shadow)
+            $('#' + e.name + '-input').css("box-shadow", "1px 1px 1px 1px #4CAF50")
           } else {
             $("#" + e.name).css("z-index", 1)
           }
@@ -3838,7 +3823,7 @@
           if(e.page == this.currentPage) {
             $("#" + e.name).css("z-index", e.style.zIndex)
             e.show = true
-            $('#' + e.name + '-input').css("box-shadow", "1px 1px 1px 1px " + this.color_box_shadow)
+            $('#' + e.name + '-input').css("box-shadow", "1px 1px 1px 1px #4CAF50")
           } else {
             $("#" + e.name).css("z-index", 1)
           }
@@ -8686,19 +8671,10 @@
 </script>
 
 <style>
-  .content-show-tem2 {
-    margin-top: 51px;
-    margin-left: 0px;
-  }
-
   .back-show-btn {
     font-family: 'Sarabun', sans-serif;
     font-size: 16px !important;
     text-transform: capitalize;
-  }
-
-  .import-excel-icon {
-    transform: rotate(90deg);
   }
 
   .import-excel-btn {
@@ -8796,8 +8772,14 @@
 
   .preview-btn {
     font-family: 'Sarabun', sans-serif;
-    margin-right: 1%;
     text-transform: capitalize;
+  }
+
+  .select-form-page-block {
+    background-color: white;
+    height: calc(100vh - 129px);
+    overflow: auto;
+    border-right: solid 1px #E0E0E0;
   }
 
   .recalculate-btn {
@@ -8816,18 +8798,19 @@
     line-height: 20px !important;
   }
 
-  .show-num-attach-file {
-    line-height: 27px;
-    margin-top: 0% !important;
-  }
-
-  .show-num-attach-file .v-badge__badge {
-    margin-top: 13%;
-  }
-
   .show-form-block {
     width: 100%;
-    margin-left: 0%;
+    margin: 0%;
+  }
+
+  .input-form-row {
+    width: 100%;
+    margin: 0%;
+  }
+
+  .num-page-input-form {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
   }
 
   .excel-file-title {
@@ -8839,17 +8822,17 @@
 
   .temp-name {
     width: 100%;
-    margin-left: 0%;
+    margin: 0%;
     font-family: 'Sarabun', sans-serif;
     text-align: center;
   }
 
   .show-paper-block {
-    margin-left: 2%;
-    margin-top: 1%;
+    /* margin-left: 2%;
+    margin-top: 1%; */
     overflow: auto;
     height: calc(100vh - 224px);
-    padding: 1%;
+    /* padding: 1%; */
   }
 
   .not-show-icon {
@@ -9051,6 +9034,20 @@
     font-size: 16px;
   }
 
+  .input-form-modal-header {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 16px;
+  }
+
+  .insert-image-file {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+  }
+
+  .insert-image-btn-modal {
+    font-family: 'Sarabun', sans-serif;
+  }
+
   /*======== style from old file >> Show_Template(old version) ========*/
   .content-show-tem {
     margin-top: 54px;
@@ -9090,7 +9087,7 @@
   }
 
   .autocomplete-pad.v-select.v-text-field input {
-    padding-left: 4px !important;
+    /* padding-left: 4px !important; */
     line-height: unset;
   }
 
@@ -9271,11 +9268,7 @@
   }
 
   /*========================================*/
-  @media only screen and (max-width:960px){ /*css for mobile screen*/
-    .content-show-tem2 {
-      margin-top: 44px;
-    }
-
+  @media only screen and (max-width:600px){ /*css for mobile screen*/
     .import-excel-btn {
       padding-left: 2% !important;
       padding-right: 2% !important;
@@ -9314,6 +9307,10 @@
       position: fixed;
       right: 0px;
       top: 112px;
+    }
+
+    .show-paper-block { 
+      height: calc(100vh - 214px);
     }
 
     .type-doc-import-title {
