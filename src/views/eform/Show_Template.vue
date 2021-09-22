@@ -1,70 +1,64 @@
 <template>
-  <div class="content-show-tem2 plane-show-tem2">
-    <v-overlay :value="notReady" absolute opacity="0.3" z-index="14" class="loading-content">
-      <!-- <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> -->
-      <v-progress-linear indeterminate rounded height="15" :background-color="color_loading_bar_bg" :color="color_loading_bar" class="loading-bar"></v-progress-linear>
+  <div>
+    <v-overlay :value="notReady" absolute opacity="0.3" z-index="9">
+      <img width="100px" src="../../assets/loader.gif" class="loading-circle">
     </v-overlay>
     <v-toolbar flat class="create-menu-bar"> <!-- top bar -->
-      <v-btn v-if="!isPublic" v text class="px-0 back-show-btn" @click="backToUseTemp()">
-        <v-icon large :color="color_icon_chevron_left">mdi-chevron-left</v-icon>
-        <b>{{ textLang.tabMenubar.back }}</b>
+      <v-btn v-if="!isPublic" text class="px-0 back-show-btn" @click="backToUseTemp()">
+        <v-icon large color="#4CAF50">mdi-chevron-left</v-icon>
+        <b>ออกจากแบบฟอร์มนี้</b>
       </v-btn>
       <v-spacer></v-spacer>
       <!-- button for web -->
-      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="yellow accent-4" class="send-back-btn-icon send-back-btn hidden-sm-and-down" @click="openReverse()">
+      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="yellow accent-4" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
         <v-icon>mdi-reply</v-icon>
         <span class="btn-return-edit">{{ textLang.tabMenubar.return_edit }}</span>
       </v-btn>
-      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn hidden-sm-and-down" @click="openReject()">
+      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
         <v-icon>mdi-file-excel-outline</v-icon>
         <span class="btn-reject-doc save-draft-word">{{ textLang.tabMenubar.reject_doc }}</span>
       </v-btn>
-      <v-btn v-if="!isPublic && isOwner && isFlowDoc" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn hidden-sm-and-down" @click="openCancel()">
+      <v-btn v-if="!isPublic && isOwner && isFlowDoc" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
         <v-icon>mdi-file-cancel-outline</v-icon>
         <span class="btn-cancel-doc">{{ textLang.tabMenubar.cancel_doc }}</span>
       </v-btn>
-      <!-- <v-btn v-if="isSendStep && !isComplete" depressed large dark :color="color_btn_background" class="send-doc-btn" @click="openDocName()">
-        <v-icon class="mr-2">mdi-file-move</v-icon>
-        {{ textLang.tabMenubar.file }}
-      </v-btn>
-      <v-badge left overlap color="red" class="mr-2 hidden-sm-and-down">
-        <span v-if="attachedFiles.length" slot="badge">{{ attachedFiles.length }}</span>
+      <!-- <v-badge bordered left overlap color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mr-2 display-pc-only">
         <v-btn v-if="!(isSendStep && !isComplete)" outlined rounded large color="grey lighten-1" class="send-back-btn-icon send-back-btn" @click="openAttachFile()">
           <v-icon>mdi-text-box-search-outline</v-icon>
           <span class="btn-view-attachment save-draft-word">{{ textLang.tabMenubar.view_attachment }}</span>
         </v-btn>
       </v-badge> -->
-      <v-btn v-if="(!isSendStep || isComplete) && isSelf" outlined rounded large color="grey lighten-1" class="send-back-btn-icon send-back-btn hidden-sm-and-down" @click="save(false, true)">
-        <v-icon>mdi-file-document</v-icon>
+      <v-btn v-if="(!isSendStep || isComplete) && isSelf" outlined rounded large color="#4CAF50" class="send-back-btn-icon send-back-btn display-pc-only" @click="save(false, true)">
+        <v-icon>mdi-file-search-outline</v-icon>
         <span class="btn-review-ex save-draft-word">{{ textLang.tabMenubar.review_ex }}</span>
       </v-btn>
-      <!-- <v-btn v-if="(!isSendStep || isComplete) && isSelf" depressed rounded large dark :color="color_savedraft" class="btn-savedraft send-back-btn-icon send-back-btn hidden-sm-and-down" @click="save(true)">
+      <!-- <v-btn v-if="(!isSendStep || isComplete) && isSelf" depressed rounded large color="#C2EB81" class="btn-savedraft send-back-btn-icon send-back-btn display-pc-only" @click="save(true)">
         <v-icon>mdi-file-hidden</v-icon>
         <span class="btn-expan-word save-draft-word">{{ textLang.tabMenubar.save_draft }}</span>
       </v-btn> -->
-      <v-btn v-if="(!isSendStep || isComplete) && isSelf" depressed large dark :color="color_btn_background" class="preview-btn" @click="save(false, false)">{{ textLang.tabMenubar.save_doc_btn }}</v-btn>
+      <v-btn v-if="(!isSendStep || isComplete) && isSelf" depressed large dark color="#4CAF50" class="preview-btn" @click="save(false, false)">{{ textLang.tabMenubar.save_doc_btn }}</v-btn>
 
-      <v-menu offset-y z-index="13" v-if="!isPublic && !isSendStep && false">
+      <v-menu offset-y z-index="13" v-if="!isPublic && !isSendStep">
         <template v-slot:activator="{ on }">
-           <v-btn v-on="on" depressed large color="grey lighten-2" class="pr-2 pl-3 hidden-sm-and-down more-en">
+           <v-btn v-on="on" depressed large color="grey lighten-2" class="ml-2 pr-2 pl-3 display-pc-only more-en">
             {{ textLang.tabMenubar.more }}
             <v-icon>mdi-menu-down</v-icon>
           </v-btn>
         </template>
         <v-list>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogRefDoc = true">
+          <!-- <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogRefDoc = true">
             <v-list-item-icon><v-icon>mdi-package-down</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogImport = true">
-            <v-list-item-icon><v-icon class="import-excel-icon">mdi-login</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon>mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="AddAttachFile()">
             <v-list-item-icon><v-icon>mdi-paperclip</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_file_menu }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isOnlyForm && isReport" @click="openExportReport()">
+          <!-- <v-list-item v-if="isOnlyForm && isReport" @click="openExportReport()">
             <v-list-item-icon><v-icon>mdi-account-group</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.export_excel_all_user }}</v-list-item-title>
           </v-list-item>
@@ -85,107 +79,102 @@
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
           </v-list-item>
           <v-list-item @click="downloadFromEid()">
-            <v-list-item-icon><v-icon class="mr-2">mdi-inbox-arrow-down</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon>mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isSendBack && isSendFirst && isEmailStep" @click="openPermissionTransference()">
-            <v-list-item-icon><v-icon class="mr-2">mdi-human-greeting-proximity</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon>mdi-human-greeting-proximity</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.transfer_title }}</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
         </v-list>
       </v-menu>
       <!-- button for mobile -->
       <v-menu offset-y z-index="13">
         <template v-slot:activator="{ on }">
-          <v-btn v-if="!isPublic && !isSendStep"  icon v-on="on" class="mr-2 hidden-md-and-up">
+          <v-btn v-if="!isPublic && !isSendStep" icon color="#4CAF50" v-on="on" class="display-mobile-only">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
         <v-list>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogRefDoc = true">
-            <v-list-item-icon><v-icon>mdi-package-down</v-icon></v-list-item-icon>
+          <!-- <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogRefDoc = true">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-package-down</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogImport = true">
-            <v-list-item-icon><v-icon class="import-excel-icon">mdi-login</v-icon></v-list-item-icon>
+          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogImport = true">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="AddAttachFile()">
-            <v-list-item-icon><v-icon>mdi-paperclip</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-paperclip</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_file_menu }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isOnlyForm && isReport" @click="openExportReport()">
-            <v-list-item-icon><v-icon>mdi-account-group</v-icon></v-list-item-icon>
+          <!-- <v-list-item v-if="isOnlyForm && isReport && false" @click="openExportReport()">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-account-group</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.export_excel_all_user }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isOnlyForm" @click="openExportMyForm()">
-            <v-list-item-icon><v-icon>mdi-account-arrow-right</v-icon></v-list-item-icon>
+          <v-list-item v-if="isOnlyForm && false" @click="openExportMyForm()">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-account-arrow-right</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.export_excel_myform }}</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="openRefDoc()">
-            <v-list-item-icon><v-icon>mdi-file-eye-outline</v-icon></v-list-item-icon>
+          <v-list-item v-if="false" @click="openRefDoc()">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-file-eye-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.view_ref_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="openAttachFile()">
-            <v-list-item-icon><v-icon>mdi-text-box-search-outline</v-icon></v-list-item-icon>
+          <v-list-item v-if="false" @click="openAttachFile()">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-text-box-search-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">
-              <v-badge color="red" class="show-num-attach-file">
-                <span v-if="attachedFiles.length" slot="badge">{{ attachedFiles.length }}</span>
-                {{ textLang.tabMenubar.view_attachment }} &nbsp;&nbsp;
+              <v-badge bordered inline color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mt-0">
+                {{ textLang.tabMenubar.view_attachment }}
               </v-badge>
             </v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isSendBack && isSendFirst" @click="openReverse()">
-            <v-list-item-icon><v-icon>mdi-reply</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-reply</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.return_edit }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isSendStep && !isComplete" @click="openDocName()">
-            <v-list-item-icon><v-icon>mdi-file-move</v-icon></v-list-item-icon>
-            <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.file }}</v-list-item-title>
-          </v-list-item>
           <v-list-item v-if="isSendBack && isSendFirst" @click="openReject()">
-            <v-list-item-icon><v-icon>mdi-file-excel-outline</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-file-excel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.reject_doc }}</v-list-item-title>
           </v-list-item>
           <v-list-item  v-if="!isPublic && isOwner && isFlowDoc" @click="openCancel()">
-            <v-list-item-icon><v-icon>mdi-file-cancel-outline</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-file-cancel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.cancel_doc }}</v-list-item-title>
-          </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="save(true, false)"> 
-            <v-list-item-icon><v-icon>mdi-file-hidden</v-icon></v-list-item-icon>
+          </v-list-item> -->
+          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="save(true, false)"> 
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-file-hidden</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.save_draft }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="save(false, true)"> 
-            <v-list-item-icon><v-icon>mdi-file-document</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-file-search-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.review_ex }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isPaperview == true" @click="switchView() && isSimpleFill">
-            <v-list-item-icon><v-icon>mdi-checkbook</v-icon></v-list-item-icon>
+          <!-- <v-list-item v-if="(isPaperview == true) && false" @click="switchView() && isSimpleFill">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-checkbook</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.simple_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-else-if="isPaperview == false" @click="switchView() && isSimpleFill">
-            <v-list-item-icon><v-icon>mdi-script-text-outline</v-icon></v-list-item-icon>
+          <v-list-item v-else-if="(isPaperview == false) && false" @click="switchView() && isSimpleFill">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-script-text-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="downloadFromEid()">
-            <v-list-item-icon><v-icon class="mr-2">mdi-inbox-arrow-down</v-icon></v-list-item-icon>
+          <v-list-item v-if="false" @click="downloadFromEid()">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isSendBack && isSendFirst && isEmailStep" @click="openPermissionTransference()">
-            <v-list-item-icon><v-icon class="mr-2">mdi-human-greeting-proximity</v-icon></v-list-item-icon>
+          <v-list-item v-if="isSendBack && isSendFirst && isEmailStep && false" @click="openPermissionTransference()">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-human-greeting-proximity</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.transfer_title }}</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
         </v-list>
       </v-menu>
     </v-toolbar>
     <v-row class="show-form-block">
-      <v-col v-if="show_page_select == true && isPaperview" cols="0" :md="col_page" :lg="col_page" class="page-select-block hidden-sm-and-down"> <!-- page select -->
-        <v-row v-for="item in pages" :key="item.index">
-          <v-col cols="1" class="num-page-block">
-            <span class="num-page">{{item.index}}</span><br>
+      <v-col v-if="show_page_select == true && isPaperview" cols="0" :md="col_page" :lg="col_page" class="pt-5 select-form-page-block display-pc-only"> <!-- page select -->
+        <v-row v-for="item in pages" :key="item.index" class="input-form-row">
+          <v-col cols="1" class="pa-0 text-center">
+            <span class="num-page-input-form">{{item.index}}</span><br>
             <v-tooltip bottom z-index="18">
               <template v-slot:activator="{ on }">
-                <v-btn v-show="!item.isHide" icon x-small color="#8BC34A" v-on="on" @click="toggleHidePage(item.index)"><v-icon class="mr-1">mdi-eye-outline</v-icon></v-btn>
+                <v-btn v-show="!item.isHide" icon x-small color="#4CAF50" v-on="on" @click="toggleHidePage(item.index)"><v-icon class="mr-1">mdi-eye-outline</v-icon></v-btn>
               </template>
               <span>{{ textLang.tabMenubar.show_page_tootip }}</span>
             </v-tooltip>
@@ -196,7 +185,7 @@
               <span>{{ textLang.tabMenubar.hide_page_tootip }}</span>
             </v-tooltip>
           </v-col>
-          <v-col cols="10" class="page-mini-block" @click="moveToPage(item.index)">
+          <v-col cols="auto" class="pt-0" @click="moveToPage(item.index)">
             <img :id="'mini-page'+item.index"  class="page-mini" :src="item.url_image">
           </v-col>
         </v-row>
@@ -204,13 +193,13 @@
       <v-col v-show="isPaperview" cols="12" :md="col_paper" :lg="col_paper" class="pa-0">
         <v-toolbar dense elevation="2" class="paper-menu-bar"> <!-- paper menu -->
           <!-- toggle page select button -->
-          <v-btn v-if="show_page_select == true" depressed x-small color="grey lighten-2" class="px-0 open-page-select-btn hidden-sm-and-down" @click="togglePageSelect()"><v-icon large>mdi-chevron-left</v-icon></v-btn>
-          <v-btn v-else depressed color="grey lighten-2" class="open-page-select-btn hidden-sm-and-down"  @click="togglePageSelect()">{{ textLang.tabMenubar.open_page }}</v-btn>
+          <v-btn v-if="show_page_select == true" depressed x-small color="grey lighten-2" class="px-0 open-page-select-btn display-pc-only" @click="togglePageSelect()"><v-icon large>mdi-chevron-left</v-icon></v-btn>
+          <v-btn v-else depressed color="grey lighten-2" class="open-page-select-btn display-pc-only"  @click="togglePageSelect()">{{ textLang.tabMenubar.open_page }}</v-btn>
           <v-spacer></v-spacer>
           <!-- zoom button -->
-          <v-btn depressed small color="grey lighten-2" class="hidden-sm-and-down" @click="zoomOut()"><v-icon color="#aaaaaa">mdi-magnify-minus-outline</v-icon></v-btn>
-          <span class="mx-3 zoom-percent hidden-sm-and-down">{{zoom_level}} %</span>
-          <v-btn depressed small color="grey lighten-2" class="hidden-sm-and-down" @click="zoomIn()"><v-icon color="#aaaaaa">mdi-magnify-plus-outline</v-icon></v-btn>
+          <v-btn depressed small color="grey lighten-2" class="display-pc-only" @click="zoomOut()"><v-icon color="#aaaaaa">mdi-magnify-minus-outline</v-icon></v-btn>
+          <span class="mx-3 zoom-percent display-pc-only">{{zoom_level}} %</span>
+          <v-btn depressed small color="grey lighten-2" class="display-pc-only" @click="zoomIn()"><v-icon color="#aaaaaa">mdi-magnify-plus-outline</v-icon></v-btn>
           <!-- page number -->
           <v-btn depressed small color="grey lighten-2" class="ml-6" @click="moveToPage(currentPage-1)"><v-icon color="#aaaaaa">mdi-arrow-left</v-icon></v-btn>
           <span class="mx-3 zoom-percent">{{ textLang.tabMenubar.page }} {{currentPage}}/{{pages.length}}</span>
@@ -228,12 +217,12 @@
           <v-spacer></v-spacer>
           <!-- toggle comment button-->
           <v-btn v-if="show_comment == true && commentAble" depressed x-small color="grey lighten-2" class="px-0 open-page-select-btn" @click="toggleComment()"><v-icon large>mdi-chevron-right</v-icon></v-btn>
-          <v-btn v-else-if="show_comment == false && commentAble" depressed color="grey lighten-2" class="open-page-select-btn show-comment-btn"  @click="toggleComment()">{{ textLang.tabMenubar.show_tab }}<br class="hidden-md-and-up">{{ textLang.tabMenubar.reviews }}</v-btn>
+          <v-btn v-else-if="show_comment == false && commentAble" depressed color="grey lighten-2" class="open-page-select-btn show-comment-btn"  @click="toggleComment()">{{ textLang.tabMenubar.show_tab }}<br class="display-mobile-only">{{ textLang.tabMenubar.reviews }}</v-btn>
         </v-toolbar>
         <v-row justify="center" class="mt-3 temp-name">
           <h3>{{template_name}} <span v-if="doc_name">: {{doc_name}}</span></h3>
         </v-row>
-        <div class="show-paper-block"> <!-- paper plane -->
+        <div class="mt-2 pl-2 pb-2 show-paper-block"> <!-- paper plane -->
           <v-sheet id="workpaper" :elevation="2" color="white" class="main-paper" style="position: relative; padding: 0px;" :width="current_paper_width + 'px'" :height="current_paper_height + 'px'">
             <div :id="item.name" :class="item.name + '-obj'" v-for="item in objectArray['inputbox']" :key="item.name" :style="'position:absolute; height:' + String(item.height) + 'px;opacity:1;display:table-cell;width:'+ String(item.width)+ 'px;top:' + String(item.top-1) + 'px;left:' + String(item.left+1) + 'px;'">
               <v-layout v-show="!item.style.hideDisplay" v-if="!item.hideBysection && item.show && getHideByValue(item.style.hideOption, item.name, item.style.zIndex)" justify-center :style="'text-align:' + item.style.font_align + ';'">
@@ -249,7 +238,7 @@
               </v-layout>
             </div>
             <div :id="item.name" :class="item.name + '-obj'" v-for="item in objectArray['textfield']" :key="item.name" :style="'position:absolute; height:' + String(item.height) + 'px;opacity:1;display:table-cell;width:'+ String(item.width)+ 'px;top:' + String(item.top) + 'px;left:' + String(item.left) + 'px;'">
-              <v-layout class="text-item" v-if="item.show && getHideByValue(item.style.hideOption, item.name, item.style.zIndex)">
+              <v-layout v-if="item.show && getHideByValue(item.style.hideOption, item.name, item.style.zIndex)">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-icon v-if="item.style.hidePreview" small color="red" class="not-show-icon" v-on="on">mdi-eye-off-outline</v-icon>
@@ -276,7 +265,7 @@
               </div>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
-                  <v-btn v-show="item.show && item.style.textAreaValiable.length && getHideByValue(item.style.hideOption, item.name, item.style.zIndex)" text icon :color="color_datemenu" class="textarea-btn" v-on="on" @click="openTextAreaValModal(item)">
+                  <v-btn v-show="item.show && item.style.textAreaValiable.length && getHideByValue(item.style.hideOption, item.name, item.style.zIndex)" text icon color="#4CAF50" class="textarea-btn" v-on="on" @click="openTextAreaValModal(item)">
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
                 </template>
@@ -320,14 +309,14 @@
                         >
                       </template>
                       <v-date-picker
-                        :color="color_datemenu"
+                        color="#4CAF50"
                         :min="item.rangeDate"
                         v-model="item.value"
                         locale="th"
                         @change="item.datemenu = datechange = false, dateChangeName = item.object_name, changeDate(item)"
                       >
                         <v-spacer></v-spacer>
-                        <v-btn text :color="color_datemenu" @click="item.value = '' ,item.datemenu= false">Clear</v-btn>
+                        <v-btn text color="#4CAF50" @click="item.value = '' ,item.datemenu= false">Clear</v-btn>
                       </v-date-picker>
                     </v-menu>
                     <v-menu
@@ -350,14 +339,14 @@
                         >
                       </template>
                       <v-date-picker
-                        :color="color_datemenu"
+                        color="#4CAF50"
                         :min="item.rangeDate"
                         v-model="item.value"
                         locale="en"
                         @change="item.datemenu = datechange = false, dateChangeName = item.object_name, changeDate(item)"
                       >
                         <v-spacer></v-spacer>
-                        <v-btn text :color="color_datemenu" @click="item.value = '' ,item.datemenu= false">Clear</v-btn>
+                        <v-btn text color="#4CAF50" @click="item.value = '' ,item.datemenu= false">Clear</v-btn>
                       </v-date-picker>
                     </v-menu>
                 </div>
@@ -393,7 +382,7 @@
                     >
                   </template>
                   <v-time-picker
-                    :color = "color_datemenu"
+                    color="#4CAF50"
                     v-if="item.datemenu"
                     v-model="item.value"
                     full-width
@@ -439,7 +428,7 @@
                     </template>
                     <span>{{ textLang.tabMenubar.not_show_obj_icon }}</span>
                   </v-tooltip>
-                  <v-combobox dense outlined hide-details :id="item.name+'-input'" :disabled="isSendStep || item.disable" :class="item.name + '-box ' + item.name + '-icon dropdown-icon-block autocomplete-pad'" :placeholder="item.placeholder" :items="item.choices" v-model="item.value" @change="changeDropDownChoice(item)" :style="item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'"></v-combobox>
+                  <v-combobox dense outlined hide-details :id="item.name+'-input'" :disabled="isSendStep || item.disable" :class="item.name + '-box ' + item.name + '-icon dropdown-icon-block autocomplete-pad'" color="black" :placeholder="item.placeholder" :items="item.choices" v-model="item.value" @change="changeDropDownChoice(item)" :style="item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'"></v-combobox>
                 </div>
                 <div v-show="!item.style.hideDisplay" v-if="!item.hideBysection && item.show && getHideByValue(item.style.hideOption, item.name, item.style.zIndex) && item.disable" :id="item.name+'-input'" fill-height justify-center align-center>
                   <input :id="item.name+'-input'" :style="'text-align:' + item.style.font_align + ';box-shadow:' + item.style.boxShadow + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'" disabled class="input-box" single-line dense :placeholder="item.placeholder" v-model="item.show_value">
@@ -554,16 +543,16 @@
                       <td v-show="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.hideDisplay" :class="item.name + '-table'" v-for="c in item.style.table.colsize" :key="c.index" class="object-table" :style="'border:' + item.style.border_size + 'px solid ' + item.style.border_color + ';' + 'width:' + c.size + 'px;' + ' background-color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.background_color">                  
                         <div v-show="getHideByValue(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.hideOption, item.object_name + '_' + 'R' + r.index + 'C' + c.index, item.style.zIndex)" :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name" :style="'color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + '!important;  font-size:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_size + 'px; ' + 'text-overflow: ellipsis; white-space: nowrap;overflow: hidden;' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].font_style + 'width:' + String(Number(c.size)-1) + 'px;'">
                           <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'linkdatabox'">
-                            <v-autocomplete v-if="(!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue) && (!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable) && (typeof dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value] !== 'undefined') && (dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value].text)" :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :class="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-icon dropdown-icon-block'" :readonly="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue" :style="'width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';'" dense outlined hide-details class="dropdown-icon-block autocomplete-pad" :items="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" @input="changeDataTableValue(item.object_name, r.index, c.index ,item.style.table.ccol)"></v-autocomplete>
+                            <v-autocomplete v-if="(!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue) && (!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable) && (typeof dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value] !== 'undefined') && (dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value].text)" :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :class="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-icon dropdown-icon-block'" :readonly="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue" :style="'width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';'" dense outlined hide-details color="black" class="dropdown-icon-block autocomplete-pad" :items="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" @input="changeDataTableValue(item.object_name, r.index, c.index ,item.style.table.ccol)"></v-autocomplete>
                             <input  v-if="(!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue) && (!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable) && (typeof dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value] !== 'undefined') && (!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value].text)" :placeholder="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].placeholder" :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :readonly="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue" :style="'height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + '; box-shadow:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.boxShadow + ';'" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value" hide-details @input="change_calculate(item.object_name + '_' + 'R' + r.index + 'C' + c.index,false)">
                             <div v-if="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :style="'white-space: normal; color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + ';'">{{dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value}}</div>
                           </div>
                           <input :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-input'" v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'inputbox'" :placeholder="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].placeholder" :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :style="'height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + '; box-shadow:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.boxShadow + ';'" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" hide-details @input="toCapital(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index]) ,change_calculate(item.object_name + '_' + 'R' + r.index + 'C' + c.index,false)">
-                          <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'textfield'" :style="'word-break: break-word; height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + '!important;'" outlined single-line hide-details>
+                          <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'textfield'" :style="'word-break: break-word; height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + '!important;'">
                             {{dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value}} 
                           </div>
                           <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'dropdownbox'" :style="'text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + '; color:lightgrey; width:'+ String(Number(c.size) - 1) + 'px;'">
-                            <v-combobox v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" dense outlined hide-details :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable"  :class="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-icon dropdown-icon-block'" :placeholder="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].placeholder" :items="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].choices" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" @change="changeDropDownChoice(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index])"></v-combobox>
+                            <v-combobox v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" dense outlined hide-details :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" color="black"  :class="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-icon dropdown-icon-block'" :placeholder="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].placeholder" :items="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].choices" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" @change="changeDropDownChoice(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index])"></v-combobox>
                             <div v-if="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :style="'white-space: normal; color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + ';'">{{dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value}}</div>
                           </div>
                           <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'checkbox'" :style="'text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';'">
@@ -571,7 +560,7 @@
                             <img v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" :width="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_size + 'px'" src="https://eform.one.th/eform_api/api/v1/view_image?file_name=50214806880_84c82695-0eff-4e1f-9e42-f07d49104a84.png" @click="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value = checkPermission(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index])">
                             <span> {{dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].text}}</span>
                           </div>
-                          <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection &&!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'calculatebox'" :style="'height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + '!important;'" outlined single-line hide-details>
+                          <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection &&!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'calculatebox'" :style="'height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + '!important;'">
                             {{numberToComma(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueShow,true)}}{{dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.suffix}}
                           </div>
                           <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection &&!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'datepickerbox'" fill-height justify-center :style="'text-align:' + item.style.font_align + ';box-shadow:' + item.style.boxShadow + ';'"> 
@@ -594,7 +583,7 @@
                                   >
                                 </template>
                                 <v-date-picker
-                                  :color="color_datemenu"
+                                  color="#4CAF50"
                                   :min="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].rangeDate"
                                   v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value"
                                   locale="th"
@@ -603,7 +592,7 @@
                                     changeDate(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index])"
                                 >
                                   <v-spacer></v-spacer>
-                                  <v-btn text :color="color_datemenu" @click="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value = '' ,dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value = '',  dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].datemenu= false">Clear</v-btn>
+                                  <v-btn text color="#4CAF50" @click="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value = '' ,dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value = '',  dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].datemenu= false">Clear</v-btn>
                                 </v-date-picker>
                               </v-menu>
                               <v-menu
@@ -625,7 +614,7 @@
                                   >
                                 </template>
                                 <v-date-picker
-                                  :color="color_datemenu"
+                                  color="#4CAF50"
                                   :min="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].rangeDate"
                                   v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value"
                                   locale="en"
@@ -634,7 +623,7 @@
                                     changeDate(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index])"
                                 >
                                   <v-spacer></v-spacer>
-                                  <v-btn text :color="color_datemenu" @click="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value = '', dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value = '' ,dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].datemenu= false">Clear</v-btn>
+                                  <v-btn text color="#4CAF50" @click="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value = '', dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value = '' ,dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].datemenu= false">Clear</v-btn>
                                 </v-date-picker>
                               </v-menu>
                           </div>
@@ -661,7 +650,7 @@
                                 >
                               </template>
                               <v-time-picker
-                                :color = "color_datemenu"
+                                color="#4CAF50"
                                 v-if="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].datemenu"
                                 v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value"
                                 full-width
@@ -684,9 +673,6 @@
                       </td>
                     </tr>
                   </table>
-                  <v-btn color="secondary" fab depressed x-small disabled v-if="item.selected" class="button-drag">
-                    <v-icon class="icon-drag">mdi-arrow-all</v-icon>
-                  </v-btn>
                 </div>     
               </div>
               <div :id="item.name" v-for="item in objectArray['line']" :key="item.name" :style="'position:absolute; height:' + String(item.height) + 'px;opacity:1;display:table-cell;width:'+ String(item.width)+ 'px;top:' + String(item.top) + 'px;left:' + String(item.left) + 'px;'">
@@ -818,25 +804,24 @@
     <!-- <SignaturePadModal/> -->
 
     <!-- Import Image Modal -->
-    <v-dialog v-model="dialogImageUpload" persistent max-width="600px">
+    <v-dialog v-model="dialogImageUpload" persistent max-width="500px">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-         <b> {{ textLang.text_dialog.insert_picture }} </b>
+        <v-card-title>
+         <span class="input-form-modal-header">{{ textLang.text_dialog.insert_picture }}</span>
+         <v-spacer></v-spacer>
+          <v-btn icon dark small color="black" @click="dialogImageUpload = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
         </v-card-title>
-        <v-card-text class="pa-10">
-          <v-row justify="center" align="center">
-            <v-col cols="12" md="2" lg="2" class="excel-file-title">
-              {{ textLang.text_dialog.image }}
-            </v-col>
-            <v-col cols="12" md="9" lg="9">
-              <v-file-input dense outlined single-line hide-details :color="color_img" :placeholder="textLang.text_dialog.select_img" accept="image/*" class="file-input" id="file" v-model="uploadImage"></v-file-input>
-            </v-col>
+        <v-card-text class="pt-3">
+          <v-row class="input-form-row">
+            <v-file-input dense outlined hide-details color="#4CAF50" :placeholder="textLang.text_dialog.select_img" accept="image/*" class="insert-image-file" id="file" v-model="uploadImage"></v-file-input>
           </v-row>
         </v-card-text>
-        <v-card-actions class="pt-0 pb-12">
+        <v-card-actions class="pb-6">
           <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialogImageUpload = false">{{ textLang.text_dialog.cancle }}</v-btn>
-          <v-btn depressed large :color="color_import" class="px-7 ml-4 save-setting-btn save-modal-font-btn" @click="imageUpload()" >{{ textLang.text_dialog.insert_picture }}</v-btn>
+          <v-btn outlined color="#4CAF50" class="px-10 mr-4 insert-image-btn-modal" @click="dialogImageUpload = false">{{ textLang.text_dialog.cancle }}</v-btn>
+          <v-btn depressed dark color="#4CAF50" class="px-5 ml-4 insert-image-btn-modal" @click="imageUpload()" >{{ textLang.text_dialog.insert_picture }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -845,34 +830,33 @@
     <!-- Setting Variable For Textarea Modal -->
     <v-dialog v-model="dialogTextAreaVal" scrollable persistent max-width="600px">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-         <b> {{ textLang.text_dialog.set_messages }} </b>
+        <v-card-title class="py-2 textarea-variable-modal-header">
+          {{ textLang.text_dialog.set_messages }}
         </v-card-title>
-        <v-card-text class="px-12 pt-8">
+        <v-card-text class="pt-4">
           <h3 class="variable-textarea-ex-title">{{ textLang.text_dialog.sample_text }}</h3>
           <div class="textarea-ex-box">
             <pre class="textarea-ex">{{selectedTextArea.defaultValue}}</pre>
           </div>
-          <br><br>
+          <br>
           <h3 class="variable-textarea-ex-title">{{ textLang.text_dialog.define_messages }}</h3>
-          <v-row>
-            <v-col cols="12" md="6" lg="6" class="pb-0" v-for="val in textAreaVals" :key="val.text"> <!-- setting value of one variable -->
-              <v-row>
-                <v-col cols="4" md="4" lg="4" align-self="center" class="pr-0 pb-0">
+          <v-row class="input-form-row">
+            <v-col cols="12" md="6" lg="6" class="pa-0" v-for="val in textAreaVals" :key="val.text"> <!-- setting value of one variable -->
+              <v-row class="input-form-row">
+                <v-col cols="5" md="4" lg="4" align-self="center" class="pl-0 pb-0">
                   <span class="variable-title">{{val.text}} :</span>
                 </v-col>
-                <v-col cols="7" md="7" lg="7" class="pb-0">
-                  <v-text-field dense outlined single-line hide-details :color="color_message" class="pad-input-textarea-variable variable-textarea" v-model="val.value"></v-text-field>
+                <v-col cols="7" md="7" lg="7" class="px-0 pb-0">
+                  <v-text-field dense outlined hide-details color="#67c25d" class="pad-input-textarea-variable variable-textarea" v-model="val.value"></v-text-field>
                 </v-col>
               </v-row>
             </v-col>
           </v-row>
-          <br><br>
         </v-card-text>
-        <v-card-actions class="pt-0 pb-12">
+        <v-card-actions class="pt-3 pb-6">
           <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialogTextAreaVal = false">{{ textLang.text_dialog.cancle }}</v-btn>
-          <v-btn depressed large :color="color_import" class="px-5 ml-4 save-setting-btn save-modal-font-btn" @click="closeTextAreaValModal()">{{ textLang.text_dialog.record_variable }}</v-btn>
+          <v-btn outlined color="#4CAF50" class="px-10 mr-2 insert-image-btn-modal" @click="dialogTextAreaVal = false">{{ textLang.text_dialog.cancle }}</v-btn>
+          <v-btn depressed dark color="#4CAF50" class="px-3 ml-2 insert-image-btn-modal" @click="closeTextAreaValModal()">{{ textLang.text_dialog.record_variable }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -934,7 +918,8 @@
 
   export default {
     computed: mapState({
-      objectTemplate: state => state.objectTemplate
+      objectTemplate: state => state.objectTemplate,
+      uploadedFile: state => state.uploadedFile
     }),
     components: {
       ReverseDocumentModal,
@@ -1552,7 +1537,7 @@
           $('#mini-page' + exPage).css("outline-color", "")
           $('#mini-page' + exPage).css("outline-style", "")
           this.currentPage = pnum
-          $('#mini-page' + this.currentPage).css("outline-color", this.color_mini_page)
+          $('#mini-page' + this.currentPage).css("outline-color", '#4CAF50')
           $('#mini-page' + this.currentPage).css("outline-style", "solid")
           this.objectType.forEach(e => {
             this.objectArray[e].forEach( e2 => {
@@ -1562,13 +1547,13 @@
                 if(e == 'textareabox' || e == 'texteditorbox' || e == 'inputbox' || e == 'datepickerbox'
                 || e == 'timebox' || e == 'dropdownbox' || (e == 'inputimagebox' && !e2.value)) {
                   if(e2.textHl) {
-                    e2.style.boxShadow = "1px 1px 1px 1px " + this.color_box_shadow
-                    $('#' + e2.name + '-input').css("box-shadow", "1px 1px 1px 1px " + this.color_box_shadow)
+                    e2.style.boxShadow = "1px 1px 1px 1px #4CAF50"
+                    $('#' + e2.name + '-input').css("box-shadow", "1px 1px 1px 1px #4CAF50")
                   }              
                 } else if(e == 'checkbox' ) {
                   if(e2.textHl) {
-                    e2.style.boxShadow = "1px 1px 1px 1px " + this.color_box_shadow
-                    $('#' + e2.name + '-input').css("box-shadow", "1px 1px 1px 1px " + this.color_box_shadow)
+                    e2.style.boxShadow = "1px 1px 1px 1px #4CAF50"
+                    $('#' + e2.name + '-input').css("box-shadow", "1px 1px 1px 1px #4CAF50")
                   }
                 }
               } else {
@@ -1584,7 +1569,7 @@
           if(Object.keys(this.dataTableObjectArray).length) {
             Object.keys(this.dataTableObjectArray).forEach(k => {
               if(this.dataTableObjectArray[k].textHl && this.dataTableObjectArray[k].page == this.currentPage) {
-                this.dataTableObjectArray[k].style.boxShadow =  "1px 1px 1px 1px " + this.color_box_shadow
+                this.dataTableObjectArray[k].style.boxShadow =  "1px 1px 1px 1px #4CAF50"
               } else {
                 this.dataTableObjectArray[k].style.boxShadow =  "0"
               }
@@ -1622,7 +1607,7 @@
       async reserveEform(eform_id) {
         if(eform_id) {
           try {
-            var { data } = await this.axios.post(this.$api + '/permission_view_eform',
+            var { data } = await this.axios.post(this.$eform_api + '/permission_view_eform',
             {
                 e_id: eform_id,
                 status:"view",
@@ -1642,7 +1627,7 @@
       async returnEform(eform_id) {
         // if(eform_id) {
         //   try {
-        //     var { data } = await this.axios.post(this.$api + '/permission_view_eform',
+        //     var { data } = await this.axios.post(this.$eform_api + '/permission_view_eform',
         //     {
         //         e_id: eform_id,
         //         status:"close"
@@ -1801,18 +1786,20 @@
           } else if (!data.status) {
             this.$router.push({ 'path': '/form'})
             this.$swal({
-              type: 'error',
-              html: '<span class="alert-error"><b>'+ this.textLang.alert.fail_template +'</b></span>',
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              text: 'ไม่พบแบบฟอร์ม',
               showCloseButton: true,
               showConfirmButton: false,
-              background: 'white',
-              customClass:{
-                popup: 'border-error'
-              },
-              position: 'top',
-              timer: 3000,
-              backdrop: false,
-              closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+              timer: 5000,
+              customClass: {
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
             })
           }
         } catch (err) {
@@ -1829,7 +1816,7 @@
       async getPublicTemplate(template_id) {
         // var template = {}
         // try {
-        //   var { data } = await this.axios.get(ApiConverterFunction.convertDoctorApi(this.$api) + '/template_guest?template=' + template_id)
+        //   var { data } = await this.axios.get(ApiConverterFunction.convertDoctorApi(this.$eform_api) + '/template_guest?template=' + template_id)
         //   this.notReady = false
         //   if(data.result == 'OK') {
         //     template = data.data
@@ -1925,7 +1912,7 @@
         await this.getTemplateExtent(eform_id)
         var template = {}
         try {
-          var { data } = await this.axios.get(this.$api_v6 + '/upload_eform?eform_id=' + eform_id + '&status_draft=' + this.option.statusDraft)
+          var { data } = await this.axios.get(this.$eform_api_v6 + '/upload_eform?eform_id=' + eform_id + '&status_draft=' + this.option.statusDraft)
           this.notReady = false
           if(data.result == 'OK') {
             template = data.data
@@ -2130,15 +2117,20 @@
             if(data.messageER == 'RESERVED') {
               this.$router.push('/form')
               this.$swal({
-                type: 'warning',
-                html: '<span class="alert-error"><b>' + this.textLang.alert.eform_use + data.detail.email +'</b></span>',
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+                text: 'แบบฟอร์มถูกใช้งานโดย ' + data.detail.email,
                 showCloseButton: true,
                 showConfirmButton: false,
-                background: 'white',
+                timer: 5000,
                 customClass: {
-                  popup: 'border-error'
-                },
-                closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             }
           }
@@ -2148,7 +2140,7 @@
       },
       async readTemplateData(token) {
         try {
-          var { data } = await this.axios.post(this.$node_api + '/read_data',{
+          var { data } = await this.axios.post(this.$eform_node_api + '/read_data',{
             token: token
           })
           if(data.result == 'OK') {
@@ -2227,7 +2219,7 @@
         var template = []
         try {
           this.onImport = true
-          var { data } = await this.axios.get(this.$api_v6+ '/upload_eform?doc_number=' + doc_no)
+          var { data } = await this.axios.get(this.$eform_api_v6+ '/upload_eform?doc_number=' + doc_no)
           this.notReady = false
           this.dialogRefDoc = false
           if(data.result == 'OK') {
@@ -2385,11 +2377,11 @@
       async getOtherService(doc_no,serviceName, isImportInRow, selectedRow) {
         var path = ""
         if(serviceName == 'cvm') {
-          path = ApiConverterFunction.convertDoctorApi(this.$api) + "/data_from_cvm?cvm_id=" + doc_no
+          path = ApiConverterFunction.convertDoctorApi(this.$eform_api) + "/data_from_cvm?cvm_id=" + doc_no
         } else if(serviceName == 'so') {
-          path = ApiConverterFunction.convertDoctorApi(this.$node_api) + "/data_from_erp?so_number=" + doc_no
+          path = ApiConverterFunction.convertDoctorApi(this.$eform_node_api) + "/data_from_erp?so_number=" + doc_no
         } else if(serviceName == 'invoice') {
-          path = ApiConverterFunction.convertDoctorApi(this.$node_api) + "/data_bank_statement?invoice=" + doc_no
+          path = ApiConverterFunction.convertDoctorApi(this.$eform_node_api) + "/data_bank_statement?invoice=" + doc_no
         }
         var template = []
         if(doc_no) {
@@ -2489,7 +2481,7 @@
       },
       async getTemplateExtent(eform_id) {
         try {
-          var { data } = await this.axios.get(this.$api + '/template_for_revert?eform_id=' + eform_id)
+          var { data } = await this.axios.get(this.$eform_api + '/template_for_revert?eform_id=' + eform_id)
           this.ext_template = data.data
         } catch (error) {
           console.log(error.message)
@@ -2557,6 +2549,7 @@
       async getBackValue() {
          if(typeof sessionStorage.getItem('template_array') === 'undefined' || (sessionStorage.getItem('template_array') == 'false')) {
           var objectTemp = await this.getTemplateTemp(JSON.parse(sessionStorage.getItem('template_array_code')))
+          this.files = await this.getTempFiles()
           var value_array = objectTemp.template_array
           value_array.forEach(e => {
             if(e.object_type == 'inputbox' || e.object_type == 'textareabox'|| e.object_type == 'texteditorbox' || e.object_type == 'dropdownbox' || e.object_type == "inputimagebox"
@@ -2620,6 +2613,9 @@
       async getTemplateTemp() {
         this.notReady = false
         return this.objectTemplate
+      },
+      async getTempFiles() {
+        return this.uploadedFile
       },
       async getArray(temp_array) {
         temp_array.forEach(e => {
@@ -3751,7 +3747,7 @@
           if(e.page == this.currentPage) {
             $("#" + e.name).css("z-index", e.style.zIndex)
             e.show = true
-            $('#' + e.name + '-input').css("box-shadow", "1px 1px 1px 1px " + this.color_box_shadow)
+            $('#' + e.name + '-input').css("box-shadow", "1px 1px 1px 1px #4CAF50")
           } else {
             $("#" + e.name).css("z-index", 1)
           }
@@ -3773,7 +3769,7 @@
           if(e.page == this.currentPage) {
             e.show = true
             $("#" + e.name).css("z-index", e.style.zIndex)
-            $('#' + e.name + '-input').css("box-shadow", "1px 1px 1px 1px " + this.color_box_shadow)
+            $('#' + e.name + '-input').css("box-shadow", "1px 1px 1px 1px #4CAF50")
           } else {
             $("#" + e.name).css("z-index", 1)
           }
@@ -3838,7 +3834,7 @@
           if(e.page == this.currentPage) {
             $("#" + e.name).css("z-index", e.style.zIndex)
             e.show = true
-            $('#' + e.name + '-input').css("box-shadow", "1px 1px 1px 1px " + this.color_box_shadow)
+            $('#' + e.name + '-input').css("box-shadow", "1px 1px 1px 1px #4CAF50")
           } else {
             $("#" + e.name).css("z-index", 1)
           }
@@ -7161,28 +7157,38 @@
           this.templateTempStore(template_array)
         } else if(!allFilled){
           this.$swal({
-            type: 'warning',
-            html: '<span class="alert-error"><b>'+ this.textLang.alert.fill_data +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+            text: 'กรุณากรอกข้อมูลให้ครบถ้วน',
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
+            timer: 5000,
             customClass: {
-              popup: 'border-error'
-            },
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
           allFilled = true
         } else if(!allValid){
           this.$swal({
-            type: 'warning',
-            html: '<span class="alert-error"><b>'+ this.validInput +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+            text: this.validInput,
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
-            customClass:{
-                popup: 'border-error'
-            },
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
           allValid = true
         }
@@ -7324,7 +7330,7 @@
         //   } else {
         //     url = '/object_template'
         //   }
-        //   var { data } = await this.axios.post(this.$api + url,
+        //   var { data } = await this.axios.post(this.$eform_api + url,
         //   { 
         //     object_temp: {
         //       template_array: template_array,
@@ -7345,10 +7351,10 @@
       },
       async sendStep(document_name, uploadFiles, opsPage) {
         try {
-          this.files = uploadFiles
-          if (this.files.length) {
-            await this.uploadAttachFile("", "")
-          }
+          // this.files = uploadFiles
+          // if (this.files.length) {
+          //   await this.uploadAttachFile("", "")
+          // }
           this.optionsPage = opsPage
           var business = ""
           this.doc_name = document_name
@@ -7371,10 +7377,10 @@
           var template_prop = this.setTemplateProperty(this.template_option)
           var sendingHtml = await this.genHtml()
           this.notReady = true
-          var url = this.$api_v6 + '/upload_eform'
+          var url = this.$eform_api_v6 + '/upload_eform'
           var speacailForm = this.$speacailForm
           if(speacailForm.includes(this.template_option.template_id)) {
-            url = this.$node_api + "/create_eform"
+            url = this.$eform_node_api + "/create_eform"
           }
           var { data } = await this.axios.post(url,
           { 
@@ -7418,66 +7424,73 @@
             if(data.response_bi && data.response_bi.Warning_Detail!=null){
               if(data.response_bi.Warning_Massager == 'green') {
                 this.$swal({
-                  type: "success",
-                  html: '<span class="alert"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                  showCloseButton: true,
-                  customClass: {
-                    popup: 'border-success'
-                  },
-                  showConfirmButton: false,
-                  background: "white",
-                  position: "top",
-                  timer: 15000,
                   backdrop: false,
-                  closeButtonHtml: '<span class="close-alert">&times;</span>',
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                  text: data.response_bi.Warning_Detail,
+                  showCloseButton: true,
+                  showConfirmButton: false,
+                  timer: 15000,
+                  customClass: {
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
               } else {
                 this.$swal({
-                  imageUrl: 'https://www.img.in.th/images/9bcaca611aad241742648c1d11c8e579.png',
-                  imageWidth: 100, 
-                  html: '<br><span class="alert-warning"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                  showCloseButton: true,
-                  customClass: {
-                    popup: 'border-warning'
-                  },
-                  showConfirmButton: false,
-                  background: "white",
-                  position: "top",
-                  timer: 15000,
                   backdrop: false,
-                  closeButtonHtml: '<span class="close-alert-warning">&times;</span>',
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+                  text: data.response_bi.Warning_Detail,
+                  showCloseButton: true,
+                  showConfirmButton: false,
+                  timer: 15000,
+                  customClass: {
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
               }
             } else {
               if(data.response_bi && data.response_bi.Warning_Detail!=null){
                 this.$swal({
-                  type: 'error',
-                  html: '<span class="alert-error"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                  showCloseButton: true,
-                  customClass: {
-                    popup: 'border-error'
-                  },
-                  showConfirmButton: false,
-                  background: "white",
-                  position: "top",
-                  timer: 15000,
                   backdrop: false,
-                  closeButtonHtml: '<span class="close-alert-warning">&times;</span>',
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                  text: data.response_bi.Warning_Detail,
+                  showCloseButton: true,
+                  showConfirmButton: false,
+                  timer: 15000,
+                  customClass: {
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
               } else {
                 this.$swal({
-                  type: 'success',
-                  html: '<span class="alert"><b>'+ this.textLang.alert.assign +'</b></span>',
+                  backdrop: false,
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                  text: 'ยื่นเอกสารสำเร็จ',
                   showCloseButton: true,
                   showConfirmButton: false,
-                  background: 'white',
-                  position: 'top',
-                  timer: 3000,
-                  backdrop: false,
+                  timer: 5000,
                   customClass: {
-                    popup: 'border-success'
-                  },
-                  closeButtonHtml: '<span class="close-alert">&times;</span>'
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
               }
             }
@@ -7486,51 +7499,57 @@
           } else {
             if(data.response_bi && data.response_bi.Warning_Detail!=null){
               this.$swal({
-                type: 'error',
-                html: '<span class="alert-error"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                showCloseButton: true,
-                customClass: {
-                  popup: 'border-error'
-                },
-                showConfirmButton: false,
-                background: "white",
-                position: "top",
-                timer: 15000,
                 backdrop: false,
-                closeButtonHtml: '<span class="close-alert-warning">&times;</span>',
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             } else {
               this.$swal({
-                type: 'error',
-                html: '<span class="alert-error"><b>'+ this.textLang.alert.fail +'</b></span>',
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                text: 'ยื่นเอกสารล้มเหลว กรุณาลองใหม่ในภายหลัง',
                 showCloseButton: true,
                 showConfirmButton: false,
-                background: 'white',
-                customClass:{
-                  popup: 'border-error'
-                },
-                position: 'top',
-                timer: 3000,
-                backdrop: false,
-                closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             }
           }         
         } catch (error) {
           this.notReady = false
           this.$swal({
-            type: 'error',
-            html: '<span class="alert-error"><b>'+ this.textLang.alert.fail +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+            text: 'ยื่นเอกสารล้มเหลว กรุณาลองใหม่ในภายหลัง',
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
-            customClass:{
-              popup: 'border-error'
-            },
-            position: 'top',
-            timer: 3000,
-            backdrop: false,
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
           console.log(error.message)
         }
@@ -7546,7 +7565,7 @@
         try {
           this.notReady = true
           var { data } = await this.axios.post(
-            ApiConverterFunction.convertDoctorApi(this.$api_v2) + "/attract_file",
+            ApiConverterFunction.convertDoctorApi(this.$eform_api_v2) + "/attract_file",
             formData)
           this.notReady = false
           if(data.result == "OK") {
@@ -7566,15 +7585,19 @@
             this.files = []
             this.attachedFiles = this.attachedFiles.filter(item => !item.waitUpload)
             this.$swal({
-              type: 'warning',
-              html: '<span class="alert-error"><b>'+ this.textLang.alert.upload_fail +'</b></span>',
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+              text: 'อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง',
               showCloseButton: true,
               showConfirmButton: false,
-              background: 'white',
               customClass: {
-                popup: 'border-error'
-              },
-              closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
             })
           }
         } catch (error) {
@@ -7582,22 +7605,26 @@
           this.files = []
           this.attachedFiles = this.attachedFiles.filter(item => !item.waitUpload)
           this.$swal({
-            type: 'warning',
-            html: '<span class="alert-error"><b>'+ this.textLang.alert.upload_fail +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+            text: 'อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง',
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
             customClass: {
-            popup: 'border-error'
-              },
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
         }
       },
       async sendInsertChat(e_id) {
         try {
           this.notReady = true
-          var { data } = await this.axios.post(this.$api + "/send_chat_signing",
+          var { data } = await this.axios.post(this.$eform_api + "/send_chat_signing",
             { 
               e_id: e_id
             })
@@ -7651,7 +7678,7 @@
       async summitReject(eId) {
         try {
           this.notReady = true
-          var { data } = await this.axios.put(this.$api_v6 + '/upload_eform',
+          var { data } = await this.axios.put(this.$eform_api_v6 + '/upload_eform',
           {
             e_id: eId,
             status:"reject"
@@ -7660,58 +7687,65 @@
           if(data.result != 'ER') {
             this.disableButton(eId)
             this.$swal({
-              type: 'success',
-              html: '<span class="alert"><b>'+ this.textLang.alert.reject_complete +'</b></span>',
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+              text: 'ปฏิเสธอนุมัติสำเร็จ',
               showCloseButton: true,
               showConfirmButton: false,
-              background: 'white',
-              position: 'top',
-              timer: 3000,
-              backdrop: false,
+              timer: 5000,
               customClass: {
-                popup: 'border-success'
-              },
-              closeButtonHtml: '<span class="close-alert">&times;</span>'
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
             })
             this.$router.push({ 'path': '/form'})
           } else {
             this.$swal({
-              type: 'error',
-              html: '<span class="alert-error"><b>'+ this.textLang.alert.reject_fail +'</b></span>',
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              text: 'ปฏิเสธอนุมัติล้มเหลว กรุณาลองใหม่ในภายหลัง',
               showCloseButton: true,
               showConfirmButton: false,
-              background: 'white',
-              customClass:{
-                popup: 'border-error'
-              },
-              position: 'top',
-              timer: 3000,
-              backdrop: false,
-              closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+              timer: 5000,
+              customClass: {
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
             })
           }
         } catch(err) {
           this.notReady = false
           this.$swal({
-            type: 'error',
-            html: '<span class="alert-error"><b>'+ this.textLang.alert.reject_fail +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+            text: 'ปฏิเสธอนุมัติล้มเหลว กรุณาลองใหม่ในภายหลัง',
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
-            customClass:{
-              popup: 'border-error'
-            },
-            position: 'top',
-            timer: 3000,
-            backdrop: false,
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
           console.log(err)
         }
       },
       changeUploadingFiles(uploadingFiles) {
         this.files = uploadingFiles
-        this.applyAttachFiles() 
+        this.$store.commit('setUploadedFile',this.files)
+        // this.applyAttachFiles() 
       },
       applyAttachFiles() {
         var holdFiles = this.attachedFiles.filter(item => !item.waitUpload)
@@ -7734,7 +7768,7 @@
       },
       async disableButton(e_id) {
         try {
-          var { data } = await this.axios.post(this.$api + "/disble_button",
+          var { data } = await this.axios.post(this.$eform_api + "/disble_button",
             {
               e_id: e_id
             })
@@ -7745,7 +7779,7 @@
       async backStep(backStepTarget) {
         try {
           this.notReady = true
-          var { data } = await this.axios.put(this.$api_v6 + '/upload_eform',
+          var { data } = await this.axios.put(this.$eform_api_v6 + '/upload_eform',
           { 
             e_id: this.template_option.e_id,
             document_name: this.template_option.document_name,
@@ -7757,51 +7791,57 @@
           this.notReady = false
           if(data.result != "ER") {
               this.$swal({
-                type: 'success',
-                html: '<span class="alert"><b>'+ this.textLang.alert.reverse +'</b></span>',
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                text: 'ส่งคืนแก้ไขสำเร็จ',
                 showCloseButton: true,
                 showConfirmButton: false,
-                background: 'white',
+                timer: 5000,
                 customClass: {
-                  popup: 'border-success'
-                },
-                position: 'top',
-                timer: 3000,
-                backdrop: false,
-                closeButtonHtml: '<span class="close-alert">&times;</span>'
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
               this.$router.push({ 'path': '/form'})
               } else {
                 this.$swal({
-                  type: 'error',
-                  html: '<span class="alert-error"><b>'+ this.textLang.alert.fail_reverse +'</b></span>',
+                  backdrop: false,
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                  text: 'ส่งคืนแก้ไขล้มเหลว กรุณาลองใหม่ในภายหลัง',
                   showCloseButton: true,
                   showConfirmButton: false,
-                  background: 'white',
-                  customClass:{
-                    popup: 'border-error'
-                  },
-                  position: 'top',
-                  timer: 3000,
-                  backdrop: false,
-                  closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+                  timer: 5000,
+                  customClass: {
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
           }
         } catch(err) {
           this.notReady = false
           this.$swal({
-            type: 'error',
-            html: '<span class="alert-error"><b>'+ this.textLang.alert.fail_reverse +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+            text: 'ส่งคืนแก้ไขล้มเหลว กรุณาลองใหม่ในภายหลัง',
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
-            customClass:{
-              popup: 'border-error'
-            },
-            position: 'top',
-            timer: 3000,
-            backdrop: false,
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
           console.log(err)
         }
@@ -7829,7 +7869,7 @@
         this.dialogImport = false
         this.notReady = true
         try {
-          var { data } = await this.axios.post(this.$api_v2 + '/import_template_excel',
+          var { data } = await this.axios.post(this.$eform_api_v2 + '/import_template_excel',
           formData)
           this.notReady = false
           if(data.messageER != 'ER') {
@@ -7846,7 +7886,7 @@
         this.dialogImageUpload = false
         this.notReady = true
         try {
-          var { data } = await this.axios.post(this.$api + '/upload_image',
+          var { data } = await this.axios.post(this.$eform_api + '/upload_image',
           formData,
           {
             headers: {
@@ -7884,7 +7924,7 @@
           var imageLink = this.objectArray[this.selected_array][this.selected_object].value
           this.objectArray[this.selected_array][this.selected_object].value = ''
           try {
-            var { data } = await this.axios.post(this.$api + '/del_image',
+            var { data } = await this.axios.post(this.$eform_api + '/del_image',
             {
               url:imageLink
             })
@@ -8159,7 +8199,7 @@
       },
       async getCvmList() {
         try{
-          var { data } = await this.axios.get(this.$api + '/list_cvmid')
+          var { data } = await this.axios.get(this.$eform_api + '/list_cvmid')
           if(data.result == 'OK') {
             this.cvmArray = data.messageText
           }
@@ -8169,7 +8209,7 @@
       },
       async getSoList() {
         try{
-          var { data } = await this.axios.get(this.$node_api + '/list_sonumber')
+          var { data } = await this.axios.get(this.$eform_node_api + '/list_sonumber')
           if(data.result == 'OK') {
             this.soArray = data.messageText
           }
@@ -8180,7 +8220,7 @@
       async getInvoiceList() {
         try{
           this.notReady = true
-          var { data } = await this.axios.get(this.$node_api + '/list_invoice',
+          var { data } = await this.axios.get(this.$eform_node_api + '/list_invoice',
           {
             headers: {
               'Authorization': 'Bearer ' + sessionStorage.getItem("one_access_token")
@@ -8197,7 +8237,7 @@
       async getCusList() {
         try{
           this.notReady = true
-          var { data } = await this.axios.get(this.$node_api + '/list_cusid')
+          var { data } = await this.axios.get(this.$eform_node_api + '/list_cusid')
           this.notReady = false
           if(data.result == 'OK') {
             this.cusArray = data.messageText
@@ -8209,7 +8249,7 @@
       async getInvioceFromCus(value, obj_name) {
         try{
           if(value) {
-            var { data } = await this.axios.get(this.$node_api + '/data_customer?cus_id=' + value)
+            var { data } = await this.axios.get(this.$eform_node_api + '/data_customer?cus_id=' + value)
             if(data.result == 'OK') {
               var holdDropdown = this.objectArray['dropdownbox'].filter(item => item.style.autoChoices && item.style.autoChoicesSelect == 'invoice' && item.style.refAutoChoices == obj_name)
               holdDropdown.forEach(e => {
@@ -8236,11 +8276,11 @@
         var url = ""
         var resArray = []
         if(type == 'pro_th' || type == 'pro_en') {
-          url = ApiConverterFunction.convertDoctorApi(this.$api) + '/thailand_provinces'
+          url = ApiConverterFunction.convertDoctorApi(this.$eform_api) + '/thailand_provinces'
         } else if(type == 'dis_th' || type == 'dis_en') {
-          url = ApiConverterFunction.convertDoctorApi(this.$api) + '/thailand_provinces?provinces_id=' + value
+          url = ApiConverterFunction.convertDoctorApi(this.$eform_api) + '/thailand_provinces?provinces_id=' + value
         } else if(type == 'subdis_th' || type == 'subdis_en') {
-          url = ApiConverterFunction.convertDoctorApi(this.$api) + '/thailand_provinces?amphure_id=' + value
+          url = ApiConverterFunction.convertDoctorApi(this.$eform_api) + '/thailand_provinces?amphure_id=' + value
         }
         try {
           var { data } = await this.axios.get(url)
@@ -8268,7 +8308,7 @@
       async getLeaderInfo(taxId) {
         try {
           var res = []
-          var { data } = await this.axios.post(this.$api + '/get_parent',
+          var { data } = await this.axios.post(this.$eform_api + '/get_parent',
           {
             "tax_id":taxId
           })
@@ -8608,7 +8648,7 @@
         var eform_id = this.option.eform_id
         if(eform_id) {
           try {
-            var { data } = await this.axios.post(this.$api + '/pdf_for_eform',
+            var { data } = await this.axios.post(this.$eform_api + '/pdf_for_eform',
             {
                 e_id: eform_id
             })
@@ -8686,19 +8726,10 @@
 </script>
 
 <style>
-  .content-show-tem2 {
-    margin-top: 51px;
-    margin-left: 0px;
-  }
-
   .back-show-btn {
     font-family: 'Sarabun', sans-serif;
     font-size: 16px !important;
     text-transform: capitalize;
-  }
-
-  .import-excel-icon {
-    transform: rotate(90deg);
   }
 
   .import-excel-btn {
@@ -8796,8 +8827,14 @@
 
   .preview-btn {
     font-family: 'Sarabun', sans-serif;
-    margin-right: 1%;
     text-transform: capitalize;
+  }
+
+  .select-form-page-block {
+    background-color: white;
+    height: calc(100vh - 129px);
+    overflow: auto;
+    border-right: solid 1px #E0E0E0;
   }
 
   .recalculate-btn {
@@ -8816,18 +8853,19 @@
     line-height: 20px !important;
   }
 
-  .show-num-attach-file {
-    line-height: 27px;
-    margin-top: 0% !important;
-  }
-
-  .show-num-attach-file .v-badge__badge {
-    margin-top: 13%;
-  }
-
   .show-form-block {
     width: 100%;
-    margin-left: 0%;
+    margin: 0%;
+  }
+
+  .input-form-row {
+    width: 100%;
+    margin: 0%;
+  }
+
+  .num-page-input-form {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
   }
 
   .excel-file-title {
@@ -8839,17 +8877,17 @@
 
   .temp-name {
     width: 100%;
-    margin-left: 0%;
+    margin: 0%;
     font-family: 'Sarabun', sans-serif;
     text-align: center;
   }
 
   .show-paper-block {
-    margin-left: 2%;
-    margin-top: 1%;
+    /* margin-left: 2%;
+    margin-top: 1%; */
     overflow: auto;
     height: calc(100vh - 224px);
-    padding: 1%;
+    /* padding: 1%; */
   }
 
   .not-show-icon {
@@ -8971,13 +9009,13 @@
 
   .variable-textarea-ex-title {
     font-family: 'Sarabun', sans-serif;
-    color: #2ACA9F;
+    color: black;
   }
 
   .textarea-ex-box {
     border-style: solid;
     border-width: 2px;
-    border-color:#2ACA9F;
+    border-color:#67c25d;
     border-radius: 5px;
     padding: 6px;
     margin-top: 2%;
@@ -8985,7 +9023,7 @@
 
   .textarea-ex {
     font-family: 'Sarabun', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     color: black;
   }
 
@@ -8996,14 +9034,12 @@
   }
 
   .v-text-field.pad-input-textarea-variable input {
-    padding-left: 3%;
-    padding-right: 2%;
-    line-height: 30px;
+    line-height: 21px;
   }
 
   .variable-textarea {
     font-family: 'Sarabun', sans-serif;
-    font-size: 16px;
+    font-size: 13px;
   }
 
   .letters-length {
@@ -9051,6 +9087,27 @@
     font-size: 16px;
   }
 
+  .input-form-modal-header {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 16px;
+  }
+
+  .insert-image-file {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+  }
+
+  .insert-image-btn-modal {
+    font-family: 'Sarabun', sans-serif;
+  }
+
+  .textarea-variable-modal-header {
+    font-family: "Sarabun", sans-serif;
+    font-size: 16px !important;
+    color: white;
+    background-color: #67c25d;
+  }
+
   /*======== style from old file >> Show_Template(old version) ========*/
   .content-show-tem {
     margin-top: 54px;
@@ -9090,7 +9147,7 @@
   }
 
   .autocomplete-pad.v-select.v-text-field input {
-    padding-left: 4px !important;
+    /* padding-left: 4px !important; */
     line-height: unset;
   }
 
@@ -9271,11 +9328,7 @@
   }
 
   /*========================================*/
-  @media only screen and (max-width:960px){ /*css for mobile screen*/
-    .content-show-tem2 {
-      margin-top: 44px;
-    }
-
+  @media only screen and (max-width:600px){ /*css for mobile screen*/
     .import-excel-btn {
       padding-left: 2% !important;
       padding-right: 2% !important;
@@ -9314,6 +9367,10 @@
       position: fixed;
       right: 0px;
       top: 112px;
+    }
+
+    .show-paper-block { 
+      height: calc(100vh - 214px);
     }
 
     .type-doc-import-title {

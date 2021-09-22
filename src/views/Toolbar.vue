@@ -105,7 +105,7 @@
             <v-list-item-title class="menu-title">รายงานการใช้งานเอกสาร</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <!-- <v-list-group no-action color="#53ba47" :value="open_doc_style_menu" active-class="menu-create-doc" :class="'doc-style-dropdown-icon ' +  doc_style_active_class">
+        <v-list-group no-action color="#53ba47" :value="open_doc_style_menu" active-class="menu-create-doc" :class="'doc-style-dropdown-icon ' +  doc_style_active_class">
           <template v-slot:activator>
             <v-list-item-icon>
               <v-icon>mdi-file-cog</v-icon>
@@ -114,15 +114,15 @@
               <v-list-item-title class="menu-title">จัดการรูปแบบเอกสาร</v-list-item-title>
             </v-list-item-content>
           </template>
-          <v-list-item to="/test_page" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
+          <!-- <v-list-item to="/flow" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
             <v-list-item-icon class="icon-sub-menu">
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="menu-title">สร้างรูปแบบอนุมัติ</v-list-item-title>
             </v-list-item-content>
-          </v-list-item>
-          <v-list-item @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
+          </v-list-item> -->
+          <v-list-item to="/template" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
             <v-list-item-icon class="icon-sub-menu">
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
@@ -130,7 +130,7 @@
               <v-list-item-title class="menu-title">สร้างแบบฟอร์ม</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </v-list-group> -->
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
     <!-- Main Content -->
@@ -228,7 +228,7 @@
         }
       },
       checkDocStyleMenu() {
-        if((this.$route.name == 'flow') || (this.$route.name == 'create_form')) {
+        if((this.$route.name == 'flow') || (this.$route.name == 'template')) {
           this.open_doc_style_menu = true
           this.doc_style_active_class = 'menu-create-doc-active'
         } else {
