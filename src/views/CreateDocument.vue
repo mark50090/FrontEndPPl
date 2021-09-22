@@ -582,10 +582,11 @@ import VueDraggableResizable from 'vue-draggable-resizable'
               "index": xyz.index
             }))
             var {data} = await this.axios.post(this.$api_url + url,{
-                flow_id: this.selected_document_type_custom._id,
+                doc_id: this.selected_document_type_custom._id,
                 set_flow: "true",
                 flow_data: flow_data,
-                pdfbase: this.pdf_src.slice(28)
+                pdfbase: this.pdf_src.slice(28),
+                business: JSON.parse(sessionStorage.getItem('selected_business'))
             })
           }
           if(data.status){
