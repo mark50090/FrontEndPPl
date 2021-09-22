@@ -60,6 +60,7 @@ export default {
     margin-left: 63px !important;
     margin-top: 2% !important;
     margin-bottom: 0% !important;
+    line-height: 22px !important;
   }
 
   /*=============================================================================*/
