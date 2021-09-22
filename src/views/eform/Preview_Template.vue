@@ -1,41 +1,39 @@
 <template>
-  <div class="content-show-tem2">
-    <v-overlay :value="notReady" absolute opacity="0.3" z-index="11" class="loading-content">
-      <!-- <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> -->
-      <v-progress-linear indeterminate rounded height="15" :background-color="color_loading_bar_bg" :color="color_loading_bar" class="loading-bar"></v-progress-linear>
+  <div>
+    <v-overlay :value="notReady" absolute opacity="0.3" z-index="9">
+      <img width="100px" src="../../assets/loader.gif" class="loading-circle">
     </v-overlay>
-    <v-toolbar flat class="create-menu-bar">
+    <v-toolbar flat class="create-menu-bar preview-form-bar">
       <!-- top bar -->
-      <v-btn v-if="!isPreview && ready" text class="px-0 back-data-btn" @click="back()">
-        <v-icon large :color="color_chevron_left">mdi-chevron-left</v-icon>
+      <v-btn v-if="!isPreview && ready" text class=" mr-1 px-0 back-data-btn" @click="back()">
+        <v-icon large color="#4CAF50">mdi-chevron-left</v-icon>
         <b>{{ textLang.tabMenubar.back_page }}</b>
       </v-btn>
-      <v-btn v-if="!(!isPreview && ready)" text class="px-0 back-show-btn" @click="backToMyForm()">
-        <v-icon large :color="color_chevron_left">mdi-chevron-left</v-icon>
-        <b>{{ textLang.tabMenubar.back_to }}</b>
+      <v-btn v-if="!(!isPreview && ready)" text class="px-0 mr-1 back-show-btn" @click="backToMyForm()">
+        <v-icon large color="#4CAF50">mdi-chevron-left</v-icon>
+        <b>ออกจากแบบฟอร์มนี้</b>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn v-if="isOwner" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn hidden-sm-and-down" @click="openCancel()">
+      <v-btn v-if="isOwner" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
         <v-icon>mdi-file-cancel-outline</v-icon>
         <span class="btn-expan-word">{{ textLang.tabMenubar.cancel_doc }}</span>
       </v-btn>
-      <v-badge left overlap color="red" class="mr-2 hidden-sm-and-down">
-        <span v-if="attachedFiles.length" slot="badge">{{ attachedFiles.length }}</span>
-          <v-btn outlined large color="grey lighten-1" class="mr-2 export-json-btn" @click="openAttachFile()">
-            <v-icon class="mr-2">mdi-text-box-search-outline</v-icon>
-              {{ textLang.tabMenubar.view_attachment }}
-          </v-btn>
-      </v-badge>
+      <!-- <v-badge bordered left overlap color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mr-2 display-pc-only">
+        <v-btn outlined large color="grey lighten-1" class="mr-2 px-2 export-json-btn" @click="openAttachFile()">
+          <v-icon class="mr-2">mdi-text-box-search-outline</v-icon>
+            {{ textLang.tabMenubar.view_attachment }}
+        </v-btn>
+      </v-badge> -->
 
-      <!-- <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready" large depressed :color="color_savedraft" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft hidden-sm-and-down" @click="openDocName(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
-      <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" large depressed dark :color="color_save_doc" class="save-doc-btn" @click="checkSave()">{{ textLang.tabMenubar.save_doc }}</v-btn>
-      <!-- <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed dark :color="color_savedraft" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft hidden-sm-and-down" :disabled="buttonClicked" @click="saveStep(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
-      <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed dark :color="color_btn_saveStep" class="btn-saveStep" :disabled="buttonClicked" @click="openSignature()">{{ textLang.tabMenubar.save_doc }}</v-btn>  <!--mobile-->
+      <!-- <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready" large depressed color="#C2EB81" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft display-pc-only" @click="openDocName(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
+      <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" large depressed dark color="#4CAF50" class="save-doc-btn" @click="checkSave()">{{ textLang.tabMenubar.save_doc }}</v-btn>
+      <!-- <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed color="#C2EB81" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft display-pc-only" :disabled="buttonClicked" @click="saveStep(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
+      <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed color="#4CAF50" class="btn-saveStep" :disabled="buttonClicked" @click="openSignature()">{{ textLang.tabMenubar.save_doc }}</v-btn>  <!-- mobile -->
       
       <!-- select next template button -->
       <v-menu offset-y z-index="11">
         <template v-slot:activator="{ on }">
-          <v-btn v-show="((isPreview && ready && !editStep && !draftPreview) || isNextFill) && nextTemplates.length" large depressed :color="color_next_temp_btn" class="ml-3 next-temp-btn" v-on="on">{{ textLang.tabMenubar.next_temp_btn }} <v-icon>mdi-menu-down</v-icon></v-btn>
+          <v-btn v-show="((isPreview && ready && !editStep && !draftPreview) || isNextFill) && nextTemplates.length" large depressed dark color="#525659" class="ml-3 next-temp-btn" v-on="on">{{ textLang.tabMenubar.next_temp_btn }} <v-icon>mdi-menu-down</v-icon></v-btn>
         </template>
         <v-list dense>
           <v-list-item v-for="item in nextTemplates" :key="item.temp_code">
@@ -43,12 +41,12 @@
           </v-list-item>
         </v-list>
       </v-menu>
-     
-      <v-btn v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" large depressed :color="color_pplLoadTemplate" class="ml-4 export-json-btn send-ppl-btn hidden-sm-and-down" :loading="ppl_loading" :disabled="ppl_loading" @click="pplLoadTemplate()">{{ textLang.offer_dialog.offer }}</v-btn>
+
+      <v-btn v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" large depressed color="#4CAF50" class="ml-4 px-3 export-json-btn send-ppl-btn display-pc-only" :loading="ppl_loading" :disabled="ppl_loading" @click="pplLoadTemplate()">{{ textLang.offer_dialog.offer }}</v-btn>
       
       <v-menu offset-y z-index="11">
         <template v-slot:activator="{ on }">
-           <v-btn v-on="on" depressed large color="grey lighten-2" class="ml-4 pr-2 pl-3 hidden-sm-and-down more-en">
+           <v-btn v-on="on" depressed large color="grey lighten-2" class="ml-4 pr-2 pl-3 display-pc-only more-en">
             {{ textLang.tabMenubar.more }}
             <v-icon>mdi-menu-down</v-icon>
           </v-btn>
@@ -74,7 +72,7 @@
           </v-list-item>
           <v-list-item v-if="((isPreview && ready && !editStep) || (isPublic && isPreview)) && !draftPreview" @click="download('download')">
             <v-list-item-icon>
-              <v-icon>mdi-inbox-arrow-down</v-icon>
+              <v-icon>mdi-download</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item>
@@ -97,71 +95,70 @@
       <!-- button for mobile after save -->
       <v-menu offset-y z-index="11">
         <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on" class="mr-2 hidden-md-and-up">
+          <v-btn icon color="#4CAF50" v-on="on" class="display-mobile-only">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
         <v-list>
           <v-list-item @click="openAttachFile()">
-            <v-list-item-icon><v-icon>mdi-text-box-search-outline</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-text-box-search-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">
-              <v-badge color="red" class="show-num-attach-file">
-                <span v-if="attachedFiles.length" slot="badge">{{ attachedFiles.length }}</span>
-                  {{ textLang.tabMenubar.view_attachment }} &nbsp;&nbsp;
+              <v-badge bordered inline color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mt-0">
+                {{ textLang.tabMenubar.view_attachment }}
               </v-badge>
             </v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(isPreview && ready && !editStep) || (isPublic && isPreview)" class="button-mobile" @click="openRefDoc()">
+          <v-list-item v-if="(isPreview && ready && !editStep) || (isPublic && isPreview)" @click="openRefDoc()">
             <v-list-item-icon>
-              <v-icon>mdi-file-eye-outline</v-icon>
+              <v-icon color="#4CAF50">mdi-file-eye-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.view_ref_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(allUserStep || (!isPreview && ready && !editStep && !allUserStep) || (editStep && !allUserStep)) && !isPublic" class="button-mobile" @click="dialogFiles = true">
+          <v-list-item v-if="(allUserStep || (!isPreview && ready && !editStep && !allUserStep) || (editStep && !allUserStep)) && !isPublic" @click="dialogFiles = true">
             <v-list-item-icon>
-              <v-icon>mdi-paperclip</v-icon>
+              <v-icon color="#4CAF50">mdi-paperclip</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="editStep && !allUserStep && !isPublic && !draftPreview" class="button-mobile" :disabled="buttonClicked" @click="saveStep(true)">
+          <v-list-item v-if="editStep && !allUserStep && !isPublic && !draftPreview" :disabled="buttonClicked" @click="saveStep(true)">
             <v-list-item-icon>
-              <v-icon>mdi-playlist-edit</v-icon>
+              <v-icon :disabled="buttonClicked" color="#4CAF50">mdi-file-hidden</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.save_draft }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && false " class="button-mobile" @click="openDocName(true)">
+          <v-list-item v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && false " @click="openDocName(true)">
             <v-list-item-icon>
-              <v-icon>mdi-playlist-edit</v-icon>
+              <v-icon color="#4CAF50">mdi-file-hidden</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.save_draft }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isPreview && ready && !editStep && !isPublic && !draftPreview" @click="exportValue()">
             <v-list-item-icon>
-              <v-icon>mdi-open-in-new</v-icon>
+              <v-icon color="#4CAF50">mdi-open-in-new</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">Export file Json Key</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isPreview && ready && !editStep && !draftPreview" @click="download('download')">
             <v-list-item-icon>
-              <v-icon>mdi-inbox-arrow-down</v-icon>
+              <v-icon color="#4CAF50">mdi-download</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isPreview && ready && !editStep && !isPublic && !isFlow && !draftPreview && !isAdminPreview" @click="copyDocument()">
             <v-list-item-icon>
-              <v-icon>mdi-content-copy</v-icon>
+              <v-icon color="#4CAF50">mdi-content-copy</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.copy }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isPreview && ready && !editStep && !isPublic && !isFlow && !draftPreview" @click="openForwardMail()">
             <v-list-item-icon>
-              <v-icon>mdi-email-send-outline</v-icon>
+              <v-icon color="#4CAF50">mdi-email-send-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.forward_mail }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" @click="pplLoadTemplate()">
             <v-list-item-icon>
-              <v-icon>mdi-draw</v-icon>
+              <v-icon color="#4CAF50">mdi-draw</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.offer_dialog.offer }}</v-list-item-title>
           </v-list-item>
@@ -174,11 +171,11 @@
           <!-- paper menu -->
           <v-spacer></v-spacer>
           <!-- zoom button -->
-          <v-btn depressed small color="grey lighten-2" class="hidden-sm-and-down" @click="zoomOut()">
+          <v-btn depressed small color="grey lighten-2" class="display-pc-only" @click="zoomOut()">
             <v-icon color="#aaaaaa">mdi-magnify-minus-outline</v-icon>
           </v-btn>
-          <span class="mx-3 zoom-percent hidden-sm-and-down">{{zoom_level}} %</span>
-          <v-btn depressed small color="grey lighten-2" class="hidden-sm-and-down" @click="zoomIn()">
+          <span class="mx-3 zoom-percent display-pc-only">{{zoom_level}} %</span>
+          <v-btn depressed small color="grey lighten-2" class="display-pc-only" @click="zoomIn()">
             <v-icon color="#aaaaaa">mdi-magnify-plus-outline</v-icon>
           </v-btn>
           <!-- page number -->
@@ -191,7 +188,7 @@
           </v-btn>
           <v-spacer></v-spacer>
           <!-- comments button -->
-          <v-btn v-if="open_comment == false && docComment.length" depressed height="100%" color="grey lighten-2" class="comment-preview-btn" @click="toggleComment()">{{ textLang.tabMenubar.open_comment_btn }}<br class="hidden-md-and-up">{{ textLang.tabMenubar.comment_btn }}</v-btn>
+          <v-btn v-if="open_comment == false && docComment.length" depressed height="100%" color="grey lighten-2" class="comment-preview-btn" @click="toggleComment()">{{ textLang.tabMenubar.open_comment_btn }}<br class="display-mobile-only">{{ textLang.tabMenubar.comment_btn }}</v-btn>
           <v-btn v-else-if="open_comment == true && docComment.length" depressed x-small height="100%" color="grey lighten-2" class="px-0" @click="toggleComment()"><v-icon large>mdi-chevron-right</v-icon></v-btn>
         </v-toolbar>
         <v-row justify="center" class="mt-3 temp-preview-name">
@@ -200,13 +197,13 @@
             <span v-if="templates.document_name != null">: {{ templates.document_name }}</span>
           </h3>
         </v-row>
-        <v-row id="paper-block" justify="center" class="mt-3 preview-paper-block">
-          <v-col cols="12" md="10" lg="10" justify-self="center">
+        <v-row id="paper-block" justify="center" class="mt-2 pl-2 pb-2 preview-paper-block">
+          <v-col cols="12" md="12" lg="12" class="pa-0">
             <v-sheet  id="workpaper" :width="current_paper_width + 'px'" :height="current_paper_height + 'px'" :elevation="2" color="white" class="main-paper" style="position: relative; padding: 0px;">
               <div id="preview-paper" style="background-color:white; width:100%; ">
-                <v-overlay v-show="pages[currentPage-1] && pages[currentPage-1].isHide" opacity="0.30" z-index="11" color="red" absolute>
+                <!-- <v-overlay v-show="pages[currentPage-1] && pages[currentPage-1].isHide" opacity="0.30" z-index="11" color="red" absolute>
                   <img src="../../assets/hide-paper.png" :width="current_paper_width + 'px'" :height="current_paper_height + 'px'" />
-                </v-overlay>
+                </v-overlay> -->
                 <div :id="item.name" v-for="item in template_array" :key="item.name" v-show="!item.style.hideDisplay && !item.style.hidePreview">
                   <v-layout v-if="item.show && item.page == currentPage && !item.invisible" style="height:100%;">
                     <span :class="item.name+ '-obj'" v-if="!item.hideBysection && item.object_type == 'autofillbox'" :style="'width:100%;' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + '; z-index:5;'">
@@ -221,7 +218,7 @@
                       </div>
                     </span>
                     <span :class="item.name+ '-obj'" v-if="!item.hideBysection && item.object_type == 'datepickerbox'" :style="'width:100%; z-index:' + String(item.style.zIndex) +'; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'">{{item.show_value}}</span>
-                    <pre :class="item.name+ '-obj'" class="text-area-front" v-if="!item.hideBysection && item.object_type == 'textareabox'" :style="'width:100%; z-index:' + String(item.style.zIndex) +'; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'">{{item.value}}</pre>
+                    <pre :class="item.name+ '-obj'" class="text-area-front textarea-data" v-if="!item.hideBysection && item.object_type == 'textareabox'" :style="'width:100%; z-index:' + String(item.style.zIndex) +'; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'">{{item.value}}</pre>
                     <span :class="item.name+ '-obj'" :style="'z-index:' + String(item.style.zIndex) +'; white-space: pre; width:100%; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'" v-if="!item.hideBysection && item.object_type != 'datatable' && item.object_type != 'inputimagebox' && item.object_type != 'inputbox' && item.object_type != 'calculatebox' && item.object_type != 'checkbox' && item.object_type != 'imagebox' && item.object_type != 'datepickerbox' && item.object_type != 'autofillbox' && item.object_type != 'number2textbox'&& item.object_type != 'table'&& item.object_type != 'line' && item.object_type != 'textareabox' && item.object_type != 'signbox' && item.object_type != 'rectangle' && item.object_type != 'dropdownbox'  && item.object_type != 'texteditorbox'">{{item.value}}</span>
                     <span :class="item.name+ '-obj'" :style="'z-index:' + String(item.style.zIndex) +'; white-space: pre; width:100%; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'" v-if="!item.hideBysection && item.object_type == 'dropdownbox'">{{item.show_value}}</span>
                     <span :class="item.name+ '-obj'" :style="'z-index:' + String(item.style.zIndex) +'; width:100%; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'" v-if="!item.hideBysection && item.object_type == 'texteditorbox'" class="editor-box-preview" v-html="item.value"></span>
@@ -234,8 +231,8 @@
                     <span :class="item.name+ '-obj'" v-if="!item.hideBysection && item.object_type == 'calculatebox'" :style="'width:100%; z-index:' + String(item.style.zIndex) +'; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'">{{numberToComma(item.valueShow, item.style.isComma)}}{{item.style.suffix}}</span>
                     <span :class="item.name+ '-obj'" v-if="!item.hideBysection && item.object_type == 'number2textbox'" :style="'width:100%; z-index:' + String(item.style.zIndex) +'; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'">{{item.value.show_value}}</span>
                     <div :class="item.name+ '-obj'" v-if="item.object_type == 'checkbox'" :style="'z-index:' + String(item.style.zIndex) +';'">
-                      <img v-if="!item.hideBysection && !item.value" :width="item.style.font_size + 'px'" src="https://eform.one.th/eform_api/api/v1/view_image?file_name=50214806880_3fc2cb62-99be-43b3-bfbb-7274606298c3.png"/>
-                      <img v-if="!item.hideBysection && item.value" :width="item.style.font_size + 'px'" src="https://eform.one.th/eform_api/api/v1/view_image?file_name=50214806880_84c82695-0eff-4e1f-9e42-f07d49104a84.png"/>
+                      <img v-if="!item.hideBysection && !item.value" :width="item.style.font_size + 'px'" class="check-box-preview" src="https://eform.one.th/eform_api/api/v1/view_image?file_name=50214806880_3fc2cb62-99be-43b3-bfbb-7274606298c3.png"/>
+                      <img v-if="!item.hideBysection && item.value" :width="item.style.font_size + 'px'" class="check-box-preview" src="https://eform.one.th/eform_api/api/v1/view_image?file_name=50214806880_84c82695-0eff-4e1f-9e42-f07d49104a84.png"/>
                       <span :style="item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'">{{item.text}}</span>
                     </div>
                     <div :class="item.name+ '-obj'" v-if="item.object_type == 'imagebox'" :style="'z-index:' + String(item.style.zIndex) +';'">
@@ -3593,8 +3590,8 @@ export default {
 .save-doc-btn {
   font-family: "Sarabun", sans-serif;
   text-transform: capitalize;
-  padding-left: 3% !important;
-  padding-right: 3% !important;
+  padding-left: 1% !important;
+  padding-right: 1% !important;
 }
 
 .export-json-btn {
@@ -3604,9 +3601,9 @@ export default {
 
 .next-temp-btn {
   font-family: "Sarabun", sans-serif;
-  color: #1b9900 !important;
-  font-weight: bold;
   text-transform: capitalize;
+  padding-left: 1% !important;
+  padding-right: 1% !important;
 }
 
 .next-temp-to {
@@ -3628,11 +3625,14 @@ export default {
 }
 
 .preview-paper-block {
-  margin-left: 1%;
-  margin-top: 1%;
   overflow: auto;
   height: calc(100vh - 224px);
-  padding: 1%;
+  width: 100%;
+  margin: 0%;
+}
+
+.check-box-preview {
+  margin-right: 4px;
 }
 
 .title-name-paperless {
@@ -3732,7 +3732,7 @@ export default {
 
 .preview-row {
   width: 100%;
-  margin-left: 0%;
+  margin: 0%;
 }
 
 .sub-toolbar-preview .v-toolbar__content, .v-toolbar__extension {
@@ -3747,7 +3747,7 @@ export default {
 .temp-preview-name {
   font-family: "Sarabun", sans-serif;
   width: 100%;
-  margin-left: 0%;
+  margin: 0%;
   text-align: center;
 }
 
@@ -3759,12 +3759,21 @@ export default {
 
 .btn-saveStep{
   font-family: "Sarabun", sans-serif;
-  padding-left: 3% !important;
-  padding-right: 3% !important;
+  padding-left: 1% !important;
+  padding-right: 1% !important;
+  color: white !important;
 }
 
 .btn-savedraft{
   color: #4CAF50 !important;
+}
+
+.textarea-data {
+  white-space: pre-wrap; /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
 .comment-part {
@@ -3990,8 +3999,7 @@ export default {
   font-size: 14px;
 }
 
-.theme--light.v-btn.v-btn--disabled .v-icon.send-ppl-disable-icon,
-.theme--light.v-btn.v-btn--disabled .v-btn__loading .icon-drag {
+.theme--light.v-btn.v-btn--disabled .v-icon.send-ppl-disable-icon {
   color: #bdbdbd !important;
 }
 
@@ -4045,14 +4053,6 @@ export default {
   font-size: 14px !important;
 }
 
-pre {
-  white-space: pre-wrap; /* Since CSS 2.1 */
-  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-  white-space: -pre-wrap; /* Opera 4-6 */
-  white-space: -o-pre-wrap; /* Opera 7 */
-  word-wrap: break-word; /* Internet Explorer 5.5+ */
-}
-
 .row-crad-files{
   width: 100%;
   margin-left: 0%;
@@ -4064,8 +4064,11 @@ pre {
 
 
 /*========================================*/
-@media only screen and (max-width: 960px) {
-  /*css for mobile screen*/
+@media only screen and (max-width: 600px) { /*css for mobile screen*/
+  .preview-form-bar .v-toolbar__content {
+    padding-left: 1% !important;
+  }
+
   .save-doc-btn {
     margin-right: 2%;
   }
@@ -4073,6 +4076,10 @@ pre {
   .next-temp-btn {
     padding-left: 2% !important;
     padding-right: 0% !important;
+  }
+
+  .preview-paper-block {
+    height: calc(100vh - 211px);
   }
 
   .all-step-block {
@@ -4095,10 +4102,6 @@ pre {
   .btn-saveStep{
     margin-right: 0%;
     margin-left: 2%;
-  }
-
-  .button-mobile{
-    background-color: white;
   }
 
   .comment-preview-btn {
