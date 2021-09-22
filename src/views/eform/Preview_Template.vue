@@ -1825,7 +1825,8 @@ export default {
         //     caStep = this.allUserStep
         //   }
         // }
-        EventBus.$emit("openInputDocName", flowPermission, caStep, signOnly)
+        // EventBus.$emit("openInputDocName", flowPermission, caStep, signOnly)
+        this.saveDocument(temp_option.template_name, temp_option)
       }
     },
     // checkName() {
@@ -2408,7 +2409,9 @@ export default {
             size_footer: sizeTemp,
             document_name: this.doc_name,
             orientation: orientationTemp,
-            paper_size: temp_option.paper_size
+            paper_size: temp_option.paper_size,
+            is_full: true,
+            others: {dataTableObjectArray : this.dataTableObjectArray}
           }
         )
 
