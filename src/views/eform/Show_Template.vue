@@ -830,34 +830,33 @@
     <!-- Setting Variable For Textarea Modal -->
     <v-dialog v-model="dialogTextAreaVal" scrollable persistent max-width="600px">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-         <b> {{ textLang.text_dialog.set_messages }} </b>
+        <v-card-title class="py-2 textarea-variable-modal-header">
+          {{ textLang.text_dialog.set_messages }}
         </v-card-title>
-        <v-card-text class="px-12 pt-8">
+        <v-card-text class="pt-4">
           <h3 class="variable-textarea-ex-title">{{ textLang.text_dialog.sample_text }}</h3>
           <div class="textarea-ex-box">
             <pre class="textarea-ex">{{selectedTextArea.defaultValue}}</pre>
           </div>
-          <br><br>
+          <br>
           <h3 class="variable-textarea-ex-title">{{ textLang.text_dialog.define_messages }}</h3>
-          <v-row>
-            <v-col cols="12" md="6" lg="6" class="pb-0" v-for="val in textAreaVals" :key="val.text"> <!-- setting value of one variable -->
-              <v-row>
-                <v-col cols="4" md="4" lg="4" align-self="center" class="pr-0 pb-0">
+          <v-row class="input-form-row">
+            <v-col cols="12" md="6" lg="6" class="pa-0" v-for="val in textAreaVals" :key="val.text"> <!-- setting value of one variable -->
+              <v-row class="input-form-row">
+                <v-col cols="5" md="4" lg="4" align-self="center" class="pl-0 pb-0">
                   <span class="variable-title">{{val.text}} :</span>
                 </v-col>
-                <v-col cols="7" md="7" lg="7" class="pb-0">
-                  <v-text-field dense outlined single-line hide-details :color="color_message" class="pad-input-textarea-variable variable-textarea" v-model="val.value"></v-text-field>
+                <v-col cols="7" md="7" lg="7" class="px-0 pb-0">
+                  <v-text-field dense outlined hide-details color="#67c25d" class="pad-input-textarea-variable variable-textarea" v-model="val.value"></v-text-field>
                 </v-col>
               </v-row>
             </v-col>
           </v-row>
-          <br><br>
         </v-card-text>
-        <v-card-actions class="pt-0 pb-12">
+        <v-card-actions class="pt-3 pb-6">
           <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialogTextAreaVal = false">{{ textLang.text_dialog.cancle }}</v-btn>
-          <v-btn depressed large :color="color_import" class="px-5 ml-4 save-setting-btn save-modal-font-btn" @click="closeTextAreaValModal()">{{ textLang.text_dialog.record_variable }}</v-btn>
+          <v-btn outlined color="#4CAF50" class="px-10 mr-2 insert-image-btn-modal" @click="dialogTextAreaVal = false">{{ textLang.text_dialog.cancle }}</v-btn>
+          <v-btn depressed dark color="#4CAF50" class="px-3 ml-2 insert-image-btn-modal" @click="closeTextAreaValModal()">{{ textLang.text_dialog.record_variable }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -1786,18 +1785,20 @@
           } else if (!data.status) {
             this.$router.push({ 'path': '/form'})
             this.$swal({
-              type: 'error',
-              html: '<span class="alert-error"><b>'+ this.textLang.alert.fail_template +'</b></span>',
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              text: 'ไม่พบแบบฟอร์ม',
               showCloseButton: true,
               showConfirmButton: false,
-              background: 'white',
-              customClass:{
-                popup: 'border-error'
-              },
-              position: 'top',
-              timer: 3000,
-              backdrop: false,
-              closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+              timer: 5000,
+              customClass: {
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
             })
           }
         } catch (err) {
@@ -2115,15 +2116,20 @@
             if(data.messageER == 'RESERVED') {
               this.$router.push('/form')
               this.$swal({
-                type: 'warning',
-                html: '<span class="alert-error"><b>' + this.textLang.alert.eform_use + data.detail.email +'</b></span>',
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+                text: 'แบบฟอร์มถูกใช้งานโดย ' + data.detail.email,
                 showCloseButton: true,
                 showConfirmButton: false,
-                background: 'white',
+                timer: 5000,
                 customClass: {
-                  popup: 'border-error'
-                },
-                closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             }
           }
@@ -7146,28 +7152,38 @@
           this.templateTempStore(template_array)
         } else if(!allFilled){
           this.$swal({
-            type: 'warning',
-            html: '<span class="alert-error"><b>'+ this.textLang.alert.fill_data +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+            text: 'กรุณากรอกข้อมูลให้ครบถ้วน',
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
+            timer: 5000,
             customClass: {
-              popup: 'border-error'
-            },
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
           allFilled = true
         } else if(!allValid){
           this.$swal({
-            type: 'warning',
-            html: '<span class="alert-error"><b>'+ this.validInput +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+            text: this.validInput,
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
-            customClass:{
-                popup: 'border-error'
-            },
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
           allValid = true
         }
@@ -7403,66 +7419,73 @@
             if(data.response_bi && data.response_bi.Warning_Detail!=null){
               if(data.response_bi.Warning_Massager == 'green') {
                 this.$swal({
-                  type: "success",
-                  html: '<span class="alert"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                  showCloseButton: true,
-                  customClass: {
-                    popup: 'border-success'
-                  },
-                  showConfirmButton: false,
-                  background: "white",
-                  position: "top",
-                  timer: 15000,
                   backdrop: false,
-                  closeButtonHtml: '<span class="close-alert">&times;</span>',
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                  text: data.response_bi.Warning_Detail,
+                  showCloseButton: true,
+                  showConfirmButton: false,
+                  timer: 15000,
+                  customClass: {
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
               } else {
                 this.$swal({
-                  imageUrl: 'https://www.img.in.th/images/9bcaca611aad241742648c1d11c8e579.png',
-                  imageWidth: 100, 
-                  html: '<br><span class="alert-warning"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                  showCloseButton: true,
-                  customClass: {
-                    popup: 'border-warning'
-                  },
-                  showConfirmButton: false,
-                  background: "white",
-                  position: "top",
-                  timer: 15000,
                   backdrop: false,
-                  closeButtonHtml: '<span class="close-alert-warning">&times;</span>',
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+                  text: data.response_bi.Warning_Detail,
+                  showCloseButton: true,
+                  showConfirmButton: false,
+                  timer: 15000,
+                  customClass: {
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
               }
             } else {
               if(data.response_bi && data.response_bi.Warning_Detail!=null){
                 this.$swal({
-                  type: 'error',
-                  html: '<span class="alert-error"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                  showCloseButton: true,
-                  customClass: {
-                    popup: 'border-error'
-                  },
-                  showConfirmButton: false,
-                  background: "white",
-                  position: "top",
-                  timer: 15000,
                   backdrop: false,
-                  closeButtonHtml: '<span class="close-alert-warning">&times;</span>',
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                  text: data.response_bi.Warning_Detail,
+                  showCloseButton: true,
+                  showConfirmButton: false,
+                  timer: 15000,
+                  customClass: {
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
               } else {
                 this.$swal({
-                  type: 'success',
-                  html: '<span class="alert"><b>'+ this.textLang.alert.assign +'</b></span>',
+                  backdrop: false,
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                  text: 'ยื่นเอกสารสำเร็จ',
                   showCloseButton: true,
                   showConfirmButton: false,
-                  background: 'white',
-                  position: 'top',
-                  timer: 3000,
-                  backdrop: false,
+                  timer: 5000,
                   customClass: {
-                    popup: 'border-success'
-                  },
-                  closeButtonHtml: '<span class="close-alert">&times;</span>'
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
               }
             }
@@ -7471,51 +7494,57 @@
           } else {
             if(data.response_bi && data.response_bi.Warning_Detail!=null){
               this.$swal({
-                type: 'error',
-                html: '<span class="alert-error"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                showCloseButton: true,
-                customClass: {
-                  popup: 'border-error'
-                },
-                showConfirmButton: false,
-                background: "white",
-                position: "top",
-                timer: 15000,
                 backdrop: false,
-                closeButtonHtml: '<span class="close-alert-warning">&times;</span>',
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             } else {
               this.$swal({
-                type: 'error',
-                html: '<span class="alert-error"><b>'+ this.textLang.alert.fail +'</b></span>',
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                text: 'ยื่นเอกสารล้มเหลว กรุณาลองใหม่ในภายหลัง',
                 showCloseButton: true,
                 showConfirmButton: false,
-                background: 'white',
-                customClass:{
-                  popup: 'border-error'
-                },
-                position: 'top',
-                timer: 3000,
-                backdrop: false,
-                closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             }
           }         
         } catch (error) {
           this.notReady = false
           this.$swal({
-            type: 'error',
-            html: '<span class="alert-error"><b>'+ this.textLang.alert.fail +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+            text: 'ยื่นเอกสารล้มเหลว กรุณาลองใหม่ในภายหลัง',
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
-            customClass:{
-              popup: 'border-error'
-            },
-            position: 'top',
-            timer: 3000,
-            backdrop: false,
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
           console.log(error.message)
         }
@@ -7551,15 +7580,19 @@
             this.files = []
             this.attachedFiles = this.attachedFiles.filter(item => !item.waitUpload)
             this.$swal({
-              type: 'warning',
-              html: '<span class="alert-error"><b>'+ this.textLang.alert.upload_fail +'</b></span>',
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+              text: 'อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง',
               showCloseButton: true,
               showConfirmButton: false,
-              background: 'white',
               customClass: {
-                popup: 'border-error'
-              },
-              closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
             })
           }
         } catch (error) {
@@ -7567,15 +7600,19 @@
           this.files = []
           this.attachedFiles = this.attachedFiles.filter(item => !item.waitUpload)
           this.$swal({
-            type: 'warning',
-            html: '<span class="alert-error"><b>'+ this.textLang.alert.upload_fail +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+            text: 'อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง',
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
             customClass: {
-            popup: 'border-error'
-              },
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
         }
       },
@@ -7645,51 +7682,57 @@
           if(data.result != 'ER') {
             this.disableButton(eId)
             this.$swal({
-              type: 'success',
-              html: '<span class="alert"><b>'+ this.textLang.alert.reject_complete +'</b></span>',
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+              text: 'ปฏิเสธอนุมัติสำเร็จ',
               showCloseButton: true,
               showConfirmButton: false,
-              background: 'white',
-              position: 'top',
-              timer: 3000,
-              backdrop: false,
+              timer: 5000,
               customClass: {
-                popup: 'border-success'
-              },
-              closeButtonHtml: '<span class="close-alert">&times;</span>'
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
             })
             this.$router.push({ 'path': '/form'})
           } else {
             this.$swal({
-              type: 'error',
-              html: '<span class="alert-error"><b>'+ this.textLang.alert.reject_fail +'</b></span>',
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              text: 'ปฏิเสธอนุมัติล้มเหลว กรุณาลองใหม่ในภายหลัง',
               showCloseButton: true,
               showConfirmButton: false,
-              background: 'white',
-              customClass:{
-                popup: 'border-error'
-              },
-              position: 'top',
-              timer: 3000,
-              backdrop: false,
-              closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+              timer: 5000,
+              customClass: {
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
             })
           }
         } catch(err) {
           this.notReady = false
           this.$swal({
-            type: 'error',
-            html: '<span class="alert-error"><b>'+ this.textLang.alert.reject_fail +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+            text: 'ปฏิเสธอนุมัติล้มเหลว กรุณาลองใหม่ในภายหลัง',
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
-            customClass:{
-              popup: 'border-error'
-            },
-            position: 'top',
-            timer: 3000,
-            backdrop: false,
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
           console.log(err)
         }
@@ -7742,51 +7785,57 @@
           this.notReady = false
           if(data.result != "ER") {
               this.$swal({
-                type: 'success',
-                html: '<span class="alert"><b>'+ this.textLang.alert.reverse +'</b></span>',
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                text: 'ส่งคืนแก้ไขสำเร็จ',
                 showCloseButton: true,
                 showConfirmButton: false,
-                background: 'white',
+                timer: 5000,
                 customClass: {
-                  popup: 'border-success'
-                },
-                position: 'top',
-                timer: 3000,
-                backdrop: false,
-                closeButtonHtml: '<span class="close-alert">&times;</span>'
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
               this.$router.push({ 'path': '/form'})
               } else {
                 this.$swal({
-                  type: 'error',
-                  html: '<span class="alert-error"><b>'+ this.textLang.alert.fail_reverse +'</b></span>',
+                  backdrop: false,
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                  text: 'ส่งคืนแก้ไขล้มเหลว กรุณาลองใหม่ในภายหลัง',
                   showCloseButton: true,
                   showConfirmButton: false,
-                  background: 'white',
-                  customClass:{
-                    popup: 'border-error'
-                  },
-                  position: 'top',
-                  timer: 3000,
-                  backdrop: false,
-                  closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+                  timer: 5000,
+                  customClass: {
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
           }
         } catch(err) {
           this.notReady = false
           this.$swal({
-            type: 'error',
-            html: '<span class="alert-error"><b>'+ this.textLang.alert.fail_reverse +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+            text: 'ส่งคืนแก้ไขล้มเหลว กรุณาลองใหม่ในภายหลัง',
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
-            customClass:{
-              popup: 'border-error'
-            },
-            position: 'top',
-            timer: 3000,
-            backdrop: false,
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
           console.log(err)
         }
@@ -8954,13 +9003,13 @@
 
   .variable-textarea-ex-title {
     font-family: 'Sarabun', sans-serif;
-    color: #2ACA9F;
+    color: black;
   }
 
   .textarea-ex-box {
     border-style: solid;
     border-width: 2px;
-    border-color:#2ACA9F;
+    border-color:#67c25d;
     border-radius: 5px;
     padding: 6px;
     margin-top: 2%;
@@ -8968,7 +9017,7 @@
 
   .textarea-ex {
     font-family: 'Sarabun', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     color: black;
   }
 
@@ -8979,14 +9028,12 @@
   }
 
   .v-text-field.pad-input-textarea-variable input {
-    padding-left: 3%;
-    padding-right: 2%;
-    line-height: 30px;
+    line-height: 21px;
   }
 
   .variable-textarea {
     font-family: 'Sarabun', sans-serif;
-    font-size: 16px;
+    font-size: 13px;
   }
 
   .letters-length {
@@ -9046,6 +9093,13 @@
 
   .insert-image-btn-modal {
     font-family: 'Sarabun', sans-serif;
+  }
+
+  .textarea-variable-modal-header {
+    font-family: "Sarabun", sans-serif;
+    font-size: 16px !important;
+    color: white;
+    background-color: #67c25d;
   }
 
   /*======== style from old file >> Show_Template(old version) ========*/
