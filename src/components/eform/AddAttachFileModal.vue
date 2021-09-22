@@ -100,9 +100,9 @@
         }
       },
       startAttach(uploadingFiles, attFiles) {
-        this.selFiles = []
+        this.selFiles = uploadingFiles
         this.currentUser = sessionStorage.getItem("oneuser")
-        this.files = uploadingFiles
+        this.files = []
         this.attachedFiles = attFiles
         this.add_attach_dialog = true
       },

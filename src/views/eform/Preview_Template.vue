@@ -498,7 +498,8 @@ import ForwardMailModal from '../../components/eform/ForwardMailModal'
 
 export default {
   computed: mapState({
-    objectTemplate: state => state.objectTemplate
+    objectTemplate: state => state.objectTemplate,
+    uploadedFile: state => state.uploadedFile
   }),
   components: {
     InputDocumentNameModal,
@@ -720,6 +721,7 @@ export default {
     EventBus.$off('saveSign')
     EventBus.$off('changeLang')
     EventBus.$off('setPdfPass')
+    EventBus.$off("emitSaveDocument")
     if(this.isSaveTemplate) {
       this.returnEform(this.eform_id)
     }
@@ -746,6 +748,8 @@ export default {
     }
     EventBus.$on("getDocName", this.save)
     EventBus.$on('saveSign', this.saveSign)
+    EventBus.$on("emitSaveDocument", this.saveDocument)
+    EventBus.$on('changeAttachFiles', this.changeUploadingFiles)
     // EventBus.$on('changeLang', this.changeLange)
     EventBus.$on('setPdfPass', this.setPdfPass)
     this.refDataDoc = JSON.parse(sessionStorage.getItem('refDataDoc'))
@@ -766,9 +770,9 @@ export default {
       }
     },
     selectedDocumentType() {
-      if (this.dialog_ppl) {
-        this.getPplTemplate()
-      }
+      // if (this.dialog_ppl) {
+      // this.getPplTemplate()
+      // }
     },
     orientation() {
       if (this.orientation == "LANDSCAPE") {
@@ -854,7 +858,7 @@ export default {
             waitUpload: true
           })
         })
-        this.uploadAttachFile('', this.eform_id)
+        // this.uploadAttachFile('', this.eform_id)
       }
       this.attachedFiles = holdFiles
       // this.$store.commit('setUploadedFile',this.files)
@@ -942,6 +946,7 @@ export default {
       } else {
         if (typeof sessionStorage.getItem("template_array") === "undefined" ||sessionStorage.getItem("template_array") == "false") {
           var objectTemp = await this.getTemplateTemp(JSON.parse(sessionStorage.getItem("template_array_code")))
+          this.files = await this.getTempFiles()
           this.template_array = objectTemp.template_array
           this.dataTableObjectArray = objectTemp.dataTableObjectArray
         } else {
@@ -1058,6 +1063,9 @@ export default {
       //     console.log(err.message)
       //   }
       // }
+    },
+    async getTempFiles() {
+      return this.uploadedFile
     },
     async getValue(eform_id) {
       try {
@@ -1753,13 +1761,20 @@ export default {
       }
       EventBus.$emit('openAttachFile', folderAttach)
     },
+    AddAttachFile() {
+      console.log("yayay")
+        var uploadingFiles = this.files
+        var attFiles = []
+        EventBus.$emit('attachFiles', uploadingFiles, attFiles)
+      },
     checkSave() {
-      var flowStatus = JSON.parse(sessionStorage.getItem("template_option")).status_flow_permission
-      if(!flowStatus) {
-        this.pplLoadTemplate()
-      } else {
-        this.openDocName(false)
-      }
+      this.openDocName(false)
+      // var flowStatus = JSON.parse(sessionStorage.getItem("template_option")).status_flow_permission
+      // if(!flowStatus) {
+      //   this.pplLoadTemplate()
+      // } else {
+      //   this.openDocName(false)
+      // }
     },
     saveName(thenUpload) {
       if(this.pplSubject && (!this.isPdfLock || (this.isPdfLock && this.pdfPasswordSetting))) {
@@ -1804,12 +1819,12 @@ export default {
         }
         var caStep = this.isCa
         var signOnly = sessionStorage.getItem('signOnlyStep') == 'true'
-        if(!caStep) {
-          var flowCa = flowPermission.find(item => item.ppl_sign[0].activity_code.includes("A03"))
-          if(flowCa) {
-            caStep = this.allUserStep
-          }
-        }
+        // if(!caStep) {
+        //   var flowCa = flowPermission.find(item => item.ppl_sign[0].activity_code.includes("A03"))
+        //   if(flowCa) {
+        //     caStep = this.allUserStep
+        //   }
+        // }
         EventBus.$emit("openInputDocName", flowPermission, caStep, signOnly)
       }
     },
@@ -1991,7 +2006,7 @@ export default {
             }
           }
           if (this.files.length) {
-            this.uploadAttachFile(temp_option.doc_number_eform, temp_option.e_id)
+            // this.uploadAttachFile(temp_option.doc_number_eform, temp_option.e_id)
           }
           // if(typeof sessionStorage.getItem('template_array')  == 'undefined' || sessionStorage.getItem('template_array') == 'false') {
           //   this.deleteTemplateTemp(JSON.parse(sessionStorage.getItem('template_array_code')))
@@ -2308,7 +2323,7 @@ export default {
           //   this.deleteTemplateTemp(JSON.parse(sessionStorage.getItem('template_array_code'))) 
           // }
           if (this.files.length) {
-            await this.uploadAttachFile(data.messageText.doc_number_eform, data.messageText.data.e_id)
+            // await this.uploadAttachFile(data.messageText.doc_number_eform, data.messageText.data.e_id)
           }
 
           var template_code = JSON.parse(sessionStorage.getItem('template_option')).template_code
@@ -2352,13 +2367,179 @@ export default {
           this.pplSubject = document_name
         } else if(data.result == "OK" && this.isSaveDraft) {
           if (this.files.length) {
-            await this.uploadAttachFile(data.messageText.doc_number_eform, data.messageText.data.e_id)
+            // await this.uploadAttachFile(data.messageText.doc_number_eform, data.messageText.data.e_id)
           }
           this.$router.push({ path: "/form" })
         }
       } catch (error) {
         this.notReady = false
         console.log(error.message)
+      }
+    },
+    async saveDocument(document_name, opsPage) {
+      try {
+        this.dialog_ppl = false
+        this.optionsPage = opsPage
+        this.doc_name = document_name
+        var sizeTemp = [{}]
+        var orientationTemp = [{}]
+        for (var i = 1; i <= this.pageOrientation.length; i++) {
+          sizeTemp[0][String(i)] = []
+          var Okey = Object.keys(this.pageOrientation[i - 1])[0]
+          orientationTemp[0][Okey] = this.pageOrientation[i - 1][Okey]
+        }
+        var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
+        if (temp_option.description_template) {
+          description = temp_option.description_template
+        } else if (temp_option.description) {
+          description = temp_option.description
+        }
+        // this.template_array
+        var url = this.$api_url + '/template_form/api/v1/create_template_form'
+        var data = {}
+        this.notReady = true
+        var { data } = await this.axios.post(
+          url,
+          {
+            template_id: temp_option.template_id,
+            template_data: this.template_array,
+            size_header: sizeTemp,
+            size_body: sizeTemp,
+            size_footer: sizeTemp,
+            document_name: this.doc_name,
+            orientation: orientationTemp,
+            paper_size: temp_option.paper_size
+          }
+        )
+
+        this.notReady = false
+        if(data.status) {
+          if(this.files.length) {
+            this.uploadFiles(data.data.transaction_id)
+          }
+          if(data.response_bi && data.response_bi.Warning_Detail!=null){
+            if(data.response_bi.Warning_Massager == 'green') {
+              this.$swal({
+                type: "success",
+                html: '<span class="alert-bi-success"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
+                showCloseButton: true,
+                customClass: {
+                  popup: 'border-success'
+                },
+                showConfirmButton: false,
+                background: "white",
+                position: "top",
+                timer: 15000,
+                backdrop: false,
+                closeButtonHtml: '<span class="close-alert">&times;</span>',
+              })
+            } else if(data.response_bi.Warning_Massager == 'yellow') {
+              this.$swal({
+                imageUrl: 'https://www.img.in.th/images/9bcaca611aad241742648c1d11c8e579.png',
+                imageWidth: 100, 
+                width: 640,
+                html: '<br><span class="alert-bi-warning"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
+                showCloseButton: true,
+                customClass: {
+                  popup: 'border-warning'
+                },
+                showConfirmButton: false,
+                background: "white",
+                position: "top",
+                timer: 15000,
+                backdrop: false,
+                closeButtonHtml: '<span class="close-alert-warning">&times;</span>',
+              })
+            } else if(data.response_bi.Warning_Massager == 'red') {
+              this.$swal({
+                type: 'error',
+                width: 640,
+                html: '<span class="alert-bi-error"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
+                showCloseButton: true,
+                customClass: {
+                  popup: 'border-error'
+                },
+                showConfirmButton: false,
+                background: "white",
+                position: "top",
+                timer: 15000,
+                backdrop: false,
+                closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+              })
+            }
+          }
+          this.$router.push({ path: "/form" })
+        } else {
+          if(data.response_bi && data.response_bi.Warning_Detail!=null){
+            this.$swal({
+              type: 'error',
+              width: 640,
+              html: '<span class="alert-bi-error"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
+              showCloseButton: true,
+              customClass: {
+                popup: 'border-error'
+              },
+              showConfirmButton: false,
+              background: "white",
+              position: "top",
+              timer: 15000,
+              backdrop: false,
+              closeButtonHtml: '<span class="close-alert-warning">&times;</span>',
+            })
+          }
+        }
+      } catch (error) {
+        this.notReady = false
+        console.log(error.message)
+      }
+    },
+    async uploadFiles(transaction_id) {
+      let formData = new FormData()
+      this.files.forEach(e => {
+        formData.append("file", e)
+      })
+      formData.append("transaction_id", transaction_id)
+      try {
+        this.notReady = true
+        var { data } = await this.axios.post(this.$api_url + "/file-component/api/saveFile",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization:
+                "Bearer " + sessionStorage.getItem("one_access_token")
+            }
+          }
+        )
+        this.notReady = false
+        if(data.status) {
+          
+        } else {
+            this.$swal({
+              type: 'warning',
+              html: '<span class="alert-error"><b>'+ this.textLang.alert.upload_fail +'</b></span>',
+              showCloseButton: true,
+              showConfirmButton: false,
+              background: 'white',
+              customClass: {
+                popup: 'border-error'
+              },
+              closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+            })
+          }
+      } catch (error) {
+        this.notReady = false
+        this.$swal({
+          type: 'warning',
+          html: '<span class="alert-error"><b>'+ this.textLang.alert.upload_fail +'</b></span>',
+          showCloseButton: true,
+          showConfirmButton: false,
+          background: 'white',
+          customClass: {
+            popup: 'border-error'
+          },
+        closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+        })
       }
     },
     async genQrCode(id){
@@ -3199,12 +3380,12 @@ export default {
           this.attachedFiles.forEach(e => {
             e.waitUpload = false
           })
-          this.files = []
+          // this.files = []
           if(neverUpload) {
             this.updateFolderName(e_id)
           }
         } else {
-            this.files = []
+            // this.files = []
             this.attachedFiles = this.attachedFiles.filter(item => !item.waitUpload)
             this.$swal({
               type: 'warning',
@@ -3220,7 +3401,7 @@ export default {
           }
       } catch (error) {
         this.notReady = false
-        this.files = []
+        // this.files = []
         this.attachedFiles = this.attachedFiles.filter(item => !item.waitUpload)
         this.$swal({
           type: 'warning',
@@ -3380,7 +3561,7 @@ export default {
     },
     async pplUploadDocument() {
       if(this.files.length > 0) {
-        await this.uploadAttachFile(this.doc_no, this.eform_id)
+        // await this.uploadAttachFile(this.doc_no, this.eform_id)
       }
       for (
         var i = 0;i < this.template_paperless_code.Template_step.length;i++) {

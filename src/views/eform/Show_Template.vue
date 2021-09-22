@@ -38,7 +38,7 @@
       </v-btn> -->
       <v-btn v-if="(!isSendStep || isComplete) && isSelf" depressed large dark color="#4CAF50" class="preview-btn" @click="save(false, false)">{{ textLang.tabMenubar.save_doc_btn }}</v-btn>
 
-      <v-menu offset-y z-index="13" v-if="!isPublic && !isSendStep && false">
+      <v-menu offset-y z-index="13" v-if="!isPublic && !isSendStep">
         <template v-slot:activator="{ on }">
            <v-btn v-on="on" depressed large color="grey lighten-2" class="ml-2 pr-2 pl-3 display-pc-only more-en">
             {{ textLang.tabMenubar.more }}
@@ -46,19 +46,19 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogRefDoc = true">
+          <!-- <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogRefDoc = true">
             <v-list-item-icon><v-icon>mdi-package-down</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogImport = true">
             <v-list-item-icon><v-icon>mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="AddAttachFile()">
             <v-list-item-icon><v-icon>mdi-paperclip</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_file_menu }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isOnlyForm && isReport" @click="openExportReport()">
+          <!-- <v-list-item v-if="isOnlyForm && isReport" @click="openExportReport()">
             <v-list-item-icon><v-icon>mdi-account-group</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.export_excel_all_user }}</v-list-item-title>
           </v-list-item>
@@ -85,7 +85,7 @@
           <v-list-item v-if="isSendBack && isSendFirst && isEmailStep" @click="openPermissionTransference()">
             <v-list-item-icon><v-icon>mdi-human-greeting-proximity</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.transfer_title }}</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
         </v-list>
       </v-menu>
       <!-- button for mobile -->
@@ -96,19 +96,19 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogRefDoc = true">
+          <!-- <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogRefDoc = true">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-package-down</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogImport = true">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="AddAttachFile()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-paperclip</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_file_menu }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isOnlyForm && isReport && false" @click="openExportReport()">
+          <!-- <v-list-item v-if="isOnlyForm && isReport && false" @click="openExportReport()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-account-group</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.export_excel_all_user }}</v-list-item-title>
           </v-list-item>
@@ -139,7 +139,7 @@
           <v-list-item  v-if="!isPublic && isOwner && isFlowDoc" @click="openCancel()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-cancel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.cancel_doc }}</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="save(true, false)"> 
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-hidden</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.save_draft }}</v-list-item-title>
@@ -148,7 +148,7 @@
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-search-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.review_ex }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(isPaperview == true) && false" @click="switchView() && isSimpleFill">
+          <!-- <v-list-item v-if="(isPaperview == true) && false" @click="switchView() && isSimpleFill">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-checkbook</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.simple_doc }}</v-list-item-title>
           </v-list-item>
@@ -163,7 +163,7 @@
           <v-list-item v-if="isSendBack && isSendFirst && isEmailStep && false" @click="openPermissionTransference()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-human-greeting-proximity</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.transfer_title }}</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
         </v-list>
       </v-menu>
     </v-toolbar>
@@ -918,7 +918,8 @@
 
   export default {
     computed: mapState({
-      objectTemplate: state => state.objectTemplate
+      objectTemplate: state => state.objectTemplate,
+      uploadedFile: state => state.uploadedFile
     }),
     components: {
       ReverseDocumentModal,
@@ -2548,6 +2549,7 @@
       async getBackValue() {
          if(typeof sessionStorage.getItem('template_array') === 'undefined' || (sessionStorage.getItem('template_array') == 'false')) {
           var objectTemp = await this.getTemplateTemp(JSON.parse(sessionStorage.getItem('template_array_code')))
+          this.files = await this.getTempFiles()
           var value_array = objectTemp.template_array
           value_array.forEach(e => {
             if(e.object_type == 'inputbox' || e.object_type == 'textareabox'|| e.object_type == 'texteditorbox' || e.object_type == 'dropdownbox' || e.object_type == "inputimagebox"
@@ -2611,6 +2613,9 @@
       async getTemplateTemp() {
         this.notReady = false
         return this.objectTemplate
+      },
+      async getTempFiles() {
+        return this.uploadedFile
       },
       async getArray(temp_array) {
         temp_array.forEach(e => {
@@ -7346,10 +7351,10 @@
       },
       async sendStep(document_name, uploadFiles, opsPage) {
         try {
-          this.files = uploadFiles
-          if (this.files.length) {
-            await this.uploadAttachFile("", "")
-          }
+          // this.files = uploadFiles
+          // if (this.files.length) {
+          //   await this.uploadAttachFile("", "")
+          // }
           this.optionsPage = opsPage
           var business = ""
           this.doc_name = document_name
@@ -7739,7 +7744,8 @@
       },
       changeUploadingFiles(uploadingFiles) {
         this.files = uploadingFiles
-        this.applyAttachFiles() 
+        this.$store.commit('setUploadedFile',this.files)
+        // this.applyAttachFiles() 
       },
       applyAttachFiles() {
         var holdFiles = this.attachedFiles.filter(item => !item.waitUpload)
