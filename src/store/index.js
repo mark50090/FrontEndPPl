@@ -12,6 +12,7 @@ export default new Vuex.Store({
     pplDocumentTemplates: [],
     storedDocumentTemplates: [],
     objectTemplate: [],
+    allEmployeeInfo: []
   },
   plugins: [
     createPersistedState({
@@ -38,6 +39,9 @@ export default new Vuex.Store({
     setObjectTemplate(state,payload){
       state.objectTemplate = payload
     },
+    setAllEmployeeInfo(state,payload){
+      state.allEmployeeInfo = payload
+    }
   },
   actions: {
 

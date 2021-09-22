@@ -36,24 +36,32 @@
                     id="pdfDiv"
                     class="text-center"
                     :src="pdf_src"
-                    @num-pages="page_count = $event"
-                    @loaded="loadedPDF"
+                    @num-pages="updatePageCount"
+                    
                     @page-loaded="loaded"
                     :page="page"
                     ref="pdfComponent"
                   />
                     <vue-draggable-resizable
                       :id="item.name"
-                      v-for="(item, index) in signArray"
-                      :key="index"
+                      v-for="item in signArray"
+                      :key="item.key"
                       :x="item.sign_position_x"
                       :y="item.sign_position_y"
                       :w="item.sign_box_width" 
                       :h="item.sign_box_heigth"
+                      :draggable="create_tab == 2"
+                      :resizable="create_tab == 2"
+                      @dragging="onDrag(item,...arguments)" 
+                      @resizing="onResize(item,...arguments)"
+                      :style="{
+                        'background-color': 'rgba(83, 186, 71, 0.2)',
+                        'display': item.show ? 'block' : 'none'
+                        }"
                     >
                       <v-row no-gutters justify="center" align="center">
-                        <span v-if="item.show == true" style="color: grey">
-                          ลำดับที่ {{ item.index }}
+                        <span style="color: grey">
+                          ลำดับที่ {{ item.sign_queue_no }}
                         </span>
                       </v-row>
                     </vue-draggable-resizable>
@@ -79,12 +87,13 @@
             </v-col>
           </v-row>
           <v-card outlined class="mt-1">
+            <v-form v-model="isFormValid">
             <v-overlay absolute opacity="0.5" color="white" :value="!uploadedFile"></v-overlay> <!-- overlay show when it doesn't has document file -->
             <v-card-title class="pa-0">
-              <v-tabs grow height="40px" color="#4CAF50" v-model="create_tab">
+              <v-tabs grow height="40px" color="#4CAF50" v-model="create_tab" @change="clearTabData">
                 <v-tab class="create-tab-title">ตั้งค่าการส่ง</v-tab>
                 <v-tab class="create-tab-title">รูปแบบอนุมัติ</v-tab>
-                <v-tab v-if="false" class="create-tab-title">กำหนดเอง</v-tab>
+                <v-tab class="create-tab-title">กำหนดเอง</v-tab>
               </v-tabs>
             </v-card-title>
             <v-divider></v-divider>
@@ -185,7 +194,7 @@
                       Require Certificate (CA) :
                     </v-col>
                     <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
-                      <v-switch inset hide-details class="mt-0 create-setting-switch"></v-switch>
+                      <v-switch inset v-model="switchCA" hide-details class="mt-0 create-setting-switch"></v-switch>
                     </v-col>
                   </v-row>
                   <v-row class="create-row">
@@ -193,45 +202,66 @@
                       Stamp All Page :
                     </v-col>
                     <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
-                      <v-switch inset hide-details class="mt-0 create-setting-switch"></v-switch>
+                      <v-switch inset hide-details v-model="switchStamp" class="mt-0 create-setting-switch"></v-switch>
                     </v-col>
                   </v-row>
                   <v-row justify="center" class="create-row">
                     <v-col cols="5" md="4" lg="4" class="pl-0 pr-1 pt-1 pb-2">
-                      <v-btn small block color="#67C25D" :disabled="false" class="add-step-btn">
+                      <v-btn small block color="#67C25D" :disabled="!selected_document_type_custom" @click="addPersonApprove" class="add-step-btn">
                         <v-icon small class="mr-1">mdi-plus</v-icon> เพิ่ม (อนุมัติ)
                       </v-btn>
                     </v-col>
                     <v-col cols="5" md="4" lg="4" class="pl-0 pr-1 pt-1 pb-2">
-                      <v-btn small block color="#67C25D" :disabled="false" class="add-step-btn">
+                      <v-btn small block color="#67C25D" :disabled="!selected_document_type_custom" @click="addPersonSign" class="add-step-btn">
                         <v-icon small class="mr-1">mdi-plus</v-icon> เพิ่ม (เซ็น)
                       </v-btn>
                     </v-col>
                   </v-row>
                   <v-card outlined class="pa-2 all-step-block">
                     <div class="mb-3"> <!-- each step -->
-                      <v-row class="create-row">
+                    <template v-for="(flow_data_custom,index) in flow_datas_custom">
+                      <v-row class="create-row" :key="flow_data_custom.index">
                         <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 py-1 create-setting-title">
-                          ลำดับ 20 : ผู้มีสิทธิ์อนุมัติ <!-- or ผู้มีสิทธิ์เซ็น -->
+                          ลำดับ {{index+1}} : {{ flow_data_custom.action | translate}} <!-- ผู้มีสิทธิ์อนุมัติ or ผู้มีสิทธิ์เซ็น -->
                         </v-col>
                         <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-1 py-1">
-                          <v-btn outlined fab x-small color="error" class="px-0 delete-step-btn"> <!-- delete step button -->
+                          <v-btn outlined fab x-small color="error" class="px-0 delete-step-btn" @click="deleteActionFlow(flow_data_custom,flow_data_custom.action)"> <!-- delete step button -->
                             <v-icon small>mdi-minus</v-icon>
                           </v-btn>
                         </v-col>
                         <v-spacer></v-spacer>
-                        <template> <!-- show when it is sign step -->
+                        <template v-if="flow_data_custom.action == 'Sign'"> <!-- show when it is sign step -->
                           <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-2 py-1 create-setting-title display-pc-only">
                             หน้าที่เซ็น
                           </v-col>
                           <v-col cols="3" md="2" lg="2" class="px-0 py-1">
-                            <v-select outlined dense hide-details label="หน้า" color="#67C25D" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="pdf_page_list" class="create-setting page-sign-box page-sign-dropdown-icon create-setting-dropdown-icon"></v-select>
+                            <v-select multiple outlined dense hide-details label="หน้า" color="#67C25D" @change="reShowSign" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="pdf_page_list" v-model="flow_data_custom.page" item-value="value" item-text="text" class="create-setting page-sign-box page-sign-dropdown-icon create-setting-dropdown-icon">
+                              <template v-slot:selection="{ item, index }">
+                                <span v-if="flow_data_custom.page.length == pdf_page_list.length && index == 0">ทั้งหมด</span>
+                                <span v-if="flow_data_custom.page.length != pdf_page_list.length">{{item.value}}{{index != flow_data_custom.page.length-1 ? ',':''}}</span>
+                              </template>
+                              <template v-slot:prepend-item>
+                                <v-list-item ripple @click="togglePage(index)">
+                                  <v-list-item-action>
+                                    <v-icon :color="pdf_page_list.length > 0 ? 'indigo darken-4' : ''">
+                                      {{ getIcon(flow_data_custom.page) }}
+                                    </v-icon>
+                                  </v-list-item-action>
+                                  <v-list-item-content>
+                                    <v-list-item-title>
+                                      ทั้งหมด
+                                    </v-list-item-title>
+                                  </v-list-item-content>
+                                </v-list-item>
+                                <v-divider class="mt-2"></v-divider>
+                              </template>
+                            </v-select>
                           </v-col>
                         </template>
                       </v-row>
-                      <v-row class="create-row each-step-mail-row"> <!-- each email row in step -->
+                      <v-row class="create-row each-step-mail-row" v-for="actor_email in flow_data_custom.actor.permission_email" :key="flow_data_custom.index + actor_email.id"> <!-- each email row in step -->
                         <v-col cols="7" md="7" lg="7" class="px-0 pt-1 each-email-step-block">
-                          <v-text-field dense outlined hide-details color="#67C25D" placeholder="@one.th" class="create-setting email-step-box each-email-icon">
+                          <v-text-field dense outlined hide-details color="#67C25D" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon">
                             <template v-slot:prepend>
                               <v-icon large>mdi-account</v-icon>
                             </template>
@@ -240,30 +270,32 @@
                         <v-col cols="5" md="5" lg="5" align-self="center" class="pa-0">
                           <v-row class="create-row ">
                             <v-col cols="12" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 py-0">
-                              <v-checkbox hide-details label="OneChat" class="mt-0 pt-0 onechat-check"></v-checkbox>
+                              <v-checkbox hide-details label="OneChat" v-model="actor_email.checkbox" class="mt-0 pt-0 onechat-check"></v-checkbox>
                             </v-col>
                             <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 pl-2 pr-0 add-delete-permission-block"> <!-- delete email in each step button -->
-                              <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn">
+                              <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn" v-if="flow_data_custom.actor.permission_email.length > 1" @click="removeActor(flow_data_custom.index,actor_email)">
                                 <v-icon>mdi-minus</v-icon>
                               </v-btn>
                             </v-col>
                             <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 px-2 add-delete-permission-block"> <!-- add email in each step button -->
-                              <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn">
+                              <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn" @click="addActor(flow_data_custom.index)">
                                 <v-icon>mdi-plus</v-icon>
                               </v-btn>
                             </v-col>
                           </v-row>
                         </v-col>
                       </v-row>
+                    </template>
                     </div>
                   </v-card>
                 </v-tab-item>
               </v-tabs-items>
             </v-card-text>
+            </v-form>
           </v-card>
           <v-row v-if="(create_tab == 1) || (create_tab == 2)" justify="end" class="create-row">
             <v-col cols="auto" md="auto" lg="auto" class="pt-1">
-              <v-btn depressed color="#67C25D" :disabled="!selected_document_template" class="send-doc-btn" @click="addTransaction">ส่งเอกสาร</v-btn>
+              <v-btn depressed color="#67C25D" :disabled="(!selected_document_template) && (!selected_document_type_custom) || !isFormValid" class="send-doc-btn" @click="addTransaction">ส่งเอกสาร</v-btn>
             </v-col>
           </v-row>
         </v-col>
@@ -310,20 +342,19 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       actionOrder: 1,
       action: '',
       flow_datas: [],
+      flow_datas_custom: [],
       flow_id: '',
       last_step: 0,
-      width: null,
-      height: null,
-      x: 100,
-      y: 100,
-      sign_position_new: [
-        {
-          w: 50,
-          h: 50,
-          x: 10,
-          y: -100
-        }
-      ],
+      width: 0,
+      height: 0,
+      x: 0,
+      y: 0,
+      eventMouse: false,
+      indexEventMouse: 0,
+      allEmployeeInfo: [],
+      switchStamp: false,
+      switchCA: false,
+      isFormValid: false
     }),
     mounted() {
       this.getDocumentType()
@@ -338,14 +369,56 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       }
     },
     methods: {
+      onResize: function (item, x, y, width, height) {
+        var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
+        var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
+        item.sign_llx = (x / clientWidth).toFixed(4)
+        item.sign_lly = (-(y+item.sign_box_heigth) / clientHeight).toFixed(4)
+        item.sign_urx = (width / clientWidth).toFixed(4)
+        item.sign_ury = (height / clientHeight).toFixed(4)
+        item.sign_position_x = x
+        item.sign_position_y = y
+        item.sign_box_heigth = height
+        item.sign_box_width = width
+      },
+      onDrag: function (item, x, y) {
+        var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
+        var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
+        item.sign_llx = (x / clientWidth).toFixed(4)
+        item.sign_lly = (-(y+item.sign_box_heigth) / clientHeight).toFixed(4)
+        item.sign_position_x = x
+        item.sign_position_y = y
+      },
+      getIcon(page){
+        if (page.length == this.pdf_page_list.length) return 'mdi-close-box'
+        if (page.length > 0) return 'mdi-minus-box'
+        return 'mdi-checkbox-blank-outline'
+      },
+      togglePage(index){
+        this.$nextTick(() => {
+          if (this.chooseAllPage()[index]) {
+            this.flow_datas_custom[index].sign.sign_page = [];
+          } else {
+            this.flow_datas_custom[index].sign.sign_page = this.pdf_page_list.slice().map(x=>x.value)
+          }
+        });
+      },
+      chooseAllPage() {
+        let arr = [];
+        for (let index = 0; index < this.flow_datas_custom.length; index++) {
+          const element = this.flow_datas_custom[index].sign?.sign_page || 0
+          arr.push(this.pdf_page_list.length === element.length);
+        }
+        return arr;
+      },
       emitLoading(isLoad) {
         EventBus.$emit('loadingOverlay', isLoad)
       },
       clearUploadedFile(){
         this.uploadedFile = undefined
         this.pdf_src = undefined
-        this.sign_position = []
         this.signArray = []
+        this.flow_datas_custom = []
       },
       async getDocumentType(){
         try {
@@ -379,13 +452,16 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       },
       async getFlowData(){
         this.emitLoading(true)
-        this.sign_position = []
+        this.signArray = []
         try {
           if(this.selected_document_template){
             var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
             var url = `/flowdata/api/v1/get1/?_id=${this.selected_document_template._id}&tax_id=${tax_id}`
             var {data} = await this.axios.get(this.$api_url + url)
             if(data.status){
+              for (let index = 0; index < this.page_count; index++) {
+                this.pdf_page_list.push({text:index+1,value:index+1})
+              }
               this.flow_id = data.data._id
               this.flow_datas = [...data.data.flow_data]
               this.flow_datas.forEach(flow_data => {
@@ -395,10 +471,11 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                 flow_data.actor[0].permission_email.forEach(email => {
                   email.checkbox = true
                 })
-                this.sign_position.push(flow_data.approver.sign_position)
-                this.sign_position_new.push(flow_data.approver.sign_position)
+                this.signArray.push(flow_data.approver.sign_position)
               })
-              this.loadedPDF()
+              this.signArray.forEach((element,index) => {
+                element.sign_queue_no = index+1
+              })
               this.loaded()
             }
           }
@@ -413,12 +490,104 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       async addTransaction(){
         try {
           this.emitLoading(true)
-          var url = '/transaction/api/v1/addtransaction'
-          var {data} = await this.axios.post(this.$api_url + url,{
-              flow_id: this.flow_id,
-              file_name: this.uploadedFile.name,
-              pdfbase: this.pdf_src.slice(28)
-          })
+          if(this.create_tab == 1){
+            var url = '/transaction/api/v1/addtransaction'
+            var {data} = await this.axios.post(this.$api_url + url,{
+                flow_id: this.flow_id,
+                file_name: this.uploadedFile.name,
+                pdfbase: this.pdf_src.slice(28)
+            })
+          }else if(this.create_tab == 2){
+            var info = this.$store.state.allEmployeeInfo
+            var url = '/transaction/api/v1/addtransaction'
+            var flow_data = this.flow_datas_custom.map(xyz => ({
+              "status_implement": false,
+              "input_status": false,
+              "form_input": {
+                  "status": false,
+                  "form_id": ""
+              },
+              "self": false,
+              "require": {
+                  "attachment": false
+              },
+              "condition": {
+                  "status": false,
+                  "condition_id": null
+              },
+              //ตรงนี้ กำหนดคนเซ็น
+              "actor": [
+                  {
+                      //ถ้าเป็น Role
+                      "permission_status": false,
+                      "permission": [],
+                      //ถ้ารายคนใส่ตรงนี้
+                      "permission_email_status": true,
+                      "permission_email": 
+                        xyz.actor.permission_email.map(yz => {
+                          var result = info.find(element => element.account_detail[0].thai_email == yz.thai_email);
+                          return {
+                            account_id : result.account_id,
+                            first_name_th: result.account_detail[0].first_name_th,
+                            last_name_th: result.account_detail[0].last_name_th,
+                            first_name_eng: result.account_detail[0].first_name_eng,
+                            last_name_eng: result.account_detail[0].last_name_eng,
+                            account_title_th: result.account_detail[0].account_title_th,
+                            account_title_eng: result.account_detail[0].account_title_eng,
+                            thai_email: result.account_detail[0].thai_email
+                          }
+                        })
+                  }
+              ],
+              "approver": {
+                  "account_id": null,
+                  "first_name_th": null,
+                  "last_name_th": null,
+                  "first_name_eng": null,
+                  "last_name_eng": null,
+                  "account_title_th": null,
+                  "account_title_eng": null,
+                  "thai_email": null,
+                  "detp_id": null,
+                  "role_id": null,
+                  "dept_name": null,
+                  "role_name": null,
+                  "status": "Incomplete",
+                  //ตำแหน่งลายเซ็น
+                  "sign_position": xyz.action=='Sign'? {
+                      "sign_llx": xyz.sign.sign_llx,
+                      "sign_lly": xyz.sign.sign_lly,
+                      "sign_urx": xyz.sign.sign_urx,
+                      "sign_ury": xyz.sign.sign_ury,
+                      //กำหนดหน้าที่เซ็นมี 3 แบบ
+                      //แบบหน้าเดียวใส่ "1" หรือ "3"
+                      //แบบหลายหน้าใส่ "1,3,5"
+                      //แบบเซ็นทั้งหมดใส่ "all"
+                      "sign_page": xyz.page.length == this.pdf_page_list.length || this.switchStamp == true? 'all': xyz.sign.sign_page.join(',')
+                  }: undefined
+              },
+              "amount_approve": 1,
+              "action_detail": [],
+              "ref": {
+                  "status": false,
+                  "detail": {
+                      "index": ""
+                  }
+              },
+              "actor_type": "personal",
+              //อันนี้ประเภทการเซ็นมี Sign, Sign-Ca, Approve
+              "action": this.switchCA == true && xyz.action == 'Sign'? 'Sign-Ca' : xyz.action,
+              "status": "W",
+              //ลำดับการเซ็น
+              "index": xyz.index
+            }))
+            var {data} = await this.axios.post(this.$api_url + url,{
+                flow_id: this.selected_document_type_custom._id,
+                set_flow: "true",
+                flow_data: flow_data,
+                pdfbase: this.pdf_src.slice(28)
+            })
+          }
           if(data.status){
             this.emitLoading(false)
             this.$swal({
@@ -460,6 +629,91 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           })
         }
       },
+      updatePageCount(page_count) {
+        this.pdf_page_list = []
+        this.page_count = page_count
+        for (let index = 0; index < this.page_count; index++) {
+          this.pdf_page_list.push({text:index+1,value:index+1})
+        }
+      },
+      clearTabData(){
+        this.signArray = []
+        this.flow_datas_custom = []
+        this.flow_datas = []
+        this.selected_document_template = ''
+      },
+      addPersonSign(){
+        var index = this.flow_datas_custom.length
+        var newItem = {
+          index: index,
+          action: 'Sign',
+          actor: {
+            permission_email: []
+          },
+          page: [...this.pdf_page_list].map(x => x.value),
+        }
+        this.flow_datas_custom.push(newItem)
+        if(!this.flow_datas_custom[index].actor.permission_email.length){
+          this.addActor(index)
+        }
+        var init_sign = {
+          sign_llx: "0",
+          sign_lly: "0.9",
+          get sign_page() {
+            return newItem.page
+          },
+          set sign_page(val) {
+            newItem.page = val
+          },
+          get sign_queue_no() {
+            return newItem.index + 1
+          },
+          sign_urx: "0.200",
+          sign_ury: "0.100"
+        }
+        newItem.sign = init_sign
+        this.signArray.push(init_sign)
+        this.reShowSign(this.signArray)
+      },
+      addPersonApprove(){
+        var index = this.flow_datas_custom.length
+        var newItem = {
+          index: index,
+          action: 'Approve',
+          actor: {
+            permission_email: []
+          }
+        }
+        this.flow_datas_custom.push(newItem)
+        if(!this.flow_datas_custom[index].actor.permission_email.length){
+          this.addActor(index)
+        }
+      },
+      deleteActionFlow(item,status){
+        var target_index = this.flow_datas_custom.indexOf(item);
+        this.flow_datas_custom.splice(target_index, 1)
+        if(status == 'Sign'){
+          var target_sign_index = this.signArray.indexOf(item.sign)
+          this.signArray.splice(target_sign_index, 1)
+        }
+        this.flow_datas_custom.forEach((element,index) => {
+          element.index = index 
+        })
+      },
+      addActor(index){
+        var newItem = {
+          id: +(new Date()),
+          thai_email: ''
+        }
+        this.flow_datas_custom[index].actor.permission_email.push(newItem)
+        this.flow_datas_custom[index].actor.permission_email.forEach(email => {
+          email.checkbox = true
+        })
+      },
+      removeActor(index,item){
+        var target_index = this.flow_datas_custom[index].actor.permission_email.indexOf(item);
+        this.flow_datas_custom[index].actor.permission_email.splice(target_index, 1)  
+      },
       inputFile(){
         this.basePDF()
       },
@@ -485,136 +739,56 @@ import VueDraggableResizable from 'vue-draggable-resizable'
               this.page--
             break
         }
+        this.loaded()
       },
       gopdf() {
         EventBus.$emit('showpdf', this.pdf_src)
       },
-      loadedPDF () {
-        if (this.sign_position.length) {
-            this.sign_position = this.sign_position.map((element) => {
-              if (element.sign_page !== 'all') {
-                element.sign_page = (typeof element.sign_page === 'string' ? element.sign_page : element.sign_page.toString()).split(',')
-            for (var i = 0; i < element.sign_page.length; i++) { element.sign_page[i] = +element.sign_page[i] }
-          } else element.sign_page = Array.from({ length: this.page_count }, (_, i) => i + 1)
-          return element
-          })
+      loaded() {
+          if(this.signArray.length) this.reShowSign(this.signArray)
+      },
+      reShowSign() {
+        for (let index = 0; index < this.signArray.length; index++) {
+          this.signArray[index].name= 'draggableDiv' + String(index)
+          this.signArray[index].index = index + 1
         }
-        // this.setPreViewImg()
-      },
-      loaded: function (e) {
-        if(this.sign_position.length) this.reShowSign(this.sign_position)
-      },
-      reShowSign(data) {
-        this.signArray = []
-        for (let index = 0; index < data.length; index++) {
-          if (index == this.focusNoArr) this.signPage = data[index].sign_page
-          let step_array = this.signArray.length
-          this.signArray.push({
-            index: step_array + 1,
-            name: 'draggableDiv' + String(step_array + 1),
-            show: false,
-            sign_page: data[index].sign_page,
-            sign_position_x: 0,
-            sign_position_y: 0,
-            sign_box_width: 1,
-            sign_box_heigth: 1,
-          })
-          setTimeout(() => {
-            if (
-              this.signArray[step_array].sign_page.findIndex(
-                (item) => item == this.page
-              ) >= 0 &&
-              this.allStatus[step_array]
-            ) {
-              this.multiShow(step_array + 1, this.allStatus[index])
-              this.setPositionSign(
-                this.signArray[index].index,
-                data[index].sign_llx,
-                data[index].sign_lly,
-                data[index].sign_urx,
-                data[index].sign_ury
-              )
-            } else {
-              this.multiShow(step_array + 1, false)
-              this.setPositionSign(
-                this.signArray[index].index,
-                data[index].sign_llx,
-                data[index].sign_lly,
-                data[index].sign_urx,
-                data[index].sign_ury
-              )
+          this.signArray.forEach((element,index) => {
+            if (!element.key) {
+              element.key = Math.random()
             }
-          }, 100)
-          console.log(this.signArray);
-
-        }
+            var shownonPage = element.sign_page.toString().split(',')
+            var isShow =  shownonPage.includes('all') ||  shownonPage.includes(this.page.toString())
+            element.show = isShow
+            this.setPositionSign(
+              index+1,
+              element.sign_llx,
+              element.sign_lly,
+              element.sign_urx,
+              element.sign_ury
+            );
+          })
       },
       setPositionSign(index, llx, lly, urx, ury) {
-        console.log(index, llx, lly, urx, ury)
         var arr_index = index - 1
-
-        var cardWidth = $('#pdfBg_create')[0].getBoundingClientRect().width
-        var cardHeight = $('#pdfBg_create')[0].getBoundingClientRect().height
 
         var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
         var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
 
-        var _pxdraggableDivHeight = clientHeight * parseFloat(ury)
-        var _pxdraggableDivWidth = clientWidth * parseFloat(urx)
-
-        var setWidth = parseFloat(clientWidth) * llx
         var setHeight = parseFloat(clientHeight) * lly
 
-        this.sign_position[arr_index].sign_llx = llx
-        this.sign_position[arr_index].sign_lly = lly
-        this.sign_position[arr_index].sign_urx = urx
-        this.sign_position[arr_index].sign_ury = ury
+        var sign = this.signArray[arr_index]
 
-        this.signArray[arr_index].sign_position_x = clientWidth*(+llx)
-        this.signArray[arr_index].sign_position_y = ((-setHeight)+ (Math.abs(ury-lly)))+(-clientHeight)*(+lly+(ury-lly))
-        this.signArray[arr_index].sign_box_heigth = (clientHeight*(ury))
-        this.signArray[arr_index].sign_box_width = (clientWidth*urx)
-      },
-      multiShow (index, status) {
-        // this.last_step = this.signArray.length
-        this.signArray[index - 1].show = status
-        $('#draggableDiv' + index).css('cursor', 'move')
-        $('#draggableDiv' + index).css('position', 'absolute')
-        $('#draggableDiv' + index).css('height', '33px')
-        $('#draggableDiv' + index).css('width', '50px')
-        $('#draggableDiv' + index).css(
-          'background-color',
-          'rgba(83, 186, 71, 0.2)'
-        )
-        $('#draggableDiv' + index).css('border', '1.2px dashed grey')
-        $('#draggableDiv' + index).css('color', 'white')
-        $('#draggableDiv' + index).css('text-align', 'center')
-        $('#draggableDiv' + index).css('margin', '1px')
-        if (status && this.last_step < index) {
-          $('#draggableDiv' + index).css('display', 'block')
-          $('#draggableDiv' + index).css('z-index', 5)
-          $('#draggableDiv' + index).css('opacity', 1)
-          $("#draggableDiv" + index).draggable({
-            containment: "#pdfDiv",
-            cursor: "move",
-            scroll: true,
-            scrollSensitivity: 100,
-            disabled: false,
-          });
-          document
-            .getElementById("draggableDiv" + index)
-            .addEventListener("mousedown", () => {
-              this.eventMouse = true;
-              this.indexEventMouse = index;
-            });
-          document
-            .getElementById("draggableDiv" + index)
-            .addEventListener("mouseup", () => {
-              // this.setSigntemplate(index);
-              this.eventMouse = false;
-            });
-          // this.setSigntemplate(index)
-        } else $('#draggableDiv' + index).css('display', 'none')
+        sign.sign_llx = llx
+        sign.sign_lly = lly
+        sign.sign_urx = urx
+        sign.sign_ury = ury
+
+        sign.sign_position_x = clientWidth*(+llx)
+        sign.sign_position_y = ((-setHeight)+ (Math.abs(ury-lly)))+(-clientHeight)*(+lly+(ury-lly))
+        sign.sign_box_heigth = (clientHeight*(ury))
+        sign.sign_box_width = (clientWidth*urx)
+
+        this.$set(this.signArray,arr_index,sign)
       },
     }
   }
