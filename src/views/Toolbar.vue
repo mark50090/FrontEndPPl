@@ -155,7 +155,8 @@
       open_create_menu: false,
       create_menu_active_class: '',
       open_doc_style_menu: false,
-      doc_style_active_class: ''
+      doc_style_active_class: '',
+      allInfo: []
     }),
     mounted(){
       this.getUserDetail().then(()=>{ // set defualt business to the 1st of item in business list
@@ -164,6 +165,7 @@
         else this.selectedBiz = JSON.parse(sessionStorage.getItem('selected_business'))
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
         this.isReady = true
+        this.getEmployeeInfo()
       })
       EventBus.$on('loadingOverlay', this.changeLoading)
       this.checkCreateDocMenu()
@@ -197,10 +199,23 @@
           this.loading_overlay = false
         }
       },
+      async getEmployeeInfo(){
+        try {
+          var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+          var url = `/business/api/v1/showaccount?tax_id=${tax_id}`
+          var { data } = await this.axios.get(this.$api_url + url)
+          if(data.status){
+            this.$store.commit('setAllEmployeeInfo',data.data)
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      },
       changeBiz(){
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
         EventBus.$emit('changeBiz')
         this.isReady = true
+        this.getEmployeeInfo()
         // this.$router.push({ path: '/inbox' })
       },
       checkCreateDocMenu() {
