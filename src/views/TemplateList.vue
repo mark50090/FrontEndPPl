@@ -149,8 +149,8 @@ import { EventBus } from '../EventBus'
                 templateform_name: element.template_name,
                 templateform_codedoc: element.code_template,
                 templateform_department: element.department,
-                templateform_fullname: '',
-                templateform_date: '',
+                templateform_fullname: element.sender_detail,
+                templateform_date: element.updated_at,
                 templateform_status: true,
                 template_id: element.template_id
               })

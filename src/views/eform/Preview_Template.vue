@@ -746,11 +746,11 @@ export default {
     }
     EventBus.$on("getDocName", this.save)
     EventBus.$on('saveSign', this.saveSign)
-    EventBus.$on('changeLang', this.changeLange)
+    // EventBus.$on('changeLang', this.changeLange)
     EventBus.$on('setPdfPass', this.setPdfPass)
     this.refDataDoc = JSON.parse(sessionStorage.getItem('refDataDoc'))
-    this.changeLange()
-    this.changeColor()
+    // this.changeLange()
+    // this.changeColor()
   },
   watch: {
     sleep(val) {
@@ -882,7 +882,7 @@ export default {
       $("#workpaper").css("zoom", String(this.zoom_level) + "%")
     },
     backToMyForm() {
-      this.$router.push({ path: "/my_form" })
+      this.$router.push({ path: "/form" })
     },
     moveToPage(pnum) {
       if (pnum != 0 && pnum <= this.pages.length) {
@@ -974,10 +974,10 @@ export default {
         }
         // this.files = this.$store.state.uploadedFile
         this.uploadFolder = sessionStorage.getItem('uploadFolder')
-        if (tempPplCode && tempPplCode[0].document_type) {
-          this.defaultPplTemplate = tempPplCode[0].code
-          this.template_paperless_code = tempPplCode[0].code
-        }
+        // if (tempPplCode && tempPplCode[0].document_type) {
+        //   this.defaultPplTemplate = tempPplCode[0].code
+        //   this.template_paperless_code = tempPplCode[0].code
+        // }
         this.pageOrientation = JSON.parse(
           sessionStorage.getItem("orientation")
         )
@@ -1133,10 +1133,10 @@ export default {
           }
 
           if (this.templates.ppl_status_upload != "OK" && !this.templates.signing && (sessionStorage.getItem('isUploaded') != 'true')) {
-            if (this.templates.ppl_template_code && this.templates.ppl_template_code[0].document_type) {
-              this.template_paperless_code = this.templates.ppl_template_code[0].code
-              this.defaultPplTemplate = this.templates.ppl_template_code[0].code
-            }
+            // if (this.templates.ppl_template_code && this.templates.ppl_template_code[0].document_type) {
+            //   this.template_paperless_code = this.templates.ppl_template_code[0].code
+            //   this.defaultPplTemplate = this.templates.ppl_template_code[0].code
+            // }
             this.uploadAble = true
           }
           if(this.isFlow && !this.templates.signing && (sessionStorage.getItem('isUploaded') != 'true')) {
@@ -1165,7 +1165,7 @@ export default {
           this.syncValue()  
         } else if(data.result == 'ER') {
           if(data.messageER == 'RESERVED') {
-            this.$router.push('/my_form')
+            this.$router.push('/form')
             this.$swal({
               type: 'warning',
               html: '<span class="alert-error"><b>แบบฟอร์มถูกใช้งานโดยผู้ใช้อื่น</b></span>',
@@ -1183,7 +1183,7 @@ export default {
         this.notReady = false
         if (err.response != null) {
           if (err.response.status == 401) {
-            this.$router.push("/login")
+            this.$router.push("/notfound")
           }
         } else {
           console.log(err.message)
@@ -2036,7 +2036,7 @@ export default {
                 this.pplLoadTemplate()
               }
             } else {
-              this.$router.push({ path: "/my_form" })
+              this.$router.push({ path: "/form" })
             }
           }
         } else {//result = ER
@@ -2316,7 +2316,7 @@ export default {
 
           if (this.allUserStep && !speacailForm.includes(template_code)) {
             await this.sendInsertChat(data.messageText.data.e_id)
-            this.$router.push({ path: "/my_form" })
+            this.$router.push({ path: "/form" })
           } else {
             this.eform_id = data.messageText.data.e_id
             this.doc_no = data.messageText.doc_number_eform
@@ -2354,7 +2354,7 @@ export default {
           if (this.files.length) {
             await this.uploadAttachFile(data.messageText.doc_number_eform, data.messageText.data.e_id)
           }
-          this.$router.push({ path: "/my_form" })
+          this.$router.push({ path: "/form" })
         }
       } catch (error) {
         this.notReady = false
@@ -2413,7 +2413,7 @@ export default {
       } catch (err) {
         if (err.response != null) {
           if (err.response.status == 401) {
-            this.$router.push('/login')
+            this.$router.push('/notfound')
           }
         } else {
           console.log(err.message)
@@ -2489,10 +2489,10 @@ export default {
           sessionStorage.setItem("isDocEdit", true)
           sessionStorage.setItem("isDocStep", true)
         }
-        this.$router.push({ path: "/use_template/show_template" })
+        this.$router.push({ path: "/form/input" })
         this.isReturnFill = true
       } else {
-        this.$router.push({ path: "/my_form" })
+        this.$router.push({ path: "/form" })
       }
     },
     async download(action) {
@@ -3054,11 +3054,11 @@ export default {
       this.ppl_templatelist = [{ text: "ไม่เลือก", value: "" }]
       var defaultDocType = ""
       var checkPplSetting = this.checkDefaultPplTemplate()
-      if(this.templates.ppl_template_code && this.templates.ppl_template_code.length) {
-        if(!this.selectedDocumentType && this.templates.ppl_template_code[0].document_type) {
-          defaultDocType = this.templates.ppl_template_code[0].document_type
-        }
-      }
+      // if(this.templates.ppl_template_code && this.templates.ppl_template_code.length) {
+      //   if(!this.selectedDocumentType && this.templates.ppl_template_code[0].document_type) {
+      //     defaultDocType = this.templates.ppl_template_code[0].document_type
+      //   }
+      // }
        if(typeof checkPplSetting.template !== 'undefined' && typeof checkPplSetting.template.Template_Code !== 'undefined') {
         this.defaultPplTemplate = checkPplSetting.template.Template_Code
       }
@@ -3396,11 +3396,11 @@ export default {
 
       this.dialog_ppl = false
       var doc_type = ""
-      this.ppl_templatelist.forEach(e => {
-        if (e.value == data) {
-          doc_type = e.document_type;
-        }
-      })
+      // this.ppl_templatelist.forEach(e => {
+      //   if (e.value == data) {
+      //     doc_type = e.document_type;
+      //   }
+      // })
       try {
         var business = JSON.parse(sessionStorage.getItem("selected_business"))
         var tax_id = "";
@@ -3506,7 +3506,7 @@ export default {
       sessionStorage.setItem('isDocStep',false)
       sessionStorage.setItem('isBack',false)
       sessionStorage.setItem('isStep',false)
-      this.$router.push({ path: '/use_template/show_template' })
+      this.$router.push({ path: '/form/input' })
     },
     setPdfPass(pdfPass, html, reDownload, count) {
       this.pdfPasswordSetting = pdfPass
@@ -3524,7 +3524,7 @@ export default {
       sessionStorage.setItem('isDocStep',false)
       sessionStorage.setItem('isBack',false)
       sessionStorage.setItem('isStep',false)
-      this.$router.push({ path: '/use_template/show_template' })
+      this.$router.push({ path: '/form/input' })
     },
     replaceGtLt(inputWord) {
       if(typeof inputWord === 'string') {
