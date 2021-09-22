@@ -830,34 +830,33 @@
     <!-- Setting Variable For Textarea Modal -->
     <v-dialog v-model="dialogTextAreaVal" scrollable persistent max-width="600px">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-         <b> {{ textLang.text_dialog.set_messages }} </b>
+        <v-card-title class="py-2 textarea-variable-modal-header">
+          {{ textLang.text_dialog.set_messages }}
         </v-card-title>
-        <v-card-text class="px-12 pt-8">
+        <v-card-text class="pt-4">
           <h3 class="variable-textarea-ex-title">{{ textLang.text_dialog.sample_text }}</h3>
           <div class="textarea-ex-box">
             <pre class="textarea-ex">{{selectedTextArea.defaultValue}}</pre>
           </div>
-          <br><br>
+          <br>
           <h3 class="variable-textarea-ex-title">{{ textLang.text_dialog.define_messages }}</h3>
-          <v-row>
-            <v-col cols="12" md="6" lg="6" class="pb-0" v-for="val in textAreaVals" :key="val.text"> <!-- setting value of one variable -->
-              <v-row>
-                <v-col cols="4" md="4" lg="4" align-self="center" class="pr-0 pb-0">
+          <v-row class="input-form-row">
+            <v-col cols="12" md="6" lg="6" class="pa-0" v-for="val in textAreaVals" :key="val.text"> <!-- setting value of one variable -->
+              <v-row class="input-form-row">
+                <v-col cols="5" md="4" lg="4" align-self="center" class="pl-0 pb-0">
                   <span class="variable-title">{{val.text}} :</span>
                 </v-col>
-                <v-col cols="7" md="7" lg="7" class="pb-0">
-                  <v-text-field dense outlined single-line hide-details :color="color_message" class="pad-input-textarea-variable variable-textarea" v-model="val.value"></v-text-field>
+                <v-col cols="7" md="7" lg="7" class="px-0 pb-0">
+                  <v-text-field dense outlined hide-details color="#67c25d" class="pad-input-textarea-variable variable-textarea" v-model="val.value"></v-text-field>
                 </v-col>
               </v-row>
             </v-col>
           </v-row>
-          <br><br>
         </v-card-text>
-        <v-card-actions class="pt-0 pb-12">
+        <v-card-actions class="pt-3 pb-6">
           <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialogTextAreaVal = false">{{ textLang.text_dialog.cancle }}</v-btn>
-          <v-btn depressed large :color="color_import" class="px-5 ml-4 save-setting-btn save-modal-font-btn" @click="closeTextAreaValModal()">{{ textLang.text_dialog.record_variable }}</v-btn>
+          <v-btn outlined color="#4CAF50" class="px-10 mr-2 insert-image-btn-modal" @click="dialogTextAreaVal = false">{{ textLang.text_dialog.cancle }}</v-btn>
+          <v-btn depressed dark color="#4CAF50" class="px-3 ml-2 insert-image-btn-modal" @click="closeTextAreaValModal()">{{ textLang.text_dialog.record_variable }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -8954,13 +8953,13 @@
 
   .variable-textarea-ex-title {
     font-family: 'Sarabun', sans-serif;
-    color: #2ACA9F;
+    color: black;
   }
 
   .textarea-ex-box {
     border-style: solid;
     border-width: 2px;
-    border-color:#2ACA9F;
+    border-color:#67c25d;
     border-radius: 5px;
     padding: 6px;
     margin-top: 2%;
@@ -8968,7 +8967,7 @@
 
   .textarea-ex {
     font-family: 'Sarabun', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     color: black;
   }
 
@@ -8979,14 +8978,12 @@
   }
 
   .v-text-field.pad-input-textarea-variable input {
-    padding-left: 3%;
-    padding-right: 2%;
-    line-height: 30px;
+    line-height: 21px;
   }
 
   .variable-textarea {
     font-family: 'Sarabun', sans-serif;
-    font-size: 16px;
+    font-size: 13px;
   }
 
   .letters-length {
@@ -9046,6 +9043,13 @@
 
   .insert-image-btn-modal {
     font-family: 'Sarabun', sans-serif;
+  }
+
+  .textarea-variable-modal-header {
+    font-family: "Sarabun", sans-serif;
+    font-size: 16px !important;
+    color: white;
+    background-color: #67c25d;
   }
 
   /*======== style from old file >> Show_Template(old version) ========*/
