@@ -137,7 +137,7 @@
                       ประเภทเอกสาร :
                     </v-col>
                     <v-col cols="7" md="8" lg="8" class="px-0 pb-0">
-                      <v-autocomplete v-model="selected_document_type" :items="document_type_list" item-text="keyword" item-value="_id" return-object @change="getDocumentTemplate" dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete>
+                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type" :items="document_type_list" item-text="keyword" item-value="_id" return-object @change="getDocumentTemplate" dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row class="create-row">
@@ -145,7 +145,7 @@
                       รูปแบบเอกสาร :
                     </v-col>
                     <v-col cols="7" md="8" lg="8" class="px-0 pb-0">
-                      <v-autocomplete v-model="selected_document_template" :items="document_template_list" item-text="name" item-value="_id" return-object @change="getFlowData" dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" :disabled="false" :filled="false" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete>
+                      <v-autocomplete  :no-data-text="loading_list_text" :loading="loading_template" v-model="selected_document_template" :items="document_template_list" item-text="name" item-value="_id" return-object @change="getFlowData" dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" :disabled="false" :filled="false" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row class="create-row" v-if="false"> <!-- department row. Show when document type and document style are selected -->
@@ -186,7 +186,7 @@
                       ประเภทเอกสาร :
                     </v-col>
                     <v-col cols="12" md="8" lg="8" align-self="center" class="pr-0 pt-4 pb-0 create-attach-file-block">
-                      <v-autocomplete v-model="selected_document_type_custom" :items="document_type_list" item-text="keyword" item-value="_id" return-object dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input create-setting-dropdown-icon"></v-autocomplete>
+                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type_custom" :items="document_type_list" item-text="keyword" item-value="_id" return-object dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input create-setting-dropdown-icon"></v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row class="create-row">
@@ -354,10 +354,17 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       allEmployeeInfo: [],
       switchStamp: false,
       switchCA: false,
-      isFormValid: false
+      isFormValid: false,
+      loading_list_text: '',
+      loading_template: false,
+      loading_type: false
     }),
     mounted() {
       this.getDocumentType()
+      EventBus.$on('changeBiz', this.changeBiz)
+    },
+    beforeDestroy () {
+      EventBus.$off('changeBiz')
     },
     filters:{
       translate(keyword){
@@ -369,6 +376,14 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       }
     },
     methods: {
+      changeBiz(){
+        this.getDocumentType()
+        this.selected_document_template = ''
+        this.selected_document_type_custom = ''
+        this.flow_datas = []
+        this.flow_datas_custom = []
+        this.signArray = []
+      },
       onResize: function (item, x, y, width, height) {
         var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
         var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
@@ -421,6 +436,9 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.flow_datas_custom = []
       },
       async getDocumentType(){
+        this.loading_type = true
+        this.loading_list_text = 'กำลังดึงข้อมูล กรุณารอสักครู่...'
+        this.document_type_list = []
         try {
           var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
           var url = `/doctype/api/v1?tax_id=`
@@ -433,11 +451,15 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         } catch (error) {
           console.log(error);
         }
+        this.loading_list_text = 'ไม่พบข้อมูล'
+        this.loading_type = false
       },
       async getDocumentTemplate(){
         this.document_template_list = []
         this.selected_document_template = ''
         this.flow_datas = []
+        this.loading_list_text = 'กำลังดึงข้อมูล กรุณารอสักครู่...'
+        this.loading_template = true
         try {
           var url = `/flowdata/api/v1/getbydocID?document_type_id=${this.selected_document_type._id}`
           var {data} = await this.axios.get(this.$api_url + url)
@@ -449,6 +471,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         } catch (error) {
           console.log(error);
         }
+        this.loading_template = false
+        this.loading_list_text = 'ไม่พบข้อมูล'
       },
       async getFlowData(){
         this.emitLoading(true)
