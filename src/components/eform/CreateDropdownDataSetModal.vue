@@ -1,5 +1,4 @@
 <template>
-  <v-container>
     <v-dialog persistent scrollable max-width="70%" v-model="dialog_dropdown_dataset">
       <v-card>
         <v-card-title elevation="4" class="dialog_title">
@@ -74,7 +73,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-container>
 </template>
 
 <script>

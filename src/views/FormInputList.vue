@@ -3,9 +3,9 @@
     <v-card outlined class="mb-1 mx-1 px-4 formdoc-page">
           <v-row class="formdoc-row">
             <v-col cols="12" md="6" lg="6" class="px-0 pb-0">
-              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-formdoc search-formdoc-btn-block">
+              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-formdoc search-formdoc-btn-block" v-model="keyword" v-on:keyup.enter="searchKeyword()">
                 <template v-slot:append-outer>
-                  <v-btn outlined color="#9e9e9e" class="search-formdoc-btn">
+                  <v-btn outlined color="#9e9e9e" class="search-formdoc-btn" @click="searchKeyword()">
                     <v-icon >mdi-magnify</v-icon>
                   </v-btn>
                 </template>
@@ -13,7 +13,7 @@
             </v-col>
           </v-row>
           <v-row class="mt-5 formdoc-row alldoc-formdoc-header">
-            เอกสารทั้งหมด 100  
+            เอกสารทั้งหมด {{totalItemsTemplate}} 
           </v-row>
           <v-row class="mt-3 formdoc-row">
             <v-data-table fixed-header :loading="false" :headers="formdoc_table_header" :items="formdoc_data" class="front-table-center formdoc-table formdoc-table-border formdoc-table-header hide-formdoc-table-progress formdoc-table-data" :footer-props="{'items-per-page-options': [5, 10, 15, 20]}">
@@ -30,7 +30,7 @@
                     </v-btn>
                   </template>
                   <v-list dense>
-                    <v-list-item>
+                    <v-list-item  @click="selectTemplate(item)">
                       <v-list-item-icon>
                           <v-icon color="#4CAF50">mdi-pen</v-icon>
                         </v-list-item-icon>
@@ -57,24 +57,109 @@ import { EventBus } from '../EventBus'
         {text: 'ลำดับ', align: 'center', sortable: true, value: 'form_doc_no'},
         {text: 'ชื่อเอกสาร', align: 'start', sortable: true, value: 'form_doc_name'},
         {text: 'แผนก', align: 'center', sortable: true, value: 'form_doc_department'},
-        {text: 'ประเภทเอกสาร', align: 'center', sortable: true, value: 'form_doc_type'},
+        // {text: 'ประเภทเอกสาร', align: 'center', sortable: true, value: 'form_doc_type'},
         {text: 'รหัสเอกสาร', align: 'center', sortable: true, value: 'form_doc_code'},
-        {text: 'วันที่บังคับใช้', align: 'center', sortable: true, value: 'form_doc_date'},
-        {text: 'เวอร์ชั่น', align: 'center', sortable: true, value: 'form_doc_version'},
+        // {text: 'วันที่บังคับใช้', align: 'center', sortable: true, value: 'form_doc_date'},
+        // {text: 'เวอร์ชั่น', align: 'center', sortable: true, value: 'form_doc_version'},
         {text: '', align: 'center', sortable: false, value: 'form_doc_insert'}
       ],
-      formdoc_data: [
-          {
-            form_doc_no: '1',
-            form_doc_name: 'TEST-DEV-รายละเอียดงบประมาณแนบท้ายโครงการ',
-            form_doc_department: 'Outsource',
-            form_doc_type: 'ทดลอง project',
-            form_doc_code: 'TSDEV-45466',
-            form_doc_date: '15 ก.ย 2564',
-            form_doc_version: 'DEV-10.5'
+      formdoc_data: [],
+      optionsTemplate: {
+        page:1,
+        itemsPerPage: 10
+      },
+      totalItemsTemplate: 0,
+      keyword: ""
+    }),
+    mounted() {
+      this.searchTemplate()
+      EventBus.$emit('loadingOverlay', true)
+      EventBus.$on('changeBiz', this.changeBiz)
+    },
+    methods: { 
+      emitLoading(isLoad) {
+        EventBus.$emit('loadingOverlay', isLoad)
+      },
+      async searchTemplate(filter = {}) {
+        const { page, itemsPerPage, status } = {
+            page: this.optionsTemplate.page,
+            itemsPerPage: this.optionsTemplate.itemsPerPage,
+            ...filter
+          } 
+
+        this.formdoc_data = [] 
+        try {
+          var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+          this.emitLoading(true)
+          var { data } = await this.axios.post(this.$api_url + '/template_form/api/v1/searchTemplate', { 
+            tax_id: tax_id, 
+            keyword: this.keyword,
+            lim: itemsPerPage, 
+            offset: (page-1)*itemsPerPage || 0, 
+          })
+          if(data.status){
+            let index = 1
+            data.result.forEach(element => { 
+              this.formdoc_data.push({
+                form_doc_no: index,
+                form_doc_name: element.template_name,
+                form_doc_department: element.department,
+                form_doc_type: '',
+                form_doc_code: element.code_template,
+                form_doc_date: '',
+                form_doc_version: '',
+                template_id: element.template_id
+              })
+              index++
+            })
           }
-        ]
-    })
+          this.countTemplate()
+        } catch (error) {
+          console.log(error)
+        }
+        this.emitLoading(false)
+      },
+      changeBiz(){
+        this.searchTemplate()
+      },
+      async countTemplate(){
+        try {
+          var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+          this.emitLoading(true)
+          var { data } = await this.axios.post(this.$api_url + '/template_form/api/v1/countTemplate', {
+            tax_id : tax_id,
+            keyword: this.keyword
+          })
+          if(data.status){
+            this.totalItemsTemplate = data.result
+          }
+          this.changeTotalItem()
+          this.isReady = true
+        } catch (error) {
+          this.isReady = true
+        }
+        this.emitLoading(false)
+      },
+      searchKeyword(){
+        if(this.optionsTemplate.page == 1) this.searchTemplate()
+        else this.optionsTemplate.page = 1
+      },
+      selectTemplate(item) {
+        let tempOption = {
+          template_id: item.template_id,
+          isCopy: false,
+          isImport: false,
+          eform_id: ""
+        }
+        sessionStorage.setItem('option',JSON.stringify(tempOption))
+        sessionStorage.setItem('isDocEdit',false)
+        sessionStorage.setItem('isDocStep',false)
+        sessionStorage.setItem('isBack',false)
+        sessionStorage.setItem('isStep',false)
+        sessionStorage.setItem('isOnlyForm',true)
+        this.$router.push({ 'path': '/form/input'})
+      }
+    }
   }
 </script>
 

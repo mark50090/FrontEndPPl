@@ -1,27 +1,25 @@
 <template>
-  <div class="create-page">
-    <v-overlay :value="notReady" absolute opacity="0.3" class="loading-content">
-      <!-- <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> -->
-      <v-progress-linear indeterminate rounded height="15" :background-color="color_loading_bar_bg" :color="color_loading_bar" class="loading-bar"></v-progress-linear>
+  <div>
+    <v-overlay :value="notReady" absolute opacity="0.3">
+      <img width="100px" src="../../assets/loader.gif" class="loading-circle">
     </v-overlay>
     <v-toolbar dense flat class="create-menu-bar"> <!--menu bar -->
-      <v-btn icon text large :color="color_chevron_left" @click="openBack()"><v-icon>mdi-chevron-left</v-icon></v-btn>
+      <v-btn icon text large color="#4CAF50" @click="openBack()"><v-icon>mdi-chevron-left</v-icon></v-btn>
       <span class="name-page"><b>{{ textLang.tabMenubar.create_doc }}</b></span>
       <v-spacer></v-spacer>
-      <v-tabs centered color="black" class="create-menu" v-model="tab">
-        <v-tabs-slider :color="color_chevron_left"></v-tabs-slider>
-        <v-tab class="create-each-menu disable-create-menu">{{ textLang.tabMenubar.set_format }}</v-tab>
-        <v-tab class="create-each-menu disable-create-menu">{{ textLang.tabMenubar.tools }}</v-tab>
-        <v-tab class="create-each-menu disable-create-menu">{{ textLang.tabMenubar.property }}</v-tab>
-        <!-- <v-tab class="create-each-menu disable-create-menu" @click="getAllPermission">{{ textLang.tabMenubar.complete_sequence }}</v-tab> -->
-        <v-tab class="create-each-menu disable-create-menu">{{ textLang.tabMenubar.set_paperless }}</v-tab>
-        <v-tab class="create-each-menu disable-create-menu">{{ textLang.tabMenubar.filling_mobile }}</v-tab>
+      <v-tabs centered color="#4CAF50" class="create-menu" v-model="tab">
+        <v-tab class="create-each-menu">{{ textLang.tabMenubar.set_format }}</v-tab>
+        <v-tab class="create-each-menu">{{ textLang.tabMenubar.tools }}</v-tab>
+        <v-tab class="create-each-menu">{{ textLang.tabMenubar.property }}</v-tab>
+        <!-- <v-tab class="create-each-menu" @click="getAllPermission">{{ textLang.tabMenubar.complete_sequence }}</v-tab> -->
+        <v-tab class="create-each-menu">{{ textLang.tabMenubar.set_paperless }}</v-tab>
+        <v-tab class="create-each-menu">{{ textLang.tabMenubar.filling_mobile }}</v-tab>
       </v-tabs>
       <v-spacer></v-spacer>
       <!-- <v-btn depressed color="grey lighten-2" class="create-preview-btn"><v-icon>mdi-file-document</v-icon><b>ดูเอกสารตัวอย่าง</b></v-btn> -->
-      <v-btn depressed dark :color="color_confirm_save" class="save-create-btn" @click="openConfirmSave()">{{ textLang.tabMenubar.save }}</v-btn>
+      <v-btn depressed dark color="#67C25D" class="save-create-btn" @click="openConfirmSave()">{{ textLang.tabMenubar.save }}</v-btn>
     </v-toolbar>
-    <v-row>
+    <v-row class="create-form-row">
       <v-col v-show="show_page_select == true" :cols="col_page" class="page-select-block"> <!-- page select -->
         <v-row v-for="item in pages" :key="item.index">
           <v-col cols="1" class="num-page-block">
@@ -40,26 +38,25 @@
           <!-- toggle page select button -->
           <v-btn v-if="show_page_select == true" depressed x-small color="grey lighten-2" class="px-0 open-page-select-btn" @click="togglePageSelect()"><v-icon large>mdi-chevron-left</v-icon></v-btn>
           <v-btn v-else depressed color="grey lighten-2" class="open-page-select-btn"  @click="togglePageSelect()">{{ textLang.tabMenubar.open_page }}</v-btn>
+          <v-spacer></v-spacer>
           <!-- zoom button -->
-          <v-btn depressed small color="grey lighten-2" class="ml-xl-10 ml-md-2" v-on:click="zoomOut()"><v-icon color="#aaaaaa">mdi-magnify-minus-outline</v-icon></v-btn>
-          <span class="mx-xl-3 zoom-percent">{{zoom_level}} %</span>
+          <v-btn depressed small color="grey lighten-2"  v-on:click="zoomOut()"><v-icon color="#aaaaaa">mdi-magnify-minus-outline</v-icon></v-btn>
+          <span class="mx-2 zoom-percent">{{zoom_level}} %</span>
           <v-btn depressed small color="grey lighten-2" ><v-icon color="#aaaaaa" v-on:click="zoomIn()">mdi-magnify-plus-outline</v-icon></v-btn>
           <!-- page number -->
-          <v-btn depressed small color="grey lighten-2" class="ml-xl-5 ml-md-2" v-on:click="moveToPage(currentPage-1)"><v-icon color="#aaaaaa">mdi-arrow-left</v-icon></v-btn>
-          <span class="mx-xl-3 zoom-percent">{{ textLang.tabMenubar.page }} {{currentPage}}/{{pages.length}}</span>
+          <v-btn depressed small color="grey lighten-2" class="ml-3" v-on:click="moveToPage(currentPage-1)"><v-icon color="#aaaaaa">mdi-arrow-left</v-icon></v-btn>
+          <span class="mx-2 zoom-percent">{{ textLang.tabMenubar.page }} {{currentPage}}/{{pages.length}}</span>
           <v-btn depressed small color="grey lighten-2" v-on:click="moveToPage(currentPage+1)"><v-icon color="#aaaaaa">mdi-arrow-right</v-icon></v-btn>
-          <v-btn depressed small color="grey lighten-2" class="ml-xl-5 ml-md-1 add-page-btn" @click="addPage()"><v-icon class="add-page-icon">mdi-plus</v-icon> {{ textLang.tabMenubar.add_page }}</v-btn> <!-- add page button -->
+          <v-btn depressed small color="grey lighten-2" class="ml-3 add-page-btn" @click="addPage()"><v-icon class="add-page-icon">mdi-plus</v-icon> {{ textLang.tabMenubar.add_page }}</v-btn> <!-- add page button -->
           <!-- undo / redo button -->
-          <v-btn v-show="deleteTempList.length" depressed small color="grey lighten-2" class="ml-xl-5 ml-md-2" @click="undoDelete()"><v-icon color="#aaaaaa">mdi-undo-variant</v-icon></v-btn>
+          <v-btn v-show="deleteTempList.length" depressed small color="grey lighten-2" class="ml-3" @click="undoDelete()"><v-icon color="#aaaaaa">mdi-undo-variant</v-icon></v-btn>
           <!-- <v-btn depressed small color="grey lighten-2" class="ml-xl-3 mx-md-1"><v-icon color="#aaaaaa">mdi-redo-variant</v-icon></v-btn> -->
           <!-- tooggle property button -->
           <v-spacer></v-spacer>
           <v-btn v-if="show_property == true" depressed x-small color="grey lighten-2" class="px-0 open-page-select-btn" @click="toggleProperty()"><v-icon large>mdi-chevron-right</v-icon></v-btn>
           <v-btn v-else depressed color="grey lighten-2" class="open-page-select-btn"  @click="toggleProperty()">{{ textLang.tabMenubar.show_toolbar }}</v-btn>
         </v-toolbar>
-        <!-- <div class="loading-myform-block" v-if="notReady"></div> -->
         <div class="main-paper-block"> <!-- paper plane -->
-          <!-- <div class="lds-roller loading-circle" v-if="notReady"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> -->
           <v-sheet id="workpaper" :width="current_paper_width + 'px'" :height="current_paper_height + 'px'" :elevation="2" color="white" class="main-paper" style="position: relative; padding: 0px; font-size:1cm;">
             <div :style="'height:' + current_paper_height +'px;'" v-on:click="selectPlain()"> 
               <div id="header-area" :style="'height:' + this.header_section.height + 'px;'">
@@ -111,7 +108,7 @@
                 <v-icon class="icon-drag">mdi-arrow-all</v-icon>
               </v-btn>
             </div>
-            <div :id="item.name" justify-left v-for="item in objectArray['texteditorbox']" :key="item.name" v-on:click="selectObject(item,'texteditorbox')" style="height: 100px; width: 500px; text-align: center;">
+            <div :id="item.name" justify-left v-for="item in objectArray['texteditorbox']" :key="item.name" v-on:click="selectObject(item,'texteditorbox')" style="text-align: center;">
               <div class="editor-box-title" v-if="item.show"><v-icon v-show="item.style.hideDisplay" small color="red" class="mr-1">mdi-eye-off-outline</v-icon>Editor Box</div>
               <div v-show="item.show" :class="item.name + '-obj'" fill-height class="editor-box-raw"></div>
               <v-btn color="secondary" fab depressed x-small v-if="item.selected" disabled class="button-drag" style="position: absolute;">
@@ -2281,7 +2278,7 @@ export default {
     code_template: "",
     version_template: "0",
     error_file_name_msg: '',
-    template_code: "",
+    template_id: "",
     isStucture: false,
     choice: null,
     template_privacy: 'PRIVATE',
@@ -2971,7 +2968,7 @@ export default {
     color_forbiden_email_chip: '#1b9900',
     color_mail_view_all: '#1b9900',
     color_seting_paperless: '#1b9900',
-    color_mini_page: '#1b9900', //function show_page_select
+    color_mini_page: '#4CAF50', //function show_page_select
     color_checkbox_not_show_mobile: '#1b9900',
     color_question_box: '#1b9900',
     colorObject: {
@@ -3032,6 +3029,7 @@ export default {
       this.changeBusiness()
     }
     EventBus.$on('changeBiz',this.changeBusiness)
+    this.digitalWorkflowLoad()
     // EventBus.$on('changeBiz',this.pplLoadTemplate)
     EventBus.$on('changeBiz',this.digitalWorkflowLoad)
     EventBus.$on('changeBiz',this.getRole)
@@ -3802,7 +3800,7 @@ export default {
         this.notReady = false
         if (err.response != null) {
           if (err.response.status == 401) {
-            this.$router.push('/login')
+            this.$router.push('/notfound')
           }
         } else {
           console.log(err.message)
@@ -3830,7 +3828,7 @@ export default {
         this.notReady = false
         if (err.response != null) {
           if (err.response.status == 401) {
-            this.$router.push('/login')
+            this.$router.push('/notfound')
           }
         } else {
           console.log(err.message)
@@ -3894,13 +3892,13 @@ export default {
     },
     getData() {
       this.option = JSON.parse(sessionStorage.getItem('option'))
-      this.template_code = this.option.template_code
-      this.getTemplate(this.option.template_code)
+      this.template_id = this.option.template_id
+      this.getTemplate(this.option.template_id)
     },
-    async getTemplate(template_code) {
+    async getTemplate(template_id) {
       var template = {}
       try {
-        var { data } = await this.axios.get(this.$api_url + '/template_form/api/v1/getTemplateFormById?template_id=' + template_code)
+        var { data } = await this.axios.get(this.$api_url + '/template_form/api/v1/getTemplateFormById?template_id=' + template_id)
         template = data.data
         this.template_privacy = template.permission_template
         this.template_type = template.structure_template_type
@@ -3946,18 +3944,6 @@ export default {
         } else {
           this.docUseDate = template.datetime_use.substr(0, 10)
         }
-        if(template.template_paperless_code) {
-          // await this.pplLoadTemplate() //Load Template
-          this.selectedDocumentType = this.getDocumentType(template.template_paperless_code[0].code)
-          this.selected_ppltemplate = template.template_paperless_code[0].code
-          this.note_paperless = template.description_template
-          if(!this.selectedDocumentType && template.template_paperless_code[0].document_type) {
-            var selectedType = this.documentTypes.find(item => item.value == template.template_paperless_code[0].document_type)
-            if(selectedType) {
-              this.selectedDocumentType = selectedType
-            }
-          }
-        }
         if(template.paperless_data) {
           this.paperless_data = template.paperless_data
         } 
@@ -3969,7 +3955,7 @@ export default {
         this.notReady = false
         if (err.response != null) {
           if (err.response.status == 401) {
-            this.$router.push('/login')
+            this.$router.push('/notfound')
           }
         } else {
           console.log(err.message)
@@ -7443,12 +7429,29 @@ export default {
 
       saveArray.push(comp)
       if(this.template_name != "") {
-        this.res_saveArray = saveArray
-        var isReady = this.checkDuplicationObjectName()
-        if(isReady == 'ready') {
-          this.sendData()
-        } else {
-          // await this.moveToPage(this.keepPage)
+        if(this.selected_ppltemplate) {
+          this.res_saveArray = saveArray
+          var isReady = this.checkDuplicationObjectName()
+          if(isReady == 'ready') {
+            this.sendData()
+          } else {
+            // await this.moveToPage(this.keepPage)
+          }
+        } else{
+          this.$swal({
+            type: 'error',
+            html: '<span class="alert-error"><b>กรุณาเลือก Worflow ของเอกสาร</b></span>',
+            showCloseButton: true,
+            showConfirmButton: false,
+            background: 'white',
+            customClass:{
+              popup: 'border-error'
+            },
+            position: 'top',
+            timer: 3000,
+            backdrop: false,
+            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+          })
         }
       } else {
         this.name_template_error = true
@@ -7996,7 +7999,7 @@ export default {
                   backdrop: false,
                   closeButtonHtml: '<span class="close-alert">&times;</span>'
                 })
-                // this.$router.push({ 'path': '/use_template'})
+                this.$router.push({ 'path': '/template'})
               } else {
                 this.$swal({
                   type: 'error',
@@ -8027,7 +8030,7 @@ export default {
         try {
               this.notReady = true
               var temp_name = this.template_name
-              var temp_code = this.template_code
+              var temp_code = this.template_id
               var business = ""
               var res = ""
               if(JSON.parse(sessionStorage.getItem('selected_business')).id) {
@@ -8087,7 +8090,7 @@ export default {
                 backdrop: false,
                 closeButtonHtml: '<span class="close-alert">&times;</span>'
               })
-              // this.$router.push({ 'path': '/use_template'})
+              this.$router.push({ 'path': '/template'})
             } else {
               this.$swal({
                 type: 'error',
@@ -8740,10 +8743,10 @@ export default {
   border-color: #1b9900 !important;
 }
 
-.create-page {
+/* .create-page {
   margin-top: 52px;
   width: 100%;
-}
+} */
 
 .create-menu-bar {
   border-bottom: solid 1px #E0E0E0 !important;
@@ -8764,9 +8767,9 @@ export default {
   text-transform: capitalize;
 }
 
-.theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active).disable-create-menu, .theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-icon, .theme--light.v-tabs > .v-tabs-bar .v-tab--disabled {
+/* .theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active).disable-create-menu {
   color: #9c9a9a !important;
-}
+} */
 
 .create-preview-btn {
   font-family: 'Sarabun', sans-serif;
@@ -8778,6 +8781,11 @@ export default {
   text-transform: capitalize;
   font-size: 14px;
   margin-left: 1%;
+}
+
+.create-form-row {
+  width: 100%;
+  margin: 0% !important;
 }
 
 .page-select-block {
@@ -8810,7 +8818,7 @@ export default {
   border: solid 1px #E0E0E0;
 }
 
-.paper-menu-bar .v-toolbar__content, .v-toolbar__extension {
+.paper-menu-bar .v-toolbar__content {
   padding-left: 0%;
   padding-right: 0%;
 }
@@ -8849,6 +8857,8 @@ export default {
 .main-paper {
   padding-left: 24px;
   padding-right: 24px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .property-block2 {
@@ -9284,7 +9294,7 @@ export default {
 }
 
 .section-name {
-  border: dashed 1px #1b9900;
+  border: dashed 1px #67C25D;
   font-family: 'Sarabun', sans-serif;
   font-size: 14px;
   width: 20%;
@@ -9859,10 +9869,10 @@ export default {
   font-size: 16px;
 }
 
-.v-text-field--outlined > .v-input__control > .v-input__slot  {
+/* .v-text-field--outlined > .v-input__control > .v-input__slot  {
   height: 30px !important;
   padding: 0px !important;
-}
+} */
 
 .permission-data-all-title {
   font-family: 'Sarabun', sans-serif;
@@ -10232,16 +10242,6 @@ export default {
 /*======== style from old file >> Create_Template(old version) ========*/
 .create-tem-block {
   margin-top: 45px;
-}
-
-.section-name {
-  border: dashed 1px #7CB342;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-  width: 20%;
-  text-align: center;
-  background-color: #9CCC65;
-  opacity: 0.4;
 }
 
 .section-box {
@@ -10785,10 +10785,10 @@ export default {
   font-size: 16px;
 }
 
-.v-text-field--outlined > .v-input__control > .v-input__slot  {
+/* .v-text-field--outlined > .v-input__control > .v-input__slot  {
   height: 30px !important;
   padding: 0px !important;
-}
+} */
 
 .body-card {
   height: calc(92vh - 74px);
@@ -10845,10 +10845,6 @@ export default {
   padding: 2px 2px 2px 2px;
 }
 
-.v-text-field.v-text-field--enclosed.dropdown-icon-block .v-input__append-inner {
-  margin-top: 0% !important;
-}
-
 .dropdown-icon .v-input__icon {
   max-height: 22px;
 }
@@ -10866,11 +10862,6 @@ export default {
 
 .zoom-icon {
   color: #757575 !important;
-}
-
-.object-table {
-  border:1px solid black;
-  border-collapse:collapse;
 }
 
 .page-button {
@@ -10908,22 +10899,12 @@ export default {
 /*=====================================================================*/
 
 /*======== style from old file >> Edit_Template(old version) ========*/
-.section-define {
-  color: lightgray;
-  font-size: 20px;
-}
-
 .button-show-prop {
   background-color: #BDBDBD !important;
   color: grey !important;
 }
 
-.theme--light.v-btn.v-btn--disabled.button-drag:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
-  background-color: #C2EB81 !important;
-  min-width: 32px;
-}
-
-.theme--light.v-btn.v-btn--disabled .v-icon, .theme--light.v-btn.v-btn--disabled .v-btn__loading .icon-drag {
+.theme--light.v-btn.v-btn--disabled .v-btn__loading .icon-drag {
   color: #1b9900 !important;
 }
 

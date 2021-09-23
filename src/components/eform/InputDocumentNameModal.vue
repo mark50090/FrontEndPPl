@@ -1,5 +1,4 @@
 <template>
-  <v-container>
     <v-dialog v-model="dialog" max-width="650px" scrollable persistent>
       <v-card>
         <v-overlay :value="notReady" absolute opacity="0.3" class="loading-content">
@@ -115,7 +114,6 @@
         </v-card-actions>      
       </v-card>
     </v-dialog>
-  </v-container>
 </template>
 
 <script>
@@ -199,10 +197,10 @@ export default {
   }),
   mounted() {
     EventBus.$on('openInputDocName',this.openInputDocName)
-    EventBus.$on('changeLang', this.changeLange)
+    // EventBus.$on('changeLang', this.changeLange)
     EventBus.$on('saveSign', this.saveSign)
     EventBus.$on('cancelSign', this.cancelSign)
-    this.changeLange()
+    // this.changeLange()
     // this.changeColor()
   },
   beforeDestroy() {
@@ -253,117 +251,118 @@ export default {
       if(!this.doc_name && this.optionsPage.subject_text) {
         this.doc_name = this.optionsPage.subject_text
       }
-      if(!this.isCa) {
-        for(let i=0; i<flowPermission.length-1; i++) {
-          var isEmail = false
-          if(flowPermission[i].ref) {
-            this.flowPerm.push({index:i, isRef:true, ref: this.textLang.reference + flowPermission[i].ref, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
-          } else if(flowPermission[i].email.length && !flowPermission[i].ref) {
-            isEmail = true
-            var emailList = []
-            var indx = 0
-            flowPermission[i].email.forEach(e => {
-              emailList.push({index: indx, value: e})
-              indx++
-            })
-            this.flowPerm.push({index:i, isEmail: isEmail, email: emailList, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
-          } else if(flowPermission[i].role.length && !flowPermission[i].ref){
-            if(flowPermission[i].role[0].name != "" && !flowPermission[i].role.find(r => r.name == 'leader-user')) {
-              var roleList = []
-              var indx = 0
-              flowPermission[i].role.forEach(e => {
-                roleList.push({index: indx, value: e})
-                indx++
-              })
-              this.flowPerm.push({index:i, isEmail: isEmail, role: roleList, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
-            } else if(flowPermission[i].role[0].name != "" && flowPermission[i].role.find(r => r.name == 'leader-user')) {
-              await this.getLeaderArray(JSON.parse(sessionStorage.getItem('selected_business')).id_card_num).then(res => {
-                isEmail = true
-                var emailList = []
-                if(res.length) {
-                  emailList.push({index:0, value:res[0]})
-                }
-                this.flowPerm.push({index:i, isEmail: isEmail, email: emailList, step_num: flowPermission[i].step_num, isEdit: true, isLeader: true})
-              })
-            }
-          }
-          if(typeof flowPermission[i].role[0].text !== 'undefined') {
-            this.orderMessage[flowPermission[i].step_num] = flowPermission[i].role[0].text
-          } else {
-            this.orderMessage[flowPermission[i].step_num] = ""
-          }
-        }
-        if(flowPermission.length) {
-          var senderIndex = flowPermission.length-1
-          var isEmail = false
-          if(typeof flowPermission[senderIndex].role[0] === 'undefined'){
-            flowPermission[senderIndex].role[0] = {name: "", editable: true}
-          }
-          if(flowPermission[senderIndex].ref) {
-            isEmail = 'ref'
-            this.senderPerm = {isEmail: isEmail, refValue: flowPermission[senderIndex].ref, ref: this.textLang.reference +  flowPermission[senderIndex].ref, isEdit:false}
-          } else if(flowPermission[senderIndex].email.length) {
-            isEmail = true
-            var emailList = []
-            var indx = 0
-            flowPermission[senderIndex].email.forEach(e => {
-              emailList.push({index: indx, value: e})
-              indx++
-            })
-            this.senderPerm = {isEmail: isEmail, email: emailList, isEdit:flowPermission[senderIndex].role[0].editable}
-          } else if(flowPermission[senderIndex].role.length){
-            if(flowPermission[senderIndex].role[0].name != "") {
-              var roleList = []
-              var indx = 0
-              flowPermission[senderIndex].role.forEach(e => {
-                roleList.push({index: indx, value: e})
-                indx++
-              })
-              this.senderPerm = {isEmail: isEmail, role: roleList, isEdit:flowPermission[senderIndex].role[0].editable}
-            }
-          } else {
-            this.senderPerm = {isEmail: true, role: [], isEdit: true, email: [""]}
-          }
-        }
-      } else {
-        for(let i=0; i<flowPermission.length; i++) {
-          var isEmail = false
-          if(flowPermission[i].ref) {
-            this.flowPerm.push({index:i, isRef:true, ref: this.textLang.reference + flowPermission[i].ref, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
-          } else if(flowPermission[i].email.length && !flowPermission[i].ref) {
-            isEmail = true
-            var emailList = []
-            var indx = 0
-            flowPermission[i].email.forEach(e => {
-              emailList.push({index: indx, value: e})
-              indx++
-            })
-            this.flowPerm.push({index:i, isEmail: isEmail, email: emailList, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
-          } else if(flowPermission[i].role.length && !flowPermission[i].ref){
-            if(flowPermission[i].role[0].name != "") {
-              var roleList = []
-              var indx = 0
-              flowPermission[i].role.forEach(e => {
-                roleList.push({index: indx, value: e})
-                indx++
-              })
-              this.flowPerm.push({index:i, isEmail: isEmail, role: roleList, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
-            }
-          }
-          if(typeof flowPermission[i].role[0].text !== 'undefined') {
-            this.orderMessage[flowPermission[i].step_num] = flowPermission[i].role[0].text
-          } else {
-            this.orderMessage[flowPermission[i].step_num] = ""
-          }
-        }
-      }
-      var template_code = JSON.parse(sessionStorage.getItem('template_option')).template_code
-      var speacailForm = this.$speacailForm
-      if(speacailForm.includes(template_code)) {
-        this.checkName()
-      } else {
-        this.dialog = true
-      }
+      // if(!this.isCa) {
+      //   for(let i=0; i<flowPermission.length-1; i++) {
+      //     var isEmail = false
+      //     if(flowPermission[i].ref) {
+      //       this.flowPerm.push({index:i, isRef:true, ref: this.textLang.reference + flowPermission[i].ref, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
+      //     } else if(flowPermission[i].email.length && !flowPermission[i].ref) {
+      //       isEmail = true
+      //       var emailList = []
+      //       var indx = 0
+      //       flowPermission[i].email.forEach(e => {
+      //         emailList.push({index: indx, value: e})
+      //         indx++
+      //       })
+      //       this.flowPerm.push({index:i, isEmail: isEmail, email: emailList, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
+      //     } else if(flowPermission[i].role.length && !flowPermission[i].ref){
+      //       if(flowPermission[i].role[0].name != "" && !flowPermission[i].role.find(r => r.name == 'leader-user')) {
+      //         var roleList = []
+      //         var indx = 0
+      //         flowPermission[i].role.forEach(e => {
+      //           roleList.push({index: indx, value: e})
+      //           indx++
+      //         })
+      //         this.flowPerm.push({index:i, isEmail: isEmail, role: roleList, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
+      //       } else if(flowPermission[i].role[0].name != "" && flowPermission[i].role.find(r => r.name == 'leader-user')) {
+      //         await this.getLeaderArray(JSON.parse(sessionStorage.getItem('selected_business')).id_card_num).then(res => {
+      //           isEmail = true
+      //           var emailList = []
+      //           if(res.length) {
+      //             emailList.push({index:0, value:res[0]})
+      //           }
+      //           this.flowPerm.push({index:i, isEmail: isEmail, email: emailList, step_num: flowPermission[i].step_num, isEdit: true, isLeader: true})
+      //         })
+      //       }
+      //     }
+      //     if(typeof flowPermission[i].role[0].text !== 'undefined') {
+      //       this.orderMessage[flowPermission[i].step_num] = flowPermission[i].role[0].text
+      //     } else {
+      //       this.orderMessage[flowPermission[i].step_num] = ""
+      //     }
+      //   }
+      //   if(flowPermission.length) {
+      //     var senderIndex = flowPermission.length-1
+      //     var isEmail = false
+      //     if(typeof flowPermission[senderIndex].role[0] === 'undefined'){
+      //       flowPermission[senderIndex].role[0] = {name: "", editable: true}
+      //     }
+      //     if(flowPermission[senderIndex].ref) {
+      //       isEmail = 'ref'
+      //       this.senderPerm = {isEmail: isEmail, refValue: flowPermission[senderIndex].ref, ref: this.textLang.reference +  flowPermission[senderIndex].ref, isEdit:false}
+      //     } else if(flowPermission[senderIndex].email.length) {
+      //       isEmail = true
+      //       var emailList = []
+      //       var indx = 0
+      //       flowPermission[senderIndex].email.forEach(e => {
+      //         emailList.push({index: indx, value: e})
+      //         indx++
+      //       })
+      //       this.senderPerm = {isEmail: isEmail, email: emailList, isEdit:flowPermission[senderIndex].role[0].editable}
+      //     } else if(flowPermission[senderIndex].role.length){
+      //       if(flowPermission[senderIndex].role[0].name != "") {
+      //         var roleList = []
+      //         var indx = 0
+      //         flowPermission[senderIndex].role.forEach(e => {
+      //           roleList.push({index: indx, value: e})
+      //           indx++
+      //         })
+      //         this.senderPerm = {isEmail: isEmail, role: roleList, isEdit:flowPermission[senderIndex].role[0].editable}
+      //       }
+      //     } else {
+      //       this.senderPerm = {isEmail: true, role: [], isEdit: true, email: [""]}
+      //     }
+      //   }
+      // } else {
+      //   for(let i=0; i<flowPermission.length; i++) {
+      //     var isEmail = false
+      //     if(flowPermission[i].ref) {
+      //       this.flowPerm.push({index:i, isRef:true, ref: this.textLang.reference + flowPermission[i].ref, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
+      //     } else if(flowPermission[i].email.length && !flowPermission[i].ref) {
+      //       isEmail = true
+      //       var emailList = []
+      //       var indx = 0
+      //       flowPermission[i].email.forEach(e => {
+      //         emailList.push({index: indx, value: e})
+      //         indx++
+      //       })
+      //       this.flowPerm.push({index:i, isEmail: isEmail, email: emailList, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
+      //     } else if(flowPermission[i].role.length && !flowPermission[i].ref){
+      //       if(flowPermission[i].role[0].name != "") {
+      //         var roleList = []
+      //         var indx = 0
+      //         flowPermission[i].role.forEach(e => {
+      //           roleList.push({index: indx, value: e})
+      //           indx++
+      //         })
+      //         this.flowPerm.push({index:i, isEmail: isEmail, role: roleList, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
+      //       }
+      //     }
+      //     if(typeof flowPermission[i].role[0].text !== 'undefined') {
+      //       this.orderMessage[flowPermission[i].step_num] = flowPermission[i].role[0].text
+      //     } else {
+      //       this.orderMessage[flowPermission[i].step_num] = ""
+      //     }
+      //   }
+      // }
+      // var template_code = JSON.parse(sessionStorage.getItem('template_option')).template_code
+      // var speacailForm = this.$speacailForm
+      // if(speacailForm.includes(template_code)) {
+      //   this.checkName()
+      // } else {
+      //   this.dialog = true
+      // }
+      this.dialog = true
     },
     checkName() {
       this.alertTextShow = false
@@ -371,47 +370,47 @@ export default {
       var notEnoughEmail = false
       if(this.doc_name != '') {
         var document_name = this.doc_name
-        for(let i=0; i<this.flowPerm.length; i++) {
-          if(this.flowPerm[i].isEmail) {
-            var emailList = []
-            this.flowPerm[i].email.forEach(e => {
-              e.value = e.value.toLowerCase()
-              e.value = e.value.trim()
-              e.value = e.value.replace(/ /g, "")
-              e.value = e.value.replace(/[\u0E01-\u0E5B]+/g, "")
-              e.value = e.value.split(" ").join("")
-              if(e.value) {
-                emailList.push(e.value)
-              }
-            })
-            if(emailList.length) {
-              this.tempFlowPerm[i].email = emailList
-            } else {
-              notEnoughEmail = true
-            }
-          }
-        }
-        if(this.tempFlowPerm.length) {
-          if(this.senderPerm.isEmail == true) {
-            var emailList = []
-           this.senderPerm.email.forEach(e => {
-              e.value = e.value.toLowerCase()
-              e.value = e.value.trim()
-              e.value = e.value.replace(/ /g, "")
-              e.value = e.value.replace(/[\u0E01-\u0E5B]+/g, "")
-              e.value = e.value.split(" ").join("")
-              emailList.push(e.value)
-            })
-            var senderIndex = this.tempFlowPerm.length-1
-            this.tempFlowPerm[senderIndex].email = emailList
-            if(typeof emailList[0] === 'undefined' || emailList == "") {
-              notEnoughEmail = true
-            }
-          } else if(this.senderPerm.isEmail == 'ref') {
-            var senderIndex = this.tempFlowPerm.length-1
-            this.tempFlowPerm[senderIndex].ref = this.senderPerm.refValue
-          }
-        }
+        // for(let i=0; i<this.flowPerm.length; i++) {
+        //   if(this.flowPerm[i].isEmail) {
+        //     var emailList = []
+        //     this.flowPerm[i].email.forEach(e => {
+        //       e.value = e.value.toLowerCase()
+        //       e.value = e.value.trim()
+        //       e.value = e.value.replace(/ /g, "")
+        //       e.value = e.value.replace(/[\u0E01-\u0E5B]+/g, "")
+        //       e.value = e.value.split(" ").join("")
+        //       if(e.value) {
+        //         emailList.push(e.value)
+        //       }
+        //     })
+        //     if(emailList.length) {
+        //       this.tempFlowPerm[i].email = emailList
+        //     } else {
+        //       notEnoughEmail = true
+        //     }
+        //   }
+        // }
+        // if(this.tempFlowPerm.length) {
+        //   if(this.senderPerm.isEmail == true) {
+        //     var emailList = []
+        //    this.senderPerm.email.forEach(e => {
+        //       e.value = e.value.toLowerCase()
+        //       e.value = e.value.trim()
+        //       e.value = e.value.replace(/ /g, "")
+        //       e.value = e.value.replace(/[\u0E01-\u0E5B]+/g, "")
+        //       e.value = e.value.split(" ").join("")
+        //       emailList.push(e.value)
+        //     })
+        //     var senderIndex = this.tempFlowPerm.length-1
+        //     this.tempFlowPerm[senderIndex].email = emailList
+        //     if(typeof emailList[0] === 'undefined' || emailList == "") {
+        //       notEnoughEmail = true
+        //     }
+        //   } else if(this.senderPerm.isEmail == 'ref') {
+        //     var senderIndex = this.tempFlowPerm.length-1
+        //     this.tempFlowPerm[senderIndex].ref = this.senderPerm.refValue
+        //   }
+        // }
 
         var uploadFiles = this.files
         var opsPage = this.optionsPage
@@ -421,24 +420,26 @@ export default {
         if(!this.optionsPage.subject_text) {
           this.optionsPage.subject_text = "<ไม่มีชื่อเรื่อง>"
         }
-        if(!notEnoughEmail) {
-          this.checkEmail(this.tempFlowPerm).then(res => {
-            if(res) {
-              if((this.currentStepCa || this.signOnlyStep) && sessionStorage.getItem('showDraft') != 'true') {
-                EventBus.$emit('openSignPad')
-              } else {
-                this.dialog = false
-                sessionStorage.setItem('flowPermission',JSON.stringify(this.tempFlowPerm))
-                EventBus.$emit('getDocName', document_name, uploadFiles, opsPage)
-              }
-            }
-          })
-          this.buttonClicked = false
-        } else {
-          this.buttonClicked =  false
-          this.alertTextShow = true
-          this.alert_text = "กรุณากรอก Email ให้ครบทุกลำดับ"
-        }
+        // if(!notEnoughEmail) {
+        //   this.checkEmail(this.tempFlowPerm).then(res => {
+        //     if(res) {
+        //       if((this.currentStepCa || this.signOnlyStep) && sessionStorage.getItem('showDraft') != 'true') {
+        //         EventBus.$emit('openSignPad')
+        //       } else {
+        //         this.dialog = false
+        //         sessionStorage.setItem('flowPermission',JSON.stringify(this.tempFlowPerm))
+        //         EventBus.$emit('getDocName', document_name, uploadFiles, opsPage)
+        //       }
+        //     }
+        //   })
+        //   this.buttonClicked = false
+        // } else {
+        //   this.buttonClicked =  false
+        //   this.alertTextShow = true
+        //   this.alert_text = "กรุณากรอก Email ให้ครบทุกลำดับ"
+        // }
+        this.dialog = false
+        EventBus.$emit('emitSaveDocument', document_name, opsPage)
       } else {
         this.buttonClicked =  false
         this.alertTextShow = true
@@ -453,7 +454,7 @@ export default {
         var opsPage = this.optionsPage
         this.dialog = false
         sessionStorage.setItem('flowPermission',JSON.stringify(this.tempFlowPerm))
-        EventBus.$emit('getDocName', document_name, uploadFiles, opsPage, sign64)
+        // EventBus.$emit('getDocName', document_name, uploadFiles, opsPage, sign64)
       } 
     },
     cancelSign() {

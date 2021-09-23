@@ -105,7 +105,7 @@
             <v-list-item-title class="menu-title">รายงานการใช้งานเอกสาร</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <!-- <v-list-group no-action color="#53ba47" :value="open_doc_style_menu" active-class="menu-create-doc" :class="'doc-style-dropdown-icon ' +  doc_style_active_class">
+        <v-list-group no-action color="#53ba47" :value="open_doc_style_menu" active-class="menu-create-doc" :class="'doc-style-dropdown-icon ' +  doc_style_active_class">
           <template v-slot:activator>
             <v-list-item-icon>
               <v-icon>mdi-file-cog</v-icon>
@@ -114,15 +114,15 @@
               <v-list-item-title class="menu-title">จัดการรูปแบบเอกสาร</v-list-item-title>
             </v-list-item-content>
           </template>
-          <v-list-item to="/test_page" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
+          <!-- <v-list-item to="/flow" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
             <v-list-item-icon class="icon-sub-menu">
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="menu-title">สร้างรูปแบบอนุมัติ</v-list-item-title>
             </v-list-item-content>
-          </v-list-item>
-          <v-list-item @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
+          </v-list-item> -->
+          <v-list-item to="/template" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
             <v-list-item-icon class="icon-sub-menu">
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
@@ -130,7 +130,7 @@
               <v-list-item-title class="menu-title">สร้างแบบฟอร์ม</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </v-list-group> -->
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
     <!-- Main Content -->
@@ -155,18 +155,24 @@
       open_create_menu: false,
       create_menu_active_class: '',
       open_doc_style_menu: false,
-      doc_style_active_class: ''
+      doc_style_active_class: '',
+      allInfo: []
     }),
     mounted(){
       this.getUserDetail().then(()=>{ // set defualt business to the 1st of item in business list
-        this.selectedBiz = this.business[0]
+        if(!(sessionStorage.getItem('selected_business'))) this.selectedBiz = this.business[0]
         // this.changeBiz()
+        else this.selectedBiz = JSON.parse(sessionStorage.getItem('selected_business'))
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
         this.isReady = true
+        this.getEmployeeInfo()
       })
       EventBus.$on('loadingOverlay', this.changeLoading)
       this.checkCreateDocMenu()
       this.checkDocStyleMenu()
+    },
+    beforeDestroy(){
+      sessionStorage.selected_business = ''
     },
     methods: {
       changeLoading(isLoad) {
@@ -193,10 +199,23 @@
           this.loading_overlay = false
         }
       },
+      async getEmployeeInfo(){
+        try {
+          var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+          var url = `/business/api/v1/showaccount?tax_id=${tax_id}`
+          var { data } = await this.axios.get(this.$api_url + url)
+          if(data.status){
+            this.$store.commit('setAllEmployeeInfo',data.data)
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      },
       changeBiz(){
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
         EventBus.$emit('changeBiz')
         this.isReady = true
+        this.getEmployeeInfo()
         // this.$router.push({ path: '/inbox' })
       },
       checkCreateDocMenu() {
@@ -209,7 +228,7 @@
         }
       },
       checkDocStyleMenu() {
-        if((this.$route.name == 'flow') || (this.$route.name == 'create_form')) {
+        if((this.$route.name == 'flow') || (this.$route.name == 'template')) {
           this.open_doc_style_menu = true
           this.doc_style_active_class = 'menu-create-doc-active'
         } else {

@@ -1,41 +1,43 @@
 <template>
-  <v-container>
 	<v-dialog v-model="dialog_attach_file" scrollable persistent max-width="600">
 	  <v-card>
-		 <v-card-title elevation="4" class="dialog_title">
-			 <b>{{ textLang.files }}</b>
-		</v-card-title>
-			<v-card-text v-if="files.length > 0" class="pl-8 pr-3 pt-5 attachfile-content">
+			<v-card-title class="py-2 attach-file-header-modal">
+				{{ textLang.files }}
+			</v-card-title>
+			<v-card-text v-if="files.length > 0" class="pt-4 pb-4">
 				<v-row class="row-list-all" justify="end">
-					<v-btn depressed dark :color="color_btn_download_all" class="btn-download-all" @click="fileDownloadAll()">{{ textLang.download_all }}</v-btn>
+					<v-btn depressed dark color="#67c25d" class="btn-download-all" @click="fileDownloadAll()">{{ textLang.download_all }}</v-btn>
 				</v-row>
 				<br/>
-				<ol>
-					<li class="mb-5" v-for="item in files" :key="item.file_id">
-						<v-row align="center" class="row-list">
-							<v-col cols="12" md="8" lg="8" class="px-0">{{item.file_name}}</v-col>
+				<ol class="attachfile-content">
+					<li v-for="item in files" :key="item.file_id">
+						<v-row class="row-list">
+							<v-col cols="9" md="10" lg="10" class="pl-2 pr-0">{{item.file_name}}</v-col>
 							<v-spacer></v-spacer> 
 							<!-- <v-icon class="mr-2">mdi-eye-outline</v-icon> -->
-							<v-btn v-show="!item.waitUpload" depressed dark :color="color_btn_download" class="btn-download" @click="fileDownload(item)">{{ textLang.download }}</v-btn>
+							<v-col v-show="!item.waitUpload" cols="auto" md="auto" lg="auto" class="pr-0 pt-2">
+								<v-btn  icon color="#67c25d" @click="fileDownload(item)">
+									<v-icon>mdi-download</v-icon>
+								</v-btn>
+							</v-col>
 						</v-row>
 					</li>
 				</ol>
 			</v-card-text>
 			
-		  <v-card-text v-else-if="files.length == 0" class="pt-5 not-attach-files-font">
-				<v-icon color="#ff8f00" class="no-step-icon not-attach-files">mdi-alert-circle</v-icon>{{ textLang.not_files }}
+		  <v-card-text v-else-if="files.length == 0" class="pt-5 pb-4 not-attach-files-font">
+				<v-icon color="#ff8f00" class="mr-2 mb-2">mdi-alert-circle</v-icon>{{ textLang.not_files }}
 			</v-card-text>
 
-			<v-divider class="mx-10"></v-divider>
+			<v-divider class="mx-6"></v-divider>
 
-			<v-card-actions class="pt-8 pb-8">
+			<v-card-actions class="py-5">
 				<v-spacer></v-spacer>
-				<v-btn outlined dark large color="#979797" class="px-12 mr-4 save-setting-btn" @click="dialog_attach_file = false">{{ textLang.cancel }}</v-btn>
+				<v-btn outlined color="#4CAF50" class="px-12 cancel-attach-file-btn" @click="dialog_attach_file = false">{{ textLang.cancel }}</v-btn>
 				<v-spacer></v-spacer>
 			</v-card-actions>
 	  </v-card>
 	</v-dialog>
-  </v-container>
 </template>
 
 <script>
@@ -115,6 +117,13 @@
 </script>
 
 <style>
+	.attach-file-header-modal {
+		font-family: "Sarabun", sans-serif;
+    font-size: 16px !important;
+    color: white;
+    background-color: #67c25d;
+	}
+
   .attachfile-content {
 		font-family: 'Sarabun', sans-serif;
 		font-size: 16px;
@@ -127,32 +136,23 @@
 		color: #ff8f00 !important;
 		text-align: center;
 	}
-
-	.not-attach-files{
-		font-size: 30px !important;
-	}
   
   .row-list{
 	  width: 100%;
-	  margin-left: 0%;
+	  margin: 0%;
   }
 
   .row-list-all{
 	  width: 100%;
-	  margin-left: 0%;
+	  margin: 0%;
   }
   
 	.btn-download-all{
 		text-transform: capitalize;
+		font-family: 'Sarabun', sans-serif;
 	}
 
-	.btn-download{
-		text-transform: capitalize;
+	.cancel-attach-file-btn {
+		font-family: 'Sarabun', sans-serif;
 	}
-
-  @media only screen and (max-width: 960px) {
-	  .btn-download{
-		  margin: auto;
-	  }
-  }
 </style>

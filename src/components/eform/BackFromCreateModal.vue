@@ -1,5 +1,4 @@
 <template>
-  <v-container>
     <v-dialog v-model="dialog" persistent max-width="600">
       <v-card>
         <v-card-title elevation="4" class="dialog_title">
@@ -18,7 +17,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-container>
 </template>
 
 <script>

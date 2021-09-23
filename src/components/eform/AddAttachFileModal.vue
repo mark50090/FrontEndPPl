@@ -1,37 +1,36 @@
 <template>
-  <v-container>
-    <v-dialog v-model="add_attach_dialog" scrollable persistent max-width="650px">
+    <v-dialog v-model="add_attach_dialog" scrollable persistent max-width="500px">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-          <b>{{ textLang.attach_header_dialog }}</b>
+        <v-card-title>
+          <span class="add-file-header-modal">แนบเอกสารเพิ่มเติม</span>
+          <v-spacer></v-spacer>
+          <v-btn icon dark small color="black" @click="add_attach_dialog = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
         </v-card-title>
-        <v-card-text class="px-12 pt-5">
-          <v-row class="row-crad-files">
+        <v-card-text class="pt-4 pb-0">
+          <v-row v-if="attachedFiles.length > 0" class="add-file-modal-row">
             <div v-for="item in attachedFiles"  :key="item.file_id">
-              <v-chip class="ma-1 chip-moblie" v-if="!item.waitUpload" small label dark :color="color_chip_file" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.file_name }}</v-chip>
-              <v-chip v-if="item.waitUpload" small label outlined class="ma-1 chip-moblie text-area-front" :color="color_paperless_file_title" close @click:close="deleteFileWait(item)"><b>{{item.file_name}}</b>&nbsp;<i>({{ textLang.wait_upload }})</i></v-chip>
+              <v-chip class="ma-1 chip-moblie" v-if="!item.waitUpload" small dark color="#4CAF50" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.file_name }}</v-chip>
+              <v-chip v-if="item.waitUpload" small outlined class="ma-1 chip-moblie" color="#4CAF50" close @click:close="deleteFileWait(item)"><b>{{item.file_name}}</b>&nbsp;<i>({{ textLang.wait_upload }})</i></v-chip>
             </div>
           </v-row>
-          <v-row>
-            <v-col cols="12" md="4" lg="4" align-self="center" class="attach-file-title">{{ textLang.input_attach_title }}</v-col>
-            <v-col cols="12" md="8" lg="8">
-              <v-file-input show-size dense counter multiple :color="color_file_input" :placeholder="textLang.placeholder_file" class="file-input" v-model="selFiles">
+          <v-row class="add-file-modal-row">
+              <v-file-input show-size dense outlined counter multiple truncate-length="600" color="#4CAF50" :placeholder="textLang.placeholder_file" class="add-attach-file-box" v-model="selFiles">
                 <template v-slot:selection="{ text }">
-                  <v-chip small label dark :color="color_chip_file">{{ text }}</v-chip>
+                  <v-chip small dark color="#4CAF50" class="py-1 attach-file-chip">{{ text }}</v-chip>
                 </template>
               </v-file-input>
-            </v-col>
           </v-row>
         </v-card-text>
-        <v-card-actions class="pt-0 pb-12">
+        <v-card-actions class="pt-4 pb-5">
           <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-11 mr-4 save-setting-btn" @click="add_attach_dialog = false">{{ textLang.cancel_attach_btn }}</v-btn>
-          <v-btn depressed large :color="color_attach_btn" class="px-12 ml-4 save-setting-btn save-modal-font-btn" @click="saveAttachFiles()">{{ textLang.attach_btn }}</v-btn>
+          <v-btn outlined color="#4CAF50" class="px-8 mr-2 add-file-modal-btn" @click="add_attach_dialog = false">{{ textLang.cancel_attach_btn }}</v-btn>
+          <v-btn depressed dark color="#4CAF50" class="px-9 ml-2 add-file-modal-btn" @click="saveAttachFiles()">{{ textLang.attach_btn }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-container>
 </template>
 
 <script>
@@ -101,9 +100,9 @@
         }
       },
       startAttach(uploadingFiles, attFiles) {
-        this.selFiles = []
+        this.selFiles = uploadingFiles
         this.currentUser = sessionStorage.getItem("oneuser")
-        this.files = uploadingFiles
+        this.files = []
         this.attachedFiles = attFiles
         this.add_attach_dialog = true
       },
@@ -157,16 +156,37 @@
 </script>
 
 <style>
-  .attach-file-title {
+  .add-file-header-modal {
     font-family: "Sarabun", sans-serif;
     font-size: 16px;
-    color: black;
-    text-align: right;
+  }
+
+  .add-file-modal-row {
+    width: 100%;
+    margin: 0%;
+  }
+
+  .add-attach-file-box {
+    font-family: "Sarabun", sans-serif;
+    font-size: 13px;
+  }
+
+  .attach-file-chip {
+    white-space: unset;
+    height: auto !important;
+  }
+
+  .attach-file-chip.v-chip .v-chip__content {
+    display: block !important;
+  }
+
+  .add-file-modal-btn {
+    font-family: "Sarabun", sans-serif;
   }
 
   @media only screen and (max-width: 960px) {
-    .attach-file-title {
-      text-align: left;
+    .add-attach-file-box.v-file-input.v-text-field--outlined.v-input--dense .v-text-field__slot {
+      width: 91%;
     }
   }
 </style>
