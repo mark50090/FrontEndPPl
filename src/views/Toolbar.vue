@@ -159,14 +159,7 @@
       allInfo: []
     }),
     mounted(){
-      this.getUserDetail().then(()=>{ // set defualt business to the 1st of item in business list
-        if(!(sessionStorage.getItem('selected_business'))) this.selectedBiz = this.business[0]
-        // this.changeBiz()
-        else this.selectedBiz = JSON.parse(sessionStorage.getItem('selected_business'))
-        sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
-        this.isReady = true
-        this.getEmployeeInfo()
-      })
+      this.getUserDetail()
       EventBus.$on('loadingOverlay', this.changeLoading)
       this.checkCreateDocMenu()
       this.checkDocStyleMenu()
@@ -178,26 +171,23 @@
       changeLoading(isLoad) {
         this.loading_overlay = isLoad
       },
-      async getUserDetail(){ // get user detail to show name, email and business list
-        try {
-          var url = '/citizen/api/v1/detail'
-          var { data } = await this.axios.get(this.$api_url + url)
-          if(data) {
-            sessionStorage.setItem('name', `${data.data.first_name_th} ${data.data.last_name_th}`)
-            this.firstname = data.data.first_name_th
-            this.lastname = data.data.last_name_th
-            this.thai_email = data.data.thai_email
-            data.data.biz_detail.forEach(element => {
-              this.business.push(...element.getbiz)
-            });
-            this.loading_overlay = false
-          }else{
-            this.loading_overlay = false
-          }
-        } catch (error) {
-          console.log(error);
-          this.loading_overlay = false
-        }
+      getUserDetail(){ // get user detail to show name, email and business list
+        var userDetail = this.$store.state.userProfile
+        var sessionDetail = JSON.parse(sessionStorage.getItem('userProfile'))
+        sessionStorage.setItem('name', `${sessionDetail.first_name_th} ${sessionDetail.last_name_th}`)
+        this.firstname = sessionDetail.first_name_th
+        this.lastname = sessionDetail.last_name_th
+        this.thai_email = sessionDetail.thai_email
+        this.business = sessionDetail.biz_detail.map(detail => {
+          return detail.getbiz[0]
+        })
+        if(!(sessionStorage.getItem('selected_business'))) this.selectedBiz = this.business[0]
+        // this.changeBiz()
+        else this.selectedBiz = JSON.parse(sessionStorage.getItem('selected_business'))
+        sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
+        this.isReady = true
+        this.getEmployeeInfo()
+        this.loading_overlay = false
       },
       async getEmployeeInfo(){
         try {
