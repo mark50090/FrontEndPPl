@@ -93,22 +93,22 @@
             Default Business 
           </v-col>
           <!-- Default Business when it's not in editing mode -->
-          <v-col v-if="statedefualt_Business == false" align-self="center" class="pa-0">
+          <v-col align-self="center" class="pa-0">
             <v-row class="font-all">
               <v-col cols="12" md="6" lg="6" class="  all-font-color def-ic-status-point def-ic-status-point-mobile" align-self="center">
-                <v-icon v-if="this.confirmBusiness == 'Not Found'" class="ic-status-point" size="16" color="#9e9e9e" >mdi-circle</v-icon> <!-- FOR NOT FOUND default business -->
-                <v-icon  v-if="this.confirmBusiness != 'Not Found'" size="16" class="ic-status-point" color="#8BC34A">mdi-circle</v-icon>  <!--FOR default business is READY -->
-                {{confirmBusiness}} <!-- or Not Found -->
+                <!--<v-icon class="ic-status-point" size="16" color="#9e9e9e" >mdi-circle</v-icon> --> <!-- FOR NOT FOUND default business -->
+                <v-icon  size="16" class="ic-status-point" color="#8BC34A">mdi-circle</v-icon>  <!--FOR default business is READY -->
+                อินเทอร์เน็ตประเทศไทย <!-- or Not Found -->
               </v-col>
               <v-col align-self="center" cols="12" md="6" lg="6" class="def-btn-status-point-mobile def-btn-status-point">
-                <v-btn depressed dark color="#67C25D" small @click="stateBusinessOn()"> <!-- button for setting default business -->
+                <v-btn depressed dark color="#67C25D" small > <!-- button for setting default business -->
                   <v-icon size="16">mdi-cog</v-icon>
                 </v-btn>
               </v-col>          
             </v-row>
           </v-col> 
           <!-- Default Business when it's in editing mode -->
-          <v-col v-if="statedefualt_Business == true" align-self="center" class="pa-0">
+          <!-- <v-col v-if="statedefualt_Business == true" align-self="center" class="pa-0">
                 <v-row class="font-all">
                   <v-col cols="12" md="6" lg="6" class="position-dropdown-mobile">
                     <v-autocomplete class="font-dropdown ic-dropdown text-dropdown" append-icon="mdi-chevron-down" auto-select-first outlined dense hide-details color="#67C25D" v-model="selectedBiz" :items="get_biz_detail" item-text="getbiz[0].first_name_th"  return-object></v-autocomplete>
@@ -120,7 +120,7 @@
                     <v-btn depressed color="#67C25D" small dark @click="changeBiz()"> บันทึก</v-btn>
                   </v-col>
                 </v-row>
-          </v-col>
+          </v-col> -->
         </v-row>
         <v-divider></v-divider>
         <v-row class="font-all">
@@ -129,8 +129,8 @@
           </v-col>
           <v-col  class="font-all pl-4 pr-2 pt-4 all-font-color">
             <ul >
-              <li v-for="item in getBusiness" :key="item.first_name_th"> <!-- each business list -->
-                {{item.first_name_th}} 
+              <li v-for="item in removeDuplicateBusiness" :key="item"> <!-- each business list -->
+                {{item}} 
               </li>
             </ul>
           </v-col>
@@ -189,10 +189,11 @@ export default {
     username:'',
     get_biz_detail: [],
     getbiz_detail: [],
-    selectedBiz: '',
-    statedefualt_Business: false,
-    confirmBusiness: 'Not Found',
+    // selectedBiz: '',
+    // statedefualt_Business: false,
+    // confirmBusiness: 'Not Found',
     getBusiness: [],
+    removeDuplicateBusiness: [],
     noneInSelectedbiz: {getbiz:[{first_name_th: "ไม่มี"}]},
   }),
   mounted() {
@@ -222,36 +223,37 @@ export default {
           data.data.biz_detail.forEach(element => {
             this.get_biz_detail.push(element)
             for (let index = 0; index < this.get_biz_detail.length; index++) {
-              this.getBusiness.push(this.get_biz_detail[index].getbiz[0])
+              this.getBusiness.push(this.get_biz_detail[index].getbiz[0].first_name_th)
             }
           })
         }
+        this.removeDuplicateBusiness = [...new Set(this.getBusiness)] 
       } catch (error) {
         console.log(error);
       }
     },
-    changeBiz() {
-      if ((this.selectedBiz.getbiz[0].first_name_th == '') || 
-          (this.selectedBiz.getbiz[0].first_name_th == 'ไม่มี') || 
-          (this.selectedBiz.getbiz[0].first_name_th == undefined)) {
-        this.confirmBusiness = 'Not Found'
-        this.get_biz_detail.shift()
-        this.statedefualt_Business = false
-      }
-      else {
-        this.confirmBusiness = this.selectedBiz.getbiz[0].first_name_th
-        this.get_biz_detail.shift()
-        this.statedefualt_Business = false
-      }  
-    },
-    stateBusinessOn() {
-      this.statedefualt_Business = true
-      this.get_biz_detail.unshift(this.noneInSelectedbiz)
-    },
-    stateBusinessOff() {
-      this.get_biz_detail.shift()
-      this.statedefualt_Business = false
-    },
+    // changeBiz() {
+    //   if ((this.selectedBiz.getbiz[0].first_name_th == '') || 
+    //       (this.selectedBiz.getbiz[0].first_name_th == 'ไม่มี') || 
+    //       (this.selectedBiz.getbiz[0].first_name_th == undefined)) {
+    //     this.confirmBusiness = 'Not Found'
+    //     this.get_biz_detail.shift()
+    //     this.statedefualt_Business = false
+    //   }
+    //   else {
+    //     this.confirmBusiness = this.selectedBiz.getbiz[0].first_name_th
+    //     this.get_biz_detail.shift()
+    //     this.statedefualt_Business = false
+    //   }  
+    // },
+    // stateBusinessOn() {
+    //   this.statedefualt_Business = true
+    //   this.get_biz_detail.unshift(this.noneInSelectedbiz)
+    // },
+    // stateBusinessOff() {
+    //   this.get_biz_detail.shift()
+    //   this.statedefualt_Business = false
+    // },
   }
 }
 </script>
