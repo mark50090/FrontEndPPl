@@ -231,16 +231,15 @@ export default {
       }
     },
     changeBiz() {
-      console.log(this.selectedBiz.first_name_th)
-      if ((this.selectedBiz.first_name_th == '') || 
-          (this.selectedBiz.first_name_th == 'ไม่มี') || 
-          (this.selectedBiz.first_name_th == undefined)) {
+      if ((this.selectedBiz.getbiz[0].first_name_th == '') || 
+          (this.selectedBiz.getbiz[0].first_name_th == 'ไม่มี') || 
+          (this.selectedBiz.getbiz[0].first_name_th == undefined)) {
         this.confirmBusiness = 'Not Found'
         this.get_biz_detail.shift()
         this.statedefualt_Business = false
       }
       else {
-        this.confirmBusiness = this.selectedBiz.first_name_th
+        this.confirmBusiness = this.selectedBiz.getbiz[0].first_name_th
         this.get_biz_detail.shift()
         this.statedefualt_Business = false
       }  
