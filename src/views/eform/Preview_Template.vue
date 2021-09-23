@@ -1,41 +1,39 @@
 <template>
-  <div class="content-show-tem2">
-    <v-overlay :value="notReady" absolute opacity="0.3" z-index="11" class="loading-content">
-      <!-- <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> -->
-      <v-progress-linear indeterminate rounded height="15" :background-color="color_loading_bar_bg" :color="color_loading_bar" class="loading-bar"></v-progress-linear>
+  <div>
+    <v-overlay :value="notReady" absolute opacity="0.3" z-index="9">
+      <img width="100px" src="../../assets/loader.gif" class="loading-circle">
     </v-overlay>
-    <v-toolbar flat class="create-menu-bar">
+    <v-toolbar flat class="create-menu-bar preview-form-bar">
       <!-- top bar -->
-      <v-btn v-if="!isPreview && ready" text class="px-0 back-data-btn" @click="back()">
-        <v-icon large :color="color_chevron_left">mdi-chevron-left</v-icon>
+      <v-btn v-if="!isPreview && ready" text class=" mr-1 px-0 back-data-btn" @click="back()">
+        <v-icon large color="#4CAF50">mdi-chevron-left</v-icon>
         <b>{{ textLang.tabMenubar.back_page }}</b>
       </v-btn>
-      <v-btn v-if="!(!isPreview && ready)" text class="px-0 back-show-btn" @click="backToMyForm()">
-        <v-icon large :color="color_chevron_left">mdi-chevron-left</v-icon>
-        <b>{{ textLang.tabMenubar.back_to }}</b>
+      <v-btn v-if="!(!isPreview && ready)" text class="px-0 mr-1 back-show-btn" @click="backToMyForm()">
+        <v-icon large color="#4CAF50">mdi-chevron-left</v-icon>
+        <b>ออกจากแบบฟอร์มนี้</b>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn v-if="isOwner" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn hidden-sm-and-down" @click="openCancel()">
+      <v-btn v-if="isOwner" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
         <v-icon>mdi-file-cancel-outline</v-icon>
         <span class="btn-expan-word">{{ textLang.tabMenubar.cancel_doc }}</span>
       </v-btn>
-      <v-badge left overlap color="red" class="mr-2 hidden-sm-and-down">
-        <span v-if="attachedFiles.length" slot="badge">{{ attachedFiles.length }}</span>
-          <v-btn outlined large color="grey lighten-1" class="mr-2 export-json-btn" @click="openAttachFile()">
-            <v-icon class="mr-2">mdi-text-box-search-outline</v-icon>
-              {{ textLang.tabMenubar.view_attachment }}
-          </v-btn>
-      </v-badge>
+      <!-- <v-badge bordered left overlap color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mr-2 display-pc-only">
+        <v-btn outlined large color="grey lighten-1" class="mr-2 px-2 export-json-btn" @click="openAttachFile()">
+          <v-icon class="mr-2">mdi-text-box-search-outline</v-icon>
+            {{ textLang.tabMenubar.view_attachment }}
+        </v-btn>
+      </v-badge> -->
 
-      <!-- <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready" large depressed :color="color_savedraft" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft hidden-sm-and-down" @click="openDocName(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
-      <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" large depressed dark :color="color_save_doc" class="save-doc-btn" @click="checkSave()">{{ textLang.tabMenubar.save_doc }}</v-btn>
-      <!-- <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed dark :color="color_savedraft" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft hidden-sm-and-down" :disabled="buttonClicked" @click="saveStep(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
-      <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed dark :color="color_btn_saveStep" class="btn-saveStep" :disabled="buttonClicked" @click="openSignature()">{{ textLang.tabMenubar.save_doc }}</v-btn>  <!--mobile-->
+      <!-- <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready" large depressed color="#C2EB81" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft display-pc-only" @click="openDocName(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
+      <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" large depressed dark color="#4CAF50" class="save-doc-btn" @click="checkSave()">{{ textLang.tabMenubar.save_doc }}</v-btn>
+      <!-- <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed color="#C2EB81" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft display-pc-only" :disabled="buttonClicked" @click="saveStep(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
+      <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed color="#4CAF50" class="btn-saveStep" :disabled="buttonClicked" @click="openSignature()">{{ textLang.tabMenubar.save_doc }}</v-btn>  <!-- mobile -->
       
       <!-- select next template button -->
       <v-menu offset-y z-index="11">
         <template v-slot:activator="{ on }">
-          <v-btn v-show="((isPreview && ready && !editStep && !draftPreview) || isNextFill) && nextTemplates.length" large depressed :color="color_next_temp_btn" class="ml-3 next-temp-btn" v-on="on">{{ textLang.tabMenubar.next_temp_btn }} <v-icon>mdi-menu-down</v-icon></v-btn>
+          <v-btn v-show="((isPreview && ready && !editStep && !draftPreview) || isNextFill) && nextTemplates.length" large depressed dark color="#525659" class="ml-3 next-temp-btn" v-on="on">{{ textLang.tabMenubar.next_temp_btn }} <v-icon>mdi-menu-down</v-icon></v-btn>
         </template>
         <v-list dense>
           <v-list-item v-for="item in nextTemplates" :key="item.temp_code">
@@ -43,12 +41,12 @@
           </v-list-item>
         </v-list>
       </v-menu>
-     
-      <v-btn v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" large depressed :color="color_pplLoadTemplate" class="ml-4 export-json-btn send-ppl-btn hidden-sm-and-down" :loading="ppl_loading" :disabled="ppl_loading" @click="pplLoadTemplate()">{{ textLang.offer_dialog.offer }}</v-btn>
+
+      <v-btn v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" large depressed color="#4CAF50" class="ml-4 px-3 export-json-btn send-ppl-btn display-pc-only" :loading="ppl_loading" :disabled="ppl_loading" @click="pplLoadTemplate()">{{ textLang.offer_dialog.offer }}</v-btn>
       
       <v-menu offset-y z-index="11">
         <template v-slot:activator="{ on }">
-           <v-btn v-on="on" depressed large color="grey lighten-2" class="ml-4 pr-2 pl-3 hidden-sm-and-down more-en">
+           <v-btn v-on="on" depressed large color="grey lighten-2" class="ml-4 pr-2 pl-3 display-pc-only more-en">
             {{ textLang.tabMenubar.more }}
             <v-icon>mdi-menu-down</v-icon>
           </v-btn>
@@ -74,7 +72,7 @@
           </v-list-item>
           <v-list-item v-if="((isPreview && ready && !editStep) || (isPublic && isPreview)) && !draftPreview" @click="download('download')">
             <v-list-item-icon>
-              <v-icon>mdi-inbox-arrow-down</v-icon>
+              <v-icon>mdi-download</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item>
@@ -97,71 +95,70 @@
       <!-- button for mobile after save -->
       <v-menu offset-y z-index="11">
         <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on" class="mr-2 hidden-md-and-up">
+          <v-btn icon color="#4CAF50" v-on="on" class="display-mobile-only">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
         <v-list>
           <v-list-item @click="openAttachFile()">
-            <v-list-item-icon><v-icon>mdi-text-box-search-outline</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-text-box-search-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">
-              <v-badge color="red" class="show-num-attach-file">
-                <span v-if="attachedFiles.length" slot="badge">{{ attachedFiles.length }}</span>
-                  {{ textLang.tabMenubar.view_attachment }} &nbsp;&nbsp;
+              <v-badge bordered inline color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mt-0">
+                {{ textLang.tabMenubar.view_attachment }}
               </v-badge>
             </v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(isPreview && ready && !editStep) || (isPublic && isPreview)" class="button-mobile" @click="openRefDoc()">
+          <v-list-item v-if="(isPreview && ready && !editStep) || (isPublic && isPreview)" @click="openRefDoc()">
             <v-list-item-icon>
-              <v-icon>mdi-file-eye-outline</v-icon>
+              <v-icon color="#4CAF50">mdi-file-eye-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.view_ref_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(allUserStep || (!isPreview && ready && !editStep && !allUserStep) || (editStep && !allUserStep)) && !isPublic" class="button-mobile" @click="dialogFiles = true">
+          <v-list-item v-if="(allUserStep || (!isPreview && ready && !editStep && !allUserStep) || (editStep && !allUserStep)) && !isPublic" @click="dialogFiles = true">
             <v-list-item-icon>
-              <v-icon>mdi-paperclip</v-icon>
+              <v-icon color="#4CAF50">mdi-paperclip</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="editStep && !allUserStep && !isPublic && !draftPreview" class="button-mobile" :disabled="buttonClicked" @click="saveStep(true)">
+          <v-list-item v-if="editStep && !allUserStep && !isPublic && !draftPreview" :disabled="buttonClicked" @click="saveStep(true)">
             <v-list-item-icon>
-              <v-icon>mdi-playlist-edit</v-icon>
+              <v-icon :disabled="buttonClicked" color="#4CAF50">mdi-file-hidden</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.save_draft }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && false " class="button-mobile" @click="openDocName(true)">
+          <v-list-item v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && false " @click="openDocName(true)">
             <v-list-item-icon>
-              <v-icon>mdi-playlist-edit</v-icon>
+              <v-icon color="#4CAF50">mdi-file-hidden</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.save_draft }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isPreview && ready && !editStep && !isPublic && !draftPreview" @click="exportValue()">
             <v-list-item-icon>
-              <v-icon>mdi-open-in-new</v-icon>
+              <v-icon color="#4CAF50">mdi-open-in-new</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">Export file Json Key</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isPreview && ready && !editStep && !draftPreview" @click="download('download')">
             <v-list-item-icon>
-              <v-icon>mdi-inbox-arrow-down</v-icon>
+              <v-icon color="#4CAF50">mdi-download</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isPreview && ready && !editStep && !isPublic && !isFlow && !draftPreview && !isAdminPreview" @click="copyDocument()">
             <v-list-item-icon>
-              <v-icon>mdi-content-copy</v-icon>
+              <v-icon color="#4CAF50">mdi-content-copy</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.copy }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isPreview && ready && !editStep && !isPublic && !isFlow && !draftPreview" @click="openForwardMail()">
             <v-list-item-icon>
-              <v-icon>mdi-email-send-outline</v-icon>
+              <v-icon color="#4CAF50">mdi-email-send-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.forward_mail }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" @click="pplLoadTemplate()">
             <v-list-item-icon>
-              <v-icon>mdi-draw</v-icon>
+              <v-icon color="#4CAF50">mdi-draw</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.offer_dialog.offer }}</v-list-item-title>
           </v-list-item>
@@ -174,11 +171,11 @@
           <!-- paper menu -->
           <v-spacer></v-spacer>
           <!-- zoom button -->
-          <v-btn depressed small color="grey lighten-2" class="hidden-sm-and-down" @click="zoomOut()">
+          <v-btn depressed small color="grey lighten-2" class="display-pc-only" @click="zoomOut()">
             <v-icon color="#aaaaaa">mdi-magnify-minus-outline</v-icon>
           </v-btn>
-          <span class="mx-3 zoom-percent hidden-sm-and-down">{{zoom_level}} %</span>
-          <v-btn depressed small color="grey lighten-2" class="hidden-sm-and-down" @click="zoomIn()">
+          <span class="mx-3 zoom-percent display-pc-only">{{zoom_level}} %</span>
+          <v-btn depressed small color="grey lighten-2" class="display-pc-only" @click="zoomIn()">
             <v-icon color="#aaaaaa">mdi-magnify-plus-outline</v-icon>
           </v-btn>
           <!-- page number -->
@@ -191,7 +188,7 @@
           </v-btn>
           <v-spacer></v-spacer>
           <!-- comments button -->
-          <v-btn v-if="open_comment == false && docComment.length" depressed height="100%" color="grey lighten-2" class="comment-preview-btn" @click="toggleComment()">{{ textLang.tabMenubar.open_comment_btn }}<br class="hidden-md-and-up">{{ textLang.tabMenubar.comment_btn }}</v-btn>
+          <v-btn v-if="open_comment == false && docComment.length" depressed height="100%" color="grey lighten-2" class="comment-preview-btn" @click="toggleComment()">{{ textLang.tabMenubar.open_comment_btn }}<br class="display-mobile-only">{{ textLang.tabMenubar.comment_btn }}</v-btn>
           <v-btn v-else-if="open_comment == true && docComment.length" depressed x-small height="100%" color="grey lighten-2" class="px-0" @click="toggleComment()"><v-icon large>mdi-chevron-right</v-icon></v-btn>
         </v-toolbar>
         <v-row justify="center" class="mt-3 temp-preview-name">
@@ -200,13 +197,13 @@
             <span v-if="templates.document_name != null">: {{ templates.document_name }}</span>
           </h3>
         </v-row>
-        <v-row id="paper-block" justify="center" class="mt-3 preview-paper-block">
-          <v-col cols="12" md="10" lg="10" justify-self="center">
+        <v-row id="paper-block" justify="center" class="mt-2 pl-2 pb-2 preview-paper-block">
+          <v-col cols="12" md="12" lg="12" class="pa-0">
             <v-sheet  id="workpaper" :width="current_paper_width + 'px'" :height="current_paper_height + 'px'" :elevation="2" color="white" class="main-paper" style="position: relative; padding: 0px;">
               <div id="preview-paper" style="background-color:white; width:100%; ">
-                <v-overlay v-show="pages[currentPage-1] && pages[currentPage-1].isHide" opacity="0.30" z-index="11" color="red" absolute>
+                <!-- <v-overlay v-show="pages[currentPage-1] && pages[currentPage-1].isHide" opacity="0.30" z-index="11" color="red" absolute>
                   <img src="../../assets/hide-paper.png" :width="current_paper_width + 'px'" :height="current_paper_height + 'px'" />
-                </v-overlay>
+                </v-overlay> -->
                 <div :id="item.name" v-for="item in template_array" :key="item.name" v-show="!item.style.hideDisplay && !item.style.hidePreview">
                   <v-layout v-if="item.show && item.page == currentPage && !item.invisible" style="height:100%;">
                     <span :class="item.name+ '-obj'" v-if="!item.hideBysection && item.object_type == 'autofillbox'" :style="'width:100%;' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + '; z-index:5;'">
@@ -221,7 +218,7 @@
                       </div>
                     </span>
                     <span :class="item.name+ '-obj'" v-if="!item.hideBysection && item.object_type == 'datepickerbox'" :style="'width:100%; z-index:' + String(item.style.zIndex) +'; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'">{{item.show_value}}</span>
-                    <pre :class="item.name+ '-obj'" class="text-area-front" v-if="!item.hideBysection && item.object_type == 'textareabox'" :style="'width:100%; z-index:' + String(item.style.zIndex) +'; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'">{{item.value}}</pre>
+                    <pre :class="item.name+ '-obj'" class="text-area-front textarea-data" v-if="!item.hideBysection && item.object_type == 'textareabox'" :style="'width:100%; z-index:' + String(item.style.zIndex) +'; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'">{{item.value}}</pre>
                     <span :class="item.name+ '-obj'" :style="'z-index:' + String(item.style.zIndex) +'; white-space: pre; width:100%; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'" v-if="!item.hideBysection && item.object_type != 'datatable' && item.object_type != 'inputimagebox' && item.object_type != 'inputbox' && item.object_type != 'calculatebox' && item.object_type != 'checkbox' && item.object_type != 'imagebox' && item.object_type != 'datepickerbox' && item.object_type != 'autofillbox' && item.object_type != 'number2textbox'&& item.object_type != 'table'&& item.object_type != 'line' && item.object_type != 'textareabox' && item.object_type != 'signbox' && item.object_type != 'rectangle' && item.object_type != 'dropdownbox'  && item.object_type != 'texteditorbox'">{{item.value}}</span>
                     <span :class="item.name+ '-obj'" :style="'z-index:' + String(item.style.zIndex) +'; white-space: pre; width:100%; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'" v-if="!item.hideBysection && item.object_type == 'dropdownbox'">{{item.show_value}}</span>
                     <span :class="item.name+ '-obj'" :style="'z-index:' + String(item.style.zIndex) +'; width:100%; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'" v-if="!item.hideBysection && item.object_type == 'texteditorbox'" class="editor-box-preview" v-html="item.value"></span>
@@ -234,8 +231,8 @@
                     <span :class="item.name+ '-obj'" v-if="!item.hideBysection && item.object_type == 'calculatebox'" :style="'width:100%; z-index:' + String(item.style.zIndex) +'; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'">{{numberToComma(item.valueShow, item.style.isComma)}}{{item.style.suffix}}</span>
                     <span :class="item.name+ '-obj'" v-if="!item.hideBysection && item.object_type == 'number2textbox'" :style="'width:100%; z-index:' + String(item.style.zIndex) +'; text-align:' + item.style.font_align + ';' + item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'">{{item.value.show_value}}</span>
                     <div :class="item.name+ '-obj'" v-if="item.object_type == 'checkbox'" :style="'z-index:' + String(item.style.zIndex) +';'">
-                      <img v-if="!item.hideBysection && !item.value" :width="item.style.font_size + 'px'" src="https://eform.one.th/eform_api/api/v1/view_image?file_name=50214806880_3fc2cb62-99be-43b3-bfbb-7274606298c3.png"/>
-                      <img v-if="!item.hideBysection && item.value" :width="item.style.font_size + 'px'" src="https://eform.one.th/eform_api/api/v1/view_image?file_name=50214806880_84c82695-0eff-4e1f-9e42-f07d49104a84.png"/>
+                      <img v-if="!item.hideBysection && !item.value" :width="item.style.font_size + 'px'" class="check-box-preview" src="https://eform.one.th/eform_api/api/v1/view_image?file_name=50214806880_3fc2cb62-99be-43b3-bfbb-7274606298c3.png"/>
+                      <img v-if="!item.hideBysection && item.value" :width="item.style.font_size + 'px'" class="check-box-preview" src="https://eform.one.th/eform_api/api/v1/view_image?file_name=50214806880_84c82695-0eff-4e1f-9e42-f07d49104a84.png"/>
                       <span :style="item.font_style + 'font-size: ' + item.style.font_size + 'px;' + 'color: ' + item.style.font_color + ';'">{{item.text}}</span>
                     </div>
                     <div :class="item.name+ '-obj'" v-if="item.object_type == 'imagebox'" :style="'z-index:' + String(item.style.zIndex) +';'">
@@ -451,33 +448,35 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="dialogFiles" scrollable persistent max-width="650px">
+    <v-dialog v-model="dialogFiles" scrollable persistent max-width="500px">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-          <b>{{ textLang.offer_dialog.doc_system }}</b>
+        <v-card-title>
+          <span class="attach-preview-modal-header">แนบเอกสารเพิ่มเติม</span>
+          <v-spacer></v-spacer>
+          <v-btn icon dark small color="black" @click="dialogFiles = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
         </v-card-title>
-        <v-card-text class="px-12 pt-5">
-          <v-row class="row-crad-files">
+        <v-card-text class="pt-4 pb-0">
+          <v-row v-if="attachedFiles.length > 0" class="row-crad-files">
             <div v-for="item in attachedFiles"  :key="item.file_id">
-              <v-chip class="ma-1 chip-moblie" v-if="!item.waitUpload" small label dark :color="color_downloadfile" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.file_name }}</v-chip>
-              <v-chip v-if="item.waitUpload" small label outlined class="ma-1 chip-moblie text-area-front" :color="color_paperless_file_title" close @click:close="deleteFileWait(item)"><b>{{item.file_name}}</b>&nbsp;<i>({{ textLang.offer_dialog.wait_upload }})</i></v-chip>
+              <v-chip class="ma-1 chip-moblie" v-if="!item.waitUpload" small dark color="#4CAF50" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.file_name }}</v-chip>
+              <v-chip v-if="item.waitUpload" small outlined class="ma-1 chip-moblie" color="#4CAF50" close @click:close="deleteFileWait(item)"><b>{{item.file_name}}</b>&nbsp;<i>({{ textLang.offer_dialog.wait_upload }})</i></v-chip>
             </div>
           </v-row>
-          <v-row>
-            <v-col cols="12" md="4" lg="4" align-self="center" class="paperless-file-title" >{{ textLang.offer_dialog.add_attachments }}</v-col>
-            <v-col cols="12" md="8" lg="8">
-              <v-file-input show-size dense counter multiple :color="color_file_input" :placeholder="textLang.offer_dialog.please_choose" class="file-input" id="file" v-model="holdFiles">
-                <template v-slot:selection="{ text }">
-                  <v-chip small label dark :color="color_text_input">{{ text }}</v-chip>
-                </template>
-              </v-file-input>
-            </v-col>
+          <v-row class="row-crad-files">
+            <!-- <v-col cols="12" md="4" lg="4" align-self="center" class="paperless-file-title" >{{ textLang.offer_dialog.add_attachments }}</v-col> -->
+            <v-file-input show-size dense outlined counter multiple truncate-length="600" color="#4CAF50" :placeholder="textLang.offer_dialog.please_choose" class="attach-file-preview-box" id="file" v-model="holdFiles">
+              <template v-slot:selection="{ text }">
+                <v-chip small dark color="#4CAF50" class="py-1 attach-file-preview-chip">{{ text }}</v-chip>
+              </template>
+            </v-file-input>
           </v-row>
         </v-card-text>
-        <v-card-actions class="pt-0 pb-12">
+        <v-card-actions class="pt-4 pb-5">
           <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-11 mr-4 save-setting-btn" @click="holdFiles=[]; dialogFiles = false">{{ textLang.offer_dialog.cancel }}</v-btn>
-          <v-btn depressed large :color="color_ok" class="px-12 ml-4 save-setting-btn save-modal-font-btn" @click="dialogFiles = false; changeHoldFiles()" >{{ textLang.offer_dialog.ok }}</v-btn>
+          <v-btn outlined color="#4CAF50" dark class="px-8 mr-2 attach-file-modal-btn" @click="holdFiles=[]; dialogFiles = false">{{ textLang.offer_dialog.cancel }}</v-btn>
+          <v-btn depressed dark color="#4CAF50" class="px-9 ml-2 attach-file-modal-btn" @click="dialogFiles = false; changeHoldFiles()" >{{ textLang.offer_dialog.ok }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -498,7 +497,8 @@ import ForwardMailModal from '../../components/eform/ForwardMailModal'
 
 export default {
   computed: mapState({
-    objectTemplate: state => state.objectTemplate
+    objectTemplate: state => state.objectTemplate,
+    uploadedFile: state => state.uploadedFile
   }),
   components: {
     InputDocumentNameModal,
@@ -720,6 +720,7 @@ export default {
     EventBus.$off('saveSign')
     EventBus.$off('changeLang')
     EventBus.$off('setPdfPass')
+    EventBus.$off("emitSaveDocument")
     if(this.isSaveTemplate) {
       this.returnEform(this.eform_id)
     }
@@ -746,11 +747,13 @@ export default {
     }
     EventBus.$on("getDocName", this.save)
     EventBus.$on('saveSign', this.saveSign)
-    EventBus.$on('changeLang', this.changeLange)
+    EventBus.$on("emitSaveDocument", this.saveDocument)
+    EventBus.$on('changeAttachFiles', this.changeUploadingFiles)
+    // EventBus.$on('changeLang', this.changeLange)
     EventBus.$on('setPdfPass', this.setPdfPass)
     this.refDataDoc = JSON.parse(sessionStorage.getItem('refDataDoc'))
-    this.changeLange()
-    this.changeColor()
+    // this.changeLange()
+    // this.changeColor()
   },
   watch: {
     sleep(val) {
@@ -766,9 +769,9 @@ export default {
       }
     },
     selectedDocumentType() {
-      if (this.dialog_ppl) {
-        this.getPplTemplate()
-      }
+      // if (this.dialog_ppl) {
+      // this.getPplTemplate()
+      // }
     },
     orientation() {
       if (this.orientation == "LANDSCAPE") {
@@ -854,7 +857,7 @@ export default {
             waitUpload: true
           })
         })
-        this.uploadAttachFile('', this.eform_id)
+        // this.uploadAttachFile('', this.eform_id)
       }
       this.attachedFiles = holdFiles
       // this.$store.commit('setUploadedFile',this.files)
@@ -882,7 +885,7 @@ export default {
       $("#workpaper").css("zoom", String(this.zoom_level) + "%")
     },
     backToMyForm() {
-      this.$router.push({ path: "/my_form" })
+      this.$router.push({ path: "/form" })
     },
     moveToPage(pnum) {
       if (pnum != 0 && pnum <= this.pages.length) {
@@ -942,6 +945,7 @@ export default {
       } else {
         if (typeof sessionStorage.getItem("template_array") === "undefined" ||sessionStorage.getItem("template_array") == "false") {
           var objectTemp = await this.getTemplateTemp(JSON.parse(sessionStorage.getItem("template_array_code")))
+          this.files = await this.getTempFiles()
           this.template_array = objectTemp.template_array
           this.dataTableObjectArray = objectTemp.dataTableObjectArray
         } else {
@@ -974,10 +978,10 @@ export default {
         }
         // this.files = this.$store.state.uploadedFile
         this.uploadFolder = sessionStorage.getItem('uploadFolder')
-        if (tempPplCode && tempPplCode[0].document_type) {
-          this.defaultPplTemplate = tempPplCode[0].code
-          this.template_paperless_code = tempPplCode[0].code
-        }
+        // if (tempPplCode && tempPplCode[0].document_type) {
+        //   this.defaultPplTemplate = tempPplCode[0].code
+        //   this.template_paperless_code = tempPplCode[0].code
+        // }
         this.pageOrientation = JSON.parse(
           sessionStorage.getItem("orientation")
         )
@@ -1059,6 +1063,9 @@ export default {
       //   }
       // }
     },
+    async getTempFiles() {
+      return this.uploadedFile
+    },
     async getValue(eform_id) {
       try {
         await this.returnEform(eform_id)
@@ -1133,10 +1140,10 @@ export default {
           }
 
           if (this.templates.ppl_status_upload != "OK" && !this.templates.signing && (sessionStorage.getItem('isUploaded') != 'true')) {
-            if (this.templates.ppl_template_code && this.templates.ppl_template_code[0].document_type) {
-              this.template_paperless_code = this.templates.ppl_template_code[0].code
-              this.defaultPplTemplate = this.templates.ppl_template_code[0].code
-            }
+            // if (this.templates.ppl_template_code && this.templates.ppl_template_code[0].document_type) {
+            //   this.template_paperless_code = this.templates.ppl_template_code[0].code
+            //   this.defaultPplTemplate = this.templates.ppl_template_code[0].code
+            // }
             this.uploadAble = true
           }
           if(this.isFlow && !this.templates.signing && (sessionStorage.getItem('isUploaded') != 'true')) {
@@ -1165,17 +1172,22 @@ export default {
           this.syncValue()  
         } else if(data.result == 'ER') {
           if(data.messageER == 'RESERVED') {
-            this.$router.push('/my_form')
+            this.$router.push('/form')
             this.$swal({
-              type: 'warning',
-              html: '<span class="alert-error"><b>แบบฟอร์มถูกใช้งานโดยผู้ใช้อื่น</b></span>',
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+              text: 'แบบฟอร์มถูกใช้งานโดยผู้ใช้อื่น',
               showCloseButton: true,
               showConfirmButton: false,
-              background: 'white',
+              timer: 5000,
               customClass: {
-                popup: 'border-error'
-              },
-              closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
             })
           }
         }
@@ -1183,7 +1195,7 @@ export default {
         this.notReady = false
         if (err.response != null) {
           if (err.response.status == 401) {
-            this.$router.push("/login")
+            this.$router.push("/notfound")
           }
         } else {
           console.log(err.message)
@@ -1753,13 +1765,20 @@ export default {
       }
       EventBus.$emit('openAttachFile', folderAttach)
     },
+    AddAttachFile() {
+      console.log("yayay")
+        var uploadingFiles = this.files
+        var attFiles = []
+        EventBus.$emit('attachFiles', uploadingFiles, attFiles)
+      },
     checkSave() {
-      var flowStatus = JSON.parse(sessionStorage.getItem("template_option")).status_flow_permission
-      if(!flowStatus) {
-        this.pplLoadTemplate()
-      } else {
-        this.openDocName(false)
-      }
+      this.openDocName(false)
+      // var flowStatus = JSON.parse(sessionStorage.getItem("template_option")).status_flow_permission
+      // if(!flowStatus) {
+      //   this.pplLoadTemplate()
+      // } else {
+      //   this.openDocName(false)
+      // }
     },
     saveName(thenUpload) {
       if(this.pplSubject && (!this.isPdfLock || (this.isPdfLock && this.pdfPasswordSetting))) {
@@ -1804,13 +1823,14 @@ export default {
         }
         var caStep = this.isCa
         var signOnly = sessionStorage.getItem('signOnlyStep') == 'true'
-        if(!caStep) {
-          var flowCa = flowPermission.find(item => item.ppl_sign[0].activity_code.includes("A03"))
-          if(flowCa) {
-            caStep = this.allUserStep
-          }
-        }
-        EventBus.$emit("openInputDocName", flowPermission, caStep, signOnly)
+        // if(!caStep) {
+        //   var flowCa = flowPermission.find(item => item.ppl_sign[0].activity_code.includes("A03"))
+        //   if(flowCa) {
+        //     caStep = this.allUserStep
+        //   }
+        // }
+        // EventBus.$emit("openInputDocName", flowPermission, caStep, signOnly)
+        this.saveDocument(temp_option.template_name, temp_option)
       }
     },
     // checkName() {
@@ -1942,56 +1962,59 @@ export default {
           if(data.response_bi && data.response_bi.Warning_Detail!=null){
             if(data.response_bi.Warning_Massager == 'green') {
               this.$swal({
-                type: "success",
-                html: '<span class="alert-bi-success"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                showCloseButton: true,
-                customClass: {
-                  popup: 'border-success'
-                },
-                showConfirmButton: false,
-                background: "white",
-                position: "top",
-                timer: 15000,
                 backdrop: false,
-                closeButtonHtml: '<span class="close-alert">&times;</span>',
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             } else if(data.response_bi.Warning_Massager == 'yellow') {
               this.$swal({
-                imageUrl: 'https://www.img.in.th/images/9bcaca611aad241742648c1d11c8e579.png',
-                imageWidth: 100,
-                width: 640,
-                html: '<br><span class="alert-bi-warning"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                showCloseButton: true,
-                customClass: {
-                  popup: 'border-warning'
-                },
-                showConfirmButton: false,
-                background: "white",
-                position: "top",
-                timer: 15000,
                 backdrop: false,
-                closeButtonHtml: '<span class="close-alert-warning">&times;</span>',
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             } else if(data.response_bi.Warning_Massager == 'red') {
               this.$swal({
-                type: 'error',
-                width: 640,
-                html: '<span class="alert-bi-error"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                showCloseButton: true,
-                customClass: {
-                  popup: 'border-error'
-                },
-                showConfirmButton: false,
-                background: "white",
-                position: "top",
-                timer: 15000,
                 backdrop: false,
-                closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             }
           }
           if (this.files.length) {
-            this.uploadAttachFile(temp_option.doc_number_eform, temp_option.e_id)
+            // this.uploadAttachFile(temp_option.doc_number_eform, temp_option.e_id)
           }
           // if(typeof sessionStorage.getItem('template_array')  == 'undefined' || sessionStorage.getItem('template_array') == 'false') {
           //   this.deleteTemplateTemp(JSON.parse(sessionStorage.getItem('template_array_code')))
@@ -2036,40 +2059,43 @@ export default {
                 this.pplLoadTemplate()
               }
             } else {
-              this.$router.push({ path: "/my_form" })
+              this.$router.push({ path: "/form" })
             }
           }
         } else {//result = ER
           if(data.response_bi && data.response_bi.Warning_Detail!=null){
             this.$swal({
-              type: 'error',
-              width: 640,
-              html: '<span class="alert-bi-error"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-              showCloseButton: true,
-              customClass: {
-                popup: 'border-error'
-              },
-              showConfirmButton: false,
-              background: "white",
-              position: "top",
-              timer: 15000,
               backdrop: false,
-              closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              text: data.response_bi.Warning_Detail,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 15000,
+              customClass: {
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
             })
           } else if(data.messageER == "already save") {
             this.$swal({
-              type: 'error',
-              html: '<span class="alert-error"><b>'+ this.textLang.offer_dialog.already_save +'</b></span>',
-              showCloseButton: true,
-              customClass: {
-                popup: 'border-error'
-              },
-              showConfirmButton: false,
-              background: "white",
-              position: "top",
-              timer: 15000,
               backdrop: false,
-              closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              text: 'บันทึกเอกสารล้มเหลว เนื่องจากเอกสารในลำดับนี้ถูกบันทึกแล้ว',
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 15000,
+              customClass: {
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
             })
           }
         }
@@ -2232,70 +2258,74 @@ export default {
           if(data.response_bi && data.response_bi.Warning_Detail!=null){
             if(data.response_bi.Warning_Massager == 'green') {
               this.$swal({
-                type: "success",
-                html: '<span class="alert-bi-success"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                showCloseButton: true,
-                customClass: {
-                  popup: 'border-success'
-                },
-                showConfirmButton: false,
-                background: "white",
-                position: "top",
-                timer: 15000,
                 backdrop: false,
-                closeButtonHtml: '<span class="close-alert">&times;</span>',
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             } else if(data.response_bi.Warning_Massager == 'yellow') {
               this.$swal({
-                imageUrl: 'https://www.img.in.th/images/9bcaca611aad241742648c1d11c8e579.png',
-                imageWidth: 100, 
-                width: 640,
-                html: '<br><span class="alert-bi-warning"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                showCloseButton: true,
-                customClass: {
-                  popup: 'border-warning'
-                },
-                showConfirmButton: false,
-                background: "white",
-                position: "top",
-                timer: 15000,
                 backdrop: false,
-                closeButtonHtml: '<span class="close-alert-warning">&times;</span>',
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             } else if(data.response_bi.Warning_Massager == 'red') {
               this.$swal({
-                type: 'error',
-                width: 640,
-                html: '<span class="alert-bi-error"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-                showCloseButton: true,
-                customClass: {
-                  popup: 'border-error'
-                },
-                showConfirmButton: false,
-                background: "white",
-                position: "top",
-                timer: 15000,
                 backdrop: false,
-                closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             }
           }
         } else {
           if(data.response_bi && data.response_bi.Warning_Detail!=null){
             this.$swal({
-              type: 'error',
-              width: 640,
-              html: '<span class="alert-bi-error"><b>'+ data.response_bi.Warning_Detail +'</b></span>',
-              showCloseButton: true,
-              customClass: {
-                popup: 'border-error'
-              },
-              showConfirmButton: false,
-              background: "white",
-              position: "top",
-              timer: 15000,
               backdrop: false,
-              closeButtonHtml: '<span class="close-alert-warning">&times;</span>',
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              text: data.response_bi.Warning_Detail,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 15000,
+              customClass: {
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
             })
           }
         }
@@ -2308,7 +2338,7 @@ export default {
           //   this.deleteTemplateTemp(JSON.parse(sessionStorage.getItem('template_array_code'))) 
           // }
           if (this.files.length) {
-            await this.uploadAttachFile(data.messageText.doc_number_eform, data.messageText.data.e_id)
+            // await this.uploadAttachFile(data.messageText.doc_number_eform, data.messageText.data.e_id)
           }
 
           var template_code = JSON.parse(sessionStorage.getItem('template_option')).template_code
@@ -2316,7 +2346,7 @@ export default {
 
           if (this.allUserStep && !speacailForm.includes(template_code)) {
             await this.sendInsertChat(data.messageText.data.e_id)
-            this.$router.push({ path: "/my_form" })
+            this.$router.push({ path: "/form" })
           } else {
             this.eform_id = data.messageText.data.e_id
             this.doc_no = data.messageText.doc_number_eform
@@ -2352,13 +2382,195 @@ export default {
           this.pplSubject = document_name
         } else if(data.result == "OK" && this.isSaveDraft) {
           if (this.files.length) {
-            await this.uploadAttachFile(data.messageText.doc_number_eform, data.messageText.data.e_id)
+            // await this.uploadAttachFile(data.messageText.doc_number_eform, data.messageText.data.e_id)
           }
-          this.$router.push({ path: "/my_form" })
+          this.$router.push({ path: "/form" })
         }
       } catch (error) {
         this.notReady = false
         console.log(error.message)
+      }
+    },
+    async saveDocument(document_name, opsPage) {
+      try {
+        this.dialog_ppl = false
+        this.optionsPage = opsPage
+        this.doc_name = document_name
+        var sizeTemp = [{}]
+        var orientationTemp = [{}]
+        for (var i = 1; i <= this.pageOrientation.length; i++) {
+          sizeTemp[0][String(i)] = []
+          var Okey = Object.keys(this.pageOrientation[i - 1])[0]
+          orientationTemp[0][Okey] = this.pageOrientation[i - 1][Okey]
+        }
+        var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
+        if (temp_option.description_template) {
+          description = temp_option.description_template
+        } else if (temp_option.description) {
+          description = temp_option.description
+        }
+        // this.template_array
+        var url = this.$api_url + '/template_form/api/v1/create_template_form'
+        var data = {}
+        this.notReady = true
+        var { data } = await this.axios.post(
+          url,
+          {
+            template_id: temp_option.template_id,
+            template_data: this.template_array,
+            size_header: sizeTemp,
+            size_body: sizeTemp,
+            size_footer: sizeTemp,
+            document_name: this.doc_name,
+            orientation: orientationTemp,
+            paper_size: temp_option.paper_size,
+            is_full: true,
+            others: {dataTableObjectArray : this.dataTableObjectArray}
+          }
+        )
+
+        this.notReady = false
+        if(data.status) {
+          if(this.files.length) {
+            this.uploadFiles(data.data.transaction_id)
+          }
+          if(data.response_bi && data.response_bi.Warning_Detail!=null){
+            if(data.response_bi.Warning_Massager == 'green') {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            } else if(data.response_bi.Warning_Massager == 'yellow') {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            } else if(data.response_bi.Warning_Massager == 'red') {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            }
+          }
+          this.$router.push({ path: "/form" })
+        } else {
+          if(data.response_bi && data.response_bi.Warning_Detail!=null){
+            this.$swal({
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              text: data.response_bi.Warning_Detail,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 15000,
+              customClass: {
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
+            })
+          }
+        }
+      } catch (error) {
+        this.notReady = false
+        console.log(error.message)
+      }
+    },
+    async uploadFiles(transaction_id) {
+      let formData = new FormData()
+      this.files.forEach(e => {
+        formData.append("file", e)
+      })
+      formData.append("transaction_id", transaction_id)
+      try {
+        this.notReady = true
+        var { data } = await this.axios.post(this.$api_url + "/file-component/api/saveFile",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization:
+                "Bearer " + sessionStorage.getItem("one_access_token")
+            }
+          }
+        )
+        this.notReady = false
+        if(data.status) {
+          
+        } else {
+            this.$swal({
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+              text: 'อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง',
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 5000,
+              customClass: {
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
+            })
+          }
+      } catch (error) {
+        this.notReady = false
+        this.$swal({
+          backdrop: false,
+          position: 'bottom-end',
+          width: '330px',
+          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+          text: 'อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง',
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 5000,
+          customClass: {
+            popup: 'alert-card',
+            title: 'alert-title-block',
+            closeButton: 'close-alert-btn',
+            htmlContainer: 'alert-text-block'
+          }
+        })
       }
     },
     async genQrCode(id){
@@ -2413,7 +2625,7 @@ export default {
       } catch (err) {
         if (err.response != null) {
           if (err.response.status == 401) {
-            this.$router.push('/login')
+            this.$router.push('/notfound')
           }
         } else {
           console.log(err.message)
@@ -2489,10 +2701,10 @@ export default {
           sessionStorage.setItem("isDocEdit", true)
           sessionStorage.setItem("isDocStep", true)
         }
-        this.$router.push({ path: "/use_template/show_template" })
+        this.$router.push({ path: "/form/input" })
         this.isReturnFill = true
       } else {
-        this.$router.push({ path: "/my_form" })
+        this.$router.push({ path: "/form" })
       }
     },
     async download(action) {
@@ -3054,11 +3266,11 @@ export default {
       this.ppl_templatelist = [{ text: "ไม่เลือก", value: "" }]
       var defaultDocType = ""
       var checkPplSetting = this.checkDefaultPplTemplate()
-      if(this.templates.ppl_template_code && this.templates.ppl_template_code.length) {
-        if(!this.selectedDocumentType && this.templates.ppl_template_code[0].document_type) {
-          defaultDocType = this.templates.ppl_template_code[0].document_type
-        }
-      }
+      // if(this.templates.ppl_template_code && this.templates.ppl_template_code.length) {
+      //   if(!this.selectedDocumentType && this.templates.ppl_template_code[0].document_type) {
+      //     defaultDocType = this.templates.ppl_template_code[0].document_type
+      //   }
+      // }
        if(typeof checkPplSetting.template !== 'undefined' && typeof checkPplSetting.template.Template_Code !== 'undefined') {
         this.defaultPplTemplate = checkPplSetting.template.Template_Code
       }
@@ -3199,39 +3411,49 @@ export default {
           this.attachedFiles.forEach(e => {
             e.waitUpload = false
           })
-          this.files = []
+          // this.files = []
           if(neverUpload) {
             this.updateFolderName(e_id)
           }
         } else {
-            this.files = []
+            // this.files = []
             this.attachedFiles = this.attachedFiles.filter(item => !item.waitUpload)
             this.$swal({
-              type: 'warning',
-              html: '<span class="alert-error"><b>'+ this.textLang.alert.upload_fail +'</b></span>',
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+              text: 'อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง',
               showCloseButton: true,
               showConfirmButton: false,
-              background: 'white',
+              timer: 5000,
               customClass: {
-                popup: 'border-error'
-              },
-              closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
             })
           }
       } catch (error) {
         this.notReady = false
-        this.files = []
+        // this.files = []
         this.attachedFiles = this.attachedFiles.filter(item => !item.waitUpload)
         this.$swal({
-          type: 'warning',
-          html: '<span class="alert-error"><b>'+ this.textLang.alert.upload_fail +'</b></span>',
+          backdrop: false,
+          position: 'bottom-end',
+          width: '330px',
+          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+          text: 'อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง',
           showCloseButton: true,
           showConfirmButton: false,
-          background: 'white',
+          timer: 5000,
           customClass: {
-            popup: 'border-error'
-          },
-        closeButtonHtml: '<span class="close-alert-error">&times;</span>',
+            popup: 'alert-card',
+            title: 'alert-title-block',
+            closeButton: 'close-alert-btn',
+            htmlContainer: 'alert-text-block'
+          }
         })
       }
     },
@@ -3380,7 +3602,7 @@ export default {
     },
     async pplUploadDocument() {
       if(this.files.length > 0) {
-        await this.uploadAttachFile(this.doc_no, this.eform_id)
+        // await this.uploadAttachFile(this.doc_no, this.eform_id)
       }
       for (
         var i = 0;i < this.template_paperless_code.Template_step.length;i++) {
@@ -3396,11 +3618,11 @@ export default {
 
       this.dialog_ppl = false
       var doc_type = ""
-      this.ppl_templatelist.forEach(e => {
-        if (e.value == data) {
-          doc_type = e.document_type;
-        }
-      })
+      // this.ppl_templatelist.forEach(e => {
+      //   if (e.value == data) {
+      //     doc_type = e.document_type;
+      //   }
+      // })
       try {
         var business = JSON.parse(sessionStorage.getItem("selected_business"))
         var tax_id = "";
@@ -3433,35 +3655,38 @@ export default {
         if (data.result == "OK") {
           this.uploadAble = false;
           this.$swal({
-            type: "success",
-            html: '<span class="alert-bi-success"><b>'+ this.textLang.alert.send_complete +'</b></span>',
-            showCloseButton: true,
-            customClass: {
-              popup: 'border-success'
-            },
-            showConfirmButton: false,
-            background: "white",
-            position: "top",
-            timer: 3000,
             backdrop: false,
-            closeButtonHtml: '<span class="close-alert">&times;</span>',
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+            text: 'เสนอเซ็นสำเร็จ',
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
           sessionStorage.setItem('isUploaded', true)
         } else {
-          // this.alert_error = true
           this.$swal({
-            type: "error",
-            html: '<span class="alert-error"><b>'+ this.textLang.alert.send_fail +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+            text: 'เสนอเซ็นล้มเหลว กรุณาลองใหม่ในภายหลัง',
             showCloseButton: true,
             showConfirmButton: false,
-            customClass:{
-              popup: 'border-error'
-            },
-            background: "white",
-            position: "top",
-            timer: 3000,
-            backdrop: false,
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
         }
       } catch (error) {
@@ -3506,7 +3731,7 @@ export default {
       sessionStorage.setItem('isDocStep',false)
       sessionStorage.setItem('isBack',false)
       sessionStorage.setItem('isStep',false)
-      this.$router.push({ path: '/use_template/show_template' })
+      this.$router.push({ path: '/form/input' })
     },
     setPdfPass(pdfPass, html, reDownload, count) {
       this.pdfPasswordSetting = pdfPass
@@ -3524,7 +3749,7 @@ export default {
       sessionStorage.setItem('isDocStep',false)
       sessionStorage.setItem('isBack',false)
       sessionStorage.setItem('isStep',false)
-      this.$router.push({ path: '/use_template/show_template' })
+      this.$router.push({ path: '/form/input' })
     },
     replaceGtLt(inputWord) {
       if(typeof inputWord === 'string') {
@@ -3593,8 +3818,8 @@ export default {
 .save-doc-btn {
   font-family: "Sarabun", sans-serif;
   text-transform: capitalize;
-  padding-left: 3% !important;
-  padding-right: 3% !important;
+  padding-left: 1% !important;
+  padding-right: 1% !important;
 }
 
 .export-json-btn {
@@ -3604,9 +3829,9 @@ export default {
 
 .next-temp-btn {
   font-family: "Sarabun", sans-serif;
-  color: #1b9900 !important;
-  font-weight: bold;
   text-transform: capitalize;
+  padding-left: 1% !important;
+  padding-right: 1% !important;
 }
 
 .next-temp-to {
@@ -3628,11 +3853,14 @@ export default {
 }
 
 .preview-paper-block {
-  margin-left: 1%;
-  margin-top: 1%;
   overflow: auto;
   height: calc(100vh - 224px);
-  padding: 1%;
+  width: 100%;
+  margin: 0%;
+}
+
+.check-box-preview {
+  margin-right: 4px;
 }
 
 .title-name-paperless {
@@ -3732,7 +3960,7 @@ export default {
 
 .preview-row {
   width: 100%;
-  margin-left: 0%;
+  margin: 0%;
 }
 
 .sub-toolbar-preview .v-toolbar__content, .v-toolbar__extension {
@@ -3747,7 +3975,7 @@ export default {
 .temp-preview-name {
   font-family: "Sarabun", sans-serif;
   width: 100%;
-  margin-left: 0%;
+  margin: 0%;
   text-align: center;
 }
 
@@ -3759,12 +3987,21 @@ export default {
 
 .btn-saveStep{
   font-family: "Sarabun", sans-serif;
-  padding-left: 3% !important;
-  padding-right: 3% !important;
+  padding-left: 1% !important;
+  padding-right: 1% !important;
+  color: white !important;
 }
 
 .btn-savedraft{
-  color: #1b9900 !important;
+  color: #4CAF50 !important;
+}
+
+.textarea-data {
+  white-space: pre-wrap; /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
 .comment-part {
@@ -3787,6 +4024,29 @@ export default {
 .each-comment {
   width: 100%;
   margin-left: 0%;
+}
+
+.attach-preview-modal-header {
+  font-family: "Sarabun", sans-serif;
+  font-size: 16px;
+}
+
+.attach-file-preview-box {
+  font-family: "Sarabun", sans-serif;
+  font-size: 13px;
+}
+
+.attach-file-preview-chip {
+  white-space: unset;
+  height: auto !important;
+}
+
+.attach-file-preview-chip.v-chip .v-chip__content {
+  display: block !important;
+}
+
+.attach-file-modal-btn {
+  font-family: "Sarabun", sans-serif;
 }
 
 
@@ -3846,14 +4106,6 @@ export default {
   font-size: 16px !important;
   color: #EF9A9A !important;
 }
-
-/* .swal2-icon.swal2-success [class^="swal2-success-line"] {
-  background-color: #558b2f !important;
-}
-
-.swal2-icon.swal2-success {
-  border-color: #7cb342 !important;
-} */
 
 .border-success{
   border: 12px double #ADCA5A;
@@ -3990,8 +4242,7 @@ export default {
   font-size: 14px;
 }
 
-.theme--light.v-btn.v-btn--disabled .v-icon.send-ppl-disable-icon,
-.theme--light.v-btn.v-btn--disabled .v-btn__loading .icon-drag {
+.theme--light.v-btn.v-btn--disabled .v-icon.send-ppl-disable-icon {
   color: #bdbdbd !important;
 }
 
@@ -4045,17 +4296,9 @@ export default {
   font-size: 14px !important;
 }
 
-pre {
-  white-space: pre-wrap; /* Since CSS 2.1 */
-  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-  white-space: -pre-wrap; /* Opera 4-6 */
-  white-space: -o-pre-wrap; /* Opera 7 */
-  word-wrap: break-word; /* Internet Explorer 5.5+ */
-}
-
 .row-crad-files{
   width: 100%;
-  margin-left: 0%;
+  margin: 0%;
 }
 
 .chip-moblie{
@@ -4064,8 +4307,11 @@ pre {
 
 
 /*========================================*/
-@media only screen and (max-width: 960px) {
-  /*css for mobile screen*/
+@media only screen and (max-width: 600px) { /*css for mobile screen*/
+  .preview-form-bar .v-toolbar__content {
+    padding-left: 1% !important;
+  }
+
   .save-doc-btn {
     margin-right: 2%;
   }
@@ -4073,6 +4319,10 @@ pre {
   .next-temp-btn {
     padding-left: 2% !important;
     padding-right: 0% !important;
+  }
+
+  .preview-paper-block {
+    height: calc(100vh - 211px);
   }
 
   .all-step-block {
@@ -4095,10 +4345,6 @@ pre {
   .btn-saveStep{
     margin-right: 0%;
     margin-left: 2%;
-  }
-
-  .button-mobile{
-    background-color: white;
   }
 
   .comment-preview-btn {
@@ -4127,6 +4373,10 @@ pre {
 
   .chip-moblie .v-chip__content {
     display: block !important;
+  }
+
+  .attach-file-preview-box.v-file-input.v-text-field--outlined.v-input--dense .v-text-field__slot {
+    width: 91%;
   }
 
   /*======== style from old file >> Preview_Template(old version) ========*/

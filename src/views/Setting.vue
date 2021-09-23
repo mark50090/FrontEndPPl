@@ -11,8 +11,8 @@
             ชื่อ
           </v-col>
           <v-col class=" py-4 pr-2">
-            <span class="all-font-color">จักรกรินทร์ ปงแก้ว</span>
-            <span class="font-light-color"> - Jakarin Pongkaew</span>
+            <span class="all-font-color">{{firstnameTh}} {{lastnameTh}}</span>
+            <span v-if="nameEng == true" class="font-light-color"> - {{firstnameEng}} {{lastnameEng}}</span>
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -21,7 +21,7 @@
             ชื่อผู้ใช้
           </v-col>
           <v-col class="all-font-color py-4 pr-2">
-            jakarinpo
+            {{username}}
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -30,22 +30,22 @@
             OneEmail
           </v-col>
           <v-col class="all-font-color py-4 pr-2">
-            jakarin.po@one.th
+            {{thai_email}}
           </v-col>
         </v-row>
-        <v-divider></v-divider>
-        <v-row class="font-all">
+        <!--<v-divider></v-divider>
+         <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class="py-4 pl-4 all-font-color" align-self="center">
             ลายเซ็นเริ่มต้น
           </v-col>
           <v-col cols="4" md="5" lg="5" align-self="center" class="py-4  all-font-color">
             <v-icon class="ic-status-point" size="16" color="#9e9e9e" >mdi-circle</v-icon> <!--FOR NOT FOUND default signature-->
             <!-- <v-icon size="16" class="ic-status-point" color="#8BC34A">mdi-circle</v-icon>  --> <!--FOR default signature is READY-->
-            Not Found <!-- or Ready-->
-          </v-col>
+            <!--Not Found <!-- or Ready-->
+          <!--</v-col>
           <v-col align-self="center" cols="3" md="5" lg="5" class="position-btn-mobile">
             <v-btn depressed dark color="#67C25D" small @click="openSetDefaultSignature()"> <!-- button for setting default signature -->
-              <v-icon size="16" >mdi-cog</v-icon>
+              <!--<v-icon size="16" >mdi-cog</v-icon>
             </v-btn>
           </v-col>
         </v-row>
@@ -83,75 +83,75 @@
             <v-row class="font-all show-stamp-block">
               <v-col cols="12" md="5" lg="5" align-self="center" class="mb-4 pa-0 show-stamp-box">
                 <!-- stamp -->
-              </v-col>
+              <!--</v-col>
             </v-row>
           </v-col>
         </v-row>
         <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class=" pl-4 all-font-color font-def-position font-def-position-mobile">
-            Default Business
+            Default Business 
           </v-col>
           <!-- Default Business when it's not in editing mode -->
-          <v-col align-self="center" class="pa-0">
+          <!--<v-col v-if="statedefualt_Business == false" align-self="center" class="pa-0">
             <v-row class="font-all">
               <v-col cols="12" md="6" lg="6" class="  all-font-color def-ic-status-point def-ic-status-point-mobile" align-self="center">
-                <!--<v-icon class="ic-status-point" size="16" color="#9e9e9e" >mdi-circle</v-icon> --> <!-- FOR NOT FOUND default business -->
-                <v-icon size="16" class="ic-status-point" color="#8BC34A">mdi-circle</v-icon>  <!--FOR default business is READY -->
-                อินเทอร์เน็ตประเทศไทย <!-- or Not Found -->
-              </v-col>
+                <v-icon v-if="this.confirmBusiness == 'Not Found'" class="ic-status-point" size="16" color="#9e9e9e" >mdi-circle</v-icon> <!-- FOR NOT FOUND default business -->
+                <!--<v-icon  v-if="this.confirmBusiness != 'Not Found'" size="16" class="ic-status-point" color="#8BC34A">mdi-circle</v-icon>  <!--FOR default business is READY -->
+                <!--{{confirmBusiness}} <!-- or Not Found -->
+              <!--</v-col>
               <v-col align-self="center" cols="12" md="6" lg="6" class="def-btn-status-point-mobile def-btn-status-point">
-                <v-btn depressed dark color="#67C25D" small> <!-- button for setting default business -->
-                  <v-icon size="16" >mdi-cog</v-icon>
+                <v-btn depressed dark color="#67C25D" small @click="stateBusinessOn()"> <!-- button for setting default business -->
+                  <!--<v-icon size="16">mdi-cog</v-icon>
                 </v-btn>
               </v-col>          
             </v-row>
           </v-col> 
           <!-- Default Business when it's in editing mode -->
-          <!--<v-col align-self="center" class="pa-0">
+          <!--<v-col v-if="statedefualt_Business == true" align-self="center" class="pa-0">
                 <v-row class="font-all">
                   <v-col cols="12" md="6" lg="6" class="position-dropdown-mobile">
-                    <v-autocomplete class="font-dropdown ic-dropdown text-dropdown" append-icon="mdi-chevron-down" auto-select-first outlined dense hide-details color="#67C25D"></v-autocomplete>
+                    <v-autocomplete class="font-dropdown ic-dropdown text-dropdown" append-icon="mdi-chevron-down" auto-select-first outlined dense hide-details color="#67C25D" v-model="selectedBiz" :items="get_biz_detail" item-text="getbiz[0].first_name_th"  return-object></v-autocomplete>
                   </v-col>
                   <v-col cols="auto" md="auto" lg="auto" class="pr-0 position-btn-mobile-cancel" align-self="center">
-                    <v-btn depressed color="#757575" small dark>ยกเลิก</v-btn>
+                    <v-btn depressed color="#757575" small dark @click="stateBusinessOff()">ยกเลิก</v-btn>
                   </v-col>
                   <v-col cols="auto" md="auto" lg="auto" align-self="center">
-                    <v-btn depressed color="#67C25D" small dark> บันทึก</v-btn>
+                    <v-btn depressed color="#67C25D" small dark @click="changeBiz()"> บันทึก</v-btn>
                   </v-col>
                 </v-row>
-          </v-col>-->  
-        </v-row>
+          </v-col>
+        </v-row>  -->
         <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class="py-4 pl-4 all-font-color">
-            Works
+            Works 
           </v-col>
-          <v-col class="font-all pl-4 pr-2 pt-4 all-font-color">
-            <ul>
-              <li class="pb-2"> <!-- each business list -->
-                อินเทอร์เน็ตประเทศไทย 
+          <v-col  class="font-all pl-4 pr-2 pt-4 all-font-color">
+            <ul >
+              <li v-for="item in removeDuplicateBusiness" :key="item"> <!-- each business list -->
+                {{item}} 
               </li>
             </ul>
           </v-col>
         </v-row>
-        <v-divider></v-divider>
+        <!-- <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="12" md="2" lg="2" class="pt-4 pl-4 all-font-color position-setup-notifications position-setup-notifications-mobile">
-            ตั้งค่าการแจ้งเตือน
+            ตั้งค่าการแจ้งเตือน 
           </v-col>
           <v-col class="pa-0 ">
             <v-row class="font-all">
               <v-col cols="5" md="2" lg="2" class="pl-4 pt-3 " align-self="center">
                 <v-switch class="mt-0 pt-0 " inset label="Email" hide-details></v-switch> <!-- noti email switch -->
-              </v-col>
+              <!--</v-col>
               <v-col class="pt-3 px-0" cols="4" md="5" lg="5">
                 <v-text-field outlined hide-details dense :filled="true" :disabled="true" class="search-box-write" color="#67C25D"></v-text-field>
               </v-col> 
               <v-col cols="auto" md="auto" lg="auto" class="px-0 pt-3">
                 <v-btn outlined  color="rgb(158,158,158)" class="search-btn-write px-0 bg-btn-pencil"> <!-- button of editing noti email -->
-                  <v-icon small  >mdi-lead-pencil</v-icon>
-                </v-btn>
+                  <!--<v-icon small  >mdi-lead-pencil</v-icon>
+                </v-btn> -->
                 <!-- <template> <!-- button of cancel and confirm editing noti email  
                       <v-btn outlined tile class="close-btn-write px-0" color="rgb(158,158,158)"> <!-- cancel editing noti email button 
                         <v-icon small >mdi-close</v-icon>
@@ -159,8 +159,8 @@
                       <v-btn outlined class="check-btn-write px-0" color="rgb(158,158,158)"> <!-- confirm editing noti email button
                         <v-icon small >mdi-check</v-icon>
                       </v-btn> 
-                </template>  -->
-              </v-col>
+                </template>  
+              </v-col>-->
             </v-row>
           </v-col>
         </v-row>
@@ -172,33 +172,94 @@
 </template>
 
 <script>
-  import { EventBus } from '../EventBus'
-  import SignatureModal from '../components/DefaultSignatureModal.vue'
-  import DefaultStampModal from '../components/DefaultStampModal.vue'
-
-  export default {
-    components: {
-      SignatureModal,
-      DefaultStampModal
+import { EventBus } from '../EventBus'
+import SignatureModal from '../components/DefaultSignatureModal.vue'
+import DefaultStampModal from '../components/DefaultStampModal.vue'
+export default {
+  components: {
+    SignatureModal,
+    DefaultStampModal
+  },
+  data: () => ({
+    firstnameTh: '',
+    lastnameTh: '',
+    firstnameEng: '',
+    lastnameEng: '',
+    thai_email:'',
+    username:'',
+    get_biz_detail: [],
+    getbiz_detail: [],
+    // selectedBiz: '',
+    // statedefualt_Business: false,
+    nameEng: false,
+    // confirmBusiness: 'Not Found',
+    getBusiness: [],
+    removeDuplicateBusiness: [],
+    noneInSelectedbiz: {getbiz:[{first_name_th: "ไม่มี"}]},
+  }),
+  mounted() {
+    this.getUserDetail()
+  },
+  methods: {
+    openSetDefaultSignature() {
+      EventBus.$emit('DefaultSignature')
     },
-    data: () => ({
-
-    }),
-    mounted() {
-
+    openAddStamp() {
+      EventBus.$emit('DefaultStamp','add')
     },
-    methods: {
-      openSetDefaultSignature() {
-        EventBus.$emit('DefaultSignature')
-      },
-      openAddStamp() {
-        EventBus.$emit('DefaultStamp','add')
-      },
-      openEditStamp() {
-        EventBus.$emit('DefaultStamp','edit')
+    openEditStamp() {
+      EventBus.$emit('DefaultStamp','edit')
+    },
+    async getUserDetail(){ // get user detail 
+      try {
+        var url = '/citizen/api/v1/detail'
+        var { data } = await this.axios.get(this.$api_url + url)
+        if(data) {
+          this.firstnameTh = data.data.first_name_th
+          this.lastnameTh = data.data.last_name_th
+          this.firstnameEng = data.data.first_name_eng
+          this.lastnameEng = data.data.last_name_eng
+          this.thai_email = data.data.thai_email
+          this.username = data.data.username
+          data.data.biz_detail.forEach(element => {
+            this.get_biz_detail.push(element)
+            for (let index = 0; index < this.get_biz_detail.length; index++) {
+              this.getBusiness.push(this.get_biz_detail[index].getbiz[0].first_name_th)
+            }
+          })
+        }
+        this.removeDuplicateBusiness = [...new Set(this.getBusiness)] 
+        if (((this.firstnameEng != '') & (this.lastnameEng != '')) || ((this.firstnameEng != undefined) & (this.lastnameEng != undefined))) {
+          this.nameEng = true
+        }
+      } catch (error) {
+        console.log(error);
       }
-    }
+    },
+    // changeBiz() {
+    //   if ((this.selectedBiz.getbiz[0].first_name_th == '') || 
+    //       (this.selectedBiz.getbiz[0].first_name_th == 'ไม่มี') || 
+    //       (this.selectedBiz.getbiz[0].first_name_th == undefined)) {
+    //     this.confirmBusiness = 'Not Found'
+    //     this.get_biz_detail.shift()
+    //     this.statedefualt_Business = false
+    //   }
+    //   else {
+    //     this.confirmBusiness = this.selectedBiz.getbiz[0].first_name_th
+    //     this.get_biz_detail.shift()
+    //     this.statedefualt_Business = false
+    //   }  
+    // },
+    // stateBusinessOn() {
+    //   this.statedefualt_Business = true
+    //   this.get_biz_detail.unshift(this.noneInSelectedbiz)
+    // },
+    // stateBusinessOff() {
+    //   this.get_biz_detail.shift()
+    //   this.statedefualt_Business = false
+    // },
   }
+}
 </script>
 
 <style>
