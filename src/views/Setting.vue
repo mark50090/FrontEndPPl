@@ -159,8 +159,8 @@
                       <v-btn outlined class="check-btn-write px-0" color="rgb(158,158,158)"> <!-- confirm editing noti email button
                         <v-icon small >mdi-check</v-icon>
                       </v-btn> 
-                </template>  -->
-              </v-col>
+                </template>  
+              </v-col>-->
             </v-row>
           </v-col>
         </v-row>
