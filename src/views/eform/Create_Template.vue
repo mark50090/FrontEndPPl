@@ -8846,10 +8846,10 @@ export default {
 
 .main-paper-block {
   position: relative;
-  margin-left: 2%;
+  margin-left: 1%;
   margin-top: 1%;
   overflow: auto;
-  height: calc(100vh - 170px);
+  height: calc(100vh - 176px);
   padding: 1%;
   z-index: 1;
 }
