@@ -184,7 +184,7 @@
     font-family: "Sarabun", sans-serif;
   }
 
-  @media only screen and (max-width: 960px) {
+  @media only screen and (max-width: 600px) {
     .add-attach-file-box.v-file-input.v-text-field--outlined.v-input--dense .v-text-field__slot {
       width: 91%;
     }
