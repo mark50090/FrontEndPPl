@@ -210,32 +210,50 @@ export default {
     openEditStamp() {
       EventBus.$emit('DefaultStamp','edit')
     },
-    async getUserDetail(){ // get user detail 
-      try {
-        var url = '/citizen/api/v1/detail'
-        var { data } = await this.axios.get(this.$api_url + url)
-        if(data) {
-          this.firstnameTh = data.data.first_name_th
-          this.lastnameTh = data.data.last_name_th
-          this.firstnameEng = data.data.first_name_eng
-          this.lastnameEng = data.data.last_name_eng
-          this.thai_email = data.data.thai_email
-          this.username = data.data.username
-          data.data.biz_detail.forEach(element => {
-            this.get_biz_detail.push(element)
-            for (let index = 0; index < this.get_biz_detail.length; index++) {
-              this.getBusiness.push(this.get_biz_detail[index].getbiz[0].first_name_th)
-            }
-          })
+    getUserDetail(){ // get user detail
+      var userDetail = JSON.parse(sessionStorage.getItem('userProfile'))
+      this.firstnameTh = userDetail.first_name_th
+      this.lastnameTh = userDetail.last_name_th
+      this.firstnameEng = userDetail.first_name_eng
+      this.lastnameEng = userDetail.last_name_eng
+      this.thai_email = userDetail.thai_email
+      this.username = userDetail.username
+      userDetail.biz_detail.forEach(element => {
+        this.get_biz_detail.push(element)
+        for (let index = 0; index < this.get_biz_detail.length; index++) {
+          this.getBusiness.push(this.get_biz_detail[index].getbiz[0].first_name_th)
         }
-        this.removeDuplicateBusiness = [...new Set(this.getBusiness)] 
-        if (((this.firstnameEng != '') & (this.lastnameEng != '')) || ((this.firstnameEng != undefined) & (this.lastnameEng != undefined))) {
-          this.nameEng = true
-        }
-      } catch (error) {
-        console.log(error);
+      })
+      this.removeDuplicateBusiness = [...new Set(this.getBusiness)] 
+      if (((this.firstnameEng != '') & (this.lastnameEng != '')) || ((this.firstnameEng != undefined) & (this.lastnameEng != undefined))) {
+        this.nameEng = true
       }
     },
+
+      // try {
+      //   var url = '/citizen/api/v1/detail'
+      //   var { data } = await this.axios.get(this.$api_url + url)
+      //   if(data) {
+      //     this.firstnameTh = data.data.first_name_th
+      //     this.lastnameTh = data.data.last_name_th
+      //     this.firstnameEng = data.data.first_name_eng
+      //     this.lastnameEng = data.data.last_name_eng
+      //     this.thai_email = data.data.thai_email
+      //     this.username = data.data.username
+      //     data.data.biz_detail.forEach(element => {
+      //       this.get_biz_detail.push(element)
+      //       for (let index = 0; index < this.get_biz_detail.length; index++) {
+      //         this.getBusiness.push(this.get_biz_detail[index].getbiz[0].first_name_th)
+      //       }
+      //     })
+      //   }
+      //   this.removeDuplicateBusiness = [...new Set(this.getBusiness)] 
+      //   if (((this.firstnameEng != '') & (this.lastnameEng != '')) || ((this.firstnameEng != undefined) & (this.lastnameEng != undefined))) {
+      //     this.nameEng = true
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      // }
     // changeBiz() {
     //   if ((this.selectedBiz.getbiz[0].first_name_th == '') || 
     //       (this.selectedBiz.getbiz[0].first_name_th == 'ไม่มี') || 
