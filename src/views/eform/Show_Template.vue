@@ -222,7 +222,7 @@
         <v-row justify="center" class="mt-3 temp-name">
           <h3>{{template_name}} <span v-if="doc_name">: {{doc_name}}</span></h3>
         </v-row>
-        <div class="mt-2 pl-2 pb-2 show-paper-block"> <!-- paper plane -->
+        <div class="mt-2 ml-1 pl-2 pb-2 show-paper-block"> <!-- paper plane -->
           <v-sheet id="workpaper" :elevation="2" color="white" class="main-paper" style="position: relative; padding: 0px;" :width="current_paper_width + 'px'" :height="current_paper_height + 'px'">
             <div :id="item.name" :class="item.name + '-obj'" v-for="item in objectArray['inputbox']" :key="item.name" :style="'position:absolute; height:' + String(item.height) + 'px;opacity:1;display:table-cell;width:'+ String(item.width)+ 'px;top:' + String(item.top-1) + 'px;left:' + String(item.left+1) + 'px;'">
               <v-layout v-show="!item.style.hideDisplay" v-if="!item.hideBysection && item.show && getHideByValue(item.style.hideOption, item.name, item.style.zIndex)" justify-center :style="'text-align:' + item.style.font_align + ';'">

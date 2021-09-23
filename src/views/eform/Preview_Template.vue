@@ -197,8 +197,8 @@
             <span v-if="templates.document_name != null">: {{ templates.document_name }}</span>
           </h3>
         </v-row>
-        <v-row id="paper-block" justify="center" class="mt-2 pl-2 pb-2 preview-paper-block">
-          <v-col cols="12" md="12" lg="12" class="pa-0">
+        <v-row id="paper-block" justify="center" class="mt-2 pl-1 preview-row">
+          <v-col cols="12" md="12" lg="12" class="pl-2 pr-0 pt-0 pb-2  preview-paper-block">
             <v-sheet  id="workpaper" :width="current_paper_width + 'px'" :height="current_paper_height + 'px'" :elevation="2" color="white" class="main-paper" style="position: relative; padding: 0px;">
               <div id="preview-paper" style="background-color:white; width:100%; ">
                 <!-- <v-overlay v-show="pages[currentPage-1] && pages[currentPage-1].isHide" opacity="0.30" z-index="11" color="red" absolute>
@@ -3855,8 +3855,6 @@ export default {
 .preview-paper-block {
   overflow: auto;
   height: calc(100vh - 224px);
-  width: 100%;
-  margin: 0%;
 }
 
 .check-box-preview {
