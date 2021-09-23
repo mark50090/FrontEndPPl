@@ -125,7 +125,7 @@
         <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class="py-4 pl-4 all-font-color">
-            Works
+            Works 
           </v-col>
           <v-col  class="font-all pl-4 pr-2 pt-4 all-font-color">
             <ul >
@@ -230,16 +230,17 @@ export default {
         console.log(error);
       }
     },
-    async changeBiz() {
-      if ((this.selectedBiz.getbiz[0].first_name_th == '') || 
-          (this.selectedBiz.getbiz[0].first_name_th == 'ไม่มี') || 
-          (this.selectedBiz.getbiz[0].first_name_th == undefined)) {
+    changeBiz() {
+      console.log(this.selectedBiz.first_name_th)
+      if ((this.selectedBiz.first_name_th == '') || 
+          (this.selectedBiz.first_name_th == 'ไม่มี') || 
+          (this.selectedBiz.first_name_th == undefined)) {
         this.confirmBusiness = 'Not Found'
         this.get_biz_detail.shift()
         this.statedefualt_Business = false
       }
       else {
-        this.confirmBusiness = this.selectedBiz.getbiz[0].first_name_th
+        this.confirmBusiness = this.selectedBiz.first_name_th
         this.get_biz_detail.shift()
         this.statedefualt_Business = false
       }  
