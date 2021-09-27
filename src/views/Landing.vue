@@ -28,11 +28,24 @@ export default {
         })
         this.$apiConfig.setToken(data.data.access_token)
         this.$apiConfig.setRefreshToken(data.data.refresh_token)
-        this.$router.push({ path: '/' })
+        this.getUserDetail()
       } catch (error) {
         console.log(error);
       }
     },
+    async getUserDetail(){ // get user detail to show name, email and business list
+        try {
+          var url = '/citizen/api/v1/detail'
+          var { data } = await this.axios.get(this.$api_url + url)
+          if(data) {
+            sessionStorage.setItem('name', `${data.data.first_name_th} ${data.data.last_name_th}`)
+            sessionStorage.setItem('userProfile', JSON.stringify(data.data))
+            this.$router.push({ path: '/inbox' })
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }, 
   }
 }
 </script>
