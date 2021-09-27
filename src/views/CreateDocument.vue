@@ -137,7 +137,7 @@
                       ประเภทเอกสาร :
                     </v-col>
                     <v-col cols="7" md="8" lg="8" class="px-0 pb-0">
-                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type" :items="document_type_list" item-text="keyword" item-value="_id" return-object @change="getDocumentTemplate" dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete>
+                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type" :items="document_type_list" item-text="document_type_detail.name" item-value="_id" return-object @change="getDocumentTemplate" dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row class="create-row">
@@ -186,7 +186,7 @@
                       ประเภทเอกสาร :
                     </v-col>
                     <v-col cols="12" md="8" lg="8" align-self="center" class="pr-0 pt-4 pb-0 create-attach-file-block">
-                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type_custom" :items="document_type_list" item-text="keyword" item-value="_id" return-object dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input create-setting-dropdown-icon"></v-autocomplete>
+                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type_custom" :items="document_type_list" item-text="document_type_detail.name" item-value="_id" return-object dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input create-setting-dropdown-icon"></v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row class="create-row">
