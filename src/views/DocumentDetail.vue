@@ -285,7 +285,7 @@
                 <v-select dense outlined hide-details color="#4CAF50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="all_sign_type" v-model="sign_type" class="sign-type sign-type-box sign-type-dropdown-icon"></v-select>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" class="pr-0 py-2">
-                <v-btn depressed small color="#1D9BDE" :disabled="false" class="clear-sign-btn" @click="clearSignature()">ล้างค่า</v-btn>
+                <v-btn depressed small color="#1D9BDE" :disabled="sign_type == 'Default'" class="clear-sign-btn" @click="clearSignature()">ล้างค่า</v-btn>
               </v-col>
               <v-spacer></v-spacer>
             </v-row>
@@ -407,7 +407,7 @@ export default {
           EventBus.$emit('FormFile', response.data, file.type, file.filename)
         })
         .catch((error) => {
-          console.log(error)
+          // console.log(error)
         })
         .then(() => {
           this.axios_pending--
@@ -504,7 +504,7 @@ export default {
         comment: !this.comment_status ? this.comment : null,
         typesign: 'web'
       }
-      console.log(data)
+      // console.log(data)
       if (this.new_attachment_file.length > 0) this.upload_attachment()
       const url = '/transaction/api/v1/updatetransaction'
       const config = {
@@ -513,13 +513,13 @@ export default {
       this.axios_pending++
       this.axios.put(`${this.$api_url}${url}`, data, config)
         .then((response) => {
-          console.log(response.data)
+          // console.log(response.data)
           if (response.data.status) {
             this.$router.replace({ name: 'inbox' })
           }
         })
         .catch((error) => {
-          console.log(error)
+          // console.log(error)
         })
         .then(() => {
           this.axios_pending--
@@ -539,10 +539,10 @@ export default {
       }
       this.axios.post(`${this.$api_url}${url}`, formData, config)
         .then(response => {
-          console.log('input', response)
+          // console.log('input', response)
         })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
         })
     },
     async get_detail_fn() {
@@ -563,6 +563,7 @@ export default {
               const find_name_in_w = doc_data.flow_step[find_w].name.findIndex((element) => element === this.my_name)
               if (find_name_in_w > -1 && this.$route.name === 'document_detail') {
                 this.check_sign = true
+                this.ca_switch = doc_data.flow_step[find_w].send_update.action.toLowerCase() === 'sign-ca'
               }
             }else{
               this.last_step = doc_data.flow_step.length
@@ -575,7 +576,7 @@ export default {
             this.doc_details.create_at = doc_data.create_at
             this.doc_details.file_name = doc_data.file_name
             this.doc_details.comment = doc_data.comment
-            console.log(this.last_step)
+            // console.log(this.last_step)
             this.doc_details.step_index = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.step_index : null
             this.doc_details.action = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.action : null
             for (let index = 0; index < doc_data.flow_step.length; index++) {
@@ -587,7 +588,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error)
+          // console.log(error)
         })
         .then(() => {
           this.axios_pending--
@@ -607,7 +608,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error)
+          // console.log(error)
         })
         .then(() => {
           this.axios_pending--
@@ -631,7 +632,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error)
+          // console.log(error)
         })
         .then(() => {
           this.axios_pending--
@@ -687,7 +688,7 @@ export default {
             )
             // this.addEventResize(step_array + 1, this.allStatus[index]);
           } else {
-            // console.log("sign_page != page", JSON.stringify(data[index]));
+            // // console.log("sign_page != page", JSON.stringify(data[index]));
             this.multiShow(step_array + 1, false)
             this.setPositionSign(
               this.signArray[index].index,
@@ -702,7 +703,7 @@ export default {
       }
     },
     setPreViewImg () {
-      // console.log("setPreViewImg start");
+      // // console.log("setPreViewImg start");
       this.signArray = []
       for (let index = 0; index < this.sign_position.length; index++) {
         this.createSign()
@@ -791,7 +792,7 @@ export default {
       this.setPdfAreaMulti(index)
     },
     setPdfAreaMulti (index) {
-      // console.log("setPdfAreaMulti index:", index);
+      // // console.log("setPdfAreaMulti index:", index);
       try {
         var clientHeight = document.getElementById('pdfDiv').clientHeight
         var clientWidth = document.getElementById('pdfDiv').clientWidth
@@ -823,7 +824,7 @@ export default {
       }
     },
     getSignAreaMulti (xMin, xMax, yMin, yMax, index) {
-      // console.log("getSignAreaMulti index:", index);
+      // // console.log("getSignAreaMulti index:", index);
       var element = document.getElementById('draggableDiv' + index)
       var rect = element.getBoundingClientRect()
 
@@ -840,10 +841,10 @@ export default {
       elementRight = rect.right
       elementBot = rect.bottom
 
-      // console.log("getSignAreaMulti left " + elementLeft);
-      // console.log("getSignAreaMulti top " + elementTop);
-      // console.log("getSignAreaMulti right " + elementRight);
-      // console.log("getSignAreaMulti bot " + elementBot);
+      // // console.log("getSignAreaMulti left " + elementLeft);
+      // // console.log("getSignAreaMulti top " + elementTop);
+      // // console.log("getSignAreaMulti right " + elementRight);
+      // // console.log("getSignAreaMulti bot " + elementBot);
 
       var xMinSign = elementLeft
       var xMaxSign = this.stringBefore(elementRight.toString(), '.')
@@ -872,20 +873,20 @@ export default {
       yMax,
       index
     ) {
-      // console.log("getSignResultMulti index:", index);
-      // console.log("xMinSign", xMinSign);
-      // console.log("xMin", xMin);
-      // console.log("xMax", xMax);
+      // // console.log("getSignResultMulti index:", index);
+      // // console.log("xMinSign", xMinSign);
+      // // console.log("xMin", xMin);
+      // // console.log("xMax", xMax);
       var lly = this.getPercent(yMaxSign, yMin, yMax)
       var sign_llx = this.getPercent(xMinSign, xMin, xMax)
       var sign_lly = parseFloat(100 - lly)
-      // console.log("sign_llx", sign_llx);
-      // console.log("sign_lly", sign_lly);
+      // // console.log("sign_llx", sign_llx);
+      // // console.log("sign_lly", sign_lly);
 
       var sign_urx = this.getPercentAll(xMinSign, xMaxSign, xMin, xMax)
       var sign_ury = this.getPercentAll(yMinSign, yMaxSign, yMin, yMax)
-      // console.log("sign_urx", sign_urx);
-      // console.log("sign_ury", sign_ury);
+      // // console.log("sign_urx", sign_urx);
+      // // console.log("sign_ury", sign_ury);
 
       sign_llx = (sign_llx * 0.01).toFixed(3)
       sign_lly = (sign_lly * 0.01).toFixed(3)
@@ -909,12 +910,12 @@ export default {
         sign_page: this.signArray[index_array].sign_page
       }
 
-      // console.log(this.preData);
-      // console.log(this.signArray);
+      // // console.log(this.preData);
+      // // console.log(this.signArray);
     },
     setPositionSign(index, llx, lly, urx, ury) {
-      console.log('position' + index)
-      // console.log(`llx: ${llx}\nlly: ${lly}\nurx: ${urx}\nury: ${ury}`)
+      // console.log('position' + index)
+      // // console.log(`llx: ${llx}\nlly: ${lly}\nurx: ${urx}\nury: ${ury}`)
       var arr_index = index - 1
 
       // MainFunction.ShowLog("sign "+index+" row(llx) "+llx)
@@ -928,11 +929,11 @@ export default {
       var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
       var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
 
-      // //console.log(cardWidth)
-      // //console.log(cardHeight)
+      // //// console.log(cardWidth)
+      // //// console.log(cardHeight)
 
-      // //console.log(clientWidth)
-      // //console.log(clientHeight)
+      // //// console.log(clientWidth)
+      // //// console.log(clientHeight)
 
       // var clientHeight = clientWidth * 141.5805606367726
       // clientHeight = parseFloat(clientHeight) / 100
@@ -987,8 +988,8 @@ export default {
       //   var setWidth = parseFloat(clientWidth) * llx;
       //   var setHeight = parseFloat(clientHeight) * lly;
 
-      //   //console.log("setWidth", setWidth);
-      //   //console.log("setHeight", setHeight);
+      //   //// console.log("setWidth", setWidth);
+      //   //// console.log("setHeight", setHeight);
 
       //   var dragWidth = clientWidth * urx;
       //   var dragHeight = clientHeight * ury;
@@ -1012,12 +1013,12 @@ export default {
       this.sign_position[arr_index].sign_lly = lly
       this.sign_position[arr_index].sign_urx = urx
       this.sign_position[arr_index].sign_ury = ury
-      //   //console.log("cardWidth", cardWidth);
-      //   //console.log("cardHeight", cardHeight);
-      //   //console.log("clientWidth", clientWidth);
-      //   //console.log("clientHeight", clientHeight);
-      //   //console.log("dragWidth", dragWidth);
-      //   //console.log("dragHeight", dragHeight);
+      //   //// console.log("cardWidth", cardWidth);
+      //   //// console.log("cardHeight", cardHeight);
+      //   //// console.log("clientWidth", clientWidth);
+      //   //// console.log("clientHeight", clientHeight);
+      //   //// console.log("dragWidth", dragWidth);
+      //   //// console.log("dragHeight", dragHeight);
     },
     getPercent (data, min, max) {
       var itemlength = parseFloat(max) - parseFloat(min)
