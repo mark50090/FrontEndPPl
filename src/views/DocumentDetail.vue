@@ -253,14 +253,14 @@
             </v-card-text>
           </v-card>
           <!-- sign card -->
-          <v-card outlined class="mt-1 pb-5" v-if="check_sign"> <!-- show when user have to approve in current step -->
+          <v-card outlined class="mt-1" :class="{'pb-5': !is_approve}" v-if="check_sign"> <!-- show when user have to approve in current step -->
             <v-row class="mt-4 mb-2 px-2 detail-row">
               <v-textarea dense outlined hide-details no-resize readonly label="คำอธิบาย" rows="2" color="rgb(158,158,158)" :value="doc_details.detail" class="doc-description"></v-textarea>
             </v-row>
             <v-divider></v-divider>
             <v-row class="detail-row">
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 py-2">
-                <v-switch inset disabled hide-details label="Certificate (CA)" v-model="ca_switch" class="mt-0 ca-switch"></v-switch>
+                <v-switch inset disabled hide-details label="Certificate (CA)"  v-if="!is_approve" v-model="ca_switch" class="mt-0 ca-switch"></v-switch>
               </v-col>
               <v-spacer></v-spacer>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-1 py-2">
@@ -270,37 +270,39 @@
                 <v-btn depressed dark color="error" class="approve-btn" @click="set_approve_fn('reject')">ปฏิเสธ</v-btn>
               </v-col>
             </v-row>
-            <v-divider></v-divider>
-            <v-row class="detail-row">
-              <!-- <v-col cols="auto" md="auto" lg="auto" class="pa-2">
-                <v-btn outlined @click="gostamp()" color="#757575">
-                  <v-icon>mdi-stamper</v-icon>
-                </v-btn>
-              </v-col> -->
-              <v-spacer></v-spacer>
-              <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-2 py-2">
-                <v-icon>mdi-draw</v-icon>
-              </v-col>
-              <v-col cols="4" md="3" lg="3" class="px-0 py-2">
-                <v-select dense outlined hide-details color="#4CAF50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="all_sign_type" v-model="sign_type" class="sign-type sign-type-box sign-type-dropdown-icon"></v-select>
-              </v-col>
-              <v-col cols="auto" md="auto" lg="auto" class="pr-0 py-2">
-                <v-btn depressed small color="#1D9BDE" :disabled="sign_type == 'Default'" class="clear-sign-btn" @click="clearSignature()">ล้างค่า</v-btn>
-              </v-col>
-              <v-spacer></v-spacer>
-            </v-row>
-            <v-row justify="center" align="center" class="detail-row">
-              <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pa-0 sign-block">
-                <!-- sign pad -->
-                <v-img
-                  v-if="sign_type == 'Default'"
-                  :src="default_sign"
-                  contain
-                  height="150px"
-                />
-                <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }"></vueSignature>
-              </v-col>
-            </v-row>
+            <template v-if="!is_approve">
+              <v-divider></v-divider>
+              <v-row class="detail-row">
+                <!-- <v-col cols="auto" md="auto" lg="auto" class="pa-2">
+                  <v-btn outlined @click="gostamp()" color="#757575">
+                    <v-icon>mdi-stamper</v-icon>
+                  </v-btn>
+                </v-col> -->
+                <v-spacer></v-spacer>
+                <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-2 py-2">
+                  <v-icon>mdi-draw</v-icon>
+                </v-col>
+                <v-col cols="4" md="3" lg="3" class="px-0 py-2">
+                  <v-select dense outlined hide-details color="#4CAF50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="all_sign_type" v-model="sign_type" class="sign-type sign-type-box sign-type-dropdown-icon"></v-select>
+                </v-col>
+                <v-col cols="auto" md="auto" lg="auto" class="pr-0 py-2">
+                  <v-btn depressed small color="#1D9BDE" :disabled="sign_type == 'Default'" class="clear-sign-btn" @click="clearSignature()">ล้างค่า</v-btn>
+                </v-col>
+                <v-spacer></v-spacer>
+              </v-row>
+              <v-row justify="center" align="center" class="detail-row">
+                <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pa-0 sign-block">
+                  <!-- sign pad -->
+                  <v-img
+                    v-if="sign_type == 'Default'"
+                    :src="default_sign"
+                    contain
+                    height="150px"
+                  />
+                  <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }"></vueSignature>
+                </v-col>
+              </v-row>
+            </template>
           </v-card>
         </v-col>
       </v-row>
@@ -352,7 +354,7 @@ export default {
       backgroundColor: 'rgba(255,255,255,0)'
     },
     padStatus: false,
-    allStatus: [true, true, true],
+    allStatus: [],
     sign_position: [],
     signArray: [],
     step_flow: [],
@@ -361,7 +363,8 @@ export default {
     check_sign: false,
     comment: '',
     comment_status: true,
-    last_step: 0
+    last_step: 0,
+    is_approve: false
   }),
   computed: {
   },
@@ -556,7 +559,9 @@ export default {
           const data = response.data
           if (data.status) {
             const doc_data = data.data
-
+            this.allStatus = doc_data.flow_step.map(
+              (element) => element.send_update.action.toLowerCase() === 'sign' || element.send_update.action.toLowerCase() === 'sign-ca'
+            )
             const find_w = doc_data.flow_step.findIndex((element) => element.status.toLowerCase() === 'w')
             if (find_w > -1) {
               this.last_step = find_w
@@ -564,6 +569,7 @@ export default {
               if (find_name_in_w > -1 && this.$route.name === 'document_detail') {
                 this.check_sign = true
                 this.ca_switch = doc_data.flow_step[find_w].send_update.action.toLowerCase() === 'sign-ca'
+                this.is_approve = doc_data.flow_step[find_w].send_update.action.toLowerCase() === 'approve'
               }
             }else{
               this.last_step = doc_data.flow_step.length
