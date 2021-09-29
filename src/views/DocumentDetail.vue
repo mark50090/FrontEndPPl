@@ -114,8 +114,13 @@
                   <span class="ml-2">SEND EMAIL</span>
                 </v-btn>
               </v-col>
-              <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
-                <v-btn v-if="false" depressed x-small dark color="error" class="download-pdf-btn">ยกเลิกเอกสาร</v-btn>
+              <v-col v-if="false" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
+                <v-btn depressed x-small dark color="error" class="download-pdf-btn">ยกเลิกเอกสาร</v-btn>
+              </v-col>
+              <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
+                <v-btn @click="optionFormReturn()" depressed x-small dark color="#FBC02D" class="return-correction-btn">
+                  <span class="ml-2">ส่งคืนแก้ไข</span>
+                </v-btn>
               </v-col>
             </v-row>
           </v-card>
@@ -310,6 +315,7 @@
     <showFormMail/>
     <showFromFile/>
     <Showpdf/>
+    <showFormReturn/>
   </div>
 </template>
 
@@ -321,6 +327,7 @@ import showFromFile from '../components/Attachments'
 import Showpdf from '../components/ShowPdf'
 import pdf from 'vue-pdf'
 import vueSignature from 'vue-signature'
+import showFormReturn from '../components/ReturnCorrection'
 export default {
   components: {
     StampModal,
@@ -328,7 +335,8 @@ export default {
     showFromFile,
     Showpdf,
     pdf,
-    vueSignature
+    vueSignature,
+    showFormReturn
   },
   data: () => ({
     document_detail_tab: null,
@@ -389,6 +397,9 @@ export default {
     }
   },
   methods: {
+    optionFormReturn() {
+      EventBus.$emit('FormReturn')
+    },
     optionFormMail() {
       EventBus.$emit('FormMail')
     },
@@ -1103,6 +1114,10 @@ export default {
   }
 
   .download-pdf-btn {
+    font-family: 'Sarabun', sans-serif;
+  }
+
+  .return-correction-btn {
     font-family: 'Sarabun', sans-serif;
   }
 
