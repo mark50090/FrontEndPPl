@@ -64,6 +64,7 @@ export default {
     stateDefaultSignature: '',
     default_Signature: '',
     default_Business: '',
+    default_sign: false
   }),
   mounted() {
     EventBus.$on('DefaultSignature',this.startSettingSignature)
@@ -74,15 +75,11 @@ export default {
       try {
       this.signature_dialog = true
       const url = '/user_setting/api/v1/get_usersetting'
-      var { data } = await this.axios.get(this.$api_url + url, 
-        {
-          headers: {
-              'Authorization': 'Bearer ' + sessionStorage.getItem("access_token")
-          }
-        })
+      var { data } = await this.axios.get(this.$api_url + url)
         if(data) {
           this.default_Business = data.result.other_setting.Default_Business
           this.default_Signature = data.result.other_setting.Default_Signature
+          this.default_sign = data.result.default_sign
           if(this.default_Signature != '') {
             this.stateDefaultSignature = 'show'
           }
@@ -116,20 +113,21 @@ export default {
       try {
         if (this.stateDefaultSignature == 'upload') {
           this.default_Signature = this.imageSignature
+          this.default_sign = true
         }
         if (this.stateDefaultSignature == 'draw') {
           var { isEmpty, data } = this.$refs.signaturePad.saveSignature();
           this.default_Signature = data
+          this.default_sign = true
           if (this.default_Signature == undefined) {
             this.default_Signature = ''
+            this.default_sign = false
           }
         }
         const url = '/user_setting/api/v1/set_usersetting'
         var { data } = await this.axios.post(this.$api_url + url, 
         {
-          headers: {
-              'Authorization': 'Bearer ' + sessionStorage.getItem("access_token")
-          },
+          default_sign : this.default_sign,
           other_setting : {Default_Business : this.default_Business, Default_Signature : this.default_Signature}
         })
       } catch (error) {

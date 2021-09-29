@@ -199,6 +199,7 @@ export default {
     noneInSelectedbiz: "ไม่มี",
     Default_Signature: '',
     state_Signature: '',
+    default_sign: false
   }),
   mounted() {
     this.getUserDetail()
@@ -241,22 +242,18 @@ export default {
     async get_usersetting(){
       try {
         const url = '/user_setting/api/v1/get_usersetting'
-        var { data } = await this.axios.get(this.$api_url + url, 
-        {
-          headers: {
-              'Authorization': 'Bearer ' + sessionStorage.getItem("access_token")
-          }
-        })
+        var { data } = await this.axios.get(this.$api_url + url)
         if(data) {
           this.confirmBusiness = data.result.other_setting.Default_Business
           this.Default_Signature = data.result.other_setting.Default_Signature
+          this.default_sign = data.result.default_sign
           if (this.confirmBusiness == '') {
             this.confirmBusiness = 'Not Found'
           }
-          if (this.Default_Signature == '') {
+          if (this.default_sign == false) {
             this.state_Signature = 'Not Found'
           }
-          if (this.Default_Signature != '') {
+          if (this.default_sign == true) {
             this.Default_Signature = data.result.other_setting.Default_Signature
             this.state_Signature = 'Ready'
           }
@@ -281,12 +278,8 @@ export default {
           this.noneForChangeBiz.shift()
           this.statedefault_Business = false
         }
-        // console.log(this.confirmBusiness)
         var { data } = await this.axios.post(this.$api_url + url, 
         {
-          headers: {
-              'Authorization': 'Bearer ' + sessionStorage.getItem("access_token")
-          },
           other_setting : {Default_Business : Default_Business,Default_Signature : this.Default_Signature}
         })
       } catch (error) {
