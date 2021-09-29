@@ -50,13 +50,12 @@
                       :y="item.sign_position_y"
                       :w="item.sign_box_width" 
                       :h="item.sign_box_heigth"
-                      :draggable="create_tab == 2"
-                      :resizable="create_tab == 2"
                       @dragging="onDrag(item,...arguments)" 
                       @resizing="onResize(item,...arguments)"
                       :style="{
                         'background-color': 'rgba(83, 186, 71, 0.2)',
-                        'display': item.show ? 'block' : 'none'
+                        'display': item.show ? 'block' : 'none',
+                        'cursor': 'move'
                         }"
                     >
                       <v-row no-gutters justify="center" align="center">
@@ -137,7 +136,7 @@
                       ประเภทเอกสาร :
                     </v-col>
                     <v-col cols="7" md="8" lg="8" class="px-0 pb-0">
-                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type" :items="document_type_list" item-text="keyword" item-value="_id" return-object @change="getDocumentTemplate" dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete>
+                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type" :items="document_type_list" item-text="document_type_detail.name" item-value="_id" return-object @change="getDocumentTemplate" dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row class="create-row">
@@ -186,7 +185,7 @@
                       ประเภทเอกสาร :
                     </v-col>
                     <v-col cols="12" md="8" lg="8" align-self="center" class="pr-0 pt-4 pb-0 create-attach-file-block">
-                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type_custom" :items="document_type_list" item-text="keyword" item-value="_id" return-object dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input create-setting-dropdown-icon"></v-autocomplete>
+                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type_custom" :items="document_type_list" item-text="document_type_detail.name" item-value="_id" return-object dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input create-setting-dropdown-icon"></v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row class="create-row">
@@ -357,7 +356,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       isFormValid: false,
       loading_list_text: '',
       loading_template: false,
-      loading_type: false
+      loading_type: false,
+      isDirty: false
     }),
     mounted() {
       this.getDocumentType()
@@ -387,14 +387,15 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       onResize: function (item, x, y, width, height) {
         var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
         var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
-        item.sign_llx = (x / clientWidth).toFixed(4)
-        item.sign_lly = (-(y+item.sign_box_heigth) / clientHeight).toFixed(4)
-        item.sign_urx = (width / clientWidth).toFixed(4)
-        item.sign_ury = (height / clientHeight).toFixed(4)
+        item.sign_llx = (x / clientWidth).toFixed(3)
+        item.sign_lly = (-(y+item.sign_box_heigth) / clientHeight).toFixed(3)
+        item.sign_urx = (width / clientWidth).toFixed(3)
+        item.sign_ury = (height / clientHeight).toFixed(3)
         item.sign_position_x = x
         item.sign_position_y = y
         item.sign_box_heigth = height
         item.sign_box_width = width
+        this.isDirty = true
       },
       onDrag: function (item, x, y) {
         var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
@@ -403,6 +404,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         item.sign_lly = (-(y+item.sign_box_heigth) / clientHeight).toFixed(4)
         item.sign_position_x = x
         item.sign_position_y = y
+        this.isDirty = true
       },
       getIcon(page){
         if (page.length == this.pdf_page_list.length) return 'mdi-close-box'
@@ -434,6 +436,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.pdf_src = undefined
         this.signArray = []
         this.flow_datas_custom = []
+        this.isDirty = false
       },
       async getDocumentType(){
         this.loading_type = true
@@ -458,6 +461,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.document_template_list = []
         this.selected_document_template = ''
         this.flow_datas = []
+        this.isDirty = false
         this.loading_list_text = 'กำลังดึงข้อมูล กรุณารอสักครู่...'
         this.loading_template = true
         try {
@@ -614,6 +618,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             })
           }
           if(data.status){
+            this.transaction_id = data.data.transaction_id
+            if(this.isDirty) this.saveNewSignPosition()
             this.emitLoading(false)
             this.$swal({
               backdrop: false,
@@ -654,6 +660,31 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           })
         }
       },
+      async saveNewSignPosition(){
+        var url = `/transaction/api/v1/saveTransaction?transaction_id=${this.transaction_id}`
+        var flow_data = this.signArray.map((e,index) => {
+          return { 
+            sign_position:{
+              sign_llx: e.sign_llx,
+              sign_lly: e.sign_lly,
+              sign_urx: e.sign_urx,
+              sign_ury: e.sign_ury,
+              sign_page: e.sign_page.length == this.pdf_page_list.length? 'all': e.sign_page.join(','),
+            },
+            index: index
+          }
+        })
+        try {
+          var {data} = await this.axios.put(this.$api_url + url,{
+            flow_data: flow_data
+          })
+          if(data){
+
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      },
       updatePageCount(page_count) {
         this.pdf_page_list = []
         this.page_count = page_count
@@ -666,6 +697,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.flow_datas_custom = []
         this.flow_datas = []
         this.selected_document_template = ''
+        this.isDirty = false
       },
       addPersonSign(){
         var index = this.flow_datas_custom.length
