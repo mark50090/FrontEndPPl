@@ -1,7 +1,7 @@
 <template>
       <v-dialog
       v-model="dialog"
-      max-width="400"
+      max-width="300"
       scrollable
       persistent
       >
