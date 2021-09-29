@@ -114,13 +114,13 @@
                   <span class="ml-2">SEND EMAIL</span>
                 </v-btn>
               </v-col>
-              <v-col v-if="false" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
-                <v-btn depressed x-small dark color="error" class="download-pdf-btn">ยกเลิกเอกสาร</v-btn>
-              </v-col>
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
                 <v-btn @click="optionFormReturn()" depressed x-small dark color="#FBC02D" class="return-correction-btn">
-                  <span class="ml-2">ส่งคืนแก้ไข</span>
+                  ส่งคืนแก้ไข
                 </v-btn>
+              </v-col>
+              <v-col v-if="false" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
+                <v-btn depressed x-small dark color="error" class="download-pdf-btn">ยกเลิกเอกสาร</v-btn>
               </v-col>
             </v-row>
           </v-card>
