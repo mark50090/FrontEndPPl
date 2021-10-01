@@ -21,7 +21,7 @@
                   <v-btn color="#67C25D" dark depressed class="front-btn-templateform" @click="createTemplate()"><v-icon left>mdi-plus</v-icon>สร้างแบบฟอร์ม</v-btn>
             </v-col>
             <!-- <v-col cols="6" md="auto" lg="auto" class="pb-0 pl-2 pr-0">
-                  <v-btn color="#67C25D" dark outlined class="front-btn-templateform"><v-icon left>mdi-inbox-arrow-down-outline</v-icon>นำเข้าแบบฟอร์ม</v-btn>
+                  <v-btn color="#67C25D" dark outlined class="front-btn-templateform" @click="ImportForm() "><v-icon left>mdi-inbox-arrow-down-outline</v-icon>นำเข้าแบบฟอร์ม</v-btn>
             </v-col> -->
           </v-row>
           <v-row class="table-top-spacer templateform-row">
@@ -89,11 +89,13 @@
             </v-data-table>
           </v-row>
     </v-card>
+    <ImportForm/>
   </div>
 </template>
 
 <script>
 import { EventBus } from '../EventBus'
+import ImportForm  from '../components/ImportForm'
   export default {
     data: () => ({
       templateform_table_header: [
@@ -115,6 +117,9 @@ import { EventBus } from '../EventBus'
       totalItemsTemplate: 0,
       keyword: ""
     }),
+    components: {
+      ImportForm
+    },
     mounted() {
       this.searchTemplate()
       EventBus.$emit('loadingOverlay', true)
@@ -212,6 +217,9 @@ import { EventBus } from '../EventBus'
         } catch(e) {
           //Alert ลบไม่สำเร็จ
         }
+      },
+      ImportForm() {
+        EventBus.$emit('importform')
       }
     }
   }
