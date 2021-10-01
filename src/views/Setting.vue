@@ -49,18 +49,18 @@
             </v-btn>
           </v-col>
         </v-row>
-        <!--<v-divider></v-divider>
+        <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class="pt-6 pl-4 all-font-color">
-            ตราประทับเริ่มต้น
+            ตราประทับเริ่มต้น 
           </v-col>
           <v-col class="pa-0">
             <v-row class="font-all">
               <v-col cols="8" md="5" lg="5" class="px-0 pt-4">
-                <v-autocomplete dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-chevron-down" class="font-dropdown ic-dropdown select-stamp-box"></v-autocomplete>
+                <v-autocomplete no-data-text="ไม่มีตราประทับ" dense outlined hide-details auto-select-first placeholder="เลือกตราประทับ" color="#67C25D" append-icon="mdi-chevron-down" class="font-dropdown ic-dropdown select-stamp-box" v-model="selectedStamp" @change="sendData()" :items="default_stamp" item-text="StampName" return-object></v-autocomplete>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pt-4 pr-0 edit-stamp-btn-block">
-                <v-tooltip top>
+                <v-tooltip top v-if="selectedStamp.StampName != undefined" >
                   <template v-slot:activator="{ on }">
                     <v-btn outlined small color="#67C25D" v-on="on" @click="openEditStamp()" class="edit-stamp-btn">
                       <v-icon size="16">mdi-cog</v-icon>
@@ -83,10 +83,11 @@
             <v-row class="font-all show-stamp-block">
               <v-col cols="12" md="5" lg="5" align-self="center" class="mb-4 pa-0 show-stamp-box">
                 <!-- stamp -->
-              <!--</v-col>
+                <v-img :src="selectedStamp.SrcBase"  width="100%" height="100%" contain ></v-img>
+              </v-col>
             </v-row>
           </v-col>
-        </v-row>-->
+        </v-row>
         <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class=" pl-4 all-font-color font-def-position font-def-position-mobile">
@@ -111,7 +112,7 @@
           <v-col v-if="statedefault_Business == true" align-self="center" class="pa-0">
                 <v-row class="font-all">
                   <v-col cols="12" md="6" lg="6" class="position-dropdown-mobile">
-                    <v-autocomplete class="font-dropdown ic-dropdown text-dropdown" append-icon="mdi-chevron-down" auto-select-first outlined dense hide-details color="#67C25D" v-model="selectedBiz" :items=noneForChangeBiz  return-object></v-autocomplete>
+                    <v-autocomplete class="font-dropdown ic-dropdown text-dropdown" placeholder="เลือก Business" append-icon="mdi-chevron-down" auto-select-first outlined dense hide-details color="#67C25D" v-model="selectedBiz" :items="noneForChangeBiz"  return-object></v-autocomplete>
                   </v-col>
                   <v-col cols="auto" md="auto" lg="auto" class="pr-0 position-btn-mobile-cancel" align-self="center">
                     <v-btn depressed color="#757575" small dark @click="stateBusinessOff()">ยกเลิก</v-btn>
@@ -198,17 +199,16 @@ export default {
     noneForChangeBiz:[],
     noneInSelectedbiz: "ไม่มี",
     Default_Signature: '',
-    state_Signature: '',
-    default_sign: false
+    state_Signature: 'Not Found',
+    default_sign: false,
+    default_stamp: [],
+    selectedStamp: [],
+    findStamp: '',
   }),
   mounted() {
     this.getUserDetail()
     this.get_usersetting()
     EventBus.$on('Setting',this.get_usersetting)
-    // if (this.confirmBusiness == 'Not Found') {
-    //   this.confirmBusiness = 'Not Found'
-    // }
-    // console.log(this.confirmBusiness)
   },
   methods: {
     openSetDefaultSignature() {
@@ -241,12 +241,18 @@ export default {
     },
     async get_usersetting(){
       try {
+        if (this.selectedStamp.stamp_name == undefined) {
+          // this.selectedStamp.imageStamp = ''
+          // this.selectedStamp.stamp_name = ''
+          this.selectedStamp = []
+        }
         const url = '/user_setting/api/v1/get_usersetting'
         var { data } = await this.axios.get(this.$api_url + url)
         if(data) {
           this.confirmBusiness = data.result.other_setting.Default_Business
           this.Default_Signature = data.result.other_setting.Default_Signature
           this.default_sign = data.result.default_sign
+          this.default_stamp = data.result.default_stamp
           if (this.confirmBusiness == '') {
             this.confirmBusiness = 'Not Found'
           }
@@ -256,6 +262,9 @@ export default {
           if (this.default_sign == true) {
             this.Default_Signature = data.result.other_setting.Default_Signature
             this.state_Signature = 'Ready'
+          }
+          if ((this.default_stamp == '') || (this.default_stamp == undefined)) {
+            this.selectedStamp.SrcBase = ''
           }
         }
       } catch (error) {
@@ -286,20 +295,6 @@ export default {
         console.log(error);
       }
     },
-    // changeBiz() {
-    //   if ((this.selectedBiz.getbiz[0].first_name_th == '') || 
-    //       (this.selectedBiz.getbiz[0].first_name_th == 'ไม่มี') || 
-    //       (this.selectedBiz.getbiz[0].first_name_th == undefined)) {
-    //     this.confirmBusiness = 'Not Found'
-    //     this.get_biz_detail.shift()
-    //     this.statedefault_Business = false
-    //   }
-    //   else {
-    //     this.confirmBusiness = this.selectedBiz.getbiz[0].first_name_th
-    //     this.get_biz_detail.shift()
-    //     this.statedefault_Business = false
-    //   }  
-    // },
     stateBusinessOn() {
       this.statedefault_Business = true
       this.noneForChangeBiz.push(this.removeDuplicateBusiness)
@@ -308,6 +303,11 @@ export default {
     stateBusinessOff() {
       this.noneForChangeBiz.shift()
       this.statedefault_Business = false
+    },
+    sendData() {
+      this.findStamp = this.default_stamp.findIndex(item => item.StampName == this.selectedStamp.StampName & item.SrcBase == this.selectedStamp.SrcBase)
+      EventBus.$emit('SelectedStamp',this.selectedStamp)
+      EventBus.$emit('findStamp',this.findStamp)
     },
   }
 }
