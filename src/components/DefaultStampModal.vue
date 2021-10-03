@@ -63,10 +63,6 @@ export default {
     EventBus.$on('findStamp', this.getFindStamp)
     EventBus.$on('DefaultStamp', this.startSettingStamp)
     EventBus.$on('SelectedStamp', this.getSelectedStamp)
-    // if (this.action_header == 'เพิ่ม') {
-    //   this.stamp_name = ''
-    //   this.imageStamp = ''
-    // }
   },
   methods: {
     getSelectedStamp(selectedStamp) {
@@ -79,23 +75,23 @@ export default {
     },
     async startSettingStamp(action) {
       try {
-      if(action == 'add') {
-        this.action_header = 'เพิ่ม'
-        this.stamp_name = ''
-        this.imageStamp = ''
-      } else if(action == 'edit') {
-        this.action_header = 'แก้ไข'
-        this.stamp_name = this.getStampName
-        this.imageStamp = this.getSrcBase
-      }
-      this.default_stamp_dialog = true
-      const url = '/user_setting/api/v1/get_usersetting'
-      var { data } = await this.axios.get(this.$api_url + url)
+        if(action == 'add') {
+          this.action_header = 'เพิ่ม'
+          this.stamp_name = ''
+          this.imageStamp = ''
+        } else if(action == 'edit') {
+          this.action_header = 'แก้ไข'
+          this.stamp_name = this.getStampName
+          this.imageStamp = this.getSrcBase
+        }
+        this.default_stamp_dialog = true
+        const url = '/user_setting/api/v1/get_usersetting'
+        var { data } = await this.axios.get(this.$api_url + url)
         if(data) {
           this.default_stamp = data.result.default_stamp
         }
       } catch (error) {
-         console.log(error);
+        console.log(error);
       }
     },
     openUploadStamp() {
@@ -116,29 +112,21 @@ export default {
     },
     async saveStamp(){
       try {
+        var Stampname = []
+        var getStampname = []
+        this.default_stamp.forEach(element => {
+          Stampname.push(element)
+        })
+        for (let index = 0; index < Stampname.length; index++) {
+          getStampname.push(Stampname[index].StampName)
+        }
         if (this.action_header == 'เพิ่ม') {
           if ((this.stamp_name != '') & (this.imageStamp != '')) {
-            var Stampname = []
-            var getStampname = []
-            this.default_stamp.forEach(element => {
-              Stampname.push(element)
-              for (let index = 0; index < Stampname.length; index++) {
-                getStampname.push(Stampname[index].StampName)
-              }
-            })
             const checkDataArray = getStampname.find(element => element == this.stamp_name);
-            // console.log("checkDataArray",checkDataArray)
             if (checkDataArray == undefined) {
-              var arrayModal = {StampName: this.stamp_name, SrcBase: this.imageStamp}
-              this.default_stamp.push(arrayModal);
-              const url = '/user_setting/api/v1/set_usersetting'
-              var { data } = await this.axios.post(this.$api_url + url, 
-                {
-                  default_stamp : this.default_stamp
-                }) 
-              EventBus.$emit('Setting')
-              this.action_header = ''
-              this.default_stamp_dialog = false
+              var stampModal = {StampName: this.stamp_name, SrcBase: this.imageStamp}
+              this.default_stamp.push(stampModal);
+              this.postStamp()
             }
             if (checkDataArray != undefined) {
               alert("มีชื่อตราประทับซ้ำในระบบ");
@@ -159,41 +147,55 @@ export default {
           }
         }
         if (this.action_header == 'แก้ไข') {
-          this.default_stamp[this.findStamp] = {StampName: this.stamp_name, SrcBase: this.imageStamp}
-          const url = '/user_setting/api/v1/set_usersetting'
-          var { data } = await this.axios.post(this.$api_url + url, 
-          {
-            default_stamp : this.default_stamp
-          })
-          EventBus.$emit('Setting')
-          this.default_stamp_dialog = false
+          if (this.stamp_name != '') {
+            getStampname.splice(this.findStamp, 1);
+            const checkDataArray = getStampname.find(element => element == this.stamp_name);
+            if (checkDataArray == undefined) {
+              this.default_stamp[this.findStamp] = {StampName: this.stamp_name, SrcBase: this.imageStamp}
+              this.postStamp()
+            }
+            if (checkDataArray != undefined) {
+              alert("มีชื่อตราประทับซ้ำในระบบ");
+              this.default_stamp_dialog = true
+            }
+          }
+          
         }
       } catch (error) {
         console.log(error);
       }
 		},
-    async deleteStamp(){
+    deleteStamp(){
+      if (this.action_header == 'แก้ไข') {
+        this.default_stamp.splice(this.findStamp, 1);
+        this.postStamp()
+      }
+		},
+    cancelButton() {
+      if (this.action_header == 'เพิ่ม') {
+        this.default_stamp_dialog = false
+        this.uploadImage = undefined
+        this.stamp_name = ''
+        this.imageStamp = ''
+      }
+      if (this.action_header == 'แก้ไข') {
+        this.default_stamp_dialog = false
+        this.uploadImage = undefined
+      }
+    },
+    async postStamp(){
       try {
-        if (this.action_header == 'แก้ไข') {
-          this.default_stamp.splice(this.findStamp, 1);
-          const url = '/user_setting/api/v1/set_usersetting'
-          var { data } = await this.axios.post(this.$api_url + url, 
-          {
-            default_stamp : this.default_stamp
-          })
-        }
+        const url = '/user_setting/api/v1/set_usersetting'
+        var { data } = await this.axios.post(this.$api_url + url, 
+        {
+          default_stamp : this.default_stamp
+        })
       } catch (error) {
         console.log(error);
       }
       EventBus.$emit('Setting')
       this.default_stamp_dialog = false
 		},
-    cancelButton() {
-      this.default_stamp_dialog = false
-      this.uploadImage = undefined
-      this.stamp_name = ''
-      this.imageStamp = ''
-    }
   }
 }
 </script>

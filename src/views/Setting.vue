@@ -230,10 +230,10 @@ export default {
       this.username = userDetail.username
       userDetail.biz_detail.forEach(element => {
         this.get_biz_detail.push(element)
-        for (let index = 0; index < this.get_biz_detail.length; index++) {
-          this.getBusiness.push(this.get_biz_detail[index].getbiz[0].first_name_th)
-        }
       })
+      for (let index = 0; index < this.get_biz_detail.length; index++) {
+        this.getBusiness.push(this.get_biz_detail[index].getbiz[0].first_name_th)
+      }
       this.removeDuplicateBusiness = [...new Set(this.getBusiness)] 
       if (((this.firstnameEng != '') & (this.lastnameEng != '')) || ((this.firstnameEng != undefined) & (this.lastnameEng != undefined))) {
         this.nameEng = true
