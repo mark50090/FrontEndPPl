@@ -202,7 +202,7 @@
                         <v-btn icon color="#525659" v-if="item_comment.restore" @click="edit_comment_fn"> <!-- show when it is user's comment -->
                           <v-icon>mdi-pencil</v-icon>
                         </v-btn>
-                        <v-btn icon color="#525659" v-if="item_comment.comment_by == my_name && false" @click="deletemessage()"> <!-- show when it is user's comment -->
+                        <v-btn icon color="#525659" v-if="item_comment.comment_by == my_name" @click="deletemessage()"> <!-- show when it is user's comment -->
                           <v-icon>mdi-delete</v-icon>
                         </v-btn> 
                         <span class="comment-time">{{ item_comment.comment_at }}</span>
@@ -386,6 +386,7 @@ export default {
     this.get_detail_fn()
     this.get_attachment_file_fn()
     this.get_signature_default_fn()
+    EventBus.$on('confirm_deletemessage',this.delete_comment_fn)
   },
   watch: {
     axios_pending (val) {
@@ -505,6 +506,11 @@ export default {
     edit_comment_fn () {
       this.doc_details.comment.pop()
       this.comment_status = true
+    },
+    delete_comment_fn () {
+      this.doc_details.comment.pop()
+      this.comment_status = true
+      this.comment = ''
     },
     async set_approve_fn(type) {
       var string_sign, data
@@ -1062,6 +1068,7 @@ export default {
   },
   beforeDestroy () {
     sessionStorage.removeItem('transaction_id')
+    EventBus.$off('confirm_deletemessage')
   }
 }
 </script>
