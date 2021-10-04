@@ -304,7 +304,7 @@
                     contain
                     height="150px"
                   />
-                  <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }"></vueSignature>
+                  <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }" w="300" h="150"></vueSignature>
                 </v-col>
               </v-row>
             </template>
