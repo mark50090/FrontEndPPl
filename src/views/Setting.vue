@@ -136,7 +136,7 @@
             </ul>
           </v-col>
         </v-row>
-        <!-- <v-divider></v-divider>
+        <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="12" md="2" lg="2" class="pt-4 pl-4 all-font-color position-setup-notifications position-setup-notifications-mobile">
             ตั้งค่าการแจ้งเตือน 
@@ -144,27 +144,27 @@
           <v-col class="pa-0 ">
             <v-row class="font-all">
               <v-col cols="5" md="2" lg="2" class="pl-4 pt-3 " align-self="center">
-                <v-switch class="mt-0 pt-0 " inset label="Email" hide-details></v-switch> <!-- noti email switch -->
-              <!--</v-col>
+                <v-switch class="mt-0 pt-0 " inset label="Email" hide-details v-model="switchEmail"></v-switch> <!-- noti email switch -->
+              </v-col>
               <v-col class="pt-3 px-0" cols="4" md="5" lg="5">
-                <v-text-field outlined hide-details dense :filled="true" :disabled="true" class="search-box-write" color="#67C25D"></v-text-field>
+                <v-text-field outlined hide-details dense :filled="disableTextEmail" :disabled="disableTextEmail" class="search-box-write" color="#67C25D" v-model="notify_email"></v-text-field>
               </v-col> 
               <v-col cols="auto" md="auto" lg="auto" class="px-0 pt-3">
-                <v-btn outlined  color="rgb(158,158,158)" class="search-btn-write px-0 bg-btn-pencil"> <!-- button of editing noti email -->
-                  <!--<v-icon small  >mdi-lead-pencil</v-icon>
-                </v-btn> -->
-                <!-- <template> <!-- button of cancel and confirm editing noti email  
-                      <v-btn outlined tile class="close-btn-write px-0" color="rgb(158,158,158)"> <!-- cancel editing noti email button 
+                <v-btn  outlined  color="rgb(158,158,158)" class="search-btn-write px-0 bg-btn-pencil" @click="checkStateEmail()"> <!-- button of editing noti email -->
+                  <v-icon small  >mdi-lead-pencil</v-icon>
+                </v-btn> 
+                <template v-if="editEmail == true"> <!-- button of cancel and confirm editing noti email  -->
+                      <v-btn outlined tile class="close-btn-write px-0" color="rgb(158,158,158)" @click="cancelEmail()"> <!-- cancel editing noti email button -->
                         <v-icon small >mdi-close</v-icon>
                       </v-btn>
-                      <v-btn outlined class="check-btn-write px-0" color="rgb(158,158,158)"> <!-- confirm editing noti email button
+                      <v-btn outlined class="check-btn-write px-0" color="rgb(158,158,158)" @click="saveEmail()"> <!-- confirm editing noti email button -->
                         <v-icon small >mdi-check</v-icon>
                       </v-btn> 
                 </template>  
               </v-col>
             </v-row>
           </v-col>
-        </v-row>-->
+        </v-row>
       </v-card-text>
       <SignatureModal/>
       <DefaultStampModal/>
@@ -199,11 +199,17 @@ export default {
     noneForChangeBiz:[],
     noneInSelectedbiz: "ไม่มี",
     Default_Signature: '',
+    Default_Business: '',
     state_Signature: 'Not Found',
     default_sign: false,
     default_stamp: [],
     selectedStamp: [],
     findStamp: '',
+    switchEmail: false,
+    editEmail: false,
+    disableTextEmail: true,
+    notify_email: '',
+    default_email: ''
   }),
   mounted() {
     this.getUserDetail()
@@ -242,8 +248,6 @@ export default {
     async get_usersetting(){
       try {
         if (this.selectedStamp.stamp_name == undefined) {
-          // this.selectedStamp.imageStamp = ''
-          // this.selectedStamp.stamp_name = ''
           this.selectedStamp = []
         }
         const url = '/user_setting/api/v1/get_usersetting'
@@ -251,8 +255,10 @@ export default {
         if(data) {
           this.confirmBusiness = data.result.other_setting.Default_Business
           this.Default_Signature = data.result.other_setting.Default_Signature
+          this.default_email = data.result.other_setting.Notify_Email
           this.default_sign = data.result.default_sign
           this.default_stamp = data.result.default_stamp
+          this.notify_email = this.default_email
           if (this.confirmBusiness == '') {
             this.confirmBusiness = 'Not Found'
           }
@@ -274,22 +280,25 @@ export default {
     async set_usersetting(){
       try {
         const url = '/user_setting/api/v1/set_usersetting'
-        var Default_Business = ''
         if ((this.selectedBiz == '') || (this.selectedBiz == 'ไม่มี') || (this.selectedBiz == undefined)) {
           this.confirmBusiness = 'Not Found'
-          Default_Business = ''
+          this.Default_Business = ''
           this.noneForChangeBiz.shift()
           this.statedefault_Business = false
         }
         else {
           this.confirmBusiness = this.selectedBiz[0]
-          Default_Business = this.confirmBusiness
+          this.Default_Business = this.confirmBusiness
           this.noneForChangeBiz.shift()
           this.statedefault_Business = false
         }
         var { data } = await this.axios.post(this.$api_url + url, 
         {
-          other_setting : {Default_Business : Default_Business,Default_Signature : this.Default_Signature}
+          other_setting : {
+            Default_Business : this.Default_Business,
+            Default_Signature : this.Default_Signature,
+            Notify_Email : this.default_email
+          }
         })
       } catch (error) {
         console.log(error);
@@ -309,6 +318,40 @@ export default {
       EventBus.$emit('SelectedStamp',this.selectedStamp)
       EventBus.$emit('findStamp',this.findStamp)
     },
+    checkStateEmail() {
+      console.log("switchEmail",this.switchEmail)
+      if (this.switchEmail == false) {
+        this.editEmail = false
+        this.disableTextEmail = true
+      }
+      if (this.switchEmail == true) {
+        this.editEmail = true
+        this.disableTextEmail = false
+      }
+    },
+    async saveEmail() {
+      try {
+        const url = '/user_setting/api/v1/set_usersetting'
+        var { data } = await this.axios.post(this.$api_url + url, 
+          {
+            other_setting : {
+              Default_Business : this.Default_Business,
+              Default_Signature : this.Default_Signature,
+              Notify_Email : this.notify_email
+            }                  
+          })
+        this.get_usersetting()
+        this.disableTextEmail = true
+        this.editEmail = false
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    cancelEmail() {
+      this.notify_email = this.default_email
+      this.disableTextEmail = true
+      this.editEmail = false
+    }
   }
 }
 </script>

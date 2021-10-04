@@ -64,7 +64,8 @@ export default {
     stateDefaultSignature: '',
     default_Signature: '',
     default_Business: '',
-    default_sign: false
+    default_sign: false,
+    Notify_Email: ''
   }),
   mounted() {
     EventBus.$on('DefaultSignature',this.startSettingSignature)
@@ -79,6 +80,7 @@ export default {
         if(data) {
           this.default_Business = data.result.other_setting.Default_Business
           this.default_Signature = data.result.other_setting.Default_Signature
+          this.Notify_Email = data.result.other_setting.Notify_Email
           this.default_sign = data.result.default_sign
           if(this.default_Signature != '') {
             this.stateDefaultSignature = 'show'
@@ -128,7 +130,12 @@ export default {
         var { data } = await this.axios.post(this.$api_url + url, 
         {
           default_sign : this.default_sign,
-          other_setting : {Default_Business : this.default_Business, Default_Signature : this.default_Signature}
+          other_setting : 
+          {
+            Default_Business : this.default_Business, 
+            Default_Signature : this.default_Signature,
+            Notify_Email : this.Notify_Email
+          }
         })
       } catch (error) {
         console.log(error);
