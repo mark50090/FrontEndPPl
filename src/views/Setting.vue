@@ -144,13 +144,13 @@
           <v-col class="pa-0 ">
             <v-row class="font-all">
               <v-col cols="5" md="2" lg="2" class="pl-4 pt-3 " align-self="center">
-                <v-switch class="mt-0 pt-0 " inset label="Email" hide-details v-model="switchEmail"></v-switch> <!-- noti email switch -->
+                <v-switch class="mt-0 pt-0 " inset label="Email" hide-details v-model="switchEmail" v-on:change="checkStateEmail()"></v-switch> <!-- noti email switch -->
               </v-col>
               <v-col class="pt-3 px-0" cols="4" md="5" lg="5">
-                <v-text-field outlined hide-details dense :filled="disableTextEmail" :disabled="disableTextEmail" class="search-box-write" color="#67C25D" v-model="notify_email"></v-text-field>
+                <v-text-field outlined hide-details dense :filled="disableTextEmail" :disabled="disableTextEmail" class="search-box-write" color="#67C25D" v-model="notify_email" @click="checkStateEmail()"></v-text-field>
               </v-col> 
               <v-col cols="auto" md="auto" lg="auto" class="px-0 pt-3">
-                <v-btn  outlined  color="rgb(158,158,158)" class="search-btn-write px-0 bg-btn-pencil" @click="checkStateEmail()"> <!-- button of editing noti email -->
+                <v-btn  v-if="editEmail == false" outlined  color="rgb(158,158,158)" class="search-btn-write px-0 bg-btn-pencil" @click="EditOn();EditOff();"> <!-- button of editing noti email -->
                   <v-icon small  >mdi-lead-pencil</v-icon>
                 </v-btn> 
                 <template v-if="editEmail == true"> <!-- button of cancel and confirm editing noti email  -->
@@ -209,7 +209,8 @@ export default {
     editEmail: false,
     disableTextEmail: true,
     notify_email: '',
-    default_email: ''
+    default_email: '',
+    openEditEmail: ''
   }),
   mounted() {
     this.getUserDetail()
@@ -319,14 +320,26 @@ export default {
       EventBus.$emit('findStamp',this.findStamp)
     },
     checkStateEmail() {
-      console.log("switchEmail",this.switchEmail)
       if (this.switchEmail == false) {
         this.editEmail = false
         this.disableTextEmail = true
+        this.openEditEmail = false
+        this.notify_email = this.default_email
       }
       if (this.switchEmail == true) {
+        this.openEditEmail = true
+      }
+    },
+    EditOn() {
+      if (this.openEditEmail == true) {
         this.editEmail = true
         this.disableTextEmail = false
+      }
+    },
+    EditOff() {
+      if (this.openEditEmail == false) {
+        this.editEmail = false
+        this.disableTextEmail = true
       }
     },
     async saveEmail() {
