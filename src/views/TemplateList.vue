@@ -73,12 +73,12 @@
                           </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>  -->
-                    <v-list-item @click="optionFormDelete()">
+                    <v-list-item @click="deletTemplate(item)">
                       <v-list-item-icon>
                           <v-icon color="#4CAF50">mdi-delete</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                          <v-list-item-title class="front-templateform-delete">
+                          <v-list-item-title class="front-templateform-down">
                             ลบ
                           </v-list-item-title>
                         </v-list-item-content>
@@ -129,9 +129,6 @@ import showFormDelete from '../components/DeleteForm.vue'
       EventBus.$on('changeBiz', this.changeBiz)
     },
     methods: { 
-      optionFormDelete() {
-      EventBus.$emit('FormDelete')
-    },
       emitLoading(isLoad) {
         EventBus.$emit('loadingOverlay', isLoad)
       },
@@ -223,6 +220,7 @@ import showFormDelete from '../components/DeleteForm.vue'
         } catch(e) {
           //Alert ลบไม่สำเร็จ
         }
+        // EventBus.$emit('FormDelete')
       },
       ImportForm() {
         EventBus.$emit('importform')
@@ -254,11 +252,6 @@ import showFormDelete from '../components/DeleteForm.vue'
   }
 
   .front-templateform-down {
-    font-family: 'Sarabun', sans-serif;
-    font-size: 14px !important;
-  }
-
-  .front-templateform-delete {
     font-family: 'Sarabun', sans-serif;
     font-size: 14px !important;
   }
