@@ -9237,9 +9237,9 @@
 
   .v-textarea.v-text-field--enclosed.pad-textarea .v-text-field__slot textarea {
     margin-top: 0px;
-    padding-left: 2%;
+    /* padding-left: 2%;
     padding-bottom: 0%;
-    padding-top: 0%;
+    padding-top: 0%; */
     line-height: 23px;
   }
 
