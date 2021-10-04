@@ -127,6 +127,11 @@ import showFormDelete from '../components/DeleteForm.vue'
       this.searchTemplate()
       EventBus.$emit('loadingOverlay', true)
       EventBus.$on('changeBiz', this.changeBiz)
+      EventBus.$on('getTemplateList', this.searchTemplate)
+    },
+    beforeDestroy() {
+      EventBus.$off('changeBiz')
+      EventBus.$off('getTemplateList')
     },
     methods: { 
       emitLoading(isLoad) {
@@ -209,18 +214,7 @@ import showFormDelete from '../components/DeleteForm.vue'
         this.$router.push({ 'path': '/template/create_template'})
       },
       async deletTemplate(item) {
-        try {
-          var { data } = await this.axios.get(this.$api_url + '/template_form/api/v1/delete_template_form?template_id=' + item.template_id)
-          if(data.message == 'success') {
-          //Alert ลบสำเร็จ
-          } else {
-            //Alert ลบไม่สำเร็จ
-          }
-          this.searchKeyword()
-        } catch(e) {
-          //Alert ลบไม่สำเร็จ
-        }
-        // EventBus.$emit('FormDelete')
+        EventBus.$emit('FormDelete',item)
       },
       ImportForm() {
         EventBus.$emit('importform')
