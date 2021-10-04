@@ -151,7 +151,7 @@ import { EventBus } from '../EventBus'
                 templateform_department: element.department,
                 templateform_fullname: element.sender_detail,
                 templateform_date: element.updated_at,
-                templateform_status: true,
+                templateform_status: element.template_status == "ACTIVE",
                 template_id: element.template_id
               })
               index++
