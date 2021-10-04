@@ -199,12 +199,12 @@
                         </v-col>
                       </v-row>
                       <v-row align="center" justify="end" class="pr-2 detail-row" :key="`comment_time_${index_comment}`">
-                        <v-btn icon color="#525659" v-if="item_comment.comment_by == my_name && false"> <!-- show when it is user's comment -->
-                          <v-icon>mdi-delete</v-icon>
-                        </v-btn>
                         <v-btn icon color="#525659" v-if="item_comment.restore" @click="edit_comment_fn"> <!-- show when it is user's comment -->
-                          <v-icon>mdi-restore</v-icon>
+                          <v-icon>mdi-pencil</v-icon>
                         </v-btn>
+                        <v-btn icon color="#525659" v-if="item_comment.comment_by == my_name && false" @click="deletemessage()"> <!-- show when it is user's comment -->
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn> 
                         <span class="comment-time">{{ item_comment.comment_at }}</span>
                       </v-row>
                     </template>
@@ -318,6 +318,7 @@
     <showFromFile/>
     <Showpdf/>
     <showFormReturn/>
+    <DeleteMessage/>
   </div>
 </template>
 
@@ -330,6 +331,7 @@ import Showpdf from '../components/ShowPdf'
 import pdf from 'vue-pdf'
 import vueSignature from 'vue-signature'
 import showFormReturn from '../components/ReturnCorrection'
+import DeleteMessage from '../components/DeleteMessage'
 export default {
   components: {
     StampModal,
@@ -338,7 +340,8 @@ export default {
     Showpdf,
     pdf,
     vueSignature,
-    showFormReturn
+    showFormReturn,
+    DeleteMessage
   },
   data: () => ({
     document_detail_tab: null,
@@ -435,6 +438,9 @@ export default {
     },  
     back() {
       this.$router.back();
+    },
+    deletemessage () {
+        EventBus.$emit('deletemessage')
     },
     change_page_fn(type) {
       switch (type) {
