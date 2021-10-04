@@ -90,12 +90,14 @@
           </v-row>
     </v-card>
     <ImportForm/>
+    <showFormDelete/>
   </div>
 </template>
 
 <script>
 import { EventBus } from '../EventBus'
 import ImportForm  from '../components/ImportForm'
+import showFormDelete from '../components/DeleteForm.vue'
   export default {
     data: () => ({
       templateform_table_header: [
@@ -118,7 +120,8 @@ import ImportForm  from '../components/ImportForm'
       keyword: ""
     }),
     components: {
-      ImportForm
+      ImportForm,
+      showFormDelete
     },
     mounted() {
       this.searchTemplate()
@@ -217,6 +220,7 @@ import ImportForm  from '../components/ImportForm'
         } catch(e) {
           //Alert ลบไม่สำเร็จ
         }
+        // EventBus.$emit('FormDelete')
       },
       ImportForm() {
         EventBus.$emit('importform')
