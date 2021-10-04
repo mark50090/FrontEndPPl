@@ -73,12 +73,12 @@
                           </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>  -->
-                    <v-list-item @click="deletTemplate(item)">
+                    <v-list-item @click="optionFormDelete()">
                       <v-list-item-icon>
                           <v-icon color="#4CAF50">mdi-delete</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                          <v-list-item-title class="front-templateform-down">
+                          <v-list-item-title class="front-templateform-delete">
                             ลบ
                           </v-list-item-title>
                         </v-list-item-content>
@@ -90,12 +90,14 @@
           </v-row>
     </v-card>
     <ImportForm/>
+    <showFormDelete/>
   </div>
 </template>
 
 <script>
 import { EventBus } from '../EventBus'
 import ImportForm  from '../components/ImportForm'
+import showFormDelete from '../components/DeleteForm.vue'
   export default {
     data: () => ({
       templateform_table_header: [
@@ -118,7 +120,8 @@ import ImportForm  from '../components/ImportForm'
       keyword: ""
     }),
     components: {
-      ImportForm
+      ImportForm,
+      showFormDelete
     },
     mounted() {
       this.searchTemplate()
@@ -126,6 +129,9 @@ import ImportForm  from '../components/ImportForm'
       EventBus.$on('changeBiz', this.changeBiz)
     },
     methods: { 
+      optionFormDelete() {
+      EventBus.$emit('FormDelete')
+    },
       emitLoading(isLoad) {
         EventBus.$emit('loadingOverlay', isLoad)
       },
@@ -248,6 +254,11 @@ import ImportForm  from '../components/ImportForm'
   }
 
   .front-templateform-down {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px !important;
+  }
+
+  .front-templateform-delete {
     font-family: 'Sarabun', sans-serif;
     font-size: 14px !important;
   }
