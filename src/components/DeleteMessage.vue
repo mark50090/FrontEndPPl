@@ -30,6 +30,7 @@
                   dark
                   block
                   depressed
+                  @click="confirm_delete_fn"
                   >ตกลง</v-btn
                 >
                 </v-col>
@@ -51,6 +52,10 @@ export default {
     methods: {
         deletemessages() {
             this.dialog = true
+        },
+        confirm_delete_fn (){
+          EventBus.$emit('confirm_deletemessage')
+          this.dialog = false
         }
     }
   }
