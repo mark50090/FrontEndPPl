@@ -45,7 +45,7 @@
     <!-- Left Menu -->
     <v-navigation-drawer app v-model="drawer">
       <v-list nav dense class="list-all-menu">
-        <v-list-item to="/inbox" @click="checkCreateDocMenu(), checkDocStyleMenu()" active-class="menu-active">
+        <v-list-item to="/inbox" active-class="menu-active">
           <v-list-item-icon>
             <v-icon>mdi-inbox-arrow-down-outline</v-icon>
           </v-list-item-icon>
@@ -62,7 +62,7 @@
               <v-list-item-title class="menu-title">สร้างเอกสาร</v-list-item-title>
             </v-list-item-content>
           </template>
-          <v-list-item to="/create" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
+          <v-list-item to="/create" class="mb-1">
             <v-list-item-icon class="icon-sub-menu">
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
@@ -70,7 +70,7 @@
               <v-list-item-title class="menu-title">อัพโหลดเอกสารอนุมัติ</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item to="/form" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
+          <v-list-item to="/form" class="mb-1">
             <v-list-item-icon class="icon-sub-menu">
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
@@ -79,7 +79,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
-        <v-list-item to="/sent_box" @click="checkCreateDocMenu(), checkDocStyleMenu()" active-class="menu-active">
+        <v-list-item to="/sent_box" active-class="menu-active">
           <v-list-item-icon>
             <v-icon>mdi-send-outline</v-icon>
           </v-list-item-icon>
@@ -87,7 +87,7 @@
             <v-list-item-title class="menu-title">รายการที่ส่ง</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/report" @click="checkCreateDocMenu(), checkDocStyleMenu()" active-class="menu-active menu-icon-svg-active">
+        <v-list-item to="/report" active-class="menu-active menu-icon-svg-active">
           <v-list-item-icon>
             <svg style="width:24px;height:24px" viewBox="0 0 24 24">
               <path fill="rgba(0, 0, 0, 0.54)" d="M2 12H4V17H20V12H22V17C22 18.11 21.11 19 20 19H4C2.9 19 2 18.11 2 17V12M12 15L17.55 9.54L16.13 8.13L13 11.25V2H11V11.25L7.88 8.13L6.46 9.55L12 15Z" />
@@ -97,7 +97,7 @@
             <v-list-item-title class="menu-title">รายงานเอกสาร</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/summary_workflow" @click="checkCreateDocMenu(), checkDocStyleMenu()" active-class="menu-active">
+        <v-list-item to="/summary_workflow" active-class="menu-active">
           <v-list-item-icon>
             <v-icon>mdi-file-document</v-icon>
           </v-list-item-icon>
@@ -114,7 +114,7 @@
               <v-list-item-title class="menu-title">จัดการรูปแบบเอกสาร</v-list-item-title>
             </v-list-item-content>
           </template>
-          <!-- <v-list-item to="/flow" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
+          <!-- <v-list-item to="/flow" class="mb-1">
             <v-list-item-icon class="icon-sub-menu">
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
@@ -122,7 +122,7 @@
               <v-list-item-title class="menu-title">สร้างรูปแบบอนุมัติ</v-list-item-title>
             </v-list-item-content>
           </v-list-item> -->
-          <v-list-item to="/template" @click="checkCreateDocMenu(), checkDocStyleMenu()" class="mb-1">
+          <v-list-item to="/template" class="mb-1">
             <v-list-item-icon class="icon-sub-menu">
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
@@ -158,6 +158,12 @@
       doc_style_active_class: '',
       allInfo: []
     }),
+    watch: {
+      $route(to, from) {
+        this.checkCreateDocMenu()
+        this.checkDocStyleMenu()
+      }
+    },
     mounted(){
       this.getUserDetail()
       EventBus.$on('loadingOverlay', this.changeLoading)
@@ -209,7 +215,7 @@
         // this.$router.push({ path: '/inbox' })
       },
       checkCreateDocMenu() {
-        if((this.$route.name == 'create') || (this.$route.name == 'form')) {
+        if((this.$route.path.startsWith('/create')) || (this.$route.path.startsWith('/form'))) {
           this.open_create_menu = true
           this.create_menu_active_class = 'menu-create-doc-active'
         } else {
@@ -218,7 +224,7 @@
         }
       },
       checkDocStyleMenu() {
-        if((this.$route.name == 'flow') || (this.$route.name == 'template')) {
+        if((this.$route.path.startsWith('/flow')) || (this.$route.path.startsWith('/template'))) {
           this.open_doc_style_menu = true
           this.doc_style_active_class = 'menu-create-doc-active'
         } else {

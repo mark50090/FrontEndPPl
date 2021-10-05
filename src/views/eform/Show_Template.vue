@@ -1296,7 +1296,7 @@
         sessionStorage.setItem("wait",false)
         this.getData ()
         this.isSendBack= false
-        this.one_result_data = JSON.parse(sessionStorage.getItem('one_result_data'))
+        this.one_result_data = JSON.parse(sessionStorage.getItem('userProfile'))
         EventBus.$on('getDocName',this.sendStep)
         EventBus.$on('toBackStep',this.backStep)
       } else {
@@ -9237,9 +9237,9 @@
 
   .v-textarea.v-text-field--enclosed.pad-textarea .v-text-field__slot textarea {
     margin-top: 0px;
-    padding-left: 2%;
+    /* padding-left: 2%;
     padding-bottom: 0%;
-    padding-top: 0%;
+    padding-top: 0%; */
     line-height: 23px;
   }
 

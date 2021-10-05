@@ -47,6 +47,7 @@
           :server-items-length="count_doc"
           :options.sync="optionsTransaction"
           :footer-props="optionFooter"
+          @click:row="goToDocumentDetail($event._id)"
           class="
             report-detail-table
             report-detail-table-border
@@ -166,6 +167,10 @@ export default {
     this.getCountFlowTransaction()
   },
   methods: {
+    goToDocumentDetail(id) {
+      sessionStorage.setItem('transaction_id', id)
+      this.$router.push('/inbox/detail')
+    },
     async getCountFlowTransaction () {
       const url = `${this.$api_url}/report/api/v1/count_flow_transaction?flow_id=${this.workflow_id}`
       const config = {
@@ -210,7 +215,8 @@ export default {
                 send_date: e.send_date,
                 step: e.step.replaceAll('\n', '<br/>'),
                 completed_time: e.completed_time,
-                process_time: e.process_time
+                process_time: e.process_time,
+                _id: e.transaction_id
               })
             })
         } else {

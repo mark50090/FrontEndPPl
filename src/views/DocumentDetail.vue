@@ -114,8 +114,13 @@
                   <span class="ml-2">SEND EMAIL</span>
                 </v-btn>
               </v-col>
-              <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
-                <v-btn v-if="false" depressed x-small dark color="error" class="download-pdf-btn">ยกเลิกเอกสาร</v-btn>
+              <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
+                <v-btn @click="optionFormReturn()" depressed x-small dark color="#FBC02D" class="return-correction-btn">
+                  ส่งคืนแก้ไข
+                </v-btn>
+              </v-col>
+              <v-col v-if="false" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
+                <v-btn depressed x-small dark color="error" class="download-pdf-btn">ยกเลิกเอกสาร</v-btn>
               </v-col>
             </v-row>
           </v-card>
@@ -194,12 +199,12 @@
                         </v-col>
                       </v-row>
                       <v-row align="center" justify="end" class="pr-2 detail-row" :key="`comment_time_${index_comment}`">
-                        <v-btn icon color="#525659" v-if="item_comment.comment_by == my_name && false"> <!-- show when it is user's comment -->
-                          <v-icon>mdi-delete</v-icon>
-                        </v-btn>
                         <v-btn icon color="#525659" v-if="item_comment.restore" @click="edit_comment_fn"> <!-- show when it is user's comment -->
-                          <v-icon>mdi-restore</v-icon>
+                          <v-icon>mdi-pencil</v-icon>
                         </v-btn>
+                        <v-btn icon color="#525659" v-if="item_comment.comment_by == my_name" @click="deletemessage()"> <!-- show when it is user's comment -->
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn> 
                         <span class="comment-time">{{ item_comment.comment_at }}</span>
                       </v-row>
                     </template>
@@ -299,7 +304,7 @@
                     contain
                     height="150px"
                   />
-                  <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }"></vueSignature>
+                  <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }" w="300" h="150"></vueSignature>
                 </v-col>
               </v-row>
             </template>
@@ -312,6 +317,8 @@
     <showFormMail/>
     <showFromFile/>
     <Showpdf/>
+    <showFormReturn/>
+    <DeleteMessage/>
   </div>
 </template>
 
@@ -323,6 +330,8 @@ import showFromFile from '../components/Attachments'
 import Showpdf from '../components/ShowPdf'
 import pdf from 'vue-pdf'
 import vueSignature from 'vue-signature'
+import showFormReturn from '../components/ReturnCorrection'
+import DeleteMessage from '../components/DeleteMessage'
 export default {
   components: {
     StampModal,
@@ -330,7 +339,9 @@ export default {
     showFromFile,
     Showpdf,
     pdf,
-    vueSignature
+    vueSignature,
+    showFormReturn,
+    DeleteMessage
   },
   data: () => ({
     document_detail_tab: null,
@@ -375,6 +386,7 @@ export default {
     this.get_detail_fn()
     this.get_attachment_file_fn()
     this.get_signature_default_fn()
+    EventBus.$on('confirm_deletemessage',this.delete_comment_fn)
   },
   watch: {
     axios_pending (val) {
@@ -392,6 +404,9 @@ export default {
     }
   },
   methods: {
+    optionFormReturn() {
+      EventBus.$emit('FormReturn')
+    },
     optionFormMail() {
       EventBus.$emit('FormMail')
     },
@@ -424,6 +439,9 @@ export default {
     },  
     back() {
       this.$router.back();
+    },
+    deletemessage () {
+        EventBus.$emit('deletemessage')
     },
     change_page_fn(type) {
       switch (type) {
@@ -488,6 +506,11 @@ export default {
     edit_comment_fn () {
       this.doc_details.comment.pop()
       this.comment_status = true
+    },
+    delete_comment_fn () {
+      this.doc_details.comment.pop()
+      this.comment_status = true
+      this.comment = ''
     },
     async set_approve_fn(type) {
       var string_sign, data
@@ -1045,6 +1068,7 @@ export default {
   },
   beforeDestroy () {
     sessionStorage.removeItem('transaction_id')
+    EventBus.$off('confirm_deletemessage')
   }
 }
 </script>
@@ -1109,6 +1133,10 @@ export default {
   }
 
   .download-pdf-btn {
+    font-family: 'Sarabun', sans-serif;
+  }
+
+  .return-correction-btn {
     font-family: 'Sarabun', sans-serif;
   }
 
