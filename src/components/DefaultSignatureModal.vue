@@ -25,7 +25,7 @@
             <!-- signature -->
             <v-img v-if="stateDefaultSignature == 'upload'" :src="imageSignature" width="100%" height="100%" class="imagesignature-block" contain></v-img>
             <v-img v-if="stateDefaultSignature == 'show'" :src="default_Signature"  width="100%" height="100%" class="imagesignature-block" contain></v-img>
-            <VueSignaturePad v-if="stateDefaultSignature == 'draw'" id="signature" width="100%" height="100%" ref="signaturePad" :options="options" class="imagesignature-block"/>
+            <VueSignaturePad v-if="stateDefaultSignature == 'draw'" id="signature" width="100%" height="100%" ref="signaturePad" :options="{penColor: 'rgb(13, 38, 154)', onBegin: () => {$refs.signaturePad.resizeCanvas()}}" class="imagesignature-block"/>
           </v-col>
         </v-row>
       </v-card-text>
@@ -58,9 +58,6 @@ export default {
     uploadImage: undefined,
     imageSignature: '',
     save_default_signature: '',
-    options: {
-      penColor: 'rgb(13, 38, 154)',
-    },
     stateDefaultSignature: 'show',
     default_Signature: '',
     default_Business: '',
@@ -85,14 +82,12 @@ export default {
     },
     getData() {
       EventBus.$off('Signature_Data')
-      console.log("default_Signature",this.default_Signature)
       if (this.default_Signature != '') {
         this.stateDefaultSignature = 'show'
-        console.log("stateDefaultSignature",this.stateDefaultSignature)
       }
-      if (this.default_Signature == '') {
+      if ((this.default_Signature == '') || (this.default_Signature == undefined)) {
+        this.imageSignature = ''
         this.stateDefaultSignature = 'draw'
-        console.log("stateDefaultSignature",this.stateDefaultSignature)
       }
     },
     openUploadSignatureImage() {
@@ -114,7 +109,6 @@ export default {
       reader.readAsDataURL(file);
     },
     saveSignature() {
-      
       if (this.stateDefaultSignature == 'upload') {
         this.default_Signature = this.imageSignature
         this.default_sign = true
@@ -146,9 +140,22 @@ export default {
       this.signature_dialog = false
       this.uploadImage = undefined
       this.imageSignature = ''
+      EventBus.$emit('Setting')
     },
     async postData() {
       try {
+        if (this.default_Business == undefined) {
+          this.default_Business = ''
+        }
+        if (this.default_Signature == undefined) {
+          this.default_Signature = ''
+        }
+        if (this.switch_notify_email == undefined) {
+          this.switch_notify_email = false
+        }
+        if (this.notify_email == undefined) {
+          this.notify_email = ''
+        }
         const url = '/user_setting/api/v1/set_usersetting'
         var { data } = await this.axios.post(this.$api_url + url, 
           {

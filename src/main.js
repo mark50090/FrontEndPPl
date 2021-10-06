@@ -15,6 +15,7 @@ import device from "vue-device-detector"
 import VueApexCharts from 'vue-apexcharts'
 import VueSignaturePad from 'vue-signature-pad'
 
+
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(VueSweetalert2)

@@ -221,11 +221,7 @@ export default {
     openSetDefaultSignature() {
       this._default_stamp = this.default_stamp
       EventBus.$emit('DefaultSignature')
-      // console.log("default_Business",this.confirmBusiness)
-      // console.log("default_Signature",this.default_Signature)
-      // console.log("switch_notify_email",this.switch_notify_email)
-      // console.log("notify_email",this.notify_email)
-      EventBus.$emit('Signature_Data',this.confirmBusiness,this.default_Signature,this.switch_notify_email,this.notify_email)
+      EventBus.$emit('Signature_Data',this.default_Business,this.default_Signature,this.switch_notify_email,this.notify_email)
     },
     openAddStamp() {
       EventBus.$emit('DefaultStamp','add')
@@ -315,15 +311,27 @@ export default {
     },
     async postData() {
       try {
+        if (this.default_Business == undefined) {
+          this.default_Business = ''
+        }
+        if (this.default_Signature == undefined) {
+          this.default_Signature = ''
+        }
+        if (this.switch_notify_email == undefined) {
+          this.switch_notify_email = false
+        }
+        if (this.notify_email == undefined) {
+          this.notify_email = ''
+        }
         const url = '/user_setting/api/v1/set_usersetting'
         var { data } = await this.axios.post(this.$api_url + url, 
-        {
-          other_setting : {
-            Default_Business : this.default_Business,
-            Default_Signature : this.default_Signature,
-            Default_NotifyEmail : this.switch_notify_email,
-            Notify_Email : this.notify_email
-          }
+          {
+            other_setting : {
+              Default_Business : this.default_Business,
+              Default_Signature : this.default_Signature,
+              Default_NotifyEmail : this.switch_notify_email,
+              Notify_Email : this.notify_email
+            }
         })
       } catch (error) {
         console.log(error);
@@ -338,12 +346,6 @@ export default {
       this.noneForChangeBiz.shift()
       this.statedefault_Business = false
     },
-    /* send_Stamp_Data() {
-      this.findStamp = this.default_stamp.findIndex(item => item.StampName == this.selectedStamp.StampName & item.SrcBase == this.selectedStamp.SrcBase)
-      // EventBus.$emit('findStamp',this.findStamp)
-      // EventBus.$emit('SelectedStamp',this.selectedStamp)
-      EventBus.$emit('Stamp_Data',this.default_stamp,this.findStamp,this.selectedStamp)
-    }, */
     check_edit_email() {
       this.postData()
       if (this.edit_email == true) {

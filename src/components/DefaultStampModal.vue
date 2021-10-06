@@ -194,7 +194,7 @@ export default {
       }
       EventBus.$emit('Setting')
       this.default_stamp_dialog = false
-		},
+		}
   }
 }
 </script>
