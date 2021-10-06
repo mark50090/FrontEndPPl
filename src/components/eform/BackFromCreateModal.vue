@@ -1,19 +1,21 @@
 <template>
-    <v-dialog v-model="dialog" persistent max-width="600">
+    <v-dialog v-model="dialog" persistent max-width="400">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
+        <!-- <v-card-title elevation="4" class="dialog_title">
           <b>{{ textLang.back_document }} "{{ page_name }}"</b>
-          <!-- <v-spacer></v-spacer>
-          <v-btn icon dark @click="dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn> -->
-        </v-card-title>
-        <v-card-text class="pa-12 confirm-content">{{ textLang.sure_leave }} "{{ page_name }}" {{ textLang.no_save }}</v-card-text>
-        <v-card-actions class="pt-0 pb-12">
-          <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialog = false">{{ textLang.cancel }}</v-btn>
-          <v-btn large depressed :color="color_back"  dark class="px-12 ml-4 button-dialog" @click="back()"><v-icon>mdi-exit-run</v-icon>&nbsp;&nbsp;{{ textLang.back }}</v-btn>
-          <v-spacer></v-spacer>
+        </v-card-title> -->
+        <v-card-text class="pt-6 pb-1 confirm-exit-create-form">ต้องการออกจากหน้าสร้างแบบฟอร์มโดยไม่บันทึกหรือไม่ ?</v-card-text>
+        <v-card-actions>
+          <v-row class="exit-create-form-row">
+            <v-spacer></v-spacer>
+            <v-col cols="4" class="pl-0 pr-2">
+              <v-btn block depressed color="#757575" dark class="cancel-exit-form-btn" @click="dialog = false">{{ textLang.cancel }}</v-btn>
+            </v-col>
+            <v-col cols="4" class="pl-2 pr-0">
+              <v-btn block depressed color="#67C25D"  dark class="cancel-exit-form-btn" @click="back()">{{ textLang.back }}</v-btn>
+            </v-col>
+            <v-spacer></v-spacer>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -89,5 +91,19 @@ export default {
 </script>
 
 <style>
+  .confirm-exit-create-form {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    color: black !important;
+    text-align: center;
+  }
 
-</style>``
+  .exit-create-form-row {
+    width: 100%;
+    margin: 0%;
+  }
+
+  .cancel-exit-form-btn {
+    font-family: 'Sarabun', sans-serif;
+  }
+</style>

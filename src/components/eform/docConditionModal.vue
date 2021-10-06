@@ -1,21 +1,21 @@
 <template>
     <v-dialog persistent scrollable max-width="800px" v-model="dialog_condition">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-          <b>{{ textLang.validation_doc_modal_title }}</b>
+        <v-card-title class="py-2 condition-doc-modal-header">
+          {{ textLang.validation_doc_modal_title }}
         </v-card-title>
-        <v-card-text class="pl-10 pt-7 pb-3">
-          <h3 class="condition-doc-hearder">{{ textLang.validate_list_title }}</h3>
-          <v-row v-for="item in docCondition" :key="item.setIndex">
-            <v-col cols="11">
-              <v-card outlined class="pa-3 condition-doc-group-card">
-                <span class="condition-doc-group-title">{{ textLang.condition_num }} {{item.setIndex}}</span>
-                <v-row class="pl-3 pr-2">
-                  <v-col cols='3' align-self="center" class="validate-title">
+        <v-card-text class="pt-4">
+          <h3 class="cond-doc-hearder">{{ textLang.validate_list_title }}</h3>
+          <v-row v-for="item in docCondition" :key="item.setIndex" class="mt-0 condition-doc-modal-row">
+            <v-col cols="11" class="px-0">
+              <v-card outlined class="pa-3 cond-doc-group-card">
+                <u class="cond-doc-group-title">{{ textLang.condition_num }} {{item.setIndex}}</u>
+                <v-row class="condition-doc-modal-row">
+                  <v-col cols='3' align-self="start" class="pl-0 cond-doc-title">
                     {{ textLang.condition_title }}:
                   </v-col>
                   <v-col cols='9' class="px-0">
-                    <v-textarea outlined dense no-resize rows="3" hide-details :color="color_validate_box" class="pad-textarea condition-validate validate-box" v-model="item.docCond">
+                    <v-textarea outlined dense no-resize rows="3" hide-details color="#4CAF50" class="pad-textarea cond-validate validate-cond-box" v-model="item.docCond">
                       <template v-slot:append-outer>
                         <v-menu offset-x>
                           <template v-slot:activator="{ on }">
@@ -24,10 +24,10 @@
                             </v-btn>
                           </template>
                           <v-card width="400">
-                            <v-card-text class="help-varidate-block">
+                            <v-card-text class="pr-1 help-varidate-content">
                               <p class="mb-0">{{ textLang.help_card.help_validate }}</p>
-                              <v-row>
-                                <v-col cols="6" class="pb-0">
+                              <v-row class="condition-doc-modal-row">
+                                <v-col cols="6" class="pl-0 pb-0">
                                   <ul>
                                     <li><b>+</b> : {{ textLang.help_card.plus_sign }}</li>
                                     <li><b>-</b> : {{ textLang.help_card.minus_sign }}</li>
@@ -59,53 +59,53 @@
                     </v-textarea>
                   </v-col>
                 </v-row>
-                <v-row class="pl-3 pr-3">
-                  <v-col cols='3' align-self="center" class="validate-title">
+                <v-row class="mt-0 condition-doc-modal-row">
+                  <v-col cols='3' align-self="center" class="pl-0 cond-doc-title">
                     {{ textLang.step_check_cond_type }}:
                   </v-col>
-                  <v-col cols="4" align-self="center" class="px-0 pt-2">
-                    <v-radio-group row mandatory hide-details dense class="mt-0" v-model="item.isSomeCheck">
-                      <v-radio :color="color_validate_box" :value="false">
+                  <v-col cols="auto" align-self="center" class="px-0 ">
+                    <v-radio-group row mandatory hide-details dense class="mt-0 pt-0" v-model="item.isSomeCheck">
+                      <v-radio color="#4CAF50" :value="false">
                         <template v-slot:label>
-                          <span class="validate-title">{{ textLang.check_all_step_choice }}</span>
+                          <span class="cond-doc-title">{{ textLang.check_all_step_choice }}</span>
                         </template>
                       </v-radio>
-                      <v-radio :color="color_validate_box" :value="true">
+                      <v-radio color="#4CAF50" :value="true">
                         <template v-slot:label>
-                          <span class="validate-title">{{ textLang.check_custom_step_choice }}</span>
+                          <span class="cond-doc-title">{{ textLang.check_custom_step_choice }}</span>
                         </template>
                       </v-radio>
                     </v-radio-group>
                   </v-col>
-                  <v-col v-if="item.isSomeCheck" cols="auto" align-self="center" class="validate-title">
+                  <v-col v-if="item.isSomeCheck" cols="auto" align-self="center" class="cond-doc-title">
                     {{ textLang.step_check_cond_title }}:
                   </v-col>
                   <v-col v-if="item.isSomeCheck" align-self="center" class="px-0">
-                    <v-select outlined dense hide-details multiple append-icon="mdi-chevron-down" :placeholder="textLang.step_check_cond_placeholder" :color="color_validate_box" :item-color="color_validate_box" :items="cond_step" class="condition-validate business-box-inside icon-dropdown-modal" v-model="item.checkStep"></v-select>
+                    <v-select outlined dense hide-details multiple append-icon="mdi-chevron-down" :placeholder="textLang.step_check_cond_placeholder" color="#4CAF50" item-color="#4CAF50" :items="cond_step" class="cond-validate validate-doc-dropdown-icon" v-model="item.checkStep"></v-select>
                   </v-col>
                 </v-row>
-                <v-row class="pl-3 pr-3">
-                  <v-col cols='3' align-self="center" class="validate-title">
+                <v-row class="mt-0 condition-doc-modal-row">
+                  <v-col cols='3' align-self="center" class="pl-0 cond-doc-title">
                     {{ textLang.alert_title }}:
                   </v-col>
                   <v-col cols='9' class="px-0">
-                    <v-text-field outlined dense hide-details :color="color_validate_box" class="pad-input validate-alert condition-validate" v-model="item.alertText"></v-text-field>
+                    <v-text-field outlined dense hide-details color="#4CAF50" class="validate-doc-alert-box cond-validate" v-model="item.alertText"></v-text-field>
                   </v-col>
                 </v-row>
               </v-card>
             </v-col>
-            <v-col cols="1" align-self="end">
+            <v-col cols="1" align-self="end" class="pr-0">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
-                  <v-btn v-show="item.setIndex == docCondition.length" depressed fab dark x-small v-on="on" :color="color_add_condition_btn" class="mb-2" @click="addCondition()">
+                  <v-btn v-show="item.setIndex == docCondition.length" depressed fab dark x-small v-on="on" color="#4CAF50" class="mb-2" @click="addCondition()">
                     <v-icon>mdi-plus</v-icon>
                   </v-btn>
                 </template>
                 <span>{{ textLang.add_condition_btn }}</span>
               </v-tooltip>
-              <v-tooltip top>
+              <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
-                  <v-btn v-if="item.setIndex != 1" depressed fab dark x-small v-on="on" color="error" @click="deleteCondition(item,item.setIndx)">
+                  <v-btn v-if="item.setIndex != 1" outlined fab x-small v-on="on" color="#4CAF50" @click="deleteCondition(item,item.setIndx)">
                     <v-icon>mdi-minus</v-icon>
                   </v-btn>
                 </template>
@@ -114,11 +114,11 @@
             </v-col>
           </v-row>
         </v-card-text>
-        <v-divider class="mx-7"></v-divider>
-        <v-card-actions class="pt-8 pb-8">
+        <v-divider class="mx-6"></v-divider>
+        <v-card-actions class="py-5">
           <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-3 save-setting-btn" @click="close()">{{ textLang.cancel_modal_btn }}</v-btn>
-          <v-btn depressed large :color="color_save_setting" class="px-5 ml-3 save-setting-btn save-modal-font-btn" @click="save()">{{ textLang.save_setting_btn }}</v-btn>
+          <v-btn outlined color="#67c25d" class="px-12 mr-4 validate-doc-modal-btn" @click="close()">{{ textLang.cancel_modal_btn }}</v-btn>
+          <v-btn depressed dark color="#67c25d" class="px-5 ml-4 validate-doc-modal-btn" @click="save()">{{ textLang.save_setting_btn }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -257,42 +257,62 @@
 </script>
 
 <style>
-  .condition-doc-hearder {
+  .condition-doc-modal-header {
+    font-family: "Sarabun", sans-serif;
+    font-size: 16px !important;
+    color: white;
+    background-color: #67c25d;
+  }
+
+  .cond-doc-hearder {
     font-family: 'Sarabun', sans-serif;
     color: black;
   }
 
-  .condition-doc-group-card {
-    border: 2px solid #2ACA9F !important;
+  .condition-doc-modal-row {
+    width: 100%;
+    margin: 0%;
   }
 
-  .condition-doc-group-title {
+  .cond-doc-group-card {
+    border: 2px solid #67c25d !important;
+  }
+
+  .cond-doc-group-title {
     font-family: 'Sarabun', sans-serif;
-    color: #2ACA9F;
+    color: #67c25d;
     font-size: 16px;
-    text-decoration: underline;
+    /* text-decoration: underline; */
   }
 
-  .validate-title {
+  .cond-doc-title {
     font-family: 'Sarabun', sans-serif;
     color: black;
     font-size: 16px;
   }
 
-  .condition-validate {
+  .cond-validate {
     font-family: 'Sarabun', sans-serif;
-    font-size: 16px;
+    font-size: 13px;
   }
 
-  .v-text-field--outlined.validate-box > .v-input__control > .v-input__slot {
+  .v-text-field--outlined.validate-cond-box > .v-input__control > .v-input__slot {
     height: 75px !important;
   }
 
-  .help-varidate-block {
+  .help-varidate-content {
     font-family: 'Sarabun', sans-serif;
   }
 
-  .v-text-field.validate-alert input {
-    line-height: 27px;
+  .validate-doc-dropdown-icon .theme--light.v-icon {
+    color: rgba(0, 0, 0, 0.54) !important;
+  }
+
+  .v-text-field.validate-doc-alert-box input {
+    line-height: 21px;
+  }
+
+  .validate-doc-modal-btn {
+    font-family: 'Sarabun', sans-serif;
   }
 </style>
