@@ -1,85 +1,78 @@
 <template>
     <v-dialog max-width="90%" persistent scrollable v-model="dialog_link_datatable">
       <v-card>
-        <v-overlay :value="notReady" absolute opacity="0.3" class="loading-content">
-          <!-- <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> -->
-          <v-progress-linear indeterminate rounded height="15" :background-color="color_loading_bar_bg" :color="color_loading_bar" class="loading-bar"></v-progress-linear>
+        <v-overlay :value="notReady" absolute opacity="0.3">
+          <img width="100px" src="../../assets/loader.gif" class="load-datatable-link">
         </v-overlay>
-        <v-card-title class="dialog_title" elevation="4">
-          <span>
-            <b>{{ textLang.setting }} "{{datatable_name}}"</b>
-          </span>
-          <!-- <v-spacer></v-spacer>
-          <v-btn icon dark @click="save()">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>-->
+        <v-card-title class="py-2 datatable-link-modal-header">
+          {{ textLang.setting }} "{{datatable_name}}"
         </v-card-title>
-        <v-card-text class="px-11 pb-10 pt-3">
+        <v-card-text class="">
           <v-expansion-panels accordion class="flat-expan" multiple v-model="row_panel">
-            <v-expansion-panel :key="row" v-for="row in datatable_row">
+            <v-expansion-panel :key="row" v-for="row in datatable_row" @change="onExpand(row)">
               <v-expansion-panel-header class="pl-0 pb-0 row-title2">
                 {{ textLang.row }} {{row}}
                 <template v-slot:actions>
-                  <v-icon :color="color_icon_expand">$expand</v-icon>
+                  <v-icon color="#4CAF50">$expand</v-icon>
                 </template>
               </v-expansion-panel-header>
               <hr class="line-expan-datatable-setting" />
-              <v-expansion-panel-content :tableno="row" @scroll.self="onNearBottom" class="data-each-row infinitList" ref="scrolls" style="position:relative">
+              <v-expansion-panel-content :tableno="row" class="data-each-row infinitList" :class="'row-no-'+ row" ref="scrolls" style="position:relative">
                 <v-row class="mt-3 import-excel-datatable-btn-row">
-                  <v-btn depressed dark :color="color_import_excel" class="import-excel-datatable-btn" @click="openImportExcel(row-1)">{{ textLang.import_data }}</v-btn>
+                  <v-btn depressed dark color="#525659" class="import-excel-datatable-btn" @click="openImportExcel(row-1)">{{ textLang.import_data }}</v-btn>
                   <input v-show='false' type='file' :id='"upload-file" + String(row-1)' @input="importExcel(row-1)" accept=".xlsx, .xls"/>
                 </v-row>
                 <!-- button to add selecter when it doesn't has any selecter -->
-                <v-lazy :options="{ threshold: 0.5 }" min-height="300" transition="fade-transition" v-model="isActive">
-                  <v-row class="add-selecter-start-row" justify="start" v-if="!tableData[row - 1].length">
-                    <v-btn :color="color_icon_mdiplus" @click="addDataChoice(row - 1)" dark depressed fab x-small>
+                <!-- <v-lazy :options="{ threshold: 0.5 }" min-height="300" transition="fade-transition" v-model="isActive"> -->
+                  <v-row class="mt-4 add-selecter-start-row" justify="start" v-if="!tableData[row - 1].length">
+                    <v-btn color="#4CAF50" @click="addDataChoice(row - 1)" dark depressed fab x-small>
                       <v-icon>mdi-plus</v-icon>
                     </v-btn>
                   </v-row>
                   <ul class="all-selecter" v-if="tableData[row - 1].length">
-                    <li :key="item.index" style="height:110.640625px" v-for="(item, index) in tableData[row-1]">
+                    <li :key="item.index" style="height:95px" v-for="(item, index) in tableData[row-1]">
                       <div class="each-selecter" v-if="scrollPosition[row - 1] - 2 <= index && index <= scrollPosition[row - 1] + 2">
                         <div class="delete-selecter-btn">
-                          <v-btn color="error" @click="removeDataChoice( row - 1, parseInt(item.index) - 1 )" dark depressed fab x-small>
+                          <v-btn color="#4CAF50" @click="removeDataChoice( row - 1, parseInt(item.index) - 1 )" outlined fab x-small>
                             <v-icon>mdi-minus</v-icon>
                           </v-btn>
                         </div>
                         <div class="add-selecter-btn" v-if="item.index == tableData[row - 1].length">
-                          <v-btn :color="color_icon_mdiplus" @click="addDataChoice(row - 1)" dark depressed fab x-small>
+                          <v-btn color="#4CAF50" @click="addDataChoice(row - 1)" dark depressed fab x-small>
                             <v-icon>mdi-plus</v-icon>
                           </v-btn>
                         </div>
-                        <span class="selecter-title">
+                        <div class="mt-1 selecter-title">
                           {{ textLang.group_option }}{{ item.index }} :
-                        </span>
+                        </div>
                         <div :key="col" class="input-data-value-block" v-for="col in datatable_col">
                           <!-- <v-checkbox :color="color_Excel" class="property-round-check" hide-details label="Excel" v-model.lazy="item.value[col - 1].isExcel"></v-checkbox> -->
-                          <v-text-field :color="color_Excel" :label="datatable_obj.object_name + '_R' + row + 'C' + col" class="pad-input label-data" dense hide-details outlined v-model.lazy="item.value[col - 1].value" v-show="!item.value[col - 1].isExcel"></v-text-field>
-                          <v-text-field :color="color_Excel" :label="datatable_obj.object_name + '_R' + row + 'C' + col" class="pad-input label-data" dense hide-details outlined v-model.lazy="item.value[col - 1].excelKey" v-show="item.value[col - 1].isExcel"></v-text-field>
+                          <v-text-field color="#4CAF50" :label="datatable_obj.object_name + '_R' + row + 'C' + col" class="data-link-box" dense hide-details outlined v-model.lazy="item.value[col - 1].value" v-show="!item.value[col - 1].isExcel"></v-text-field>
+                          <v-text-field color="#4CAF50" :label="datatable_obj.object_name + '_R' + row + 'C' + col" class="data-link-box" dense hide-details outlined v-model.lazy="item.value[col - 1].excelKey" v-show="item.value[col - 1].isExcel"></v-text-field>
                         </div>
                       </div>
                     </li>
                   </ul>
-                </v-lazy>
+                <!-- </v-lazy> -->
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-card-text>
-        <v-divider class="line-end-setting-datatable"></v-divider>
-        <v-row class="px-3 help-row">
-          <v-col class="btn-help-block" cols="1">
+        <v-divider class="ml-6 mr-6"></v-divider>
+        <v-row class="pl-6 pr-6 help-row">
+          <v-col class="pl-0" cols="auto">
             <v-btn @click="help = !help" color="primary" dark depressed fab x-small>
               <v-icon>mdi-help</v-icon>
             </v-btn>
           </v-col>
-          <v-col class="help-content-block" cols="11" v-if="help == true">
+          <v-col class="px-0" cols="" v-if="help == true">
             <p class="help-content">{{ textLang.select }}</p>
           </v-col>
         </v-row>
-        <v-card-actions class="pt-0 pb-12">
+        <v-card-actions class="pt-0 pb-6">
           <v-spacer></v-spacer>
-          <v-btn color="#979797" @click="close()" class="px-12 mr-4 save-setting-btn" large outlined>{{ textLang.cancel }}</v-btn>
-          <v-btn :color="color_save" @click="save()" class="px-6 ml-4 save-setting-btn" dark depressed large>{{ textLang.save }}</v-btn>
+          <v-btn color="#4CAF50" @click="close()" class="px-12 mr-4 datatable-setting-modal-btn" outlined>{{ textLang.cancel }}</v-btn>
+          <v-btn color="#4CAF50" @click="save()" class="px-6 ml-4 datatable-setting-modal-btn" dark depressed>{{ textLang.save }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -156,6 +149,17 @@
       EventBus.$off('changeLang')
     },
     methods: {
+      onExpand(row_no){
+        setTimeout(() => {
+          this.$nextTick(()=> {
+            if(!$('.row-no-'+ row_no).hasClass("scrollable")) {
+              $('.row-no-'+ row_no).addClass("scrollable");
+              $('.row-no-'+ row_no).scroll(this.InfinitScrollHandler)
+            }
+            $('.row-no-'+ row_no).scrollTop(0)
+          })
+        }, 1000);
+      },
       changeColor() {
         this.colorObject = JSON.parse(sessionStorage.getItem('biz_theme'))
         // this.color_dialog_header_bg = this.colorObject.modal.modal_main_color
@@ -223,15 +227,15 @@
         })
       },
       addScrollListenner() {
-        this.$refs.scrolls.forEach((vueComponent) => {
-           $(vueComponent.$el).scroll(this.InfinitScrollHandler)
-            $(vueComponent.$el).scrollTop(0)
+        this.$refs.scrolls?.forEach((vueComponent) => {
+          $(vueComponent.$el).scroll(this.InfinitScrollHandler)
+          $(vueComponent.$el).scrollTop(0)
         })
       },
       InfinitScrollHandler(e) {
         var firstChildOfScrollableContentWrapper = $(e.target).children().first()
         var tableno =  $(e.target).attr("tableno")-0
-        var rowIndex = -Math.floor(firstChildOfScrollableContentWrapper.position().top/110.640625)
+        var rowIndex = -Math.floor(firstChildOfScrollableContentWrapper.position().top/95)
         if (this.scrollPosition[tableno-1] != rowIndex) {
           this.$set(this.scrollPosition, tableno-1 ,rowIndex);
           
@@ -322,6 +326,17 @@
 </script>
 
 <style>
+.load-datatable-link {
+  opacity: 0.6;
+}
+
+.datatable-link-modal-header {
+  font-family: "Sarabun", sans-serif;
+  font-size: 16px !important;
+  color: white;
+  background-color: #67c25d;
+}
+
 .row-title {
   font-family: "Sarabun", sans-serif;
   font-size: 18px;
@@ -330,11 +345,11 @@
 .row-title2 {
   font-family: "Sarabun", sans-serif;
   font-size: 16px !important;
-  color: #2aca9f;
+  color: #4CAF50;
 }
 
 .line-expan-datatable-setting {
-  border: solid 1px #2aca9f;
+  border: solid 1px #4CAF50;
 }
 
 .data-each-row {
@@ -352,15 +367,12 @@
 }
 
 .add-selecter-start-row {
-  /* padding-left: 1%; */
   width: 100%;
-  margin-left: 0%;
-  margin-top: 1%;
+  margin: 0%;
 }
 
 .all-selecter {
-  /* padding-top: 1%; */
-  padding-top: 2%;
+  padding-top: 3%;
   padding-left: 0% !important;
   max-height: 200px;
   list-style-type: none;
@@ -371,10 +383,6 @@
   display: -webkit-inline-box;
   width: 100%;
   padding-bottom: 2%;
-}
-
-.v-text-field--outlined.v-input--dense.label-data .v-label--active {
-  left: 13px !important;
 }
 
 .input-data-link {
@@ -395,7 +403,7 @@
 
 .import-excel-datatable-btn-row {
   width: 100%;
-  margin-left: 0%;
+  margin: 0%;
 }
 
 .import-excel-datatable-btn {
@@ -403,23 +411,18 @@
   text-transform: capitalize;
 }
 
-.line-end-setting-datatable {
-  margin-left: 44px;
-  margin-right: 43px;
+.data-link-box {
+  font-family: "Sarabun", sans-serif;
+  font-size: 13px;
+}
+
+.data-link-box.v-text-field input {
+  line-height: 21px !important;
 }
 
 .help-row {
   width: 100%;
-  margin-left: 0%;
-}
-
-.btn-help-block {
-  text-align: center;
-  padding-right: 0%;
-}
-
-.help-content-block {
-  padding-left: 0%;
+  margin: 0%;
 }
 
 .help-content {
@@ -433,6 +436,11 @@
 }
 
 .save-setting-btn {
+  font-family: "Sarabun", sans-serif;
+  text-transform: capitalize;
+}
+
+.datatable-setting-modal-btn {
   font-family: "Sarabun", sans-serif;
   text-transform: capitalize;
 }

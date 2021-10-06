@@ -2,7 +2,7 @@
     <v-dialog v-model="dialog" persistent max-width="450">
        <v-card>
         <v-card-title>
-          <v-row class="text-box">
+          <v-row class="text-form">
             <span class="front-section">นำเข้าไฟล์แบบฟอร์ม</span>
             <v-spacer></v-spacer>
             <v-btn icon @click="dialog = false" color="#000000">
@@ -23,6 +23,7 @@
                     dense
                     color="#67C25D"
                     hide-details
+                    v-model="file"
                 ></v-file-input>
               </v-col>
           </v-row>
@@ -31,7 +32,7 @@
           <v-row class="text-form">
             <v-spacer></v-spacer>
             <v-col  cols="auto" lg="auto" md="auto">
-          <v-btn color="#67C25D" dark depressed class="front-form">
+          <v-btn color="#67C25D" dark depressed class="front-form" @click="importJson()">
             นำเข้า
           </v-btn>
           </v-col>
@@ -45,7 +46,8 @@
 import { EventBus } from '../EventBus'
 export default {
     data: () => ({
-        dialog: false
+        dialog: false,
+        file: []
     }),
     mounted() {
         EventBus.$on('importform',this.importforms)
@@ -53,6 +55,37 @@ export default {
     methods: {
         importforms() {
             this.dialog = true
+        },
+        async importJson() {
+          let formData = new FormData()
+          var business = ""
+          if(JSON.parse(sessionStorage.getItem('selected_business')).id) {
+            business = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+          }
+          formData.append('file', this.file)
+          formData.append('tax_id', business)
+          try {
+            var { data } = await this.axios.post(this.$api_url + '/template_form/api/v1/jsonImport',
+            formData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + sessionStorage.getItem("one_access_token")
+              }
+            })
+            if(data.status) {
+              this.file = []
+              this.dialog = false
+              let tempOption = {
+                template_id: data.data.template_id,
+              }
+              sessionStorage.setItem('option',JSON.stringify(tempOption))
+              sessionStorage.setItem('page_action', 'edit')
+              this.$router.push({ 'path': '/template/create_template'})
+            }
+          } catch (error) {
+            console.log(error.message)
+          }
         }
     }
   }

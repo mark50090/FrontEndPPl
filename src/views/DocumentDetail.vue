@@ -202,7 +202,7 @@
                         <v-btn icon color="#525659" v-if="item_comment.restore" @click="edit_comment_fn"> <!-- show when it is user's comment -->
                           <v-icon>mdi-pencil</v-icon>
                         </v-btn>
-                        <v-btn icon color="#525659" v-if="item_comment.comment_by == my_name && false" @click="deletemessage()"> <!-- show when it is user's comment -->
+                        <v-btn icon color="#525659" v-if="item_comment.comment_by == my_name" @click="deletemessage()"> <!-- show when it is user's comment -->
                           <v-icon>mdi-delete</v-icon>
                         </v-btn> 
                         <span class="comment-time">{{ item_comment.comment_at }}</span>
@@ -304,7 +304,7 @@
                     contain
                     height="150px"
                   />
-                  <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }"></vueSignature>
+                  <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }" w="300" h="150"></vueSignature>
                 </v-col>
               </v-row>
             </template>
@@ -381,11 +381,16 @@ export default {
   },
   mounted () {
     this.token = sessionStorage.getItem('access_token')
-    this.transaction_id = sessionStorage.getItem('transaction_id')
     this.my_name = sessionStorage.getItem('name')
+    this.transaction_id = sessionStorage.getItem('transaction_id')
+    if (!this.transaction_id) {
+      this.$router.replace({ name: 'inbox' })
+      return
+    }
     this.get_detail_fn()
     this.get_attachment_file_fn()
     this.get_signature_default_fn()
+    EventBus.$on('confirm_deletemessage',this.delete_comment_fn)
   },
   watch: {
     axios_pending (val) {
@@ -506,6 +511,11 @@ export default {
       this.doc_details.comment.pop()
       this.comment_status = true
     },
+    delete_comment_fn () {
+      this.doc_details.comment.pop()
+      this.comment_status = true
+      this.comment = ''
+    },
     async set_approve_fn(type) {
       var string_sign, data
       if (this.sign_type === 'Sign Pad') {
@@ -535,6 +545,41 @@ export default {
         .then((response) => {
           // console.log(response.data)
           if (response.data.status) {
+            if (type === 'approve') {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                text: 'อนุมัติเอกสารสำเร็จ',
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            } else if (type === 'reject') {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                text: 'ปฏิเสธเอกสารสำเร็จ',
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            }
             this.$router.replace({ name: 'inbox' })
           }
         })
@@ -612,10 +657,37 @@ export default {
         })
         .catch((error) => {
           // console.log(error)
+          if (error.response) {
+            const errResponse = error.response.data
+            if (errResponse.message === 'error read pdf') {
+              this.error_swal_fn('ไม่สามารถอ่าน PDF ได้')
+            } else {
+              this.error_swal_fn(errResponse.message || 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง')
+            }
+            this.$router.replace({ name: 'inbox' })
+          }
         })
         .then(() => {
           this.axios_pending--
         })
+    },
+    error_swal_fn (msg = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง') {
+      this.$swal({
+        backdrop: false,
+        position: 'bottom-end',
+        width: '330px',
+        title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+        text: msg,
+        showCloseButton: true,
+        showConfirmButton: false,
+        timer: 5000,
+        customClass: {
+          popup: 'alert-card',
+          title: 'alert-title-block',
+          closeButton: 'close-alert-btn',
+          htmlContainer: 'alert-text-block'
+        }
+      })
     },
     async get_attachment_file_fn () {
       const url = `/file-component/api/getListFile?transaction_id=${this.transaction_id}`
@@ -1062,6 +1134,7 @@ export default {
   },
   beforeDestroy () {
     sessionStorage.removeItem('transaction_id')
+    EventBus.$off('confirm_deletemessage')
   }
 }
 </script>
