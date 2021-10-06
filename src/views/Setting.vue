@@ -54,13 +54,13 @@
           <v-col cols="5" md="2" lg="2" class="pt-6 pl-4 all-font-color">
             ตราประทับเริ่มต้น 
           </v-col>
-          <v-col class="pa-0">
+          <v-col class="pa-0" cols="7" md="10" lg="10">
             <v-row class="font-all">
               <v-col cols="8" md="5" lg="5" class="px-0 pt-4">
-                <v-autocomplete no-data-text="ไม่มีตราประทับ" dense outlined hide-details auto-select-first placeholder="เลือกตราประทับ" color="#67C25D" append-icon="mdi-chevron-down" class="font-dropdown ic-dropdown select-stamp-box" v-model="selectedStamp" @change="sendData()" :items="default_stamp" item-text="StampName" return-object></v-autocomplete>
+                <v-autocomplete no-data-text="ไม่มีตราประทับ" dense outlined hide-details auto-select-first placeholder="เลือกตราประทับ" color="#67C25D" append-icon="mdi-chevron-down" class="font-dropdown ic-dropdown select-stamp-box" v-model="selectedStamp" :items="default_stamp" item-text="StampName" return-object></v-autocomplete>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pt-4 pr-0 edit-stamp-btn-block">
-                <v-tooltip top v-if="selectedStamp.StampName != undefined" >
+                <v-tooltip top v-if="show_Edit_Stamp == true" >
                   <template v-slot:activator="{ on }">
                     <v-btn outlined small color="#67C25D" v-on="on" @click="openEditStamp()" class="edit-stamp-btn">
                       <v-icon size="16">mdi-cog</v-icon>
@@ -130,7 +130,7 @@
           </v-col>
           <v-col  class="font-all pl-4 pr-2 pt-4 all-font-color">
             <ul >
-              <li v-for="item in removeDuplicateBusiness" :key="item"> <!-- each business list -->
+              <li v-for="item in getBusiness" :key="item"> <!-- each business list -->
                 {{item}} 
               </li>
             </ul>
@@ -144,20 +144,20 @@
           <v-col class="pa-0 ">
             <v-row class="font-all">
               <v-col cols="5" md="2" lg="2" class="pl-4 pt-3 " align-self="center">
-                <v-switch class="mt-0 pt-0 " inset label="Email" hide-details v-model="switchEmail" v-on:change="checkStateEmail()"></v-switch> <!-- noti email switch -->
+                <v-switch class="mt-0 pt-0 " inset label="Email" hide-details v-model="switch_notify_email" v-on:change="check_edit_email()"></v-switch> <!-- noti email switch -->
               </v-col>
               <v-col class="pt-3 px-0" cols="4" md="5" lg="5">
-                <v-text-field outlined hide-details dense :filled="disableTextEmail" :disabled="disableTextEmail" class="search-box-write" color="#67C25D" v-model="notify_email" @click="checkStateEmail()"></v-text-field>
+                <v-text-field outlined hide-details dense :filled="disable_notify_email" :disabled="disable_notify_email" class="search-box-write" color="#67C25D" v-model="notify_email"></v-text-field>
               </v-col> 
               <v-col cols="auto" md="auto" lg="auto" class="px-0 pt-3">
-                <v-btn  v-if="editEmail == false" outlined  color="rgb(158,158,158)" class="search-btn-write px-0 bg-btn-pencil" @click="EditOn();EditOff();"> <!-- button of editing noti email -->
+                <v-btn v-if="edit_email == false" outlined  color="rgb(158,158,158)" class="search-btn-write px-0 bg-btn-pencil" @click="editEmail()"> <!-- button of editing noti email -->
                   <v-icon small  >mdi-lead-pencil</v-icon>
                 </v-btn> 
-                <template v-if="editEmail == true"> <!-- button of cancel and confirm editing noti email  -->
-                      <v-btn outlined tile class="close-btn-write px-0" color="rgb(158,158,158)" @click="cancelEmail()"> <!-- cancel editing noti email button -->
+                <template v-if="edit_email == true" > <!-- button of cancel and confirm editing noti email  -->
+                      <v-btn outlined tile class="close-btn-write px-0" color="rgb(158,158,158)" @click="close_notifyemail()"> <!-- cancel editing noti email button -->
                         <v-icon small >mdi-close</v-icon>
                       </v-btn>
-                      <v-btn outlined class="check-btn-write px-0" color="rgb(158,158,158)" @click="saveEmail()"> <!-- confirm editing noti email button -->
+                      <v-btn outlined class="check-btn-write px-0" color="rgb(158,158,158)" @click="confirm_notifyemail()"> <!-- confirm editing noti email button -->
                         <v-icon small >mdi-check</v-icon>
                       </v-btn> 
                 </template>  
@@ -195,22 +195,22 @@ export default {
     nameEng: false,
     confirmBusiness: 'Not Found',
     getBusiness: [],
-    removeDuplicateBusiness: [],
     noneForChangeBiz:[],
     noneInSelectedbiz: "ไม่มี",
-    Default_Signature: '',
-    Default_Business: '',
+    default_Signature: '',
+    default_Business: '',
     state_Signature: 'Not Found',
     default_sign: false,
     default_stamp: [],
     selectedStamp: [],
-    findStamp: '',
-    switchEmail: false,
-    editEmail: false,
-    disableTextEmail: true,
+    show_Edit_Stamp: true,
     notify_email: '',
-    default_email: '',
-    openEditEmail: ''
+    set_notify_email: '',
+    switch_notify_email: false,
+    edit_email: false,
+    disable_notify_email: true,
+    show_Edit_Stamp: true ,
+    _default_stamp : []
   }),
   mounted() {
     this.getUserDetail()
@@ -219,13 +219,22 @@ export default {
   },
   methods: {
     openSetDefaultSignature() {
+      this._default_stamp = this.default_stamp
       EventBus.$emit('DefaultSignature')
+      // console.log("default_Business",this.confirmBusiness)
+      // console.log("default_Signature",this.default_Signature)
+      // console.log("switch_notify_email",this.switch_notify_email)
+      // console.log("notify_email",this.notify_email)
+      EventBus.$emit('Signature_Data',this.confirmBusiness,this.default_Signature,this.switch_notify_email,this.notify_email)
     },
     openAddStamp() {
       EventBus.$emit('DefaultStamp','add')
+      EventBus.$emit('Stamp_Data_Add',this.default_stamp)
     },
     openEditStamp() {
       EventBus.$emit('DefaultStamp','edit')
+      let findStamp = this.default_stamp.findIndex(item => item.StampName == this.selectedStamp.StampName & item.SrcBase == this.selectedStamp.SrcBase)
+      EventBus.$emit('Stamp_Data_Edit',this.default_stamp,findStamp,this.selectedStamp)
     },
     getUserDetail(){ // get user detail
       var userDetail = JSON.parse(sessionStorage.getItem('userProfile'))
@@ -241,7 +250,7 @@ export default {
       for (let index = 0; index < this.get_biz_detail.length; index++) {
         this.getBusiness.push(this.get_biz_detail[index].getbiz[0].first_name_th)
       }
-      this.removeDuplicateBusiness = [...new Set(this.getBusiness)] 
+      this.getBusiness = [...new Set(this.getBusiness)] 
       if (((this.firstnameEng != '') & (this.lastnameEng != '')) || ((this.firstnameEng != undefined) & (this.lastnameEng != undefined))) {
         this.nameEng = true
       }
@@ -255,19 +264,30 @@ export default {
         var { data } = await this.axios.get(this.$api_url + url)
         if(data) {
           this.confirmBusiness = data.result.other_setting.Default_Business
-          this.Default_Signature = data.result.other_setting.Default_Signature
-          this.default_email = data.result.other_setting.Notify_Email
+          this.default_Signature = data.result.other_setting.Default_Signature
+          this.switch_notify_email = data.result.other_setting.Default_NotifyEmail
+          this.notify_email = data.result.other_setting.Notify_Email
+          this.set_notify_email = data.result.other_setting.Notify_Email
           this.default_sign = data.result.default_sign
           this.default_stamp = data.result.default_stamp
-          this.notify_email = this.default_email
-          if (this.confirmBusiness == '') {
+          if (this.default_stamp != '') {
+            if (this.default_stamp != this._default_stamp) {
+              this.selectedStamp = data.result.default_stamp[0]
+              if (this.selectedStamp.SrcBase != undefined) {
+                this.show_Edit_Stamp = true
+              }
+            }
+          }
+          if (this.selectedStamp.SrcBase == undefined) {
+            this.show_Edit_Stamp = false
+          }
+          if ((this.confirmBusiness == '') || (this.confirmBusiness == undefined)) {
             this.confirmBusiness = 'Not Found'
           }
           if (this.default_sign == false) {
             this.state_Signature = 'Not Found'
           }
           if (this.default_sign == true) {
-            this.Default_Signature = data.result.other_setting.Default_Signature
             this.state_Signature = 'Ready'
           }
           if ((this.default_stamp == '') || (this.default_stamp == undefined)) {
@@ -278,27 +298,31 @@ export default {
         console.log(error);
       }
     },
-    async set_usersetting(){
+    set_usersetting(){
+      if ((this.selectedBiz == '') || (this.selectedBiz == 'ไม่มี') || (this.selectedBiz == undefined)) {
+        this.confirmBusiness = 'Not Found'
+        this.default_Business = ''
+        this.noneForChangeBiz.shift()
+        this.statedefault_Business = false
+      }
+      else {
+        this.confirmBusiness = this.selectedBiz[0]
+        this.default_Business = this.confirmBusiness
+        this.noneForChangeBiz.shift()
+        this.statedefault_Business = false
+      }
+      this.postData()
+    },
+    async postData() {
       try {
         const url = '/user_setting/api/v1/set_usersetting'
-        if ((this.selectedBiz == '') || (this.selectedBiz == 'ไม่มี') || (this.selectedBiz == undefined)) {
-          this.confirmBusiness = 'Not Found'
-          this.Default_Business = ''
-          this.noneForChangeBiz.shift()
-          this.statedefault_Business = false
-        }
-        else {
-          this.confirmBusiness = this.selectedBiz[0]
-          this.Default_Business = this.confirmBusiness
-          this.noneForChangeBiz.shift()
-          this.statedefault_Business = false
-        }
         var { data } = await this.axios.post(this.$api_url + url, 
         {
           other_setting : {
-            Default_Business : this.Default_Business,
-            Default_Signature : this.Default_Signature,
-            Notify_Email : this.default_email
+            Default_Business : this.default_Business,
+            Default_Signature : this.default_Signature,
+            Default_NotifyEmail : this.switch_notify_email,
+            Notify_Email : this.notify_email
           }
         })
       } catch (error) {
@@ -307,63 +331,38 @@ export default {
     },
     stateBusinessOn() {
       this.statedefault_Business = true
-      this.noneForChangeBiz.push(this.removeDuplicateBusiness)
+      this.noneForChangeBiz.push(this.getBusiness)
       this.noneForChangeBiz.unshift(this.noneInSelectedbiz)
     },
     stateBusinessOff() {
       this.noneForChangeBiz.shift()
       this.statedefault_Business = false
     },
-    sendData() {
+    /* send_Stamp_Data() {
       this.findStamp = this.default_stamp.findIndex(item => item.StampName == this.selectedStamp.StampName & item.SrcBase == this.selectedStamp.SrcBase)
-      EventBus.$emit('SelectedStamp',this.selectedStamp)
-      EventBus.$emit('findStamp',this.findStamp)
-    },
-    checkStateEmail() {
-      if (this.switchEmail == false) {
-        this.editEmail = false
-        this.disableTextEmail = true
-        this.openEditEmail = false
-        this.notify_email = this.default_email
-      }
-      if (this.switchEmail == true) {
-        this.openEditEmail = true
+      // EventBus.$emit('findStamp',this.findStamp)
+      // EventBus.$emit('SelectedStamp',this.selectedStamp)
+      EventBus.$emit('Stamp_Data',this.default_stamp,this.findStamp,this.selectedStamp)
+    }, */
+    check_edit_email() {
+      this.postData()
+      if (this.edit_email == true) {
+        this.edit_email = false
       }
     },
-    EditOn() {
-      if (this.openEditEmail == true) {
-        this.editEmail = true
-        this.disableTextEmail = false
-      }
+    editEmail() {
+      this.edit_email = true
+      this.disable_notify_email = false
     },
-    EditOff() {
-      if (this.openEditEmail == false) {
-        this.editEmail = false
-        this.disableTextEmail = true
-      }
+    confirm_notifyemail() {
+      this.postData()
+      this.edit_email = false
+      this.disable_notify_email = true
     },
-    async saveEmail() {
-      try {
-        const url = '/user_setting/api/v1/set_usersetting'
-        var { data } = await this.axios.post(this.$api_url + url, 
-          {
-            other_setting : {
-              Default_Business : this.Default_Business,
-              Default_Signature : this.Default_Signature,
-              Notify_Email : this.notify_email
-            }                  
-          })
-        this.get_usersetting()
-        this.disableTextEmail = true
-        this.editEmail = false
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    cancelEmail() {
-      this.notify_email = this.default_email
-      this.disableTextEmail = true
-      this.editEmail = false
+    close_notifyemail() {
+      this.notify_email = this.set_notify_email
+      this.edit_email = false
+      this.disable_notify_email = true
     }
   }
 }

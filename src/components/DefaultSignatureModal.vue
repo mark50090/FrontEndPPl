@@ -61,36 +61,38 @@ export default {
     options: {
       penColor: 'rgb(13, 38, 154)',
     },
-    stateDefaultSignature: '',
+    stateDefaultSignature: 'show',
     default_Signature: '',
     default_Business: '',
     default_sign: false,
-    Notify_Email: ''
+    notify_email: '',
+    switch_notify_email: false,
+    default_Business: '',
   }),
   mounted() {
     EventBus.$on('DefaultSignature',this.startSettingSignature)
   },
   methods: {
-    async startSettingSignature() {
-      this.stateDefaultSignature = 'show'
-      try {
+    startSettingSignature() {
       this.signature_dialog = true
-      const url = '/user_setting/api/v1/get_usersetting'
-      var { data } = await this.axios.get(this.$api_url + url)
-        if(data) {
-          this.default_Business = data.result.other_setting.Default_Business
-          this.default_Signature = data.result.other_setting.Default_Signature
-          this.Notify_Email = data.result.other_setting.Notify_Email
-          this.default_sign = data.result.default_sign
-          if(this.default_Signature != '') {
-            this.stateDefaultSignature = 'show'
-          }
-          if(this.default_Signature == '') {
-            this.stateDefaultSignature = 'draw'
-          }
-        }
-      } catch (error) {
-        console.log(error);
+      EventBus.$on('Signature_Data',(default_Business,default_Signature,switch_notify_email,notify_email) => {
+        this.default_Business = default_Business
+        this.default_Signature = default_Signature
+        this.switch_notify_email = switch_notify_email
+        this.notify_email = notify_email
+      })
+      EventBus.$on('Signature_Data',this.getData)
+    },
+    getData() {
+      EventBus.$off('Signature_Data')
+      console.log("default_Signature",this.default_Signature)
+      if (this.default_Signature != '') {
+        this.stateDefaultSignature = 'show'
+        console.log("stateDefaultSignature",this.stateDefaultSignature)
+      }
+      if (this.default_Signature == '') {
+        this.stateDefaultSignature = 'draw'
+        console.log("stateDefaultSignature",this.stateDefaultSignature)
       }
     },
     openUploadSignatureImage() {
@@ -111,37 +113,26 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    async saveSignature(){
-      try {
-        if (this.stateDefaultSignature == 'upload') {
-          this.default_Signature = this.imageSignature
-          this.default_sign = true
-        }
-        if (this.stateDefaultSignature == 'draw') {
-          var { isEmpty, data } = this.$refs.signaturePad.saveSignature();
-          this.default_Signature = data
-          this.default_sign = true
-          if (this.default_Signature == undefined) {
-            this.default_Signature = ''
-            this.default_sign = false
-          }
-        }
-        const url = '/user_setting/api/v1/set_usersetting'
-        var { data } = await this.axios.post(this.$api_url + url, 
-        {
-          default_sign : this.default_sign,
-          other_setting : 
-          {
-            Default_Business : this.default_Business, 
-            Default_Signature : this.default_Signature,
-            Notify_Email : this.Notify_Email
-          }
-        })
-      } catch (error) {
-        console.log(error);
+    saveSignature() {
+      
+      if (this.stateDefaultSignature == 'upload') {
+        this.default_Signature = this.imageSignature
+        this.default_sign = true
+        this.postData()
       }
-      EventBus.$emit('Setting')
-      this.signature_dialog = false
+      if (this.stateDefaultSignature == 'show') {
+        this.postData()
+      }
+      if (this.stateDefaultSignature == 'draw') {
+        var { isEmpty, data } = this.$refs.signaturePad.saveSignature();
+        this.default_Signature = data
+        this.default_sign = true
+        if (this.default_Signature == undefined) {
+          this.default_Signature = ''
+          this.default_sign = false
+        }
+        this.postData()
+      }
 		},
     clearSignature() {
       this.$refs.signaturePad.clearSignature();
@@ -155,8 +146,28 @@ export default {
       this.signature_dialog = false
       this.uploadImage = undefined
       this.imageSignature = ''
+    },
+    async postData() {
+      try {
+        const url = '/user_setting/api/v1/set_usersetting'
+        var { data } = await this.axios.post(this.$api_url + url, 
+          {
+            default_sign : this.default_sign,
+            other_setting : 
+            {
+              Default_Business : this.default_Business, 
+              Default_Signature : this.default_Signature,
+              Default_NotifyEmail : this.switch_notify_email,
+              Notify_Email : this.notify_email
+            }
+        })
+      } catch (error) {
+        console.log(error);
+      }
+      EventBus.$emit('Setting')
+      EventBus.$off('DefaultStamp')
+      this.signature_dialog = false
     }
-
   }
 }
 </script>

@@ -58,40 +58,40 @@ export default {
     findStamp: '',
     getStampName: '',
     getSrcBase: '',
+    notify_email: ''
   }),
   mounted() {
-    EventBus.$on('findStamp', this.getFindStamp)
-    EventBus.$on('DefaultStamp', this.startSettingStamp)
-    EventBus.$on('SelectedStamp', this.getSelectedStamp)
+    EventBus.$on('DefaultStamp',this.startSettingStamp)
   },
   methods: {
-    getSelectedStamp(selectedStamp) {
-      this.selectedStamp = selectedStamp
-      this.getStampName = this.selectedStamp.StampName
-      this.getSrcBase = this.selectedStamp.SrcBase
+    getDataForEditStamp() {
+      EventBus.$off('Stamp_Data_Edit')
+      this.action_header = 'แก้ไข'
+      this.stamp_name = this.selectedStamp.StampName
+      this.imageStamp = this.selectedStamp.SrcBase
+      this.default_stamp_dialog = true 
     },
-    getFindStamp(findStamp) {
-      this.findStamp = findStamp
+    getDataForAddStamp() {
+      EventBus.$off('Stamp_Data_Add')
+      this.action_header = 'เพิ่ม'
+      this.stamp_name = ''
+      this.imageStamp = ''
+      this.default_stamp_dialog = true 
     },
-    async startSettingStamp(action) {
-      try {
-        if(action == 'add') {
-          this.action_header = 'เพิ่ม'
-          this.stamp_name = ''
-          this.imageStamp = ''
-        } else if(action == 'edit') {
-          this.action_header = 'แก้ไข'
-          this.stamp_name = this.getStampName
-          this.imageStamp = this.getSrcBase
-        }
-        this.default_stamp_dialog = true
-        const url = '/user_setting/api/v1/get_usersetting'
-        var { data } = await this.axios.get(this.$api_url + url)
-        if(data) {
-          this.default_stamp = data.result.default_stamp
-        }
-      } catch (error) {
-        console.log(error);
+    startSettingStamp(action) {
+      if (action == 'add') {
+        EventBus.$on('Stamp_Data_Add',(default_stamp) => {
+          this.default_stamp = default_stamp
+        })
+        EventBus.$on('Stamp_Data_Add',this.getDataForAddStamp)
+      } 
+      else if (action == 'edit') {
+        EventBus.$on('Stamp_Data_Edit',(default_stamp,findStamp,selectedStamp) => {
+          this.default_stamp = default_stamp
+          this.findStamp = findStamp
+          this.selectedStamp = selectedStamp
+        })
+        EventBus.$on('Stamp_Data_Edit',this.getDataForEditStamp)
       }
     },
     openUploadStamp() {
@@ -128,25 +128,25 @@ export default {
               this.default_stamp.push(stampModal);
               this.postStamp()
             }
-            if (checkDataArray != undefined) {
+            else if (checkDataArray != undefined) {
               alert("มีชื่อตราประทับซ้ำในระบบ");
               this.default_stamp_dialog = true
             }
           }
-          if ((this.stamp_name == '') & (this.imageStamp == '')) {
+          else if ((this.stamp_name == '') & (this.imageStamp == '')) {
             alert("กรุณากรอกชื่อและอัพโหลดรูปภาพตราประทับ");
             this.default_stamp_dialog = true
           }
-          if ((this.stamp_name == '') & (this.imageStamp != '')) {
+          else if ((this.stamp_name == '') & (this.imageStamp != '')) {
             alert("กรุณากรอกชื่อตราประทับ");
             this.default_stamp_dialog = true
           }
-          if ((this.stamp_name != '') & (this.imageStamp == '')) {
+          else if ((this.stamp_name != '') & (this.imageStamp == '')) {
             alert("กรุณาอัพโหลดรูปภาพตราประทับ");
             this.default_stamp_dialog = true
           }
         }
-        if (this.action_header == 'แก้ไข') {
+        else if (this.action_header == 'แก้ไข') {
           if (this.stamp_name != '') {
             getStampname.splice(this.findStamp, 1);
             const checkDataArray = getStampname.find(element => element == this.stamp_name);
@@ -154,12 +154,11 @@ export default {
               this.default_stamp[this.findStamp] = {StampName: this.stamp_name, SrcBase: this.imageStamp}
               this.postStamp()
             }
-            if (checkDataArray != undefined) {
+            else if (checkDataArray != undefined) {
               alert("มีชื่อตราประทับซ้ำในระบบ");
               this.default_stamp_dialog = true
             }
           }
-          
         }
       } catch (error) {
         console.log(error);
@@ -178,7 +177,7 @@ export default {
         this.stamp_name = ''
         this.imageStamp = ''
       }
-      if (this.action_header == 'แก้ไข') {
+      else if (this.action_header == 'แก้ไข') {
         this.default_stamp_dialog = false
         this.uploadImage = undefined
       }
