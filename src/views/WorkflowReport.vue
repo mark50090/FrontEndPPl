@@ -84,7 +84,7 @@
 
 <script>
 import { EventBus } from '../EventBus'
-import DocumentReport from '../components/DocumentReport'
+import DocumentReport from '../components/DocumentReportModal'
 
 export default {
   components:{
@@ -154,9 +154,10 @@ export default {
       this.getAllFlow()
     },
     exportExcel (id) {
+      EventBus.$emit('documentreport',id)
+      return
       if (this.$device.windows) window.open(`${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${id}`)
       else window.open(`https://chat-develop.one.th/deeplink-redirect/?url=${`${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${id}`}`)
-      // EventBus.$emit('documentreport')
     },
     async getAllFlow () {
       this.workflow_data = []
