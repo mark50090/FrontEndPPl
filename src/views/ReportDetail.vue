@@ -52,7 +52,11 @@ import DocumentReport from '../components/DocumentReportModal'
       this.getTemplateFormReport()
       this.url = JSON.parse(sessionStorage.getItem('selected_template_report')).url
       this.doc_type = JSON.parse(sessionStorage.getItem('selected_template_report')).doc_type
-      this.workflow_id = JSON.parse(sessionStorage.getItem('selected_workflow_report')).workflow_id
+      this.workflow_id = JSON.parse(sessionStorage.getItem('selected_template_report')).flow_id
+      this.template_id = JSON.parse(sessionStorage.getItem('selected_template_report')).template_id
+    },
+    beforeDestroy(){
+      sessionStorage.removeItem('selected_template_report')
     },
     methods: {
        async getTemplateFormReport(){ // get user detail to show name, email and business list
@@ -97,7 +101,7 @@ import DocumentReport from '../components/DocumentReportModal'
         this.$router.push('/report')
       },
       exportExcel () {
-        EventBus.$emit('documentreport',this.workflow_id)
+        EventBus.$emit('documentreport')
       }
     }
   }
