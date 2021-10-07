@@ -2,7 +2,7 @@
     <v-dialog v-model="dialog" persistent max-width="450">
        <v-card>
         <v-card-title>
-          <v-row class="text-box">
+          <v-row class="text-form">
             <span class="front-section">นำเข้าไฟล์แบบฟอร์ม</span>
             <v-spacer></v-spacer>
             <v-btn icon @click="dialog = false" color="#000000">

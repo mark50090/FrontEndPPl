@@ -9,7 +9,7 @@
         </v-card-title>
         <v-card-text class="">
           <v-expansion-panels accordion class="flat-expan" multiple v-model="row_panel">
-            <v-expansion-panel :key="row" v-for="row in datatable_row">
+            <v-expansion-panel :key="row" v-for="row in datatable_row" @change="onExpand(row)">
               <v-expansion-panel-header class="pl-0 pb-0 row-title2">
                 {{ textLang.row }} {{row}}
                 <template v-slot:actions>
@@ -17,20 +17,20 @@
                 </template>
               </v-expansion-panel-header>
               <hr class="line-expan-datatable-setting" />
-              <v-expansion-panel-content :tableno="row" @scroll.self="onNearBottom" class="data-each-row infinitList" ref="scrolls" style="position:relative">
+              <v-expansion-panel-content :tableno="row" class="data-each-row infinitList" :class="'row-no-'+ row" ref="scrolls" style="position:relative">
                 <v-row class="mt-3 import-excel-datatable-btn-row">
                   <v-btn depressed dark color="#525659" class="import-excel-datatable-btn" @click="openImportExcel(row-1)">{{ textLang.import_data }}</v-btn>
                   <input v-show='false' type='file' :id='"upload-file" + String(row-1)' @input="importExcel(row-1)" accept=".xlsx, .xls"/>
                 </v-row>
                 <!-- button to add selecter when it doesn't has any selecter -->
-                <v-lazy :options="{ threshold: 0.5 }" min-height="300" transition="fade-transition" v-model="isActive">
+                <!-- <v-lazy :options="{ threshold: 0.5 }" min-height="300" transition="fade-transition" v-model="isActive"> -->
                   <v-row class="mt-4 add-selecter-start-row" justify="start" v-if="!tableData[row - 1].length">
                     <v-btn color="#4CAF50" @click="addDataChoice(row - 1)" dark depressed fab x-small>
                       <v-icon>mdi-plus</v-icon>
                     </v-btn>
                   </v-row>
                   <ul class="all-selecter" v-if="tableData[row - 1].length">
-                    <li :key="item.index" style="height:110.640625px" v-for="(item, index) in tableData[row-1]">
+                    <li :key="item.index" style="height:95px" v-for="(item, index) in tableData[row-1]">
                       <div class="each-selecter" v-if="scrollPosition[row - 1] - 2 <= index && index <= scrollPosition[row - 1] + 2">
                         <div class="delete-selecter-btn">
                           <v-btn color="#4CAF50" @click="removeDataChoice( row - 1, parseInt(item.index) - 1 )" outlined fab x-small>
@@ -53,7 +53,7 @@
                       </div>
                     </li>
                   </ul>
-                </v-lazy>
+                <!-- </v-lazy> -->
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -149,6 +149,17 @@
       EventBus.$off('changeLang')
     },
     methods: {
+      onExpand(row_no){
+        setTimeout(() => {
+          this.$nextTick(()=> {
+            if(!$('.row-no-'+ row_no).hasClass("scrollable")) {
+              $('.row-no-'+ row_no).addClass("scrollable");
+              $('.row-no-'+ row_no).scroll(this.InfinitScrollHandler)
+            }
+            $('.row-no-'+ row_no).scrollTop(0)
+          })
+        }, 1000);
+      },
       changeColor() {
         this.colorObject = JSON.parse(sessionStorage.getItem('biz_theme'))
         // this.color_dialog_header_bg = this.colorObject.modal.modal_main_color
@@ -216,15 +227,15 @@
         })
       },
       addScrollListenner() {
-        this.$refs.scrolls.forEach((vueComponent) => {
-           $(vueComponent.$el).scroll(this.InfinitScrollHandler)
-            $(vueComponent.$el).scrollTop(0)
+        this.$refs.scrolls?.forEach((vueComponent) => {
+          $(vueComponent.$el).scroll(this.InfinitScrollHandler)
+          $(vueComponent.$el).scrollTop(0)
         })
       },
       InfinitScrollHandler(e) {
         var firstChildOfScrollableContentWrapper = $(e.target).children().first()
         var tableno =  $(e.target).attr("tableno")-0
-        var rowIndex = -Math.floor(firstChildOfScrollableContentWrapper.position().top/110.640625)
+        var rowIndex = -Math.floor(firstChildOfScrollableContentWrapper.position().top/95)
         if (this.scrollPosition[tableno-1] != rowIndex) {
           this.$set(this.scrollPosition, tableno-1 ,rowIndex);
           
