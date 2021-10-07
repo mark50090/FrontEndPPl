@@ -82,7 +82,8 @@ export default {
     currentdate: new Date().toISOString().substr(0, 10),
     dialog: false,
     menu2: false,
-    workflow_id: ''
+    workflow_id: '',
+    template_id: ''
   }),
   mounted() {
     EventBus.$on('documentreport',this.documentreports)
@@ -97,9 +98,15 @@ export default {
   },
   methods: {
     documentreports(id) {
+      if (JSON.parse(sessionStorage.getItem('selected_template_report'))) {
+        var data = JSON.parse(sessionStorage.getItem('selected_template_report'))
+        this.workflow_id = data.flow_id
+        this.template_id = data.template_id
+      }else{
+        this.workflow_id = id
+      }
       this.dialog = true
       this.dates = []
-      this.workflow_id = id
     },
     setDateFormatBEShort (date) {
       var curDate = date.split('-')
@@ -113,8 +120,13 @@ export default {
       return str
     },
     exportExcel(){
-      if (this.$device.windows) window.open(`${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${this.workflow_id}&start_date=${this.dates[0]}&end_date=${this.dates[1]}`)
-      else window.open(`https://chat-develop.one.th/deeplink-redirect/?url=${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${this.workflow_id}&start_date=${this.dates[0]}&end_date=${this.dates[1]}`)
+      if(!this.template_id){
+        if (this.$device.windows) window.open(`${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${this.workflow_id}&start_date=${this.dates[0]}&end_date=${this.dates[1]}`)
+        else window.open(`https://chat-develop.one.th/deeplink-redirect/?url=${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${this.workflow_id}&start_date=${this.dates[0]}&end_date=${this.dates[1]}`)
+      }else{
+        if (this.$device.windows) window.open(`${this.$api_url}/template_form/api/v1/getTemplateFormDataExcel?template_id=${this.template_id}&flow_id=${this.workflow_id}&start_date=${this.dates[0]}&end_date=${this.dates[1]}`)
+        else window.open(`https://chat-develop.one.th/deeplink-redirect/?url=${this.$api_url}/template_form/api/v1/getTemplateFormDataExcel?template_id=${this.template_id}&flow_id=${this.workflow_id}&start_date=${this.dates[0]}&end_date=${this.dates[1]}`)
+      }
     }
   },
 }
