@@ -20,9 +20,9 @@
             <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pb-0 px-0">
                   <v-btn color="#67C25D" dark depressed class="front-btn-templateform" @click="createTemplate()"><v-icon left>mdi-plus</v-icon>สร้างแบบฟอร์ม</v-btn>
             </v-col>
-            <!-- <v-col cols="6" md="auto" lg="auto" class="pb-0 pl-2 pr-0">
+            <v-col cols="6" md="auto" lg="auto" class="pb-0 pl-2 pr-0">
                   <v-btn color="#67C25D" dark outlined class="front-btn-templateform" @click="ImportForm() "><v-icon left>mdi-inbox-arrow-down-outline</v-icon>นำเข้าแบบฟอร์ม</v-btn>
-            </v-col> -->
+            </v-col>
           </v-row>
           <v-row class="table-top-spacer templateform-row">
             <v-data-table fixed-header :loading="false" :headers="templateform_table_header" :items="templateform_data" 
@@ -63,7 +63,7 @@
                           </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item> 
-                    <!-- <v-list-item>
+                    <v-list-item @click="exportTemplate(item)">
                       <v-list-item-icon>
                           <v-icon color="#4CAF50">mdi-open-in-new</v-icon>
                         </v-list-item-icon>
@@ -72,7 +72,7 @@
                             Export
                           </v-list-item-title>
                         </v-list-item-content>
-                    </v-list-item>  -->
+                    </v-list-item>
                     <!-- <v-list-item @click="optionFormTransfer()">
                       <v-list-item-icon>
                           <v-icon color="#4CAF50">mdi-account-edit</v-icon>
@@ -228,6 +228,9 @@ import showFormTransfer from '../components/TransferEdit.vue'
         sessionStorage.setItem('option',JSON.stringify(tempOption))
         sessionStorage.setItem('page_action', 'edit')
         this.$router.push({ 'path': '/template/create_template'})
+      },
+      async exportTemplate(item) {
+        window.open(this.$api_url + '/template_form/api/v1/template_form/' + item.template_id)
       },
       async deletTemplate(item) {
         EventBus.$emit('FormDelete',item)

@@ -96,6 +96,7 @@ import { EventBus } from '../EventBus'
             keyword: this.keyword,
             lim: itemsPerPage, 
             offset: (page-1)*itemsPerPage || 0, 
+            is_active: true
           })
           if(data.status){
             let index = 1
@@ -128,7 +129,8 @@ import { EventBus } from '../EventBus'
           this.emitLoading(true)
           var { data } = await this.axios.post(this.$api_url + '/template_form/api/v1/countTemplate', {
             tax_id : tax_id,
-            keyword: this.keyword
+            keyword: this.keyword,
+            is_active: true
           })
           if(data.status){
             this.totalItemsTemplate = data.result

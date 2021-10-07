@@ -861,8 +861,8 @@
           <v-tab-item> <!-- Property Tab -->
             <span class="header-property"><b>{{ textLang.property_text.property_object }}</b></span>
             <br><br>
-            <v-btn outlined small color="black" class="permission-data-btn" @click="openObjectRole()">{{ textLang.property_text.set_data_access }} <v-icon color="#4CAF50" class="ml-2">mdi-cursor-default-click-outline</v-icon></v-btn>
-            <br><br>
+            <!-- <v-btn outlined small color="black" class="permission-data-btn" @click="openObjectRole()">{{ textLang.property_text.set_data_access }} <v-icon color="#4CAF50" class="ml-2">mdi-cursor-default-click-outline</v-icon></v-btn>
+            <br><br> -->
             <span class="sub-title-property"><b>{{ textLang.property_text.set_pro_values }}</b></span>
             <v-row class="row-table-prop" @click="copyObject = ''">
               <v-simple-table class="table-prop">
@@ -2105,26 +2105,30 @@
       <sumifToolModal/>
       <flowConditionModal/>
       <!-- Import Image Modal -->
-      <v-dialog v-model="dialogImageUpload" persistent max-width="600px">
+      <v-dialog v-model="dialogImageUpload" persistent max-width="450px">
         <v-card>
-          <v-card-title elevation="4" class="dialog_title">
-            <b>{{ textLang.modal.insert_picture }}</b>
+          <v-card-title>
+            <v-row class="insert-img-modal-row">
+              <span class="inert-img-modal-header">{{ textLang.modal.insert_picture }}</span>
+              <v-spacer></v-spacer>
+              <v-btn icon @click="dialogImageUpload = false" color="black">
+                <v-icon> mdi-close-circle</v-icon> 
+              </v-btn>
+            </v-row>
           </v-card-title>
-          <v-card-text class="pa-10">
-            <v-row justify="center" align="center">
-              <v-col cols="12" md="2" lg="2" class="excel-file-title">
-                {{ textLang.modal.image }}:
-              </v-col>
-              <v-col cols="12" md="9" lg="9">
-                <v-file-input dense outlined single-line hide-details :color="color_image" :placeholder="textLang.modal.select_picture" accept="image/*" class="file-input" id="file" v-model="uploadImage"></v-file-input>
-              </v-col>
+          <v-card-text class="pt-3">
+            <v-row justify="center" align="center" class="insert-img-modal-row">
+              <v-file-input dense outlined single-line hide-details color="#67C25D" :placeholder="textLang.modal.select_picture" truncate-length="50" accept="image/*" class="prop-input" id="file" v-model="uploadImage"></v-file-input>
             </v-row>
           </v-card-text>
-          <v-card-actions class="pt-0 pb-12">
-            <v-spacer></v-spacer>
-            <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialogImageUpload = false">{{ textLang.modal.cancel }}</v-btn>
-            <v-btn depressed large :color="color_imageUpload" class="px-7 ml-4 save-setting-btn save-modal-font-btn" @click="imageUpload()" >{{ textLang.modal.insert_picture }}</v-btn>
-            <v-spacer></v-spacer>
+          <v-card-actions class="">
+            <v-row class="insert-img-modal-row">
+              <v-spacer></v-spacer>
+              <v-col cols="auto" class="px-0 pt-0">
+                <v-btn depressed dark color="#67C25D" class="insert-img-modal-btn" @click="imageUpload()" >{{ textLang.modal.insert_picture }}</v-btn>
+              </v-col>
+              <v-spacer></v-spacer>
+            </v-row>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -2637,7 +2641,7 @@ export default {
         complete_sequence: "ลำดับการกรอกและเซ็น",
         set_paperless: "ตั้งค่าเอกสาร Digital Workflow",
         filling_mobile: "ตั้งค่าการกรอกในมุมมองเอกสารอย่างง่าย",
-        save: "บันทึกเอกสาร",
+        save: "บันทึกแบบฟอร์ม",
         open_page: "เปิดเพื่อดูหน้ากระดาษ",
         page: "หน้า",
         add_page: "เพิ่มหน้ากระดาษ",
@@ -2656,7 +2660,7 @@ export default {
         en_data: "วันที่บังคับใช้:",
         locking_pdf: "ตั้งค่าการล็อกเอกสาร (pdf):",
         choose: "เลือก",
-        please_fill_in: "กรุณากรอกชื่อรูปแบบเอกสาร",
+        please_fill_in: "กรุณากรอกชื่อแบบฟอร์ม",
         permission_step: " (อ้างอิงลำดับที่",
         step: "ลำดับที่"
       },
@@ -2937,8 +2941,8 @@ export default {
         change_name: "\" ซ้ำ กรุณาเปลี่ยนชื่อ Object",
         duplicate: "ลำดับการกรอกซ้ำ",
         section_boxes: "Section Box ซ้อนทับกัน กรุณาจัดวาง Section Box ใหม่",
-        save_complete: "บันทึกรูปแบบเอกสารสำเร็จ",
-        fail_save: "บันทึกรูปแบบเอกสารไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
+        save_complete: "บันทึกแบบฟอร์มสำเร็จ",
+        fail_save: "บันทึกแบบฟอร์มล้มเหลว กรุณาลองใหม่ในภายหลัง",
         create_eform: "สร้างรูปแบบเอกสาร"
       },
       dropdown:{
@@ -7202,18 +7206,20 @@ export default {
             if(this.res_saveArray[i].object_name == this.res_saveArray[j].object_name) {
               // this.res_saveArray[j].object_name = this.res_saveArray[j].object_name + "_" + this.res_saveArray[j].page
               this.$swal({
-                type: 'error',
-                html: '<span class="alert-error"><b>'+ this.textLang.alert.name_object + this.res_saveArray[j].object_name + this.textLang.alert.change_name +'</b></span>',
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                text: this.textLang.alert.name_object + this.res_saveArray[j].object_name + this.textLang.alert.change_name,
                 showCloseButton: true,
                 showConfirmButton: false,
-                background: 'white',
-                customClass:{
-                  popup: 'border-error'
-                },
-                position: 'top',
-                timer: 3000,
-                backdrop: false,
-                closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
               $('#' + this.res_saveArray[i].name_input).css("outline-color", "red")
               $('#' + this.res_saveArray[i].name_input).css("outline-style", "solid")
@@ -7252,34 +7258,38 @@ export default {
           this.save()
         } else {
           this.$swal({
-            type: 'error',
-            html: '<span class="alert-error"><b>'+ this.textLang.alert.duplicate +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+            text: this.textLang.alert.duplicate,
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
-            customClass:{
-              popup: 'border-error'
-            },
-            position: 'top',
-            timer: 3000,
-            backdrop: false,
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
-          }) 
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
+          })
         }
       } else {
         this.$swal({
-          type: 'error',
-          html: '<span class="alert-error"><b>'+ this.textLang.alert.section_boxes +'</b></span>',
+          backdrop: false,
+          position: 'bottom-end',
+          width: '330px',
+          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+          text: this.textLang.alert.section_boxes,
           showCloseButton: true,
           showConfirmButton: false,
-          background: 'white',
-          customClass:{
-            popup: 'border-error'
-          },
-          position: 'top',
-          timer: 3000,
-          backdrop: false,
-          closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+          timer: 5000,
+          customClass: {
+            popup: 'alert-card',
+            title: 'alert-title-block',
+            closeButton: 'close-alert-btn',
+            htmlContainer: 'alert-text-block'
+          }
         })
       }
     },
@@ -7468,36 +7478,40 @@ export default {
           }
         } else{
           this.$swal({
-            type: 'error',
-            html: '<span class="alert-error"><b>กรุณาเลือก Worflow ของเอกสาร</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+            text: 'กรุณาเลือก Worflow ของแบบฟอร์ม',
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
-            customClass:{
-              popup: 'border-error'
-            },
-            position: 'top',
-            timer: 3000,
-            backdrop: false,
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
         }
       } else {
         this.name_template_error = true
         this.error_file_name_msg = 'กรุณากรอกชื่อแบบฟอร์ม'
         this.$swal({
-          type: 'error',
-          html: '<span class="alert-error"><b>'+ this.textLang.set_format_form.please_fill_in +'</b></span>',
+          backdrop: false,
+          position: 'bottom-end',
+          width: '330px',
+          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+          text: this.textLang.set_format_form.please_fill_in,
           showCloseButton: true,
           showConfirmButton: false,
-          background: 'white',
-          customClass:{
-            popup: 'border-error'
-          },
-          position: 'top',
-          timer: 3000,
-          backdrop: false,
-          closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+          timer: 5000,
+          customClass: {
+            popup: 'alert-card',
+            title: 'alert-title-block',
+            closeButton: 'close-alert-btn',
+            htmlContainer: 'alert-text-block'
+          }
         })
       }
     },
@@ -8015,34 +8029,38 @@ export default {
                 //   this.objectArray[e] = []
                 // })
                 this.$swal({
-                  type: 'success',
-                  html: '<span class="alert"><b>'+ this.textLang.alert.save_complete +'</b></span>',
+                  backdrop: false,
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                  text: this.textLang.alert.save_complete,
                   showCloseButton: true,
                   showConfirmButton: false,
-                  background: 'white',
+                  timer: 5000,
                   customClass: {
-                    popup: 'border-success'
-                  },
-                  position: 'top',
-                  timer: 3000,
-                  backdrop: false,
-                  closeButtonHtml: '<span class="close-alert">&times;</span>'
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
                 this.$router.push({ 'path': '/template'})
               } else {
                 this.$swal({
-                  type: 'error',
-                  html: '<span class="alert-error"><b>'+ this.textLang.alert.fail_save +'</b></span>',
+                  backdrop: false,
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                  text: this.textLang.alert.fail_save,
                   showCloseButton: true,
                   showConfirmButton: false,
-                  background: 'white',
-                  customClass:{
-                    popup: 'border-error'
-                  },
-                  position: 'top',
-                  timer: 3000,
-                  backdrop: false,
-                  closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+                  timer: 5000,
+                  customClass: {
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
               }
         } catch (error) {
@@ -8106,34 +8124,38 @@ export default {
               //   this.objectArray[e] = []
               // })
               this.$swal({
-                type: 'success',
-                html: '<span class="alert"><b></b>'+ this.textLang.alert.save_complete +'</b></span>',
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                text: this.textLang.alert.save_complete,
                 showCloseButton: true,
                 showConfirmButton: false,
-                background: 'white',
+                timer: 5000,
                 customClass: {
-                  popup: 'border-success'
-                },
-                position: 'top',
-                timer: 3000,
-                backdrop: false,
-                closeButtonHtml: '<span class="close-alert">&times;</span>'
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
               this.$router.push({ 'path': '/template'})
             } else {
               this.$swal({
-                type: 'error',
-                html: '<span class="alert-error"><b>'+ this.textLang.alert.fail_save +'</b></span>',
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                text: this.textLang.alert.fail_save,
                 showCloseButton: true,
                 showConfirmButton: false,
-                background: 'white',
-                customClass:{
-                  popup: 'border-error'
-                },
-                position: 'top',
-                timer: 3000,
-                backdrop: false,
-                closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             }
         } catch (error) {
@@ -9473,6 +9495,20 @@ export default {
 .radio-img {
   height: 24px;
   width: 80px;
+}
+
+.insert-img-modal-row {
+  width: 100%;
+  margin: 0%;
+}
+
+.inert-img-modal-header {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 16px;
+}
+
+.insert-img-modal-btn {
+  font-family: 'Sarabun', sans-serif;
 }
 
 .image-block {

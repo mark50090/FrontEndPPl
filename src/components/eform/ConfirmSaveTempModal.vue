@@ -1,15 +1,20 @@
 <template>
-    <v-dialog persistent max-width="500" v-model="dialog_confirm_save">
+    <v-dialog persistent max-width="320" v-model="dialog_confirm_save">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title"><b>{{ textLang.confirm_save }}</b></v-card-title>
-        <v-card-text class="pa-12 confirm-content">
+        <v-card-text class="pt-6 pb-1 confirm-content">
           {{ textLang.sure_save }}
         </v-card-text>
-        <v-card-actions class="pt-0 pb-12">
-          <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialog_confirm_save = false">{{ textLang.cancel }}</v-btn>
-          <v-btn depressed large :color="color_save" class="px-7 ml-4 save-setting-btn save-modal-font-btn" @click="sendToSave()">{{ textLang.save }}</v-btn>
-          <v-spacer></v-spacer>
+        <v-card-actions>
+          <v-row class="confirm-save-form-row">
+            <v-spacer></v-spacer>
+            <v-col cols="4" class="pl-0 pr-2">
+              <v-btn depressed block color="#757575" dark class="confirm-save-form-btn" @click="dialog_confirm_save = false">{{ textLang.cancel }}</v-btn>
+            </v-col>
+            <v-col cols="4" class="pl-2 pr-0">
+              <v-btn depressed block dark color="#67C25D" class="confirm-save-form-btn" @click="sendToSave()">{{ textLang.save }}</v-btn>
+            </v-col>
+            <v-spacer></v-spacer>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -22,9 +27,9 @@
       dialog_confirm_save: false,
       textLang: {
         confirm_save: "ยืนยันการบันทึกรูปแบบเอกสาร" ,
-        sure_save: "คุณต้องการบันทึกรูปแบบเอกสารนี้หรือไม่" ,
+        sure_save: "ต้องการบันทึกแบบฟอร์มนี้หรือไม่ ?" ,
         cancel: "ยกเลิก" ,
-        save: "บันทึกเอกสาร" 
+        save: "บันทึก" 
       },
 
       //Color Variable
@@ -83,8 +88,17 @@
 <style>
   .confirm-content {
     font-family: 'Sarabun', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     color: black !important;
     text-align: center;
+  }
+
+  .confirm-save-form-row {
+    width: 100%;
+    margin: 0%;
+  }
+
+  .confirm-save-form-btn {
+    font-family: 'Sarabun', sans-serif;
   }
 </style>

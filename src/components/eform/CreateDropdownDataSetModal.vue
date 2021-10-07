@@ -1,37 +1,31 @@
 <template>
     <v-dialog persistent scrollable max-width="70%" v-model="dialog_dropdown_dataset">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-          <span>
-            <b>{{ textLang.create_edit }}</b>
-          </span>
-          <!-- <v-spacer></v-spacer>
-          <v-btn icon dark @click="dialog_dropdown_dataset = false,choiceSet = []">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>-->
+        <v-card-title class="py-2 create-dropdown-header-modal">
+          {{ textLang.create_edit }}
         </v-card-title>
-        <v-row class="add-dataset-row">
-          <v-btn depressed dark :color="color_add_choice" class="add-dataset-button" @click="addChoiceSet()">
-            <v-icon :color="color_name_choice">mdi-plus</v-icon><b>{{ textLang.add_group }}</b>
+        <v-row class="px-6 py-5 add-dataset-row">
+          <v-btn depressed dark color="#0F3852" class="pl-2 add-dataset-button" @click="addChoiceSet()">
+            <v-icon class="mr-2">mdi-plus</v-icon>{{ textLang.add_group }}
           </v-btn>
         </v-row>
-        <v-card-text class="pa-7">
+        <v-card-text class="pb-8">
           <v-expansion-panels accordion multiple class="flat-expan" v-model="dataset_panel">
             <v-expansion-panel v-for="item in choiceSet" :key="item.index">
-              <v-expansion-panel-header class="row-title dataset-title-header">
-                <v-row>
-                  <v-col cols="2" class="pb-0 dataset-title-block">
+              <v-expansion-panel-header class="px-0 pb-0 dataset-title-header">
+                <v-row class="add-dataset-row">
+                  <v-col cols="auto" align-self="center" class="pl-2 pt-0 dataset-title-block">
                     <b>{{ textLang.group_no }} {{item.index}} :</b>
                   </v-col>
-                  <v-col cols="4" class="pb-0 dataset-name-block">
-                    <v-text-field outlined dense :label="textLang.name_group" :color="color_name_choice" class="pad-input label-data dataset-name-line-height" v-model="item.name" :error="item.name_error" :error-messages="item.name_error_msg" @input="checkEmptyName(item)"></v-text-field>
+                  <v-col cols="4" align-self="center" class="px-0 pb-0">
+                    <v-text-field outlined dense :label="textLang.name_group" color="#67c25d" class="dropdown-dataset-name dropdown-dataset-name-label" v-model="item.name" :error="item.name_error" :error-messages="item.name_error_msg" @input="checkEmptyName(item)"></v-text-field>
                   </v-col>
                   <v-spacer></v-spacer>
-                  <v-col cols="1" class="pb-0 delete-dataset-block">
+                  <v-col cols="auto" align-self="start" class="delete-dataset-block">
                     <v-tooltip top>
                       <template v-slot:activator="{ on }">
-                        <v-btn text icon color="red" dark v-on="on" @click="deleteChoiceSet(item)">
-                          <v-icon class="delete-dataset-icon">mdi-trash-can-outline</v-icon>
+                        <v-btn text icon large color="red" v-on="on" @click="deleteChoiceSet(item)">
+                          <v-icon>mdi-delete</v-icon>
                         </v-btn>
                       </template>
                       <span>{{ textLang.delete_group }}</span>
@@ -39,36 +33,33 @@
                   </v-col>
                 </v-row>
                 <template v-slot:actions>
-                  <v-icon :color="color_icon_expand">$expand</v-icon>
+                  <v-icon color="#67c25d">$expand</v-icon>
                 </template>
               </v-expansion-panel-header>
-              <hr class="line-expan-dataset-modal" />
+              <hr class="ml-2 line-expan-dataset-modal" />
               <v-expansion-panel-content class="dataset-choice-content">
-                <v-row>
-                  <v-col cols="10" class="choice-chips-block">
-                    <v-chip v-for="choice in item.list" :key="choice" close dark :color="color_name" class="choice-chip" @click:close="deleteChoice(item,choice)">{{choice}}</v-chip>
+                <v-row justify="end" class="pl-2 add-dataset-row">
+                  <v-col cols="11" class="pr-0 pb-0">
+                    <v-chip v-for="choice in item.list" :key="choice" close dark small color="#4CAF50" class="mr-2 mb-2 choice-chip" @click:close="deleteChoice(item,choice)">{{choice}}</v-chip>
                   </v-col>
                 </v-row>
-                <v-row v-show="item.name">
-                  <v-col cols="2">
-                    <v-subheader class="choice-title">{{ textLang.sub_choices }} :</v-subheader>
+                <v-row v-show="item.name" class="pl-2 add-dataset-row">
+                  <v-col cols="1" align-self="center" class="pl-0 choice-title">
+                    {{ textLang.sub_choices }} :
                   </v-col>
-                  <v-col cols="5">
-                    <v-text-field dense hide-details :color="color_choice" append-outer-icon="mdi-plus" @click:append-outer="addChoice(item)" v-on:keyup.enter="addChoice(item)" v-model="newChoice"></v-text-field>
+                  <v-col cols="5" align-self="center" class="pr-0">
+                    <v-text-field dense hide-details color="#4CAF50" append-outer-icon="mdi-plus" @click:append-outer="addChoice(item)" v-on:keyup.enter="addChoice(item)" v-model="newChoice" class="dropdown-dataset-choice"></v-text-field>
                   </v-col>
                 </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-card-text>
-        <v-divider class="mx-10"></v-divider>
-        <v-card-actions class="dataset-dialog-button-part">
+        <v-divider class="ml-8 mr-6"></v-divider>
+        <v-card-actions class="py-5">
           <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialog_dropdown_dataset = false,choiceSet = []">{{ textLang.cancel }}</v-btn>
-          <v-btn depressed large :color="color_save" class="px-7 ml-4 save-setting-btn save-modal-font-btn" :disabled="!choiceSet.length" @click="saveChoiceSet()">
-            <!--<v-icon class="save-setting-icon send-ppl-disable-icon">mdi-content-save-outline</v-icon>-->
-            {{ textLang.save }}
-          </v-btn>
+          <v-btn outlined color="#67c25d" class="px-12 mr-4 cancel-create-dropdown-dataset" @click="dialog_dropdown_dataset = false,choiceSet = []">{{ textLang.cancel }}</v-btn>
+          <v-btn depressed color="#67c25d" class="px-3 ml-4 save-create-dropdown-dataset" :disabled="!choiceSet.length" @click="saveChoiceSet()">{{ textLang.save }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -219,63 +210,73 @@ export default {
 </script>
 
 <style>
+.create-dropdown-header-modal {
+  font-family: "Sarabun", sans-serif;
+  font-size: 16px !important;
+  color: white;
+  background-color: #67c25d;
+}
+
 .add-dataset-row {
   width: 100%;
-  padding-top: 2%;
-  padding-left: 5%;
-  padding-bottom: 2%;
+  margin: 0%;
 }
 
 .add-dataset-button {
   font-family: "Sarabun", sans-serif;
-  color: #2aca9f !important;
+  /* color: #2aca9f !important; */
   text-transform: capitalize;
 }
 
 .dataset-title-header {
   font-family: "Sarabun", sans-serif;
-  padding-bottom: 0%;
+  /* padding-bottom: 0%; */
 }
 
 .dataset-title-block {
-  padding-right: 0%;
-  padding-top: 2%;
-}
-
-.dataset-name-block {
-  padding-left: 0%;
+  /* padding-right: 0%;
+  padding-top: 2%; */
+  font-family: "Sarabun", sans-serif;
+  font-size: 16px;
 }
 
 .delete-dataset-block {
   padding-top: 2%;
 }
 
-.v-text-field.dataset-name-line-height input {
-  line-height: 30px !important;
+.dropdown-dataset-name {
+  font-family: "Sarabun", sans-serif;
+  font-size: 13px;
 }
 
-.delete-dataset-icon {
-  font-size: 32px !important;
+.v-text-field.dropdown-dataset-name input {
+  line-height: 21px !important;
+}
+
+.dropdown-dataset-name-label.v-input .v-label {
+  height: 24px !important;
+  line-height: 24px !important;
+}
+
+.dropdown-dataset-name-label.v-text-field--outlined.v-input--dense .v-label {
+  top: 6px !important;
 }
 
 .line-expan-dataset-modal {
-  border: solid 1px #2aca9f;
-  margin-right: 2%;
-  margin-left: 2%;
+  border: solid 1px #67c25d;
+  /* margin-right: 2%;
+  margin-left: 2%; */
 }
 
-.dataset-choice-content {
-  padding-bottom: 5%;
-}
-
-.choice-chips-block {
-  margin-left: 10%;
+.dataset-choice-content .v-expansion-panel-content__wrap {
+  padding-left: 0% !important;
+  padding-right: 0% !important;
 }
 
 .choice-chip {
   font-family: "Sarabun", sans-serif;
-  margin-right: 2%;
-  margin-bottom: 1%;
+  /* margin-right: 2%;
+  margin-bottom: 1%; */
 }
 
 .choice-title {
@@ -283,12 +284,26 @@ export default {
   font-size: 16px;
 }
 
-.dataset-dialog-button-part {
-  padding-bottom: 4%;
-  padding-top: 5%;
+.dropdown-dataset-choice {
+  font-family: "Sarabun", sans-serif;
+  font-size: 13px;
+}
+
+.dropdown-dataset-choice.v-text-field input {
+  line-height: 21px !important;
 }
 
 .save-modal-font-btn {
+  color: white !important;
+  text-transform: capitalize;
+}
+
+.cancel-create-dropdown-dataset {
+  font-family: "Sarabun", sans-serif;
+}
+
+.save-create-dropdown-dataset {
+  font-family: "Sarabun", sans-serif;
   color: white !important;
   text-transform: capitalize;
 }

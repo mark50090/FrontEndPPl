@@ -1,31 +1,31 @@
 <template>
-    <v-dialog persistent scrollable max-width="900px" v-model="dialog_hide_setting">
+    <v-dialog persistent scrollable max-width="930px" v-model="dialog_hide_setting">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-          <b>{{ textLang.setting_object }}: {{objectName}}</b>
+        <v-card-title class="py-2 hide-object-header-modal">
+          {{ textLang.setting_object }}: {{objectName}}
         </v-card-title>
-        <v-card-text class="px-10 pt-7 pb-8">
+        <v-card-text class="pt-4">
           <h3 class="hide-object-hearder">{{objectName}} {{ textLang.hidden_conditions }}</h3>
           <br>
-          <v-card outlined class="pa-3 condition-group-card">
-            <span class="condition-group-title">{{ textLang.condition_group_title }} {{firstHideSet.setIndx}}</span>
-            <v-row>
-              <v-col cols='2' align-self="center" class="condition-hide-title">
+          <v-card outlined class="pa-3 condition-group-card"> <!-- first condition group -->
+            <u class="condition-group-title">{{ textLang.condition_group_title }} {{firstHideSet.setIndx}}</u>
+            <v-row class="mt-1 hide-cond-modal-row"> <!-- first condition of group -->
+              <v-col cols='2' align-self="center" class="pl-0 condition-hide-title">
                 {{ textLang.condition_1 }}:
               </v-col>
               <v-col cols='3' class="pl-0">
-                <v-text-field outlined dense hide-details :color="color_name" :label="textLang.name_object" class="pad-input condition-hide condition-hide-line hide-object-name-label" v-model="firstHideSet.hideFx.objectName"></v-text-field>
+                <v-text-field outlined dense hide-details color="#4CAF50" :label="textLang.name_object" class="condition-hide condition-hide-line hide-object-name-label" v-model="firstHideSet.hideFx.objectName"></v-text-field>
               </v-col>
               <v-col cols='3' class="px-0">
-                <v-select dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.condition" :color="color_logicFx" class="condition-hide hide-object-name-label business-box-inside icon-select icon-dropdown-modal" :items="logicFx" v-model="firstHideSet.hideFx.logic"></v-select>
+                <v-select dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.condition" color="#4CAF50" class="condition-hide condition-hide-line hide-object-name-label hide-object-dropdown-icon" :items="logicFx" v-model="firstHideSet.hideFx.logic"></v-select>
               </v-col>
               <v-col cols='3'>
-                <v-text-field outlined dense hide-details :color="color_hideFx_logicValue" :label="textLang.cost" class="pad-input condition-hide condition-hide-line hide-object-name-label" v-model="firstHideSet.hideFx.logicValue"></v-text-field>
+                <v-text-field outlined dense hide-details color="#4CAF50" :label="textLang.cost" class="condition-hide condition-hide-line hide-object-name-label" v-model="firstHideSet.hideFx.logicValue"></v-text-field>
               </v-col>
-              <v-col v-show="firstHideSet.hideFxExtra.length == 0" cols="1" align-self="center" class="px-0">
+              <v-col v-show="firstHideSet.hideFxExtra.length == 0" cols="auto" align-self="center" class="px-0">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
-                    <v-btn depressed fab dark x-small v-on="on" :color="color_icon_mdiplus" @click="addLogic(firstHideSet.setIndx)">
+                    <v-btn depressed fab dark x-small v-on="on" color="#4CAF50" @click="addLogic(firstHideSet.setIndx)">
                       <v-icon>mdi-plus</v-icon>
                     </v-btn>
                   </template>
@@ -34,109 +34,44 @@
               </v-col>
             </v-row>
 
-            <v-row v-for='item in firstHideSet.hideFxExtra' :key="item.index"> 
-              <v-col cols='12' class="conect-condition-block">
-                <v-select v-if="item.index == 0" dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.conditional_connector" :color="color_intFx" class="condition-hide hide-object-name-label business-box-inside icon-select icon-dropdown-modal" :items="intFx" v-model="firstHideSet.hideFx.int"></v-select>
-                <v-select v-else-if="item.index != 0" dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.conditional_connector" :color="color_intFx" class="condition-hide hide-object-name-label business-box-inside icon-select icon-dropdown-modal" :items="intFx" v-model="firstHideSet.hideFxExtra[item.index-1].int"></v-select>
-              </v-col>
-              <v-col cols='2' align-self="center" class="condition-hide-title">
-                {{ textLang.conditions_no }} {{ item.index+2 }}:
-              </v-col>
-              <v-col cols='3' class="pl-0">
-                <v-text-field outlined dense hide-details :color="color_name" :label="textLang.name_object" class="pad-input condition-hide condition-hide-line hide-object-name-label" v-model="item.objectName"></v-text-field>
-              </v-col>
-              <v-col cols='3' class="px-0">
-                <v-select dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.condition" :color="color_logicFx" class="condition-hide hide-object-name-label business-box-inside icon-select icon-dropdown-modal" :items="logicFx" v-model="item.logic"></v-select>
-              </v-col>
-              <v-col cols='3'>
-                <v-text-field outlined dense hide-details :color="color_hideFx_logicValue" :label="textLang.cost" class="pad-input condition-hide condition-hide-line hide-object-name-label" v-model="item.logicValue"></v-text-field>
-              </v-col>
-              <v-col cols='1' align-self="center" class="px-0">
-                <v-tooltip top>
-                  <template v-slot:activator="{ on }">
-                    <v-btn depressed fab dark x-small v-on="on" color="error" @click="deleteLogic(item,firstHideSet.setIndx)">
-                      <v-icon>mdi-minus</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>{{ textLang.delete_condition }}</span>
-                </v-tooltip>
-                <v-tooltip top>
-                  <template v-slot:activator="{ on }">
-                    <v-btn v-show="item.index == (firstHideSet.hideFxExtra.length-1)" depressed fab dark x-small v-on="on" :color="color_icon_mdiplus" class="add-cond-btn" @click="addLogic(firstHideSet.setIndx)">
-                      <v-icon>mdi-plus</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>{{ textLang.add_condition }}</span>
-                </v-tooltip>
-              </v-col>
-            </v-row>
-          </v-card>
-
-          <div v-for="hs in hideSetArray" :key="hs.setIndx" v-show="hideSetArray.length">
-            <v-row justify="center" class="mt-3">
-              <v-col cols="3">
-                <v-select dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.conditional_connector_group" :color="color_intFx" class="condition-hide hide-object-name-label business-box-inside icon-select icon-dropdown-modal" :items="intFx" v-model="hs.operand"></v-select>
-              </v-col>
-            </v-row>
-            <v-card outlined class="pa-3 mt-3 condition-group-card">
-              <v-row class="condition-group-title-row">
-                <span class="condition-group-title">{{ textLang.condition_group_title }} {{hs.setIndx}} </span>
-                <v-btn depressed dark small color="error" class="ml-3 delete-cond-group-btn" @click="deleteLogicGroup(hs)">{{ textLang.delete_condition_group }}</v-btn>
-              </v-row>
-              <v-row>
-                <v-col cols='2' align-self="center" class="condition-hide-title">
-                  {{ textLang.condition_1 }}:
-                </v-col>
-                <v-col cols='3' class="pl-0">
-                  <v-text-field outlined dense hide-details :color="color_name" :label="textLang.name_object" class="pad-input condition-hide condition-hide-line hide-object-name-label" v-model="hs.hideFx.objectName"></v-text-field>
-                </v-col>
-                <v-col cols='3' class="px-0">
-                  <v-select dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.condition" :color="color_logicFx" class="condition-hide hide-object-name-label business-box-inside icon-select icon-dropdown-modal" :items="logicFx" v-model="hs.hideFx.logic"></v-select>
-                </v-col>
-                <v-col cols='3'>
-                  <v-text-field outlined dense hide-details :color="color_hideFx_logicValue" :label="textLang.cost" class="pad-input condition-hide condition-hide-line hide-object-name-label" v-model="hs.hideFx.logicValue"></v-text-field>
-                </v-col>
-                <v-col v-show="hs.hideFxExtra.length == 0" cols="1" align-self="center" class="px-0">
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                      <v-btn depressed fab dark x-small v-on="on" :color="color_icon_mdiplus" @click="addLogic(hs.setIndx)">
-                        <v-icon>mdi-plus</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>{{ textLang.add_condition }}</span>
-                  </v-tooltip>
+            <div v-for='item in firstHideSet.hideFxExtra' :key="item.index"> <!-- next condition of group -->
+              <v-row class="hide-cond-modal-row">
+                <v-col cols="9" offset="2" class="pa-0">
+                  <v-row justify="center" class="hide-cond-modal-row">
+                    <v-col cols='4' class="px-0">
+                      <v-select v-if="item.index == 0" dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.conditional_connector" color="#4CAF50" class="condition-hide condition-hide-line hide-object-name-label hide-object-dropdown-icon" :items="intFx" v-model="firstHideSet.hideFx.int"></v-select>
+                      <v-select v-else-if="item.index != 0" dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.conditional_connector" color="#4CAF50" class="condition-hide condition-hide-line hide-object-name-label hide-object-dropdown-icon" :items="intFx" v-model="firstHideSet.hideFxExtra[item.index-1].int"></v-select>
+                    </v-col>
+                  </v-row>
                 </v-col>
               </v-row>
-
-              <v-row v-for='item in hs.hideFxExtra' :key="item.index"> 
-                <v-col cols='12' class="conect-condition-block">
-                  <v-select v-if="item.index == 0" dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.conditional_connector" :color="color_intFx" class="condition-hide hide-object-name-label business-box-inside icon-select icon-dropdown-modal" :items="intFx" v-model="hs.hideFx.int"></v-select>
-                  <v-select v-else-if="item.index != 0" dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.conditional_connector" :color="color_intFx" class="condition-hide hide-object-name-label business-box-inside icon-select icon-dropdown-modal" :items="intFx" v-model="hs.hideFxExtra[item.index-1].int"></v-select>
-                </v-col>
-                <v-col cols='2' align-self="center" class="condition-hide-title">
+              <v-row class="mt-0 hide-cond-modal-row">
+                <v-col cols='2' align-self="center" class="pl-0 condition-hide-title">
                   {{ textLang.conditions_no }} {{ item.index+2 }}:
                 </v-col>
                 <v-col cols='3' class="pl-0">
-                  <v-text-field outlined dense hide-details :color="color_name" :label="textLang.name_object" class="pad-input condition-hide condition-hide-line hide-object-name-label" v-model="item.objectName"></v-text-field>
+                  <v-text-field outlined dense hide-details color="#4CAF50" :label="textLang.name_object" class="condition-hide condition-hide-line hide-object-name-label" v-model="item.objectName"></v-text-field>
                 </v-col>
                 <v-col cols='3' class="px-0">
-                  <v-select dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.condition" :color="color_logicFx" class="condition-hide hide-object-name-label business-box-inside icon-select icon-dropdown-modal" :items="logicFx" v-model="item.logic"></v-select>
+                  <v-select dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.condition" color="#4CAF50" class="condition-hide condition-hide-line hide-object-name-label hide-object-dropdown-icon" :items="logicFx" v-model="item.logic"></v-select>
                 </v-col>
                 <v-col cols='3'>
-                  <v-text-field outlined dense hide-details :color="color_hideFx_logicValue" :label="textLang.cost" class="pad-input condition-hide condition-hide-line hide-object-name-label" v-model="item.logicValue"></v-text-field>
+                  <v-text-field outlined dense hide-details color="#4CAF50" :label="textLang.cost" class="condition-hide condition-hide-line hide-object-name-label" v-model="item.logicValue"></v-text-field>
                 </v-col>
-                <v-col cols='1' align-self="center" class="px-0">
+                <v-col cols='auto' align-self="center" class="pl-0 pr-1">
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
-                      <v-btn depressed fab dark x-small v-on="on" color="error" @click="deleteLogic(item,hs.setIndx)">
+                      <v-btn outlined fab x-small v-on="on" color="#4CAF50" @click="deleteLogic(item,firstHideSet.setIndx)">
                         <v-icon>mdi-minus</v-icon>
                       </v-btn>
                     </template>
                     <span>{{ textLang.delete_condition }}</span>
                   </v-tooltip>
+                </v-col>
+                <v-col v-show="item.index == (firstHideSet.hideFxExtra.length-1)" cols='auto' align-self="center" class="px-0">
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
-                      <v-btn v-show="item.index == (hs.hideFxExtra.length-1)" depressed fab dark x-small v-on="on" :color="color_icon_mdiplus" class="add-cond-btn" @click="addLogic(hs.setIndx)">
+                      <v-btn depressed fab dark x-small v-on="on" color="#4CAF50" @click="addLogic(firstHideSet.setIndx)">
                         <v-icon>mdi-plus</v-icon>
                       </v-btn>
                     </template>
@@ -144,18 +79,103 @@
                   </v-tooltip>
                 </v-col>
               </v-row>
+            </div>
+          </v-card>
+
+          <div v-for="hs in hideSetArray" :key="hs.setIndx" v-show="hideSetArray.length"> <!-- next condition group -->
+            <v-row justify="center" class="mt-2 hide-cond-modal-row">
+              <v-col cols="3" class="px-0">
+                <v-select dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.conditional_connector_group" color="#4CAF50" class="condition-hide condition-hide-line hide-object-name-label hide-object-dropdown-icon" :items="intFx" v-model="hs.operand"></v-select>
+              </v-col>
+            </v-row>
+            <v-card outlined class="pa-3 mt-2 condition-group-card">
+              <v-row align="center" class="condition-group-title-row">
+                <u class="condition-group-title">{{ textLang.condition_group_title }} {{hs.setIndx}} </u>
+                <v-btn depressed dark small color="error" class="ml-3 delete-cond-group-btn" @click="deleteLogicGroup(hs)">{{ textLang.delete_condition_group }}</v-btn>
+              </v-row>
+              <v-row class="mt-1 hide-cond-modal-row"> <!-- first condition of group -->
+                <v-col cols='2' align-self="center" class="pl-0 condition-hide-title">
+                  {{ textLang.condition_1 }}:
+                </v-col>
+                <v-col cols='3' class="pl-0">
+                  <v-text-field outlined dense hide-details color="#4CAF50" :label="textLang.name_object" class="condition-hide condition-hide-line hide-object-name-label" v-model="hs.hideFx.objectName"></v-text-field>
+                </v-col>
+                <v-col cols='3' class="px-0">
+                  <v-select dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.condition" color="#4CAF50" class="condition-hide condition-hide-line hide-object-name-label hide-object-dropdown-icon" :items="logicFx" v-model="hs.hideFx.logic"></v-select>
+                </v-col>
+                <v-col cols='3'>
+                  <v-text-field outlined dense hide-details color="#4CAF50" :label="textLang.cost" class="condition-hide condition-hide-line hide-object-name-label" v-model="hs.hideFx.logicValue"></v-text-field>
+                </v-col>
+                <v-col v-show="hs.hideFxExtra.length == 0" cols="auto" align-self="center" class="px-0">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn depressed fab dark x-small v-on="on" color="#4CAF50" @click="addLogic(hs.setIndx)">
+                        <v-icon>mdi-plus</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>{{ textLang.add_condition }}</span>
+                  </v-tooltip>
+                </v-col>
+              </v-row>
+
+              <div v-for='item in hs.hideFxExtra' :key="item.index"> <!-- next condition of group -->
+                <v-row class="hide-cond-modal-row">
+                  <v-col cols="9" offset="2" class="pa-0">
+                    <v-row justify="center" class="hide-cond-modal-row">
+                      <v-col cols='4' class="px-0">
+                        <v-select v-if="item.index == 0" dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.conditional_connector" color="#4CAF50" class="condition-hide condition-hide-line hide-object-name-label hide-object-dropdown-icon" :items="intFx" v-model="hs.hideFx.int"></v-select>
+                        <v-select v-else-if="item.index != 0" dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.conditional_connector" color="#4CAF50" class="condition-hide condition-hide-line hide-object-name-label hide-object-dropdown-icon" :items="intFx" v-model="hs.hideFxExtra[item.index-1].int"></v-select>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+                <v-row class="mt-0 hide-cond-modal-row">
+                  <v-col cols='2' align-self="center" class="pl-0 condition-hide-title">
+                    {{ textLang.conditions_no }} {{ item.index+2 }}:
+                  </v-col>
+                  <v-col cols='3' class="pl-0">
+                    <v-text-field outlined dense hide-details color="#4CAF50" :label="textLang.name_object" class="condition-hide condition-hide-line hide-object-name-label" v-model="item.objectName"></v-text-field>
+                  </v-col>
+                  <v-col cols='3' class="px-0">
+                    <v-select dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.condition" color="#4CAF50" class="condition-hide condition-hide-line hide-object-name-label hide-object-dropdown-icon" :items="logicFx" v-model="item.logic"></v-select>
+                  </v-col>
+                  <v-col cols='3'>
+                    <v-text-field outlined dense hide-details color="#4CAF50" :label="textLang.cost" class="condition-hide condition-hide-line hide-object-name-label" v-model="item.logicValue"></v-text-field>
+                  </v-col>
+                  <v-col cols='auto' align-self="center" class="pl-0 pr-1">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on }">
+                        <v-btn outlined fab x-small v-on="on" color="#4CAF50" @click="deleteLogic(item,hs.setIndx)">
+                          <v-icon>mdi-minus</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>{{ textLang.delete_condition }}</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col v-show="item.index == (hs.hideFxExtra.length-1)" cols="auto" align-self="center" class="px-0">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on }">
+                        <v-btn depressed fab dark x-small v-on="on" color="#4CAF50" @click="addLogic(hs.setIndx)">
+                          <v-icon>mdi-plus</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>{{ textLang.add_condition }}</span>
+                    </v-tooltip>
+                  </v-col>
+                </v-row>
+              </div>
             </v-card>
           </div>
-          <v-row class="mt-3 add-group-cond-row">
+          <v-row class="mt-4 add-group-cond-row">
             <v-spacer></v-spacer>
-            <v-btn depressed :color="color_add_cond_group" class="add-group-cond-btn" @click="addLogicGroup()"><b>{{ textLang.add_group_cond }}</b></v-btn>
+            <v-btn depressed dark color="#0F3852" class="add-group-cond-btn" @click="addLogicGroup()">{{ textLang.add_group_cond }}</v-btn>
           </v-row>
         </v-card-text>
-        <v-divider class="mx-10"></v-divider>
-        <v-card-actions class="pt-12 pb-10">
+        <v-divider class="mx-6"></v-divider>
+        <v-card-actions class="py-5">
           <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-3 save-setting-btn" @click="close()">{{ textLang.cancel }}</v-btn>
-          <v-btn depressed large :color="color_save" class="px-5 ml-3 save-setting-btn save-modal-font-btn" @click="save()">{{ textLang.save }}</v-btn>
+          <v-btn outlined color="#67c25d" dark class="px-12 mr-4 hide-cond-modal-btn" @click="close()">{{ textLang.cancel }}</v-btn>
+          <v-btn depressed dark color="#67c25d" class="px-5 ml-4 hide-cond-modal-btn" @click="save()">{{ textLang.save }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -459,20 +479,31 @@
 </script>
 
 <style>
+  .hide-object-header-modal {
+    font-family: "Sarabun", sans-serif;
+    font-size: 16px !important;
+    color: white;
+    background-color: #67c25d;
+  }
+
   .hide-object-hearder {
     font-family: 'Sarabun', sans-serif;
     color: black;
   }
 
   .condition-group-card {
-    border: 2px solid #2ACA9F !important;
+    border: 2px solid #67c25d !important;
   }
 
   .condition-group-title {
     font-family: 'Sarabun', sans-serif;
-    color: #2ACA9F;
+    color: #67c25d;
     font-size: 16px;
-    text-decoration: underline;
+  }
+
+  .hide-cond-modal-row {
+    width: 100%;
+    margin: 0%;
   }
 
   .condition-hide-title {
@@ -483,45 +514,49 @@
 
   .condition-hide {
     font-family: 'Sarabun', sans-serif;
-    font-size: 16px;
+    font-size: 13px;
   }
 
   .v-text-field.condition-hide-line input {
-    line-height: 25px;
+    line-height: 21px;
   }
 
   .v-input.hide-object-name-label .v-label {
-    left: 12px !important;
-    font-family: "Sarabun", sans-serif;
+    /* left: 12px !important;
+    font-family: "Sarabun", sans-serif; */
+    height: 25px !important;
+    line-height: 25px !important;
   }
 
-  .conect-condition-block {
-    padding-left: 40%;
-    padding-right: 40%;
+  .hide-object-name-label.v-text-field--outlined.v-input--dense .v-label {
+    top: 6px !important;
   }
 
-  .add-cond-btn {
-    margin-left: 4%;
+  .hide-object-dropdown-icon .theme--light.v-icon {
+    color: rgba(0, 0, 0, 0.54) !important;
   }
 
   .add-group-cond-row {
     width: 100%;
-    margin-left: 0%;
+    margin: 0%;
   }
 
   .add-group-cond-btn {
     font-family: "Sarabun", sans-serif;
-    color: #0E3852 !important;
     text-transform: capitalize;
   }
 
   .condition-group-title-row {
     width: 100%;
-    margin-left: 0%;
+    margin: 0%;
   }
 
   .delete-cond-group-btn {
     font-family: "Sarabun", sans-serif;
     text-transform: capitalize;
+  }
+
+  .hide-cond-modal-btn {
+    font-family: "Sarabun", sans-serif;
   }
 </style>
