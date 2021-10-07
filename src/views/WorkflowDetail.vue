@@ -75,11 +75,17 @@
         </v-data-table>
       </v-row>
     </v-card>
+    <DocumentReport/>
   </div>
 </template>
 
 <script>
+import { EventBus } from '../EventBus'
+import DocumentReport from '../components/DocumentReportModal'
 export default {
+  components:{
+    DocumentReport
+    },
   data: () => ({
     report_header: [
       {
@@ -231,6 +237,8 @@ export default {
       this.$router.push({ name: 'summary_workflow' })
     },
     exportExcel () {
+      EventBus.$emit('documentreport',this.workflow_id)
+      return
       if (this.$device.windows) window.open(`${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${this.workflow_id}`)
       else window.open(`https://chat-develop.one.th/deeplink-redirect/?url=${`${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${this.workflow_id}`}`)
     }

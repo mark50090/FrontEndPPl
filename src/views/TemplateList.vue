@@ -72,7 +72,17 @@
                             Export
                           </v-list-item-title>
                         </v-list-item-content>
-                    </v-list-item> 
+                    </v-list-item>
+                    <!-- <v-list-item @click="optionFormTransfer()">
+                      <v-list-item-icon>
+                          <v-icon color="#4CAF50">mdi-account-edit</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title class="front-templateform-down">
+                            โอนสิทธิการแก้ไข
+                          </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item> -->
                     <v-list-item @click="deletTemplate(item)">
                       <v-list-item-icon>
                           <v-icon color="#4CAF50">mdi-delete</v-icon>
@@ -91,6 +101,7 @@
     </v-card>
     <ImportForm/>
     <showFormDelete/>
+    <showFormTransfer/>
   </div>
 </template>
 
@@ -98,6 +109,7 @@
 import { EventBus } from '../EventBus'
 import ImportForm  from '../components/ImportForm'
 import showFormDelete from '../components/DeleteForm.vue'
+import showFormTransfer from '../components/TransferEdit.vue'
   export default {
     data: () => ({
       templateform_table_header: [
@@ -121,7 +133,8 @@ import showFormDelete from '../components/DeleteForm.vue'
     }),
     components: {
       ImportForm,
-      showFormDelete
+      showFormDelete,
+      showFormTransfer
     },
     mounted() {
       this.searchTemplate()
@@ -134,6 +147,9 @@ import showFormDelete from '../components/DeleteForm.vue'
       EventBus.$off('getTemplateList')
     },
     methods: { 
+      optionFormTransfer() {
+        EventBus.$emit('FormTransfer')
+      },
       emitLoading(isLoad) {
         EventBus.$emit('loadingOverlay', isLoad)
       },
