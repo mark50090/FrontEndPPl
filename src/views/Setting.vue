@@ -209,17 +209,16 @@ export default {
     switch_notify_email: false,
     edit_email: false,
     disable_notify_email: true,
-    show_Edit_Stamp: true ,
-    _default_stamp : []
+    show_Edit_Stamp: Boolean ,
   }),
   mounted() {
     this.getUserDetail()
     this.get_usersetting()
+    EventBus.$on('Set_Signature',this.get_defaultSignature)
     EventBus.$on('Setting',this.get_usersetting)
   },
   methods: {
     openSetDefaultSignature() {
-      this._default_stamp = this.default_stamp
       EventBus.$emit('DefaultSignature')
       EventBus.$emit('Signature_Data',this.default_Business,this.default_Signature,this.switch_notify_email,this.notify_email)
     },
@@ -267,14 +266,13 @@ export default {
           this.default_sign = data.result.default_sign
           this.default_stamp = data.result.default_stamp
           if (this.default_stamp != '') {
-            if (this.default_stamp != this._default_stamp) {
-              this.selectedStamp = data.result.default_stamp[0]
-              if (this.selectedStamp.SrcBase != undefined) {
-                this.show_Edit_Stamp = true
-              }
+            if (this.selectedStamp != this.default_stamp) {
+              this.selectedStamp = this.default_stamp[0]
+              this.show_Edit_Stamp = true
             }
           }
-          if (this.selectedStamp.SrcBase == undefined) {
+          if (this.selectedStamp == undefined) {
+            this.selectedStamp = ''
             this.show_Edit_Stamp = false
           }
           if ((this.confirmBusiness == '') || (this.confirmBusiness == undefined)) {
@@ -286,8 +284,23 @@ export default {
           if (this.default_sign == true) {
             this.state_Signature = 'Ready'
           }
-          if ((this.default_stamp == '') || (this.default_stamp == undefined)) {
-            this.selectedStamp.SrcBase = ''
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async get_defaultSignature(){
+      try {
+        const url = '/user_setting/api/v1/get_usersetting'
+        var { data } = await this.axios.get(this.$api_url + url)
+        if(data) {
+          this.default_Signature = data.result.other_setting.Default_Signature
+          this.default_sign = data.result.default_sign
+          if (this.default_sign == false) {
+            this.state_Signature = 'Not Found'
+          }
+          if (this.default_sign == true) {
+            this.state_Signature = 'Ready'
           }
         }
       } catch (error) {
@@ -333,8 +346,40 @@ export default {
               Notify_Email : this.notify_email
             }
         })
+        this.$swal({
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+            text: 'อัพเดทข้อมูลสำเร็จ',
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 5000,
+            customClass: {
+            popup: 'alert-card',
+            title: 'alert-title-block',
+            closeButton: 'close-alert-btn',
+            htmlContainer: 'alert-text-block'
+          }
+        })
       } catch (error) {
         console.log(error);
+        this.$swal({
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+            text: 'อัพเดทข้อมูลล้มเหลว',
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 5000,
+            customClass: {
+            popup: 'alert-card',
+            title: 'alert-title-block',
+            closeButton: 'close-alert-btn',
+            htmlContainer: 'alert-text-block'
+          }
+        })
       }
     },
     stateBusinessOn() {

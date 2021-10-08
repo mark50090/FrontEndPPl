@@ -12,7 +12,7 @@
         <v-card-text class="pb-0">
             <v-row class="default-stamp-row">
                 <v-text-field v-if="action_header == 'เพิ่ม'" dense outlined hide-details color="#67C25D" label="ชื่อตราประทับ" class="stamp-name-box stamp-name-label" v-model="stamp_name" :rules="stamp_name_Rules" required ></v-text-field>
-                <v-text-field v-if="action_header == 'แก้ไข'" dense outlined hide-details color="#67C25D" label="ชื่อตราประทับ"  class="stamp-name-box stamp-name-label" v-model="stamp_name"></v-text-field>
+                <v-text-field v-if="action_header == 'แก้ไข'" dense outlined hide-details color="#67C25D" label="ชื่อตราประทับ"  class="stamp-name-box stamp-name-label" v-model="stamp_name" :rules="stamp_name_Rules" required ></v-text-field>
             </v-row>
 
           <v-row class="mt-3 default-stamp-row">
@@ -35,7 +35,7 @@
             </v-col>
             <v-spacer></v-spacer>
             <v-col cols="auto" class="pl-0 pr-2">
-                <v-btn :disabled="valid" depressed color="#67C25D" class="upload-stamp-btn white--text" @click="saveStamp()">บันทึก</v-btn>
+                <v-btn :disabled="!valid" depressed color="#67C25D" class="upload-stamp-btn white--text" @click="saveStamp()">บันทึก</v-btn>
             </v-col>
           </v-row>
         </v-card-actions>
@@ -79,6 +79,7 @@ export default {
       this.stamp_name = this.selectedStamp.StampName
       this.imageStamp = this.selectedStamp.SrcBase
       this.default_stamp_dialog = true 
+      this.uploadImage = this.selectedStamp
     },
     getDataForAddStamp() {
       EventBus.$off('Stamp_Data_Add')
@@ -122,28 +123,28 @@ export default {
       reader.readAsDataURL(file);
     },
     saveStamp(){
-        var Stampname = []
-        var getStampname = []
-        this.default_stamp.forEach(element => {
-          Stampname.push(element)
-        })
-        for (let index = 0; index < Stampname.length; index++) {
-          getStampname.push(Stampname[index].StampName)
-        }
+        // var Stampname = []
+        // var getStampname = []
+        // this.default_stamp.forEach(element => {
+        //   Stampname.push(element)
+        // })
+        // for (let index = 0; index < Stampname.length; index++) {
+        //   getStampname.push(Stampname[index].StampName)
+        // }
         if (this.action_header == 'เพิ่ม') {
           this.$refs.form.validate()
-          if ((this.stamp_name != '') & (this.imageStamp != '')) {
-            const checkDataArray = getStampname.find(element => element == this.stamp_name);
-            if (checkDataArray == undefined) {
+          // if ((this.stamp_name != '') & (this.imageStamp != '')) {
+          //   const checkDataArray = getStampname.find(element => element == this.stamp_name);
+          //   if (checkDataArray == undefined) {
               var stampModal = {StampName: this.stamp_name, SrcBase: this.imageStamp}
               this.default_stamp.push(stampModal);
               this.postStamp()
-            }
-            else if (checkDataArray != undefined) {
-              alert("มีชื่อตราประทับซ้ำในระบบ");
-              this.default_stamp_dialog = true
-            }
-          }
+            // }
+            // else if (checkDataArray != undefined) {
+            //   alert("มีชื่อตราประทับซ้ำในระบบ");
+            //   this.default_stamp_dialog = true
+            // }
+          // }
           // else if ((this.stamp_name == '') & (this.imageStamp == '')) {
           //   alert("กรุณากรอกชื่อและอัพโหลดรูปภาพตราประทับ");
           //   this.default_stamp_dialog = true
@@ -160,16 +161,16 @@ export default {
         }
         else if (this.action_header == 'แก้ไข') {
           if (this.stamp_name != '') {
-            getStampname.splice(this.findStamp, 1);
-            const checkDataArray = getStampname.find(element => element == this.stamp_name);
-            if (checkDataArray == undefined) {
+            // getStampname.splice(this.findStamp, 1);
+            // const checkDataArray = getStampname.find(element => element == this.stamp_name);
+            // if (checkDataArray == undefined) {
               this.default_stamp[this.findStamp] = {StampName: this.stamp_name, SrcBase: this.imageStamp}
               this.postStamp()
-            }
-            else if (checkDataArray != undefined) {
-              alert("มีชื่อตราประทับซ้ำในระบบ");
-              this.default_stamp_dialog = true
-            }
+            // }
+            // else if (checkDataArray != undefined) {
+            //   alert("มีชื่อตราประทับซ้ำในระบบ");
+            //   this.default_stamp_dialog = true
+            // }
           }
         }
 		},
