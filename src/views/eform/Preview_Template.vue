@@ -28,7 +28,7 @@
       <!-- <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready" large depressed color="#C2EB81" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft display-pc-only" @click="openDocName(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
       <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" large depressed dark color="#4CAF50" class="save-doc-btn" @click="checkSave()">{{ textLang.tabMenubar.save_doc }}</v-btn>
       <!-- <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed color="#C2EB81" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft display-pc-only" :disabled="buttonClicked" @click="saveStep(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
-      <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed color="#4CAF50" class="btn-saveStep" :disabled="buttonClicked" @click="openSignature()">{{ textLang.tabMenubar.save_doc }}</v-btn>  <!-- mobile -->
+      <!-- <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed color="#4CAF50" class="btn-saveStep" :disabled="buttonClicked" @click="openSignature()">{{ textLang.tabMenubar.save_doc }}</v-btn> -->  <!-- mobile -->
       
       <!-- select next template button -->
       <v-menu offset-y z-index="11">
@@ -120,12 +120,12 @@
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="editStep && !allUserStep && !isPublic && !draftPreview" :disabled="buttonClicked" @click="saveStep(true)">
+          <!-- <v-list-item v-if="editStep && !allUserStep && !isPublic && !draftPreview" :disabled="buttonClicked" @click="saveStep(true)">
             <v-list-item-icon>
               <v-icon :disabled="buttonClicked" color="#4CAF50">mdi-file-hidden</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.save_draft }}</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && false " @click="openDocName(true)">
             <v-list-item-icon>
               <v-icon color="#4CAF50">mdi-file-hidden</v-icon>
@@ -329,33 +329,26 @@
     <ConfirmCancelDocumentModal/>
     <SetPasswordPDFModal />
     <ForwardMailModal/>
-    <!-- Send Paperless Modal -->
+    <!-- Save Document Modal -->
     <v-dialog v-model="dialog_ppl" scrollable persistent max-width="650px">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-          <!-- <b>{{ textLang.offer_dialog.offer_paperless_old }}</b> -->
-          <b>{{ textLang.offer_dialog.offer_paperless_new }}</b>
+        <v-card-title class="py-2 save-doc-modal-header">
+          {{ textLang.offer_dialog.offer_paperless_new }}
         </v-card-title>
-        <v-card-text class="px-12 pt-5">
-          <v-row>
-            <v-col cols="12" md="3" lg="3" align-self="top" class="pt-4 pb-0 title-name-paperless"><!--{{ textLang.offer_dialog.subject_old }}-->{{ textLang.offer_dialog.subject_new }} </v-col>
-            <v-col cols="12" md="9" lg="9">
-              <v-text-field outlined dense class="pad-input title-name-paperless-value paperless-input-line" :color="color_title_name_paperless" :placeholder="textLang.offer_dialog.no_subject" v-model="pplSubject" :error="name_ppl_error" :error-messages="error_file_name_ppl_msg"></v-text-field>
+        <v-card-text class="pt-4">
+          <v-row class="save-doc-row">
+            <v-col cols="12" md="2" lg="2" align-self="start" class="pl-0 pt-5 pb-0 title-name-paperless">{{ textLang.offer_dialog.subject_new }} </v-col>
+            <v-col cols="12" md="10" lg="10" class="px-0 pb-0">
+              <v-text-field outlined dense class="title-name-paperless-value paperless-input-line" color="#4CAF50" v-model="pplSubject" :error="name_ppl_error" :error-messages="error_file_name_ppl_msg"></v-text-field>
             </v-col>
           </v-row>
-          <v-row v-show="isPdfLock">
-            <v-col cols="12" md="3" lg="3" align-self="top" class="pt-4 pb-0 title-name-paperless">{{ textLang.offer_dialog.password_setting }}<span class="color-password-setting"> * </span>:</v-col>
-            <v-col cols="12" md="9" lg="9">
-              <v-text-field outlined dense class="pad-input title-name-paperless-value paperless-input-line error_messages_set" :color="color_title_name_paperless" v-model="pdfPasswordSetting" :error="pdf_setting_error" :error-messages="error_pdf_setting_password"></v-text-field>
+          <v-row class="mt-0 save-doc-row">
+            <v-col cols="12" md="2" lg="2" class="pl-0 pt-0 title-name-paperless">{{ textLang.offer_dialog.message }}</v-col>
+            <v-col cols="12" md="10" lg="10" class="px-0 pt-0">
+              <v-textarea outlined dense hide-details no-resize rows="6" color="#4CAF50" class="pad-textarea message-paperless-row title-name-paperless-value" v-model="pplBody"></v-textarea>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="12" md="3" lg="3" class="pt-4 pb-0 title-name-paperless">{{ textLang.offer_dialog.message }}</v-col>
-            <v-col cols="12" md="9" lg="9">
-              <v-textarea outlined single-line dense hide-details no-resize rows="6" :color="color_message_paperless" class="pad-textarea message-paperless-row title-name-paperless-value" v-model="pplBody"></v-textarea>
-            </v-col>
-          </v-row>
-          <v-row justify="center" class="mb-3">
+          <!-- <v-row justify="center" class="mb-3">
             <v-col cols="12" md="3" lg="3" class="pb-0 type-paperless-title">{{ textLang.offer_dialog.doc_type }}</v-col>
             <v-col cols="12" md="7" lg="7">
               <v-autocomplete dense outlined hide-details :color="color_type_paperless_title" append-icon="mdi-chevron-down" :placeholder="textLang.offer_dialog.choose" class="type-paperless autocomplete-pad icon-select dropdown-icon-color" :items="documentTypes" v-model="selectedDocumentType"></v-autocomplete>
@@ -366,84 +359,74 @@
             <v-col cols="12" md="7" lg="7">
               <v-autocomplete dense outlined hide-details :color="color_document_format_paperless" append-icon="mdi-chevron-down" :placeholder="textLang.offer_dialog.choose" class="type-paperless autocomplete-pad icon-select dropdown-icon-color" :items="ppl_templatelist" v-model="template_paperless_code"></v-autocomplete>
             </v-col>
+          </v-row> -->
+          <!-- <br /> -->
+          <v-row v-if="templates.description" class="save-doc-row">
+            <v-textarea outlined dense readonly hide-details no-resize :label="textLang.offer_dialog.note" color="#FF9800" rows="6" class="message-paperless-row digital-workflow-not-line note-paperless-title note-paperless-content note-paperless-box" :value="templates.description"></v-textarea>
           </v-row>
-          <br />
-          <v-row justify="center" v-if="templates.description">
-            <v-col cols="12" md="10" lg="10">
-              <v-textarea outlined readonly no-resize :label="textLang.offer_dialog.note" :color="color_templates_description" rows="6" class="pad-textarea message-paperless-row note-paperless-title note-paperless-content note-paperless-box" :value="templates.description"></v-textarea>
-            </v-col>
-          </v-row>
+          <br>
           <v-divider></v-divider>
-          <v-row class="mt-8 step-btn-block">
-            <v-btn depressed large dark :color="color_step_btn" class="step-btn" @click="step_show = !step_show">
+          <br>
+          <v-row class="save-doc-row">
+            <v-btn depressed large dark color="#4CAF50" class="step-btn" @click="step_show = !step_show">
               {{ textLang.offer_dialog.seq_approval }}
               <v-icon v-if="step_show == true" large class="ml-12">mdi-chevron-up</v-icon>
               <v-icon v-else-if="step_show == false" large class="ml-12">mdi-chevron-down</v-icon>
             </v-btn>
           </v-row>
-          <v-row v-if="step_show == true" class="all-step-block">
-            <v-timeline align-top dense class="pt-11 all-step">
-              <v-timeline-item fill-dot icon :color="color_all_step_block" v-for="item in steps" :key="item">
+          <v-row v-if="step_show == true" class="mt-0 save-doc-row all-workflow-block">
+            <v-timeline align-top dense class="pt-6 all-step">
+              <v-timeline-item fill-dot icon color="#4CAF50" v-for="item in steps" :key="item">
                 <template v-slot:icon>
                   <span class="number-step">{{item.step_num}}</span>
                 </template>
-                <v-text-field v-show="!item.ref_step || (item.ref_step == 'ref-undefined')" outlined dense hide-details :color="color_all_step_block" class="mb-3 pad-input type-paperless" v-for="e in item.one_email" :key="e.ex_email" v-model="e.email"></v-text-field>
-                <v-text-field v-show="item.ref_step &&  (item.ref_step != 'ref-undefined')" readonly outlined dense hide-details :color="color_all_step_block" class="mb-3 pad-input type-paperless" :value="textLang.offer_dialog.re_number + item.ref_step"></v-text-field>
+                <v-text-field v-show="!item.ref_step || (item.ref_step == 'ref-undefined')" outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" v-for="e in item.one_email" :key="e.ex_email" v-model="e.email"></v-text-field>
+                <v-text-field v-show="item.ref_step &&  (item.ref_step != 'ref-undefined')" readonly outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" :value="textLang.offer_dialog.re_number + item.ref_step"></v-text-field>
               </v-timeline-item>
             </v-timeline>
           </v-row>
           <br />
           <v-divider></v-divider>
           <br />
-          <v-row class="show-form-block">
-            <div v-for="item in attachedFiles"  :key="item.file_id">
-              <v-chip class="ma-1 chip-moblie" v-if="!item.waitUpload" small label dark :color="color_downloadfile" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.file_name }}</v-chip>
+          <v-row class="mb-2 save-doc-row">
+            <v-col v-for="item in attachedFiles"  :key="item.file_id" cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-1 pt-0 pb-1">
+              <v-chip class="attached-file-save-modal" v-if="!item.waitUpload" small dark color="#4CAF50" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.file_name }}</v-chip>
               <!-- <v-chip v-if="item.waitUpload" small label outlined class="ma-1 chip-moblie text-area-front" :color="color_aperless_file_title"><b>{{item.file_name}}</b>&nbsp;<i>({{ textLang.offer_dialog.wait_upload }})</i></v-chip> -->
-            </div>
+            </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="12" md="4" lg="4" align-self="center" class="paperless-file-title">{{ textLang.offer_dialog.add_attachments }}</v-col>
-            <v-col cols="12" md="8" lg="8">
-              <v-file-input show-size dense counter multiple :color="color_paperless_file_title" :placeholder="textLang.offer_dialog.offer_dialog" class="file-input" id="file" v-model="files">
+          <v-row class="mt-0 save-doc-row">
+            <v-col cols="12" md="auto" lg="auto" class="pl-0 pb-0 attach-title-save-modal paperless-file-title">{{ textLang.offer_dialog.add_attachments }}:</v-col>
+            <v-col cols="12" md="" lg="" class="px-0 pb-0">
+              <v-file-input show-size dense outlined counter multiple color="#4CAF50" truncate-length="600" placeholder="เลือกเอกสารแนบ" class="attach-file-preview-box" id="file" v-model="files">
                 <template v-slot:selection="{ text }">
-                  <v-chip small label dark :color="color_paperless_file_title">{{ text }}</v-chip>
+                  <v-chip small dark color="#4CAF50" class="py-1 attach-file-preview-chip">{{ text }}</v-chip>
                 </template>
               </v-file-input>
             </v-col>
           </v-row>
-          <br />
-          <v-divider></v-divider>
         </v-card-text>
-        <v-row class="paperless-alert-row" v-show="alert_text">
-          <v-col cols="1">
+        <v-divider class="mx-6"></v-divider>
+        <v-row class="px-6 paperless-alert-row" v-show="alert_text">
+          <v-col cols="auto" class="pl-0 pt-2">
             <v-icon color="red">mdi-alert</v-icon>
           </v-col>
-          <v-col cols="11">
+          <v-col cols="" class="px-0">
             <span class="paperless-alert" v-html="alert_text"></span>
           </v-col>
         </v-row>
-        <v-card-actions class="send-ppl-actions-block">
-          <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" class="px-12 mr-4 save-setting-btn hidden-sm-and-down" @click="dialog_ppl = false">{{ textLang.offer_dialog.cancel }}</v-btn>
+        <v-card-actions>
+          <!-- <v-btn outlined large color="#979797" class="px-12 mr-4 save-setting-btn hidden-sm-and-down" @click="dialog_ppl = false">{{ textLang.offer_dialog.cancel }}</v-btn>
           <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" large depressed :color="color_btn_save_ppl" class="px-8 mr-2 save-setting-btn save-modal-font-btn hidden-sm-and-down font-save-doc" @click="saveName(false)">{{ textLang.tabMenubar.save_doc }}</v-btn>
           <v-btn v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" :disabled="!(selectedDocumentType && template_paperless_code)" depressed large :color="color_save" class="px-12 ml-4 save-setting-btn save-modal-font-btn hidden-sm-and-down" @click="checkPplUpload()"><b>{{ textLang.offer_dialog.offer }}</b></v-btn>
-          <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" :disabled="!(selectedDocumentType && template_paperless_code)" depressed large :color="color_save" class="px-12 ml-4 save-setting-btn save-modal-font-btn hidden-sm-and-down" @click="saveAndUpload()"><b>{{ textLang.offer_dialog.offer }}</b></v-btn>
-          <!-- mobile -->
-          <v-row justify="center" class="hidden-md-and-up">
-            <v-col cols="9">
-              <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" block large depressed :color="color_btn_save_ppl" class="save-setting-btn save-modal-font-btn font-save-doc" @click="saveName(false)">{{ textLang.tabMenubar.save_doc }}</v-btn>
+          <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" :disabled="!(selectedDocumentType && template_paperless_code)" depressed large :color="color_save" class="px-12 ml-4 save-setting-btn save-modal-font-btn hidden-sm-and-down" @click="saveAndUpload()"><b>{{ textLang.offer_dialog.offer }}</b></v-btn> -->
+          <v-row justify="center" class="save-doc-row">
+            <v-col cols="5" md="3" lg="3" class="pl-0 pr-2">
+              <v-btn block outlined color="#67C25D" class="cancel-efrom-modal-btn" @click="dialog_ppl = false">{{ textLang.offer_dialog.cancel }}</v-btn>
             </v-col>
-            <v-col cols="9">
-              <v-btn v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" :disabled="!(selectedDocumentType && template_paperless_code)" block depressed large :color="color_save" class="ml-0 save-setting-btn save-modal-font-btn" @click="checkPplUpload()"><b>{{ textLang.offer_dialog.offer }}</b></v-btn>
-            </v-col>
-            <v-col cols="9">
-              <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" :disabled="!(selectedDocumentType && template_paperless_code)" block depressed large :color="color_save" class="ml-0 save-setting-btn save-modal-font-btn" @click="saveAndUpload()"><b>{{ textLang.offer_dialog.offer }}</b></v-btn>
-            </v-col>
-            <v-col cols="9">
-              <v-btn block outlined large color="#979797" class="ml-0 save-setting-btn" @click="dialog_ppl = false">{{ textLang.offer_dialog.cancel }}</v-btn>
+            <v-col cols="5" md="3" lg="3" class="pl-2 pr-0">
+              <v-btn block depressed color="#67C25D" class="save-eform-modal-btn">{{ textLang.tabMenubar.save_doc }}</v-btn>
             </v-col>
           </v-row>
-          <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -640,16 +623,16 @@ export default {
       },
       offer_dialog: {
         offer: "เสนอเซ็น",
-        offer_paperless_new: "บันทึกและเสนอเซ็นผ่านระบบ Paperless",
+        offer_paperless_new: "บันทึกเอกสาร",
         offer_paperless_old: "เสนอเซ็นผ่านระบบ Paperless",
-        subject_new: "ชื่อเอกสาร(เรื่อง):",
+        subject_new: "ชื่อเอกสาร:",
         subject_old: "เรื่อง:",
         password_setting: "ตั้งค่ารหัสผ่านเอกสาร (pdf)",
         no_subject: "<ไม่มีหัวเรื่อง>",
         message: "ข้อความ:",
         doc_type: "ประเภทเอกสาร paperless:",
         doc_format: "รูปแบบเอกสาร paperless:",
-        seq_approval: "ลำดับการอนุมัติ",
+        seq_approval: "Workflow",
         add_attachments: "เอกสารแนบเพิ่มเติม",
         please_choose: "กรุณาเลือกเอกสารแนบ",
         doc_system: "แนบเอกสารเข้าระบบ Paperless",
@@ -661,7 +644,7 @@ export default {
         default: "(ค่าเริ่มต้น)",
         please_input: "กรุณากรอกข้อมูล Email ให้ครบถ้วน",
         email_found: "ไม่พบอีเมล์ต่อไปนี้ในระบบ",
-        name_ppl_error: "กรุณากรอกชื่อเอกสาร(เรื่อง)",
+        name_ppl_error: "กรุณากรอกชื่อเอกสาร",
         pdf_setting_error:"กรุณาตั้งค่ารหัสผ่าน",
         wait_upload: "รอการอัพโหลด",
         already_save: "เอกสารในลำดับนี้ ถูกบันทึกแล้ว"
@@ -3869,17 +3852,19 @@ export default {
 
 .title-name-paperless-value {
   font-family: "Sarabun", sans-serif;
-  font-size: 16px;
+  font-size: 13px;
 }
 
 .v-text-field.paperless-input-line input {
-  line-height: 25px;
+  line-height: 21px;
 }
 
-.v-text-field--outlined.message-paperless-row
-  > .v-input__control
-  > .v-input__slot {
+.v-text-field--outlined.message-paperless-row > .v-input__control > .v-input__slot {
   height: 150px !important;
+}
+
+.digital-workflow-not-line.v-textarea textarea {
+  line-height: 21px !important;
 }
 
 .type-paperless-title {
@@ -3890,41 +3875,36 @@ export default {
 
 .type-paperless {
   font-family: "Sarabun", sans-serif;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .v-input.note-paperless-title .v-label {
-  left: 12px !important;
+  /* left: 12px !important; */
   font-family: "Sarabun", sans-serif;
   font-size: 19px;
-  top: 14px !important;
+  top: 6px !important;
   height: 29px;
-  color: #1b9900;
+  color: #FF9800;
 }
 
-.v-textarea.v-text-field--enclosed.note-paperless-content
-  .v-text-field__slot
-  textarea {
+.v-textarea.v-text-field--enclosed.note-paperless-content .v-text-field__slot textarea {
   font-family: "Sarabun", sans-serif;
   font-size: 13px;
   color: #616161;
 }
 
 .theme--light.v-text-field--outlined.note-paperless-box fieldset {
-  border-color: #1b9900;
-}
-
-.step-btn-block {
-  padding-left: 6%;
+  border-color: #FF9800;
 }
 
 .step-btn {
   font-family: "Sarabun", sans-serif;
+  font-size: 15px !important;
   text-transform: capitalize;
 }
 
-.all-step-block {
-  padding-left: 6%;
+.all-workflow-block {
+  /* padding-left: 6%; */
   overflow: auto;
   max-height: 265px;
 }
@@ -3942,12 +3922,11 @@ export default {
   font-family: "Sarabun", sans-serif;
   font-size: 16px;
   color: black;
-  text-align: right;
 }
 
 .paperless-alert-row {
   width: 100%;
-  padding-left: 10%;
+  margin: 0%;
 }
 
 .paperless-alert {
@@ -4045,6 +4024,44 @@ export default {
 
 .attach-file-modal-btn {
   font-family: "Sarabun", sans-serif;
+}
+
+.save-doc-modal-header {
+  font-family: "Sarabun", sans-serif;
+  font-size: 16px !important;
+  color: white;
+  background-color: #67c25d;
+}
+
+.save-doc-row {
+  width: 100%;
+  margin: 0%;
+}
+
+.attached-file-save-modal {
+  font-family: "Sarabun", sans-serif;
+}
+
+.attached-file-save-modal {
+  white-space: inherit;
+  height: auto !important;
+}
+
+.attached-file-save-modal .v-chip__content {
+  display: flex !important;
+}
+
+.attach-title-save-modal {
+  padding-top: 3% !important;
+}
+
+.cancel-efrom-modal-btn {
+  font-family: "Sarabun", sans-serif;
+}
+
+.save-eform-modal-btn {
+  font-family: "Sarabun", sans-serif;
+  color: white !important;
 }
 
 
@@ -4323,17 +4340,8 @@ export default {
     height: calc(100vh - 211px);
   }
 
-  .all-step-block {
-    padding-left: 0%;
-    padding-right: 2%;
-  }
-
   .all-step {
     width: 100%;
-  }
-
-  .paperless-file-title {
-    text-align: left;
   }
 
   .back-data-btn {
@@ -4357,6 +4365,10 @@ export default {
     top: 112px;
     height: 100%;
     z-index: 12;
+  }
+
+  .attach-title-save-modal {
+    padding-top: 0% !important;
   }
 
   .send-ppl-actions-block{
