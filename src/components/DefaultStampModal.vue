@@ -35,10 +35,7 @@
             </v-col>
             <v-spacer></v-spacer>
             <v-col cols="auto" class="pl-0 pr-2">
-              <!-- <v-form ref="form" v-model="valid"> -->
-                <v-btn v-if="state_stamp == 'add'" :disabled="!valid" depressed color="#67C25D" class="upload-stamp-btn white--text" @click="saveStamp()">บันทึก</v-btn>
-                <v-btn v-if="state_stamp == 'edit'" :disabled="!valid" depressed color="#67C25D" class="upload-stamp-btn white--text" @click="saveStamp()">บันทึก</v-btn>
-              <!-- </v-form> -->
+                <v-btn :disabled="valid" depressed color="#67C25D" class="upload-stamp-btn white--text" @click="saveStamp()">บันทึก</v-btn>
             </v-col>
           </v-row>
         </v-card-actions>
@@ -71,43 +68,34 @@ export default {
     getStampName: '',
     getSrcBase: '',
     notify_email: '',
-    state_stamp: ''
   }),
   mounted() {
     EventBus.$on('DefaultStamp',this.startSettingStamp)
   },
   methods: {
     getDataForEditStamp() {
-      // EventBus.$off('Stamp_Data_Edit')
-      // this.$refs.form.resetValidation()
+      EventBus.$off('Stamp_Data_Edit')
       this.action_header = 'แก้ไข'
       this.stamp_name = this.selectedStamp.StampName
       this.imageStamp = this.selectedStamp.SrcBase
       this.default_stamp_dialog = true 
-      console.log("state_stamp",this.state_stamp)
-      this.valid = true
-      console.log("valid",this.valid)
     },
     getDataForAddStamp() {
-      // EventBus.$off('Stamp_Data_Add')
+      EventBus.$off('Stamp_Data_Add')
       this.$refs.form.resetValidation()
       this.action_header = 'เพิ่ม'
       this.stamp_name = ''
       this.imageStamp = ''
       this.default_stamp_dialog = true
-      console.log("state_stamp",this.state_stamp)
-      console.log("valid",this.valid)
     },
     startSettingStamp(action) {
       if (action == 'add') {
-        this.state_stamp = 'add'
         EventBus.$on('Stamp_Data_Add',(default_stamp) => {
           this.default_stamp = default_stamp
         })
         EventBus.$on('Stamp_Data_Add',this.getDataForAddStamp)
       } 
       else if (action == 'edit') {
-        this.state_stamp = 'edit'
         EventBus.$on('Stamp_Data_Edit',(default_stamp,findStamp,selectedStamp) => {
           this.default_stamp = default_stamp
           this.findStamp = findStamp
@@ -171,7 +159,6 @@ export default {
           // this.valid = false
         }
         else if (this.action_header == 'แก้ไข') {
-          this.$refs.form.validate()
           if (this.stamp_name != '') {
             getStampname.splice(this.findStamp, 1);
             const checkDataArray = getStampname.find(element => element == this.stamp_name);
