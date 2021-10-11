@@ -252,9 +252,6 @@ export default {
     },
     async get_usersetting(){
       try {
-        if (this.selectedStamp.stamp_name == undefined) {
-          this.selectedStamp = []
-        }
         const url = '/user_setting/api/v1/get_usersetting'
         var { data } = await this.axios.get(this.$api_url + url)
         if(data) {
@@ -266,10 +263,13 @@ export default {
           this.default_sign = data.result.default_sign
           this.default_stamp = data.result.default_stamp
           if (this.default_stamp != '') {
-            if (this.selectedStamp != this.default_stamp) {
+            if (this.selectedStamp != this.default_stamp[0]) {
               this.selectedStamp = this.default_stamp[0]
               this.show_Edit_Stamp = true
             }
+          }
+          if (this.default_stamp == '') {
+            this.selectedStamp = ''
           }
           if (this.selectedStamp == undefined) {
             this.selectedStamp = ''
