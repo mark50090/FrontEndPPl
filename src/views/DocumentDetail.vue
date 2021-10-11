@@ -117,11 +117,11 @@
                   <span class="ml-2">SEND EMAIL</span>
                 </v-btn>
               </v-col>
-              <!-- <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
+              <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
                 <v-btn @click="optionFormReturn()" depressed x-small dark color="#FBC02D" class="return-correction-btn">
                   ส่งคืนแก้ไข
                 </v-btn>
-              </v-col> -->
+              </v-col>
               <v-col v-if="false" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
                 <v-btn depressed x-small dark color="error" class="download-pdf-btn">ยกเลิกเอกสาร</v-btn>
               </v-col>
@@ -412,7 +412,7 @@ export default {
   },
   methods: {
     optionFormReturn() {
-      EventBus.$emit('FormReturn')
+      EventBus.$emit('FormReturn',this.transaction_detail)
     },
     optionFormMail() {
       EventBus.$emit('FormMail')
@@ -624,6 +624,7 @@ export default {
           const data = response.data
           if (data.status) {
             const doc_data = data.data
+            this.transaction_detail = doc_data
             this.allStatus = doc_data.flow_step.map(
               (element) => element.send_update.action.toLowerCase() === 'sign' || element.send_update.action.toLowerCase() === 'sign-ca'
             )
