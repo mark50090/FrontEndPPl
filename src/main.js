@@ -11,9 +11,10 @@ import VueAxios from 'vue-axios'
 import { Api } from "./api/axiosInstant";
 import './filters/dateFilters'
 import VueDraggableResizable from 'vue-draggable-resizable/src/index'
-
 import device from "vue-device-detector"
 import VueApexCharts from 'vue-apexcharts'
+import VueSignaturePad from 'vue-signature-pad'
+
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
@@ -21,6 +22,7 @@ Vue.use(VueSweetalert2)
 Vue.prototype.$apiConfig = new Api(axios)
 Vue.use(device)
 Vue.use(VueApexCharts)
+Vue.use(VueSignaturePad)
 
 Vue.prototype.$api_url = 'https://uatpaperless.one.th/api3'
 // Vue.prototype.$api_url = 'http://localhost:8808'
