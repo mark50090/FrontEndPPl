@@ -290,32 +290,29 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col v-if="open_comment == true && docComment.length" :cols="col_comment_sm" :md="col_comment" :lg="col_comment" class="pr-0 comment-part"> <!-- Comment Part -->
-        <v-row>
+      <v-col v-if="open_comment == true && docComment.length" :cols="col_comment_sm" :md="col_comment" :lg="col_comment" class="pr-0 pb-0 comment-part"> <!-- Comment Part -->
+        <v-row class="pr-3 preview-comment-row">
           <b class="mt-4 comment-header">{{ textLang.tabMenubar.comment_header }}</b>
-          <v-spacer class="hidden-md-and-up"></v-spacer>
-          <v-btn icon @click="toggleComment()" class="mt-2 mr-4 hidden-md-and-up"><v-icon large>mdi-chevron-right</v-icon></v-btn>
+          <v-spacer class="display-mobile-only"></v-spacer>
+          <v-btn icon @click="toggleComment()" class="mt-2 display-mobile-only"><v-icon large>mdi-chevron-right</v-icon></v-btn>
         </v-row>
         <div class="comment-boxes">
           <br>
-          <v-row class="mb-5 each-comment" v-for="item in docComment" :key="item.index"> <!-- set of one comment -->
-            <v-col cols="1" class="mr-2 pt-1">
-              <v-icon :color="color_comment_icon">mdi-human-greeting</v-icon>
+          <v-row  v-for="item in docComment" :key="item.index" class="mb-5 each-comment"> <!-- set of one comment -->
+            <v-col cols="auto" class="px-0 pt-0">
+              <v-icon size="30">mdi-account-circle</v-icon>
             </v-col>
-            <v-col cols="10" class="pt-0 pr-0">
-              <v-card outlined class="comment-box">
-                <v-card-title class="pt-1 px-2">
-                  <b class="comment-name">{{item.sender}}</b>
-                </v-card-title>
-                <v-card-text class="pr-2">
-                  <pre class="comment-sentence">{{item.message}}</pre>
-                  <br>
-                  <v-row class="comment-date-row">
-                    <v-spacer></v-spacer>
-                    <v-card-subtitle class="comment-date">{{item.date}}</v-card-subtitle>
-                  </v-row>
-                </v-card-text>
+            <v-col cols="" class="pa-0">
+              <v-row class="preview-comment-row comment-name">
+                {{item.sender}}
+              </v-row>
+              <v-card outlined class="mr-3 mt-3 pa-3">
+                <pre class="comment-sentence">{{item.message}}</pre>
               </v-card>
+              <v-row class="pr-3 preview-comment-row">
+                <v-spacer></v-spacer>
+                <span class="comment-date">{{item.date}}</span>
+              </v-row>
             </v-col>
           </v-row>
         </div>
@@ -3986,21 +3983,25 @@ export default {
   border-left: solid 1px #E0E0E0;
 }
 
+.preview-comment-row {
+  width: 100%;
+  margin: 0%;
+}
+
 .comment-header {
   font-family: "Sarabun", sans-serif;
   font-size: 16px;
   text-decoration: underline;
-  margin-left: 4%;
 }
 
 .comment-boxes {
-  height: calc(100vh - 178px);
+  height: calc(100vh - 181px);
   overflow: auto;
 }
 
 .each-comment {
   width: 100%;
-  margin-left: 0%;
+  margin: 0%;
 }
 
 .attach-preview-modal-header {
@@ -4365,6 +4366,10 @@ export default {
     top: 112px;
     height: 100%;
     z-index: 12;
+  }
+
+  .comment-boxes {
+    height: calc(100vh - 169px);
   }
 
   .attach-title-save-modal {

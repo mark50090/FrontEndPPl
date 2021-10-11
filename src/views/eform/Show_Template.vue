@@ -729,40 +729,36 @@
           <ShowTemplateMobile/>
         </v-row> -->
       </v-col>
-      <v-col :cols="col_comment_sm" :md="col_comment" :lg="col_comment" v-if="show_comment == true && commentAble" class="comment-block2"> <!-- Comment -->
-        <v-row>
-          <span class="mt-4 header-property"><b>{{ textLang.text_dialog.comment }}</b></span>
-          <v-spacer class="hidden-md-and-up"></v-spacer>
-          <v-btn icon class="mt-2 hidden-md-and-up" @click="toggleComment()"><v-icon large>mdi-chevron-right</v-icon></v-btn>
+      <v-col :cols="col_comment_sm" :md="col_comment" :lg="col_comment" v-if="show_comment == true && commentAble" class="pr-0 pb-0 comment-block2"> <!-- Comment -->
+        <v-row class="pr-3 show-form-block">
+          <span class="mt-4 comment-header-property"><b>{{ textLang.text_dialog.comment }}</b></span>
+          <v-spacer class="display-mobile-only"></v-spacer>
+          <v-btn icon class="mt-2 display-mobile-only" @click="toggleComment()"><v-icon large>mdi-chevron-right</v-icon></v-btn>
         </v-row>
         <br>
-        <v-textarea rows="1" outlined single-line dense no-resize :placeholder="textLang.text_dialog.write_comment" :color="color_inputComment" class="px-1 pad-textarea" :disabled="!isEditable" v-model="inputComment">
+        <v-textarea rows="1" outlined single-line dense no-resize :placeholder="textLang.text_dialog.write_comment" color="#4CAF50" class="mr-3 pad-textarea show-input-comment-box" :disabled="!isEditable" v-model="inputComment">
           <template v-slot:append-outer>
-            <v-icon :color="color_inputComment" class="send-comment-icon2" :disabled="!isEditable" @click="addComment()">mdi-telegram</v-icon>
+            <v-icon size="30" color="#4CAF50" :disabled="!isEditable" @click="addComment()">mdi-send</v-icon>
           </template>
         </v-textarea>
-        <br>
         <div class="comments-box">
-        <v-row class="mb-5 comment-set" v-for="item in comments" :key="item.index"> <!-- set of one comment -->
-          <v-col cols="1" class="mr-2 pt-1">
-            <v-icon :color="color_icon_human_greeting" >mdi-human-greeting</v-icon>
-          </v-col>
-          <v-col cols="10" class="pt-0 pl-4 pr-5">
-            <v-card outlined class="comment-box">
-              <v-card-title class="pt-1 px-2">
-                <b class="comment-name">{{item.sender}}</b>
-              </v-card-title>
-              <v-card-text class="pr-2">
+          <v-row v-for="item in comments" :key="item.index" class="mb-5 comment-set"> <!-- set of one comment -->
+            <v-col cols="auto" class="px-0 pt-0">
+              <v-icon size="30">mdi-account-circle</v-icon>
+            </v-col>
+            <v-col cols="" class="pa-0">
+              <v-row class="show-comment-row comment-name">
+                {{item.sender}}
+              </v-row>
+              <v-card outlined class="mr-3 mt-3 pa-3">
                 <pre class="comment-sentence">{{item.message}}</pre>
-                <br>
-                <v-row class="comment-date-row">
-                  <v-spacer></v-spacer>
-                  <v-card-subtitle class="comment-date">{{item.date}}</v-card-subtitle>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
+              </v-card>
+              <v-row class="pr-3 show-comment-row">
+                <v-spacer></v-spacer>
+                <span class="comment-date">{{item.date}}</span>
+              </v-row>
+            </v-col>
+          </v-row>
         </div>
       </v-col>
     </v-row>
@@ -1156,8 +1152,8 @@
           open_page: "เปิดเพื่อดูหน้ากระดาษ",
           show_page_tootip: "แสดงหน้ากระดาษ",
           hide_page_tootip: "ซ่อนหน้ากระดาษ",
-          show_tab:"เปิดแถบ",
-          reviews: "แสดงความคิดเห็น",
+          show_tab:"เปิดแถบแสดง",
+          reviews: "ความคิดเห็น",
           add_variable: "เพิ่มค่าตัวแปรให้กับข้อความ",
           not_show_obj_icon: "ไม่แสดงในหน้าเอกสาร",
           fill: "ช่อง ",
@@ -8960,13 +8956,13 @@
   }
 
   .comments-box {
-    height: calc(100vh - 293px);
+    height: calc(100vh - 271px);
     overflow: auto;
   }
 
   .comment-set {
     width: 100%;
-    margin-left: 0%;
+    margin: 0%;
   }
 
   .comment-block2 {
@@ -8976,35 +8972,29 @@
     z-index: 12;
   }
 
-  .send-comment-icon2 {
-    font-size: 30px !important;
-  }
-
-  .comment-box {
-    border: 1px solid #1b9900 !important;
-  }
-
   .comment-name {
     font-family: 'Sarabun', sans-serif;
-    color: #1b9900;
-    font-size: 16px;
+    color: black;
+    font-size: 14px;
   }
 
   .comment-sentence {
     font-family: 'Sarabun', sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     color: black;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
 
-  .comment-date-row {
+  .show-comment-row {
     width: 100%;
-    margin-left: 0%;
+    margin: 0%;
   }
 
   .comment-date {
     font-family: 'Sarabun', sans-serif;
-    font-size: 12px;
-    color: #1b9900;
+    font-size: 13px;
+    color: #808080;
   }
 
   .variable-textarea-ex-title {
@@ -9209,6 +9199,11 @@
     margin-top: -25px;
   }
 
+  .show-input-comment-box {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+  }
+
   .comment-block {
     position: fixed;
     top: 67px;
@@ -9216,6 +9211,13 @@
     padding-left: 0%;
     padding-right: 0%;
     z-index: 7;
+  }
+
+  .comment-header-property {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 16px;
+    text-decoration: underline;
+    display: inline-block;
   }
 
   .comment-card {
@@ -9372,6 +9374,10 @@
       position: fixed;
       right: 0px;
       top: 112px;
+    }
+
+    .comments-box {
+      height: calc(100vh - 259px);
     }
 
     .show-paper-block { 
