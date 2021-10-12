@@ -5,15 +5,15 @@
     </v-overlay>
     <v-toolbar dense flat class="create-menu-bar"> <!--menu bar -->
       <v-btn icon text large color="#4CAF50" @click="openBack()"><v-icon>mdi-chevron-left</v-icon></v-btn>
-      <span class="name-page"><b>{{ textLang.tabMenubar.create_doc }}</b></span>
+      <span class="name-page"><b>ออกจากหน้าสร้าง</b></span>
       <v-spacer></v-spacer>
       <v-tabs centered color="#4CAF50" class="create-menu" v-model="tab">
-        <v-tab class="create-each-menu">{{ textLang.tabMenubar.set_format }}</v-tab>
+        <v-tab class="create-each-menu">กำหนดรูปแบบฟอร์ม</v-tab>
         <v-tab class="create-each-menu">{{ textLang.tabMenubar.tools }}</v-tab>
         <v-tab class="create-each-menu">{{ textLang.tabMenubar.property }}</v-tab>
         <!-- <v-tab class="create-each-menu" @click="getAllPermission">{{ textLang.tabMenubar.complete_sequence }}</v-tab> -->
         <v-tab class="create-each-menu">{{ textLang.tabMenubar.set_paperless }}</v-tab>
-        <v-tab class="create-each-menu">{{ textLang.tabMenubar.filling_mobile }}</v-tab>
+        <v-tab class="create-short-form-menu">ตั้งค่าการกรอกในมุมมองแบบฟอร์มอย่างง่าย</v-tab>
       </v-tabs>
       <v-spacer></v-spacer>
       <!-- <v-btn depressed color="grey lighten-2" class="create-preview-btn"><v-icon>mdi-file-document</v-icon><b>ดูเอกสารตัวอย่าง</b></v-btn> -->
@@ -302,15 +302,15 @@
       <v-col v-if="show_property == true" :cols="col_property" class="property-block2"> <!-- Property Plane -->
         <v-tabs-items v-model="tab">
           <v-tab-item> <!-- E-Form Setting Tab -->
-            <span class="header-property"><b>{{ textLang.set_format_form.set_doc_format }}</b></span>
+            <span class="header-property"><b>กำหนดรูปแบบฟอร์ม</b></span>
             <br><br>
-            <span class="sub-title-property"><b>{{ textLang.set_format_form.set_doc_detail }}</b></span>
+            <span class="sub-title-property"><b>กำหนดรายละเอียดแบบฟอร์ม</b></span>
             <v-row class="row-prop">
-              <v-col cols="4" class="pb-0 mt-3 title-prop-block">
-                <span class="title-prop">{{ textLang.set_format_form.name_doc }}</span>
+              <v-col cols="4" class="pt-4 pb-0 mt-3 title-prop-block">
+                <span class="title-prop">ชื่อแบบฟอร์ม:</span>
               </v-col>
-              <v-col cols="7" class="px-0 pb-0 mt-3">
-                <v-text-field outlined dense class="prop-input pad-input" :color="color_document_format" v-model="template_name" :error="name_template_error" :error-messages="error_file_name_msg" @click="copyObject = ''"></v-text-field>
+              <v-col cols="8" class="pl-0 pr-2 pb-0 mt-3">
+                <v-text-field outlined dense class="prop-input create-prop-line-height" color="#4caf50" v-model="template_name" :error="name_template_error" :error-messages="error_file_name_msg" @click="copyObject = ''"></v-text-field>
               </v-col>
             </v-row>
             <!-- <v-row class="row-prop">
@@ -321,58 +321,58 @@
                 <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_document_format" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="eformDocTypes" v-model="selectedEformDocType"></v-autocomplete>
               </v-col>
             </v-row> -->
-            <v-row class="row-prop">
-              <v-col cols="4" class="title-prop-block">
+            <!-- <v-row class="mt-0 row-prop">
+              <v-col cols="4" align-self="center" class="py-0 title-prop-block">
                 <span class="title-prop">{{ textLang.set_format_form.department }}</span>
               </v-col>
-              <v-col cols="7" class="px-0">
-                <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_document_format" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="departments" v-model="docDepartment"></v-autocomplete>
+              <v-col cols="8" align-self="center" class="pl-0 pr-2 py-0">
+                <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4caf50" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="departments" v-model="docDepartment"></v-autocomplete>
+              </v-col>
+            </v-row> -->
+            <!-- <v-row class="row-prop">
+              <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
+                <span class="title-prop">กลุ่มของแบบฟอร์ม:</span>
+              </v-col>
+              <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
+                <v-select dense outlined hide-details multiple color="#4caf50" item-color="#4caf50" append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" class="font-in-property create-prop-line-height create-prop-dropdown-icon group-form-box" :items="document_level" v-model="docLevel"></v-select>
+              </v-col>
+            </v-row> -->
+            <v-row class="mt-0 row-prop">
+              <v-col cols="4" align-self="center" class="py-0 title-prop-block">
+                <span class="title-prop">รหัสแบบฟอร์ม:</span>
+              </v-col>
+              <v-col cols="8" align-self="center" class="pl-0 pr-2 py-0">
+                <v-text-field outlined dense hide-details color="#4caf50" class="prop-input create-prop-line-height" @click="copyObject = ''" v-model="code_template"></v-text-field>
               </v-col>
             </v-row>
             <v-row class="row-prop">
-              <v-col cols="4" class="title-prop-block">
-                <span class="title-prop">{{ textLang.set_format_form.group }}</span>
+              <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
+                <span class="title-prop">เวอร์ชันแบบฟอร์ม:</span>
               </v-col>
-              <v-col cols="7" class="px-0">
-                <v-select dense outlined hide-details multiple :color="color_document_format" :item-color="color_document_format" append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" class="font-in-property business-box-inside icon-select dropdown-icon-color step-see-label step-see-height-box" :items="document_level" v-model="docLevel"></v-select>
-              </v-col>
-            </v-row>
-            <v-row class="row-prop">
-              <v-col cols="4" class="title-prop-block">
-                <span class="title-prop">{{ textLang.set_format_form.id }}</span>
-              </v-col>
-              <v-col cols="7" class="px-0">
-                <v-text-field outlined dense hide-details :color="color_document_format" class="prop-input pad-input" @click="copyObject = ''" v-model="code_template"></v-text-field>
+              <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
+                <v-text-field outlined dense hide-details color="#4caf50" class="prop-input create-prop-line-height" @click="copyObject = ''" v-model="version_template"></v-text-field>
               </v-col>
             </v-row>
             <v-row class="row-prop">
-              <v-col cols="4" class="title-prop-block">
-                <span class="title-prop">{{ textLang.set_format_form.verdion }}</span>
-              </v-col>
-              <v-col cols="7" class="px-0">
-                <v-text-field outlined dense hide-details :color="color_document_format" class="prop-input pad-input" @click="copyObject = ''" v-model="version_template"></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row class="row-prop">
-              <v-col cols="4" class="title-prop-block">
+              <v-col cols="4" align-self="center" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_format_form.en_data }}</span>
               </v-col>
-              <v-col cols="7" class="px-0">
+              <v-col cols="8" align-self="center" class="pl-0 pr-2">
                 <v-menu :close-on-content-click="false" v-model="menu_date_force">
                   <template v-slot:activator="{ on }">
-                    <v-text-field outlined dense readonly v-on="on" hide-details :color="color_document_format" class="prop-input pad-input" :value="setDateFormatBE(docUseDate, 'be')"></v-text-field>
+                    <v-text-field outlined dense readonly v-on="on" hide-details color="#4caf50" class="prop-input create-prop-line-height form-force-date-box" :value="setDateFormatBE(docUseDate, 'be')"></v-text-field>
                   </template>
-                  <v-date-picker :color="color_document_format" locale="th" @change="menu_date_force = false"  v-model="docUseDate"></v-date-picker>
+                  <v-date-picker color="#67C25D" locale="th" @change="menu_date_force = false"  v-model="docUseDate"></v-date-picker>
                 </v-menu>
               </v-col>
             </v-row>
             <!-- Lock PDF -->
             <v-row v-if="false" class="row-prop"> 
-              <v-col cols="4" class="title-prop-block">
+              <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
                 <span class="title-prop">{{ textLang.set_format_form.locking_pdf }}</span>
               </v-col>
-              <v-col cols="7" class="px-0" align-self="center">
-              <v-checkbox hide-details class="mt-0 pt-0" :color="color_document_format" v-model="docOption.isPdfLock"></v-checkbox>
+              <v-col cols="8" class="pl-0 pr-2 pb-0" align-self="center">
+                <v-checkbox hide-details class="mt-0 pt-0" color="#4caf50" v-model="docOption.isPdfLock"></v-checkbox>
               </v-col>
             </v-row>
             <!-- <br>
@@ -441,70 +441,66 @@
             <v-divider class="divider-prop"></v-divider>
             <br> -->
             <span class="sub-title-property"><b>{{ textLang.set_font_paper.page_setup }}</b></span>
-            <v-row class="row-prop">
-              <v-col cols="4" class="title-prop-block">
+            <!-- <v-row class="row-prop">
+              <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
                 <span class="title-prop">{{ textLang.set_font_paper.paper_size }}</span>
               </v-col>
-              <v-col cols="7" class="px-0">
-                <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_document_format" :items="paper_size" class="prop-input autocomplete-pad icon-select dropdown-icon-color" v-model="paperSizeIndex"></v-autocomplete>
+              <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
+                <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4caf50" :items="paper_size" class="prop-input create-prop-line-height create-prop-dropdown-icon" v-model="paperSizeIndex"></v-autocomplete>
               </v-col>
-            </v-row>
-            <v-row class="row-prop">
+            </v-row> -->
+            <!-- <v-row class="row-prop">
               <v-radio-group row hide-details class="template-type-block" v-model="template_side">
-                <v-radio :color="color_document_format" value="PORTRAIT">
+                <v-radio color="#4caf50" value="PORTRAIT">
                   <template v-slot:label>
                     <span class="title-prop">{{ textLang.set_font_paper.vertical }}</span>
                   </template>
                 </v-radio>
-                <!-- <v-radio :color="color_document_format" value="LANDSCAPE">
+                <v-radio color="#4caf50" value="LANDSCAPE">
                   <template v-slot:label>
                     <span class="title-prop">{{ textLang.set_font_paper.landscape }}</span>
                   </template>
-                </v-radio> -->
+                </v-radio>
               </v-radio-group>
-            </v-row>
+            </v-row> -->
             <v-row class="row-prop">
-              <v-col cols="8" class="py-0 px-1">
-              <v-checkbox hide-details class="check-grid-block" :color="color_document_format" v-model="show_area">
+              <v-checkbox hide-details class="check-grid-block" color="#4caf50" v-model="show_area">
                 <template v-slot:label>
                   <span class="title-prop">{{ textLang.set_font_paper.show_page_line }}</span>
                 </template>
               </v-checkbox>
-              </v-col>
             </v-row>
-            <v-row class="row-prop">
-              <v-col cols="8" class="py-0 px-1">
-              <v-checkbox hide-details class="check-grid-block" :color="color_document_format" v-model="middle_grid">
+            <v-row class="mt-0 row-prop">
+              <v-checkbox hide-details class="check-grid-block" color="#4caf50" v-model="middle_grid">
                 <template v-slot:label>
                   <span class="title-prop">{{ textLang.set_font_paper.show_line }}</span>
                 </template>
               </v-checkbox>
-              </v-col>
             </v-row>
-            <v-row class="row-prop">
-              <v-col cols="8" class="py-0 px-1">
-              <v-checkbox hide-details class="pb-2 check-grid-block" :color="color_document_format" v-model="paper_grid">
-                <template v-slot:label>
-                  <span class="title-prop">{{ textLang.set_font_paper.show_grids }}</span>
-                </template>
-              </v-checkbox>
+            <v-row class="mt-0 row-prop">
+              <v-col cols="" align-self="center" class="pr-1 pb-1 check-paper-grid-block">
+                <v-checkbox hide-details class="mt-0" color="#4caf50" v-model="paper_grid">
+                  <template v-slot:label>
+                    <span class="title-prop">{{ textLang.set_font_paper.show_grids }}</span>
+                  </template>
+                </v-checkbox>
               </v-col>
-              <v-col cols="3" class="px-0" v-if="paper_grid">
-                <v-text-field outlined dense hide-details :color="color_document_format" suffix="px" type="number" class="prop-input input-px input-number-px" v-model="grid_size" @click="copyObject = ''"></v-text-field>
+              <v-col cols="4" align-self="center" class="pl-0 pr-2 pb-1" v-if="paper_grid">
+                <v-text-field outlined dense hide-details color="#4caf50" suffix="px" type="number" class="prop-input grid-size-box" v-model="grid_size" @click="copyObject = ''"></v-text-field>
               </v-col>
             </v-row>
             <br>
             <v-divider class="divider-prop"></v-divider>
             <br>
-            <span class="sub-title-property"><b>{{ textLang.status_doc.status_doc}}</b></span>
+            <span class="sub-title-property"><b>สถานะของแบบฟอร์ม</b></span>
             <v-row class="row-prop">
               <v-radio-group row hide-details class="template-type-block" v-model="template_status">
-                <v-radio :color="color_document_format" value="ACTIVE">
+                <v-radio color="#4caf50" value="ACTIVE">
                   <template v-slot:label>
                     <span class="title-prop">{{ textLang.status_doc.ready}}</span>
                   </template>
                 </v-radio>
-                <v-radio :color="color_document_format" value="INACTIVE">
+                <v-radio color="#4caf50" value="INACTIVE">
                   <template v-slot:label>
                     <span class="title-prop">{{ textLang.status_doc.not_available}}</span>
                   </template>
@@ -517,101 +513,101 @@
             <span class="sub-title-property"><b>{{ textLang.validation_doc.validation_title }}</b></span>
             <v-row class="row-prop">
               <v-col cols="11" class="mt-1 pb-0 text-center">
-                <v-btn depressed block small :color="color_varidate_button" class="validate-doc-btn" @click="openDocCondition()">{{ textLang.validation_doc.validate_setting_btn }}</v-btn>
+                <v-btn depressed block dark small color="#525659" class="validate-doc-btn" @click="openDocCondition()">{{ textLang.validation_doc.validate_setting_btn }}</v-btn>
               </v-col>
             </v-row>
             <br>
             <v-divider class="divider-prop"></v-divider>
             <br>
-            <span class="sub-title-property"><b>{{ textLang.set_sharing.doc_sharing_set}}</b></span>
-            <v-row class="mt-2 row-prop">
-              <v-col cols="4" class="title-prop-block">
-                <span class="title-prop">{{ textLang.set_sharing.doc_sharing}}</span>
+            <span class="sub-title-property"><b>ตั้งค่าการแชร์แบบฟอร์ม</b></span>
+            <v-row class="mt-1 row-prop">
+              <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
+                <span class="title-prop">Business ที่แชร์:</span>
               </v-col>
-              <v-col cols="7" class="px-0">
-                <v-text-field readonly outlined dense hide-details :color="color_document_format" class="prop-input pad-input" v-model="business.first_name_th"></v-text-field>
+              <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
+                <v-text-field readonly outlined dense hide-details color="#4caf50" class="prop-input create-prop-line-height" v-model="business.first_name_th"></v-text-field>
               </v-col>
             </v-row>
-            <v-row class="row-prop" v-if="business.first_name_th != 'เฉพาะฉัน' && !all_permission.length">
-              <v-checkbox hide-details class="check-grid-block" :color="color_document_format" v-model="isPublicForm">
+            <!-- <v-row class="row-prop" v-if="business.first_name_th != 'เฉพาะฉัน' && !all_permission.length">
+              <v-checkbox hide-details class="check-grid-block" color="#4caf50" v-model="isPublicForm">
                 <template v-slot:label>
-                  <span class="title-prop">{{ textLang.set_sharing.doc_general}}</span>
+                  <span class="title-prop">แบบฟอร์มสำหรับบุคคลทั่วไป</span>
                 </template>
               </v-checkbox>
-            </v-row>
-            <v-row class="mt-2 row-prop" v-if="!isPublicForm && business.first_name_th != 'เฉพาะฉัน'">
-              <v-col cols="4" class="title-prop-block">
-                <span class="title-prop">{{ textLang.set_sharing.doc_usage}}</span>
+            </v-row> -->
+            <!-- <v-row class="mt-2 row-prop" v-if="!isPublicForm && business.first_name_th != 'เฉพาะฉัน'">
+              <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
+                <span class="title-prop">สิทธิ์การใช้งาน:</span>
               </v-col>
-              <v-col cols="7" class="px-0">
-                <v-autocomplete filled dense outlined hide-details multiple chips background-color="white" append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :item-color="color_document_format" :color="color_document_format" class="prop-input permission-box autocomplete-pad icon-select dropdown-icon-color" :items="roleNameList" v-model="accessRole">
+              <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
+                <v-autocomplete dense outlined hide-details multiple chips append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" item-color="#4caf50" color="#4caf50" class="prop-input permission-box form-permission-box create-prop-dropdown-icon" :items="roleNameList" v-model="accessRole">
                   <template v-slot:selection="data">
-                    <v-chip dark :color="color_document_format" class="data-chip-roleList" v-bind="data.attrs" :input-value="data.selected" close @click="data.select" @click:close="deleteAccesstRoleList(data.item)">
+                    <v-chip dark color="#4caf50" class="mb-1 data-chip-roleList" v-bind="data.attrs" :input-value="data.selected" close @click="data.select" @click:close="deleteAccesstRoleList(data.item)">
                       {{data.item}}
                     </v-chip>
                   </template>
                 </v-autocomplete>
               </v-col>
-            </v-row>
+            </v-row> -->
             <v-row class="row-prop" v-if="!isPublicForm && business.first_name_th != 'เฉพาะฉัน'">
               <v-col cols="4" align-self="end" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_sharing.permission_view_all_title }}:</span>
               </v-col>
-              <v-col cols="7" align-self="center" class="px-0">
-                <v-chip v-for="item in docOption.viewers" :key="item" small close dark :color="color_mail_view_all" class="mb-2 forbiden-email-chip" @click:close="deleteNewViewer(item)"> 
+              <v-col cols="8" align-self="center" class="px-0">
+                <v-chip v-for="item in docOption.viewers" :key="item" small close dark color="#4caf50" class="mb-1 mr-1 forbiden-email-chip" @click:close="deleteNewViewer(item)"> 
                   <div class="text-truncate">{{item}}</div>
                 </v-chip>
-                <v-text-field dense hide-details outlined :color="color_document_format" placeholder="One E-mail" append-outer-icon="mdi-plus" class="prop-input pad-input" @click="copyObject = ''" @click:append-outer="addNewViewer()" v-model="addViewer"></v-text-field>
+                <v-text-field dense hide-details outlined color="#4caf50" placeholder="One E-mail" append-outer-icon="mdi-plus" class="prop-input" @click="copyObject = ''" @click:append-outer="addNewViewer()" v-model="addViewer"></v-text-field>
               </v-col>
             </v-row>
-            <br>
+            <!-- <br>
             <v-divider class="divider-prop"></v-divider>
             <br>
             <span class="sub-title-property"><b>{{ textLang.set_data_doc.set_data_doc}}</b></span>
             <div v-for="item in webhookUrl" :key="item.service">
               <v-row class="mt-2 row-prop">
-                <v-col cols="4" class="pt-2 title-prop-block">
+                <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
                   <span class="title-prop">{{ textLang.set_data_doc.system_name }}</span>
                 </v-col>
-                <v-col cols="7" class="px-0">
-                  <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_document_format" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="othersService" v-model="item.service"></v-autocomplete>
-                </v-col>
-              </v-row>
-              <v-row class="mt-2 row-prop">
-                <v-col cols="4" class="pt-2 title-prop-block">
-                  <span class="title-prop">{{ textLang.set_data_doc.webhook}}</span>
-                </v-col>
-                <v-col cols="7" class="px-0">
-                  <v-text-field outlined dense hide-details :color="color_document_format" class="prop-input pad-input" v-model="item.api"></v-text-field>
+                <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
+                  <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4caf50" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="othersService" v-model="item.service"></v-autocomplete>
                 </v-col>
               </v-row>
               <v-row class="row-prop">
-                <v-col cols="4" class="pt-2 title-prop-block">
-                  <span class="title-prop">{{ textLang.set_data_doc.send_api }}</span>
+                <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
+                  <span class="title-prop">{{ textLang.set_data_doc.webhook}}</span>
                 </v-col>
-                <v-col cols="7" class="px-0">
-                  <v-select dense outlined hide-details multiple :color="color_document_format" :item-color="color_document_format" append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" class="font-in-property business-box-inside icon-select dropdown-icon-color step-see-label step-see-height-box" :items="step_api_send" v-model="item.sendStep"></v-select>
+                <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
+                  <v-text-field outlined dense hide-details color="#4caf50" class="prop-input" v-model="item.api"></v-text-field>
                 </v-col>
               </v-row>
-            </div>
-            <br>
+              <v-row class="row-prop">
+                <v-col cols="4" align-self="center" class="title-prop-block">
+                  <span class="title-prop">{{ textLang.set_data_doc.send_api }}</span>
+                </v-col>
+                <v-col cols="8" align-self="center" class="pr-2 pb-0">
+                  <v-select dense outlined hide-details multiple color="#4caf50" item-color="#4caf50" append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" class="font-in-property create-prop-line-height create-prop-dropdown-icon step-see-height-box" :items="step_api_send" v-model="item.sendStep"></v-select>
+                </v-col>
+              </v-row>
+            </div> -->
+            <!-- <br>
             <v-divider class="divider-prop"></v-divider>
             <br>
-            <span class="sub-title-property"><b>{{ textLang.set_next_template.set_next_temp_title }}</b></span>
+            <span class="sub-title-property"><b>ตั้งค่าแบบฟอร์มถัดไป</b></span>
             <v-row class="mt-2 row-prop">
-              <v-col cols="4" class="pt-2 title-prop-block">
+              <v-col cols="4" align-self="center" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_next_template.next_temp }}:</span>
               </v-col>
-              <v-col cols="7" class="px-0">
-                <v-autocomplete dense outlined hide-details multiple chips append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :item-color="color_document_format" :color="color_document_format" :menu-props="{zIndex:11}" class="prop-input next-temp-box autocomplete-pad icon-select dropdown-icon-color" v-model="docOption['nextTemplates']" :items="allEformList">
+              <v-col cols="8" align-self="center" class="pl-0 pr-2">
+                <v-autocomplete dense outlined hide-details multiple chips append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" item-color="#4caf50" color="#4caf50" :menu-props="{zIndex:11}" class="prop-input next-temp-box create-prop-dropdown-icon" v-model="docOption['nextTemplates']" :items="allEformList">
                   <template v-slot:selection="data">
-                    <v-chip small dark :color="color_document_format" v-bind="data.attrs" :input-value="data.selected" close>
+                    <v-chip small dark color="#4caf50" v-bind="data.attrs" :input-value="data.selected" close>
                       <span class="text-truncate next-temp-chip">{{data.item.text}}</span>
                     </v-chip>
                   </template>
                 </v-autocomplete>
               </v-col>
-            </v-row>
+            </v-row> -->
             <br>
             <v-divider class="divider-prop"></v-divider>
             <br><br>
@@ -623,13 +619,13 @@
                 <v-expansion-panel-header class="section-object-header">
                   <b>Section Object</b>
                   <template v-slot:actions>
-                    <v-icon :color="color_tools_creating">$expand</v-icon>
+                    <v-icon color="#4CAF50">$expand</v-icon>
                   </template>
                 </v-expansion-panel-header>
                 <hr class="line-expan-object">
-                <v-expansion-panel-content>
+                <v-expansion-panel-content class="obj-expand-content">
                   <v-row class="obj-group">
-                    <v-col cols="4">
+                    <v-col cols="4" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_8a6ea025-6845-4d45-92f5-263785a9cf4f.jpg" class="img-of-obj" v-on="on" @click="addObject('section_box')">
@@ -644,13 +640,13 @@
                 <v-expansion-panel-header class="object-type-header">
                   <b>Object</b>
                   <template v-slot:actions>
-                    <v-icon :color="color_tools_creating">$expand</v-icon>
+                    <v-icon color="#4CAF50">$expand</v-icon>
                   </template>
                 </v-expansion-panel-header>
                 <hr class="line-expan-object">
-                <v-expansion-panel-content>
+                <v-expansion-panel-content class="obj-expand-content">
                   <v-row class="obj-group">
-                    <v-col cols="4">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_c050340b-786c-47b8-9c10-3e1434f29d8f.png" class="img-of-obj" v-on="on"  @click="addObject('text_field')">
@@ -658,7 +654,7 @@
                         <span>Text Field</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="4">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_977c2c21-20d8-40f2-8ed7-c12513cd0f53.jpg" class="img-of-obj" v-on="on" v-on:click="addObject('rectangle')">
@@ -666,7 +662,7 @@
                         <span>Rectangle</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="4">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_129b70a7-e64e-4ea8-9891-cda5917bffa7.jpg" class="img-of-obj" v-on="on" v-on:click="addObject('input_box')">
@@ -674,7 +670,7 @@
                         <span>Input Box</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="4">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_6a8836b8-ec84-41ad-a4af-fbd49ec66dce.jpg" class="img-of-obj" v-on="on" v-on:click="addObject('text_area_box')">
@@ -682,7 +678,7 @@
                         <span>Text Area</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="4">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_079400e7-a95c-49b3-a677-c6812a9e971f.jpg" class="img-of-obj" v-on="on" v-on:click="addObject('dropdown_box')">
@@ -690,7 +686,7 @@
                         <span>Dropdown Input</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="4">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_686c2b47-1cb9-4497-a15c-af17071b427a.jpg" class="img-of-obj" v-on="on" v-on:click="addObject('datepicker_box')">
@@ -698,7 +694,7 @@
                         <span>Date Picker</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="4">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_59002c61-cb37-4800-851a-3b64bb4366d9.jpg" class="img-of-obj" v-on="on" v-on:click="addObject('time_box')">
@@ -716,7 +712,7 @@
                         <span>Line</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="4">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_42f69f7d-2b96-4b97-9299-ad4a067c32f0.jpg" class="img-of-obj" v-on="on" v-on:click="addObject('check_box')">
@@ -724,36 +720,44 @@
                         <span>Check Box</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="4" class="object-table-block">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
-                          <img src="https://sv1.picz.in.th/images/2019/12/09/iUxdqk.jpg" class="img-of-obj img-object-justify-center" v-on="on" v-on:click="addObject('table')">
+                          <img src="https://sv1.picz.in.th/images/2019/12/09/iUxdqk.jpg" class="img-of-obj" v-on="on" v-on:click="addObject('table')">
                         </template>
                         <span>Table</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="4" class="object-table-block">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
-                          <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_b0b3d0f5-d57b-4a9b-a910-058b57cd1232.jpg" class="img-of-obj img-object-justify-center" v-on="on" v-on:click="addObject('data_table')">
+                          <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_b0b3d0f5-d57b-4a9b-a910-058b57cd1232.jpg" class="img-of-obj" v-on="on" v-on:click="addObject('data_table')">
                         </template>
                         <span>Data Table</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="4">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
-                          <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_8c4f4036-5fa8-43a9-acfd-a7545102b6b9.png" class="img-of-obj object-image" v-on="on" v-on:click="addObject('input_image_box')">
+                          <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_8c4f4036-5fa8-43a9-acfd-a7545102b6b9.png" class="object-image" v-on="on" v-on:click="addObject('input_image_box')">
                         </template>
                         <span>Image Box</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="4" class="pa-0">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_8ed93c31-1c52-4226-ac56-897bf914eb38.jpg" class="img-of-obj" v-on="on" v-on:click="addObject('texteditorbox')">
                         </template>
                         <span>Editor Box</span>
+                      </v-tooltip>
+                    </v-col>
+                    <v-col cols="4" align-self="center" class="pr-0 text-center">
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                          <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_f2722e8c-75d7-48fd-99f1-8cd831071966.jpg" class="object-sign-img" v-on="on" v-on:click="addObject('sign_box')">
+                        </template>
+                        <span>Sign Box</span>
                       </v-tooltip>
                     </v-col>
                   </v-row>
@@ -763,13 +767,13 @@
                 <v-expansion-panel-header class="object-type-header">
                   <b>Auto Object</b>
                   <template v-slot:actions>
-                    <v-icon :color="color_tools_creating">$expand</v-icon>
+                    <v-icon color="#4CAF50">$expand</v-icon>
                   </template>
                 </v-expansion-panel-header>
                 <hr class="line-expan-object">
-                <v-expansion-panel-content>
+                <v-expansion-panel-content class="obj-expand-content">
                   <v-row class="obj-group">
-                    <v-col cols="4">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_cd68e597-0455-4f3a-b9b8-a1261997415a.jpg" class="img-of-obj" v-on="on" v-on:click="addObject('autofill_box')">
@@ -777,7 +781,7 @@
                         <span>Input Box Auto</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="4">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_a4cbcffb-560d-4684-9454-575a84e2b505.jpg" class="img-of-obj" v-on="on" v-on:click="addObject('calculate_box')">
@@ -785,10 +789,10 @@
                         <span>Calculate Box</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="4">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
-                          <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_76d90d03-9175-4a66-bee4-dcfe04c2cc2c.jpg" style="width: 71%;" class="img-of-obj" v-on="on" v-on:click="addObject('number2text_box')">
+                          <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_76d90d03-9175-4a66-bee4-dcfe04c2cc2c.jpg" class="img-of-obj" v-on="on" v-on:click="addObject('number2text_box')">
                         </template>
                         <span>Number To Text Box</span>
                       </v-tooltip>
@@ -796,37 +800,37 @@
                   </v-row>
                 </v-expansion-panel-content>
               </v-expansion-panel>
-              <v-expansion-panel> <!-- Paperless Object -->
+              <!-- <v-expansion-panel> <!-- Paperless Object 
                 <v-expansion-panel-header class="object-type-header">
                   <b>Paperless Object</b>
                   <template v-slot:actions>
-                    <v-icon :color="color_tools_creating">$expand</v-icon>
+                    <v-icon color="#4CAF50">$expand</v-icon>
                   </template>
                 </v-expansion-panel-header>
                 <hr class="line-expan-object">
-                <v-expansion-panel-content>
+                <v-expansion-panel-content class="obj-expand-content">
                   <v-row class="obj-group">
-                    <v-col cols="4">
+                    <v-col cols="4" align-self="center" class="pr-0">
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
-                          <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_f2722e8c-75d7-48fd-99f1-8cd831071966.jpg" class="img-of-obj object-sign-img" v-on="on" v-on:click="addObject('sign_box')">
+                          <img src="https://eform.one.th/eform_api/api/v1/view_image?file_name=3138425702_f2722e8c-75d7-48fd-99f1-8cd831071966.jpg" class="object-sign-img" v-on="on" v-on:click="addObject('sign_box')">
                         </template>
                         <span>Sign Box</span>
                       </v-tooltip>
                     </v-col>
                   </v-row>
                 </v-expansion-panel-content>
-              </v-expansion-panel>
+              </v-expansion-panel> -->
             </v-expansion-panels>
             <v-divider class="divider-obj"></v-divider>
             <br>
             <v-row class="row-prop">
-              <v-col cols="2" class="px-0 tips-btn-block">
-                <v-btn :color="color_tools_creating" depressed fab x-small dark class="tips-btn" @click="tips = !tips">
+              <v-col cols="auto" class="pl-3 pr-0">
+                <v-btn color="#4CAF50" depressed fab x-small dark class="tips-btn" @click="tips = !tips">
                   <b>Tips</b>
                 </v-btn>
               </v-col>
-              <v-col cols="9" v-if="tips == true" class="px-0">
+              <v-col cols="" v-if="tips == true" class="pl-0 pr-2">
                 <ul class="tips2">
                   <li>
                     {{ textLang.tips_data.ctrl_arrow }}
@@ -857,8 +861,8 @@
           <v-tab-item> <!-- Property Tab -->
             <span class="header-property"><b>{{ textLang.property_text.property_object }}</b></span>
             <br><br>
-            <v-btn outlined small color="black" class="permission-data-btn" @click="openObjectRole()">{{ textLang.property_text.set_data_access }} <v-icon :color="color_property_Object" class="ml-2">mdi-cursor-default-click-outline</v-icon></v-btn>
-            <br><br>
+            <!-- <v-btn outlined small color="black" class="permission-data-btn" @click="openObjectRole()">{{ textLang.property_text.set_data_access }} <v-icon color="#4CAF50" class="ml-2">mdi-cursor-default-click-outline</v-icon></v-btn>
+            <br><br> -->
             <span class="sub-title-property"><b>{{ textLang.property_text.set_pro_values }}</b></span>
             <v-row class="row-table-prop" @click="copyObject = ''">
               <v-simple-table class="table-prop">
@@ -873,19 +877,19 @@
                     <tr v-if="custom_object_name">
                       <td class="property-title no-border">{{ textLang.property_type.object }}:</td>
                       <td class="no-border">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" :readonly="selected_array == 'datatable'" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].object_name"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" :readonly="selected_array == 'datatable'" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].object_name"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_name">
                       <td class="property-title no-border">JSON Key:</td>
                       <td class="no-border">
-                        <v-text-field dense height="25px" :hint="textLang.property_type.for_database" persistent-hint class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.json_key"></v-text-field>
+                        <v-text-field dense height="25px" :hint="textLang.property_type.for_database" persistent-hint class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.json_key"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_name">
                       <td class="property-title no-border">{{ textLang.property_type.fixed_object }}:</td>
                       <td class="no-border">
-                         <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.fixPosition"></v-checkbox>
+                         <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.fixPosition"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="custom_object_bordercolor">
@@ -893,7 +897,7 @@
                       <td class="no-border">
                         <v-menu v-model="border_color_menu" :close-on-content-click="false">
                             <template v-slot:activator="{ on }">
-                              <v-text-field hide-details v-on="on" :color="color_property_Object" class="font-in-property input-color" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.border_color"></v-text-field>
+                              <v-text-field hide-details v-on="on" height="25px" color="#4CAF50" class="font-in-property input-color" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.border_color"></v-text-field>
                             </template>
                             <v-color-picker show-swatches hide-mode-switch mode="hexa" @input="border_color_menu = false" v-model="objectArray[selected_array][selected_object].style.border_color"></v-color-picker>
                           </v-menu>
@@ -902,56 +906,62 @@
                     <tr v-if="custom_object_bordersize">
                       <td class="property-title no-border">{{ textLang.property_type.border_thickness }}:</td>
                       <td class="no-border">
-                        <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.border_size" @input="change_bordersize"></v-text-field>
+                        <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.border_size" @input="change_bordersize"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_colcount">
                       <td class="property-title no-border">{{ textLang.property_type.num_col }}:</td>
                       <td class="no-border">
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.cols" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" @input="change_ccol"  v-model="objectArray[selected_array][selected_object].style.table.ccol"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.cols" class="font-in-property" color="#4CAF50" @click="copyObject = ''" @input="change_ccol"  v-model="objectArray[selected_array][selected_object].style.table.ccol"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_rowcount">
                       <td class="property-title no-border">{{ textLang.property_type.num_row }}:</td>
                       <td class="no-border">
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.rows" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" @input="change_crow" v-model="objectArray[selected_array][selected_object].style.table.crow"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.rows" class="font-in-property" color="#4CAF50" @click="copyObject = ''" @input="change_crow" v-model="objectArray[selected_array][selected_object].style.table.crow"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_rowcount">
                       <td class="property-title no-border">{{ textLang.property_type.max_row }}:</td>
                       <td class="no-border">
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.rows" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" @input="change_crow" v-model="objectArray[selected_array][selected_object].style.maxRow"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.rows" class="font-in-property" color="#4CAF50" @click="copyObject = ''" @input="change_crow" v-model="objectArray[selected_array][selected_object].style.maxRow"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_addtable && selected_array == 'datatable'">
                       <td class="property-title no-border">{{ textLang.property_type.export_data_table }}:</td>
                       <td class="no-border">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.exportDatatable"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.exportDatatable"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="custom_object_addtable">
                       <td class="property-title no-border">{{ textLang.property_type.allow_table_row }}:</td>
                       <td class="no-border">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.addTable"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.addTable"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="custom_object_name">
                       <td class="property-title no-border">{{ textLang.property_type.continue_table }}:</td>
                       <td class="no-border">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" @input="changeConTable(objectArray[selected_array][selected_object])" v-model="objectArray[selected_array][selected_object].style.contTable"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" @input="changeConTable(objectArray[selected_array][selected_object])" v-model="objectArray[selected_array][selected_object].style.contTable"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="objectArray[selected_array][selected_object].style.addTable">
                       <td class="property-title no-border">{{ textLang.property_type.line_def }}:</td>
                       <td class="no-border">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.isDefaultRow"></v-checkbox>
-                        <v-text-field v-if="objectArray[selected_array][selected_object].style.isDefaultRow" dense height="25px" type="number" class="font-in-property" :color="color_property_Object"  @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.defaultRow"></v-text-field>
+                        <v-row class="property-row">
+                          <v-col cols="auto" align-self="center" class="py-0 pl-0">
+                            <v-checkbox color="#4CAF50" hide-details class="pt-0 property-check" v-model="objectArray[selected_array][selected_object].style.isDefaultRow"></v-checkbox>
+                          </v-col>
+                          <v-col cols="" align-self="center" class="pa-0">
+                            <v-text-field v-if="objectArray[selected_array][selected_object].style.isDefaultRow" dense height="25px" type="number" class="font-in-property" color="#4CAF50"  @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.defaultRow"></v-text-field>
+                          </v-col>
+                        </v-row>
                       </td>
                     </tr>
                     <tr v-if="objectArray[selected_array][selected_object].style.addTable">
                       <td class="property-title no-border">{{ textLang.property_type.not_moving_below }}:</td>
                       <td class="no-border">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.addTableUnmove"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.addTableUnmove"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="custom_object_colsetting">
@@ -963,15 +973,15 @@
                               <v-simple-table>
                                 <tbody class="font-in-property table-color-striped">
                                   <tr>
-                                    <td class="property-title no-border">{{ textLang.property_type.total_col }}:</td>
+                                    <td width="40%" class="property-title no-border">{{ textLang.property_type.total_col }}:</td>
                                     <td class="no-border">
-                                      <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" :color="color_property_Object"  @click="copyObject = ''" v-model="colsize"></v-text-field>
+                                      <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" color="#4CAF50"  @click="copyObject = ''" v-model="colsize"></v-text-field>
                                     </td>
                                   </tr>
                                   <tr v-for="item in objectArray[selected_array][selected_object].style.table.colsize" :key="item.index">
-                                    <td class="property-title no-border">{{ textLang.property_type.column }} {{item.index}}</td>
+                                    <td width="40%" class="property-title no-border">{{ textLang.property_type.column }} {{item.index}}</td>
                                     <td class="no-border">
-                                      <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="item.size" @input="calColSize()"></v-text-field> 
+                                      <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="item.size" @input="calColSize()"></v-text-field> 
                                     </td>
                                   </tr>
                                 </tbody>
@@ -990,15 +1000,15 @@
                               <v-simple-table>
                                 <tbody class="font-in-property setting-table-row-color-striped">
                                   <tr>
-                                    <td class="property-title no-border">{{ textLang.property_type.total_row }}:</td>
+                                    <td width="40%" class="property-title no-border">{{ textLang.property_type.total_row }}:</td>
                                     <td class="no-border">
-                                      <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="rowsize"></v-text-field>
+                                      <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="rowsize"></v-text-field>
                                     </td>
                                   </tr>
                                   <tr v-for="item in objectArray[selected_array][selected_object].style.table.rowsize" :key="item.index">
-                                    <td class="property-title no-border">{{ textLang.property_type.row }} {{item.index}}</td>
+                                    <td width="40%" class="property-title no-border">{{ textLang.property_type.row }} {{item.index}}</td>
                                     <td class="no-border">
-                                      <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="item.size"></v-text-field>
+                                      <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="item.size"></v-text-field>
                                     </td>
                                   </tr>
                                 </tbody>
@@ -1010,7 +1020,7 @@
                     </tr>
                     <tr v-if="custom_object_datatablesetting">
                       <td colspan="2" class="no-border">
-                        <v-btn  block color="cyan lighten-1" dark class="setting-hiding" @click="toOpenLinkData(objectArray[selected_array][selected_object])">{{ textLang.property_type.set_link }}</v-btn>
+                        <v-btn  block small depressed color="rgb(50, 54, 57)" dark class="setting-hiding" @click="toOpenLinkData(objectArray[selected_array][selected_object])">{{ textLang.property_type.set_link }}</v-btn>
                       </td>
                     </tr>
                     <tr v-if="custom_object_datatablesetting && false">
@@ -1021,99 +1031,99 @@
                     <tr v-if="custom_object_cellname">
                       <td class="property-title no-border">{{ textLang.property_type.call_name }}:</td>
                       <td class="no-border">
-                        <v-text-field dense readonly height="25px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].name"></v-text-field>
+                        <v-text-field dense readonly height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].name"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_cellname">
                       <td class="property-title no-border">Cell JSON Key:</td>
                       <td class="no-border">
-                        <v-text-field dense height="25px" :hint="textLang.property_type.for_database" persistent-hint class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.json_key"></v-text-field>
+                        <v-text-field dense height="25px" :hint="textLang.property_type.for_database" persistent-hint class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.json_key"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_cellname">
                       <td class="property-title no-border">{{ textLang.property_type.hide_object_cell }}:</td>
                       <td class="no-border">
-                        <v-btn depressed small dark :color="color_property_Object" class="setting-hiding display-set-object-cell" @click="openHideSetting(selectedCell)">{{ textLang.property_type.set_object_cell }}</v-btn>
+                        <v-btn depressed small dark color="#525659" class="setting-hiding display-set-object-cell" @click="openHideSetting(selectedCell)">{{ textLang.property_type.set_object_cell }}</v-btn>
                       </td>
                     </tr>
                     <tr v-if="objectTypeInput.includes(selected_array) || (selectedCell && objectTypeInput.includes(dataTableObjectArray[selectedCell].object_type))">
                       <td class="property-title no-border">{{ textLang.property_type.not_referring }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                         <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.noInputRef"></v-checkbox>
+                         <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.noInputRef"></v-checkbox>
                       </td>
                       <td class="no-border" v-if="selectedCell && objectTypeInput.includes(dataTableObjectArray[selectedCell].object_type)">
-                         <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.noInputRef"></v-checkbox>
+                         <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.noInputRef"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="objectTypeInput.includes(selected_array) || (selectedCell && (objectTypeInput.includes(dataTableObjectArray[selectedCell].object_type) || dataTableObjectArray[selectedCell].object_type == 'linkdatabox'))">
                       <td class="property-title no-border">{{ textLang.property_type.hide_display }}:</td>
                       <td class="no-border"  v-if="!selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.hideDisplay"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.hideDisplay"></v-checkbox>
                       </td>
                       <td class="no-border"  v-if="selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.hideDisplay" @input="changeSelected(selectedCell)"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.hideDisplay" @input="changeSelected(selectedCell)"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="(objectTypeInput.includes(selected_array) || selected_array == 'textfield') && !objectArray[selected_array][selected_object].style.hideDisplay">
                       <td class="property-title no-border">{{ textLang.property_type.hide_preview }}:</td>
                       <td class="no-border">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.hidePreview"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.hidePreview"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="custom_cell_nodata && selectedCell">
                       <td class="property-title no-border">{{ textLang.property_type.don_show_cell }}:</td>
                       <td class="no-border">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.noCellData"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.noCellData"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="selectedCell && !dataTableObjectArray[selectedCell].style.noCellData">
                       <td class="property-title no-border">{{ textLang.property_type.object_inside }}:</td>
                       <td class="no-border">
-                        <v-select v-model="dataTableObjectArray[selectedCell].object_type" @change="changeCellObject()" dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" :items="cellObjectTypes" class="font-in-property business-box-inside icon-select dropdown-icon-color property-dropdown-box"></v-select>
+                        <v-select v-model="dataTableObjectArray[selectedCell].object_type" @change="changeCellObject()" dense outlined background-color="white" hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" :items="cellObjectTypes" class="font-in-property create-prop-dropdown-icon"></v-select>
                       </td>
                     </tr>
                     <tr v-if="custom_object_text || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'checkbox')">
                       <td class="property-title no-border">{{ textLang.property_type.body }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].text"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].text"></v-text-field>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].text"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].text"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_fontsize || custom_cell_fontsize">
                       <td class="property-title no-border">{{ textLang.property_type.font_size }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" @input="change_fontsize" v-model="objectArray[selected_array][selected_object].style.font_size"></v-text-field>
+                        <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" @input="change_fontsize" v-model="objectArray[selected_array][selected_object].style.font_size"></v-text-field>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" @input="change_fontsize, changeSelected(selectedCell)" v-model="dataTableObjectArray[selectedCell].style.font_size"></v-text-field>
+                        <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" @input="change_fontsize, changeSelected(selectedCell)" v-model="dataTableObjectArray[selectedCell].style.font_size"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_font || custom_cell_font">
                       <td class="property-title no-border">{{ textLang.property_type.font_style }}:</td>
                       <td class="no-border"  v-if="!selectedCell">
-                        <v-btn-toggle dense group multiple :color="color_property_Object" v-model="objectArray[selected_array][selected_object].style.font_style" @change="change_fontstyle">
-                          <v-btn value="b" text>
+                        <v-btn-toggle dense group multiple color="#4CAF50" v-model="objectArray[selected_array][selected_object].style.font_style" @change="change_fontstyle">
+                          <v-btn small value="b" text class="mx-0 px-1">
                             <v-icon>mdi-format-bold</v-icon>
                           </v-btn>
-                          <v-btn value="i" text>
+                          <v-btn small value="i" text class="px-1">
                             <v-icon>mdi-format-italic</v-icon>
                           </v-btn>
-                          <v-btn value="u" text>
+                          <v-btn small value="u" text class="mx-0 px-1">
                             <v-icon>mdi-format-underline</v-icon>
                           </v-btn>
                         </v-btn-toggle>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-btn-toggle dense group multiple :color="color_property_Object" v-model="dataTableObjectArray[selectedCell].style.font_style" @change="change_fontstyle">
-                          <v-btn value="b" text>
+                        <v-btn-toggle dense group multiple color="#4CAF50" v-model="dataTableObjectArray[selectedCell].style.font_style" @change="change_fontstyle">
+                          <v-btn small value="b" text class="mx-0 px-1">
                             <v-icon>mdi-format-bold</v-icon>
                           </v-btn>
-                          <v-btn value="i" text>
+                          <v-btn small value="i" text class="px-1">
                             <v-icon>mdi-format-italic</v-icon>
                           </v-btn>
-                          <v-btn value="u" text>
+                          <v-btn small value="u" text class="mx-0 px-1">
                             <v-icon>mdi-format-underline</v-icon>
                           </v-btn>
                         </v-btn-toggle>
@@ -1121,34 +1131,34 @@
                     </tr>
                     <tr v-if="custom_object_align || selectedCell">
                       <td class="property-title no-border">{{ textLang.property_type.text_format }}:</td>
-                      <td class="px-0 no-border" v-if="!selectedCell">
-                        <v-btn-toggle dense group mandatory :color="color_property_Object" v-model="objectArray[selected_array][selected_object].style.font_align">
-                          <v-btn small value="left" text class="mr-0">
+                      <td class="pl-2 pr-0 no-border" v-if="!selectedCell">
+                        <v-btn-toggle dense group mandatory color="#4CAF50" v-model="objectArray[selected_array][selected_object].style.font_align" class="align-prop-block">
+                          <v-btn small value="left" text class="mx-0 px-1">
                             <v-icon>mdi-format-align-left</v-icon>
                           </v-btn>
-                          <v-btn small value="center" text class="mr-0">
+                          <v-btn small value="center" text class="mr-0 px-1">
                             <v-icon>mdi-format-align-center</v-icon>
                           </v-btn>
-                          <v-btn small value="right" text class="mr-0">
+                          <v-btn small value="right" text class="mr-0 px-1">
                             <v-icon>mdi-format-align-right</v-icon>
                           </v-btn>
-                          <v-btn small value="justify" text class="mr-0">
+                          <v-btn small value="justify" text class="mr-0 px-1">
                             <v-icon>mdi-format-align-justify</v-icon>
                           </v-btn>
                         </v-btn-toggle>
                       </td>
-                      <td class="px-0 no-border" v-if="selectedCell">
-                        <v-btn-toggle dense group mandatory :color="color_property_Object" v-model="dataTableObjectArray[selectedCell].style.font_align">
-                          <v-btn small value="left" text class="mr-0">
+                      <td class="pl-2 pr-0 no-border" v-if="selectedCell">
+                        <v-btn-toggle dense group mandatory color="#4CAF50" v-model="dataTableObjectArray[selectedCell].style.font_align">
+                          <v-btn small value="left" text class="mx-0 px-1">
                             <v-icon>mdi-format-align-left</v-icon>
                           </v-btn>
-                          <v-btn small value="center" text class="mr-0">
+                          <v-btn small value="center" text class="mr-0 px-1">
                             <v-icon>mdi-format-align-center</v-icon>
                           </v-btn>
-                          <v-btn small value="right" text class="mr-0">
+                          <v-btn small value="right" text class="mr-0 px-1">
                             <v-icon>mdi-format-align-right</v-icon>
                           </v-btn>
-                          <v-btn small value="justify" text class="mr-0">
+                          <v-btn small value="justify" text class="mr-0 px-1">
                             <v-icon>mdi-format-align-justify</v-icon>
                           </v-btn>
                         </v-btn-toggle>
@@ -1159,7 +1169,7 @@
                       <td class="no-border" v-if="!selectedCell">
                         <v-menu v-model="font_color_menu" :close-on-content-click="false">
                           <template v-slot:activator="{ on }">
-                            <v-text-field hide-details v-on="on" :color="color_property_Object" class="font-in-property input-color" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.font_color"></v-text-field>
+                            <v-text-field hide-details v-on="on" color="#4CAF50" class="font-in-property input-color" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.font_color"></v-text-field>
                           </template>
                           <v-color-picker show-swatches hide-mode-switch mode="hexa" v-model="objectArray[selected_array][selected_object].style.font_color" @input="font_color_menu = false"></v-color-picker>
                         </v-menu>
@@ -1167,7 +1177,7 @@
                       <td class="no-border" v-if="selectedCell">
                         <v-menu v-model="font_color_menu" :close-on-content-click="false">
                           <template v-slot:activator="{ on }">
-                            <v-text-field hide-details v-on="on" :color="color_property_Object" class="font-in-property input-color" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.font_color"></v-text-field>
+                            <v-text-field hide-details v-on="on" color="#4CAF50" class="font-in-property input-color" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.font_color"></v-text-field>
                           </template>
                           <v-color-picker show-swatches hide-mode-switch mode="hexa" v-model="dataTableObjectArray[selectedCell].style.font_color" @input="font_color_menu = false, changeSelected(selectedCell)"></v-color-picker>
                         </v-menu>
@@ -1176,10 +1186,10 @@
                     <tr v-if="selected_array == 'inputbox' || (selectedCell && (dataTableObjectArray[selectedCell].object_type == 'inputbox'))">
                       <td class="property-title no-border">{{ textLang.property_type.alphabet_type }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="AlphabetType" v-model="objectArray[selected_array][selected_object].style.alphabetType"></v-autocomplete>
+                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" color="#4CAF50" background-color="white" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="AlphabetType" v-model="objectArray[selected_array][selected_object].style.alphabetType"></v-autocomplete>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="AlphabetType" v-model="dataTableObjectArray[selectedCell].style.alphabetType"></v-autocomplete>
+                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" color="#4CAF50" background-color="white" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="AlphabetType" v-model="dataTableObjectArray[selectedCell].style.alphabetType"></v-autocomplete>
                       </td>
                     </tr>
                     <tr v-if="custom_object_linecolor">
@@ -1187,7 +1197,7 @@
                       <td class="no-border">
                         <v-menu v-model="border_color_menu" :close-on-content-click="false">
                           <template v-slot:activator="{ on }">
-                            <v-text-field hide-details v-on="on" :color="color_property_Object" class="font-in-property input-color" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.border_color"></v-text-field>
+                            <v-text-field hide-details v-on="on" color="#4CAF50" class="font-in-property input-color" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.border_color"></v-text-field>
                           </template>
                           <v-color-picker show-swatches hide-mode-switch mode="hexa" v-model="objectArray[selected_array][selected_object].style.border_color" @input="border_color_menu = false"></v-color-picker>
                         </v-menu>
@@ -1196,37 +1206,37 @@
                     <tr v-if="custom_object_linesize">
                       <td class="property-title no-border">{{ textLang.property_type.line_thickness }}:</td>
                       <td class="no-border">
-                        <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.border_size"  @input="change_linesize"></v-text-field>
+                        <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.border_size"  @input="change_linesize"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_lineside">
                       <td class="property-title no-border">{{ textLang.property_type.line }}:</td>
                       <td class="no-border">
                         <v-radio-group row hide-details class="object-line-type-block"  v-model="objectArray[selected_array][selected_object].style.line_set" @change="change_lineside">
-                          <v-radio :color="color_property_Object" value="p">
-                              <template v-slot:label>
-                                <span class="template-status">{{ textLang.property_type.vertical }}</span>
-                              </template>
-                            </v-radio>
-                            <v-radio :color="color_property_Object" value="l">
-                              <template v-slot:label>
-                                <span class="template-status">{{ textLang.property_type.landscape }}</span>
-                              </template>
-                            </v-radio>
+                          <v-radio color="#4CAF50" value="p" class="mb-1">
+                            <template v-slot:label>
+                              <span class="template-status">{{ textLang.property_type.vertical }}</span>
+                            </template>
+                          </v-radio>
+                          <v-radio :color="color_property_Object" value="l" class="mb-1">
+                            <template v-slot:label>
+                              <span class="template-status">{{ textLang.property_type.landscape }}</span>
+                            </template>
+                          </v-radio>
                         </v-radio-group>
                       </td>
                     </tr>
                     <tr v-if="custom_object_lineside">
                       <td class="property-title no-border">{{ textLang.property_type.line_style }}:</td>
                       <td class="no-border">
-                        <v-btn-toggle dense group mandatory :color="color_property_Object" v-model="objectArray[selected_array][selected_object].style.line_style">
-                          <v-btn value="solid" class="pa-0" active-class="line-style-active">
+                        <v-btn-toggle dense group mandatory color="#4CAF50" v-model="objectArray[selected_array][selected_object].style.line_style">
+                          <v-btn min-width="30px" height="30px" value="solid" class="pa-0" active-class="line-style-active">
                             <hr class="solid-line-property2">
                           </v-btn>
-                          <v-btn value="dashed" text class="pa-0" active-class="line-style-active">
+                          <v-btn min-width="30px" height="30px" value="dashed" text class="pa-0" active-class="line-style-active">
                             <hr class="dashed-line-property2">
                           </v-btn>
-                          <v-btn value="dotted" text class="pa-0" active-class="line-style-active">
+                          <v-btn min-width="30px" height="30px" value="dotted" text class="pa-0" active-class="line-style-active">
                             <hr class="dotted-line-property2">
                           </v-btn>
                         </v-btn-toggle>
@@ -1237,7 +1247,7 @@
                       <td class="no-border" v-if="!selectedCell">
                         <v-menu v-model="background_color_menu" :close-on-content-click="false">
                           <template v-slot:activator="{ on }">
-                            <v-text-field hide-details  @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.background_color" v-on="on" :color="color_property_Object" class="font-in-property input-color"></v-text-field>
+                            <v-text-field hide-details  @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.background_color" v-on="on" color="#4CAF50" class="font-in-property input-color"></v-text-field>
                           </template>
                           <v-color-picker show-swatches hide-mode-switch mode="rgba" v-model="objectArray[selected_array][selected_object].style.background_color_select" @input="change_backgroundcolor()"></v-color-picker>
                         </v-menu>
@@ -1245,13 +1255,13 @@
                       <td class="no-border" v-if="selectedCell">
                         <v-menu v-model="background_color_menu" :close-on-content-click="false">
                           <template v-slot:activator="{ on }">
-                            <v-text-field hide-details  @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.background_color" v-on="on" :color="color_property_Object" class="font-in-property input-color"></v-text-field>
+                            <v-text-field hide-details  @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.background_color" v-on="on" color="#4CAF50" class="font-in-property input-color"></v-text-field>
                           </template>
                           <v-color-picker show-swatches hide-mode-switch mode="rgba" v-model="dataTableObjectArray[selectedCell].style.background_color_select" @input="change_backgroundcolor()"></v-color-picker>
                         </v-menu>
                       </td>
                     </tr>
-                    <tr v-if="custom_object_boxwidth">
+                    <!-- <tr v-if="custom_object_boxwidth">
                       <td class="property-title no-border">{{ textLang.property_type.width }}:</td>
                       <td class="no-border">
                         <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.image_width"></v-text-field>
@@ -1262,112 +1272,120 @@
                       <td class="no-border">
                         <v-text-field dense height="25px" type="number" suffix="px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.image_height"></v-text-field>
                       </td>
-                    </tr>
+                    </tr> -->
                     <tr v-if="custom_object_placholder || (selectedCell && (dataTableObjectArray[selectedCell].object_type == 'dropdownbox' || dataTableObjectArray[selectedCell].object_type == 'inputbox' || dataTableObjectArray[selectedCell].object_type == 'datepickerbox' || dataTableObjectArray[selectedCell].object_type == 'timebox'))">
                       <td class="property-title no-border">{{ textLang.property_type.textbox }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].placeholder"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].placeholder"></v-text-field>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].placeholder"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].placeholder"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_row">
                       <td class="property-title no-border">{{ textLang.property_type.line_num }}:</td>
                       <td class="no-border">
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.line1" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.row" @input="change_row"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.line1" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.row" @input="change_row"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_row">
                       <td class="property-title no-border">{{ textLang.property_type.maximum_characters }}:</td>
                       <td class="no-border">
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.characters" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.maxLetter"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.characters" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.maxLetter"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_row && objectArray[selected_array][selected_object].style.maxLetter">
                       <td class="property-title no-border">{{ textLang.property_type.add_extra_characters }}:</td>
                       <td class="no-border">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.extraAddAble"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.extraAddAble"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="custom_object_refvalue || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'dropdownbox')">
                       <td class="property-title no-border">{{ textLang.property_type.choice_reference }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-text-field dense height="25px" :hint="textLang.property_type.name_object" persistent-hint class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.refValue"></v-text-field>
+                        <v-text-field dense height="25px" :hint="textLang.property_type.name_object" persistent-hint class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.refValue"></v-text-field>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-text-field dense height="25px" :hint="textLang.property_type.name_object" persistent-hint class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.refValue" @input="changeSelected(selectedCell)"></v-text-field>
+                        <v-text-field dense height="25px" :hint="textLang.property_type.name_object" persistent-hint class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.refValue" @input="changeSelected(selectedCell)"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_refvalue || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'dropdownbox')">
                       <td class="property-title no-border">{{ textLang.property_type.auto_select }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.autoChoices"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.autoChoices"></v-checkbox>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.autoChoices"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.autoChoices"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="selected_array == 'inputimagebox'">
                       <td class="property-title no-border">{{ textLang.property_type.img_link }}:</td>
                       <td class="no-border">
-                        <v-text-field dense height="25px" persistent-hint class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].value"></v-text-field>
+                        <v-text-field dense height="25px" persistent-hint class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].value"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="(custom_object_choices && !objectArray[selected_array][selected_object].style.refValue) || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'dropdownbox' && !dataTableObjectArray[selectedCell].style.refValue)">
                       <td class="property-title no-border">{{ textLang.property_type.options }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <div v-if="!objectArray[selected_array][selected_object].style.autoChoices">
-                          <div v-for="item in objectArray[selected_array][selected_object].choices" :key="item">
-                            {{item}}<v-icon v-on:click="deleteChoices(item)">mdi-trash-can-outline</v-icon><br>
-                          </div>
-                          <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" append-outer-icon="mdi-plus" @click:append-outer="addChoices()" @click="copyObject = ''" v-model="choice"></v-text-field>
-                        </div>
-                        <div v-else>
-                          <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color property-dropdown-box" :items="autoChoices" v-model="objectArray[selected_array][selected_object].style.autoChoicesSelect"></v-autocomplete>
-                          <v-text-field dense height="25px" :hint="textLang.property_type.name_object" persistent-hint class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.refAutoChoices"></v-text-field>
-                        </div>
+                        <template v-if="!objectArray[selected_array][selected_object].style.autoChoices">
+                          <v-row class="property-row">
+                            <v-col v-for="item in objectArray[selected_array][selected_object].choices" :key="item" cols="auto" align-self="center" class="pl-0 pr-2 pt-1 pb-0">
+                              {{item}}<v-icon v-on:click="deleteChoices(item)">mdi-trash-can-outline</v-icon>
+                            </v-col>
+                          </v-row>
+                          <v-row class="property-row">
+                            <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" append-outer-icon="mdi-plus" @click:append-outer="addChoices()" @click="copyObject = ''" v-model="choice"></v-text-field>
+                          </v-row>
+                        </template>
+                        <template v-else>
+                          <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" background-color="white" :placeholder="textLang.set_format_form.choose" color="#4CAF50" class="mt-3 prop-input create-prop-line-height create-prop-dropdown-icon" :items="autoChoices" v-model="objectArray[selected_array][selected_object].style.autoChoicesSelect"></v-autocomplete>
+                          <v-text-field dense height="25px" :hint="textLang.property_type.name_object" persistent-hint class="mb-2 font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.refAutoChoices"></v-text-field>
+                        </template>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <div v-if="!dataTableObjectArray[selectedCell].style.autoChoices">
-                          <div v-for="item in dataTableObjectArray[selectedCell].choices" :key="item">
-                            {{item}}<v-icon v-on:click="deleteChoices(item)">mdi-trash-can-outline</v-icon><br>
-                          </div>
-                          <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" append-outer-icon="mdi-plus" @click:append-outer="addChoices()" @click="copyObject = ''" v-model="choice"></v-text-field>
-                        </div>
-                        <div v-else>
-                          <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color property-dropdown-box" :items="autoChoices" v-model="dataTableObjectArray[selectedCell].style.autoChoicesSelect"></v-autocomplete>
-                          <v-text-field dense height="25px" :hint="textLang.property_type.name_object" persistent-hint class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.refAutoChoices" @input="changeSelected(selectedCell)"></v-text-field>
-                          <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.importInRow">  
+                        <template v-if="!dataTableObjectArray[selectedCell].style.autoChoices">
+                          <v-row class="property-row">
+                            <v-col v-for="item in dataTableObjectArray[selectedCell].choices" :key="item" cols="auto" align-self="center" class="pl-0 pr-2 pt-1 pb-0">
+                              {{item}}<v-icon v-on:click="deleteChoices(item)">mdi-trash-can-outline</v-icon>
+                            </v-col>
+                          </v-row>
+                          <v-row class="property-row">
+                            <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" append-outer-icon="mdi-plus" @click:append-outer="addChoices()" @click="copyObject = ''" v-model="choice"></v-text-field>
+                          </v-row>
+                        </template>
+                        <template v-else>
+                          <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" background-color="white" :placeholder="textLang.set_format_form.choose" color="#4CAF50" class="mt-3 prop-input create-prop-line-height create-prop-dropdown-icon" :items="autoChoices" v-model="dataTableObjectArray[selectedCell].style.autoChoicesSelect"></v-autocomplete>
+                          <v-text-field dense height="25px" :hint="textLang.property_type.name_object" persistent-hint class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.refAutoChoices" @input="changeSelected(selectedCell)"></v-text-field>
+                          <v-checkbox color="#4CAF50" hide-details class="mb-1 property-check" v-model="dataTableObjectArray[selectedCell].style.importInRow">  
                             <template v-slot:label>
                               <span class="title-prop">{{ textLang.property_type.in_row_import }}</span>
                             </template>
                           </v-checkbox>
-                        </div>
+                        </template>
                       </td>
                     </tr>
                     <tr v-if="(custom_object_refvalue && objectArray[selected_array][selected_object].style.refValue) || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'dropdownbox' && dataTableObjectArray[selectedCell].style.refValue)">
                       <td class="property-title no-border">{{ textLang.property_type.choice_group }}:</td>
                       <td class="no-border">
-                        <v-btn depressed small dark :color="color_property_Object" class="setting-hiding" @click="openCreateDropdownDataset()">{{ textLang.property_type.create_edit }}</v-btn>
+                        <v-btn depressed small dark color="#525659" class="setting-hiding" @click="openCreateDropdownDataset()">{{ textLang.property_type.create_edit }}</v-btn>
                       </td>
                     </tr>
                     <tr v-if="custom_object_datestyle || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'datepickerbox')">
                       <td class="property-title no-border">{{ textLang.property_type.date_format }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" :items="property_date_style" class="font-in-property business-box-inside icon-select dropdown-icon-color property-dropdown-box" @input="change_dateformat" v-model="objectArray[selected_array][selected_object].style.date_format"></v-select>
+                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" background-color="white" :items="property_date_style" class="font-in-property create-prop-line-height create-prop-dropdown-icon" @input="change_dateformat" v-model="objectArray[selected_array][selected_object].style.date_format"></v-select>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" :items="property_date_style" class="font-in-property business-box-inside icon-select dropdown-icon-color property-dropdown-box" @input="change_dateformat" v-model="dataTableObjectArray[selectedCell].style.date_format"></v-select>
+                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" background-color="white" :items="property_date_style" class="font-in-property create-prop-line-height create-prop-dropdown-icon" @input="change_dateformat" v-model="dataTableObjectArray[selectedCell].style.date_format"></v-select>
                       </td>
                     </tr>
                     <tr v-if="custom_object_datestyle || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'datepickerbox')">
                       <td class="property-title no-border">{{ textLang.property_type.default }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" class="font-in-property business-box-inside icon-select dropdown-icon-color property-dropdown-box" :items="defaultDatePicker" v-model="objectArray[selected_array][selected_object].style.defaultDateSelect" @change="objectArray[selected_array][selected_object].style.defaultDateValue = ''"></v-select>
+                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" background-color="white" class="my-1 font-in-property create-prop-line-height create-prop-dropdown-icon date-default-prop" :items="defaultDatePicker" v-model="objectArray[selected_array][selected_object].style.defaultDateSelect" @change="objectArray[selected_array][selected_object].style.defaultDateValue = ''"></v-select>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" class="font-in-property business-box-inside icon-select dropdown-icon-color property-dropdown-box" :items="defaultDatePicker" v-model="dataTableObjectArray[selectedCell].style.defaultDateSelect" @change="dataTableObjectArray[selectedCell].style.defaultDateValue  = ''"></v-select>
+                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" background-color="white" class="my-1 font-in-property create-prop-line-height create-prop-dropdown-icon date-default-prop" :items="defaultDatePicker" v-model="dataTableObjectArray[selectedCell].style.defaultDateSelect" @change="dataTableObjectArray[selectedCell].style.defaultDateValue  = ''"></v-select>
                       </td>
                     </tr>
                     <tr v-if="(custom_object_datestyle && (objectArray[selected_array][selected_object].style.defaultDateSelect == 'custom')) || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'datepickerbox' && dataTableObjectArray[selectedCell].style.defaultDateSelect == 'custom')">
@@ -1375,128 +1393,128 @@
                       <td class="no-border" v-if="!selectedCell">
                         <v-menu :close-on-content-click="false" v-model="menu_date_default">
                           <template v-slot:activator="{ on }">
-                            <v-text-field outlined dense readonly v-on="on" hide-details :color="color_document_format" class="prop-input pad-input"  :value="setDateFormatBE(objectArray[selected_array][selected_object].style.defaultDateValue, 'be')"></v-text-field>
+                            <v-text-field dense readonly v-on="on" hide-details color="#4CAF50" class="prop-input" :value="setDateFormatBE(objectArray[selected_array][selected_object].style.defaultDateValue, 'be')"></v-text-field>
                           </template>
-                          <v-date-picker :color="color_document_format" locale="th" @change="menu_date_default = false" v-model="objectArray[selected_array][selected_object].style.defaultDateValue"></v-date-picker>
+                          <v-date-picker color="#4CAF50" locale="th" @change="menu_date_default = false" v-model="objectArray[selected_array][selected_object].style.defaultDateValue"></v-date-picker>
                         </v-menu>
                       </td>
                       <td class="no-border" v-if="selectedCell">
                         <v-menu :close-on-content-click="false" v-model="menu_date_default">
                           <template v-slot:activator="{ on }">
-                            <v-text-field outlined dense readonly v-on="on" hide-details :color="color_document_format" class="prop-input pad-input"  :value="setDateFormatBE(dataTableObjectArray[selectedCell].style.defaultDateValue, 'be')"></v-text-field>
+                            <v-text-field dense readonly v-on="on" hide-details color="#4CAF50" class="prop-input"  :value="setDateFormatBE(dataTableObjectArray[selectedCell].style.defaultDateValue, 'be')"></v-text-field>
                           </template>
-                          <v-date-picker :color="color_document_format" locale="th" @change="menu_date_default = false" v-model="dataTableObjectArray[selectedCell].style.defaultDateValue"></v-date-picker>
+                          <v-date-picker color="#4CAF50" locale="th" @change="menu_date_default = false" v-model="dataTableObjectArray[selectedCell].style.defaultDateValue"></v-date-picker>
                         </v-menu>
                       </td>
                     </tr>
                     <tr v-if="(custom_object_datestyle && (objectArray[selected_array][selected_object].style.defaultDateSelect == 'ref_date')) || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'datepickerbox' && dataTableObjectArray[selectedCell].style.defaultDateSelect == 'ref_date')">
                       <td class="property-title no-border">{{ textLang.property_type.datepicker_name }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" v-model="objectArray[selected_array][selected_object].style.defaultDateValue"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" v-model="objectArray[selected_array][selected_object].style.defaultDateValue"></v-text-field>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" v-model="dataTableObjectArray[selectedCell].style.defaultDateValue" @input="changeSelected(selectedCell)"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" v-model="dataTableObjectArray[selectedCell].style.defaultDateValue" @input="changeSelected(selectedCell)"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="(custom_object_datestyle && (objectArray[selected_array][selected_object].style.defaultDateSelect == 'ref_date')) || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'datepickerbox' && dataTableObjectArray[selectedCell].style.defaultDateSelect == 'ref_date')">
                       <td class="property-title no-border">{{ textLang.property_type.num_date_ref }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.start_date_day" class="font-in-property" :color="color_property_Object" v-model="objectArray[selected_array][selected_object].style.additionDate"></v-text-field>
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.num_month" class="font-in-property" :color="color_property_Object" v-model="objectArray[selected_array][selected_object].style.additionMon"></v-text-field>
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.num_year" class="font-in-property" :color="color_property_Object" v-model="objectArray[selected_array][selected_object].style.additionYear"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.start_date_day" class="font-in-property" color="#4CAF50" v-model="objectArray[selected_array][selected_object].style.additionDate"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.num_month" class="font-in-property" color="#4CAF50" v-model="objectArray[selected_array][selected_object].style.additionMon"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.num_year" class="font-in-property" color="#4CAF50" v-model="objectArray[selected_array][selected_object].style.additionYear"></v-text-field>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.start_date_day" class="font-in-property" :color="color_property_Object" v-model="dataTableObjectArray[selectedCell].style.additionDate" @input="changeSelected(selectedCell)"></v-text-field>
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.num_month" class="font-in-property" :color="color_property_Object" v-model="dataTableObjectArray[selectedCell].style.additionMon" @input="changeSelected(selectedCell)"></v-text-field>
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.num_year" class="font-in-property" :color="color_property_Object" v-model="dataTableObjectArray[selectedCell].style.additionYear" @input="changeSelected(selectedCell)"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.start_date_day" class="font-in-property" color="#4CAF50" v-model="dataTableObjectArray[selectedCell].style.additionDate" @input="changeSelected(selectedCell)"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.num_month" class="font-in-property" color="#4CAF50" v-model="dataTableObjectArray[selectedCell].style.additionMon" @input="changeSelected(selectedCell)"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.num_year" class="font-in-property" color="#4CAF50" v-model="dataTableObjectArray[selectedCell].style.additionYear" @input="changeSelected(selectedCell)"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_datestyle || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'datepickerbox')">
                       <td class="property-title no-border">{{ textLang.property_type.start_date_setting }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color property-dropdown-box" :items="startDateTypes" v-model="objectArray[selected_array][selected_object].style.startDateType"></v-autocomplete>
+                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" background-color="white" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="startDateTypes" v-model="objectArray[selected_array][selected_object].style.startDateType"></v-autocomplete>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color property-dropdown-box" :items="startDateTypes" v-model="dataTableObjectArray[selectedCell].style.startDateType"></v-autocomplete>
+                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" background-color="white" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="startDateTypes" v-model="dataTableObjectArray[selectedCell].style.startDateType"></v-autocomplete>
                       </td>
                     </tr>
                     <tr v-if="(custom_object_datestyle && objectArray[selected_array][selected_object].style.startDateType == 'custom') || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'datepickerbox' && dataTableObjectArray[selectedCell].style.startDateType == 'custom')">
                       <td class="property-title no-border">{{ textLang.property_type.start_date_custom }}</td>
-                      <td class="pt-2 no-border" v-if="!selectedCell">
+                      <td class="no-border" v-if="!selectedCell">
                         <v-menu :close-on-content-click="false" v-model="menu_date_start">
                           <template v-slot:activator="{ on }">
-                            <v-text-field outlined dense readonly v-on="on" hide-details :color="color_document_format" class="prop-input pad-input" :value="setDateFormatBE(objectArray[selected_array][selected_object].style.startDateValue, 'be')"></v-text-field>
+                            <v-text-field dense readonly v-on="on" hide-details color="#4CAF50" class="prop-input" :value="setDateFormatBE(objectArray[selected_array][selected_object].style.startDateValue, 'be')"></v-text-field>
                           </template>
-                          <v-date-picker :color="color_document_format" locale="th" @change="menu_date_start = false"  v-model="objectArray[selected_array][selected_object].style.startDateValue"></v-date-picker>
+                          <v-date-picker color="#4CAF50" locale="th" @change="menu_date_start = false"  v-model="objectArray[selected_array][selected_object].style.startDateValue"></v-date-picker>
                         </v-menu>
                       </td>
-                      <td class="pt-2 no-border" v-if="selectedCell">
+                      <td class="no-border" v-if="selectedCell">
                         <v-menu :close-on-content-click="false" v-model="menu_date_start">
                           <template v-slot:activator="{ on }">
-                            <v-text-field outlined dense readonly v-on="on" hide-details :color="color_document_format" class="prop-input pad-input" :value="setDateFormatBE(dataTableObjectArray[selectedCell].style.startDateValue, 'be')"></v-text-field>
+                            <v-text-field dense readonly v-on="on" hide-details color="#4CAF50" class="prop-input" :value="setDateFormatBE(dataTableObjectArray[selectedCell].style.startDateValue, 'be')"></v-text-field>
                           </template>
-                          <v-date-picker :color="color_document_format" locale="th" @change="menu_date_start = false"  v-model="dataTableObjectArray[selectedCell].style.startDateValue"></v-date-picker>
+                          <v-date-picker color="#4CAF50" locale="th" @change="menu_date_start = false"  v-model="dataTableObjectArray[selectedCell].style.startDateValue"></v-date-picker>
                         </v-menu>
                       </td>
                     </tr>
                     <tr v-if="(custom_object_datestyle && objectArray[selected_array][selected_object].style.startDateType == 'current') || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'datepickerbox' && dataTableObjectArray[selectedCell].style.startDateType == 'current')">
                       <td class="property-title no-border">{{ textLang.property_type.start_date_from }}</td>
-                      <td class="pt-2 no-border" v-if="!selectedCell">
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.start_date_day" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.startDateFrom"></v-text-field>
+                      <td class="no-border" v-if="!selectedCell">
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.start_date_day" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.startDateFrom"></v-text-field>
                       </td>
-                      <td class="pt-2 no-border" v-if="selectedCell">
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.start_date_day" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.startDateFrom" @input="changeSelected(selectedCell)"></v-text-field>
+                      <td class="no-border" v-if="selectedCell">
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.start_date_day" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.startDateFrom" @input="changeSelected(selectedCell)"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_datestyle || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'datepickerbox')">
                       <td class="property-title no-border">{{ textLang.property_type.no_default }}</td>
-                      <td class="pt-2 no-border" v-if="!selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.noDefaultDate"></v-checkbox>
+                      <td class="no-border" v-if="!selectedCell">
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.noDefaultDate"></v-checkbox>
                       </td>
-                      <td class="pt-2 no-border" v-if="selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.noDefaultDate"></v-checkbox>
+                      <td class="no-border" v-if="selectedCell">
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.noDefaultDate"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="custom_object_databind">
                       <td class="property-title no-border">{{ textLang.property_type.data_sync }}:</td>
                       <td class="no-border">
-                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color property-dropdown-box" :items="databind_choice" v-model="objectArray[selected_array][selected_object].value" @input="change_datablind"></v-autocomplete>
+                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" background-color="white" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="databind_choice" v-model="objectArray[selected_array][selected_object].value" @input="change_datablind"></v-autocomplete>
                       </td>
                     </tr>
                     <tr v-if="custom_object_databind && (objectArray[selected_array][selected_object].value == 'leader_role_th')">
                       <td class="property-title no-border"></td>
                       <td class="no-border">
-                        <v-combobox dense height="25px" :hint="textLang.property_type.name_object" persistent-hint class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.refValue" :items="autofillboxLeaders"></v-combobox>
+                        <v-combobox dense height="25px" :hint="textLang.property_type.name_object" persistent-hint class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.refValue" :items="autofillboxLeaders"></v-combobox>
                       </td>
                     </tr>
                     <tr v-if="custom_object_databind && objectArray[selected_array][selected_object].value == 'ref_data'">
                       <td class="property-title no-border">{{ textLang.property_type.name_reference }}:</td>
                       <td class="no-border">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.refValue" @input="change_datablind"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.refValue" @input="change_datablind"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_n2tdecimal">
                       <td class="property-title no-border">{{ textLang.property_type.reading_style }}:</td>
                       <td class="no-border">
-                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" :items="number2textDecimalType" class="font-in-property business-box-inside icon-select dropdown-icon-color property-dropdown-box" v-model="objectArray[selected_array][selected_object].style.n2tdecimal"></v-select>
+                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" background-color="white" :items="number2textDecimalType" class="my-1 font-in-property create-prop-line-height create-prop-dropdown-icon date-default-prop" v-model="objectArray[selected_array][selected_object].style.n2tdecimal"></v-select>
                       </td>
                     </tr>
                     <tr v-if="custom_object_timestyle || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'timebox')">
                       <td class="property-title no-border">{{ textLang.property_type.time_format }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" :items="time_style" class="font-in-property business-box-inside icon-select dropdown-icon-color property-dropdown-box" v-model="objectArray[selected_array][selected_object].style.time.isFull"></v-select>
+                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" background-color="white" :items="time_style" class="font-in-property create-prop-line-height create-prop-dropdown-icon" v-model="objectArray[selected_array][selected_object].style.time.isFull"></v-select>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" :items="time_style" class="font-in-property business-box-inside icon-select dropdown-icon-color property-dropdown-box" v-model="dataTableObjectArray[selectedCell].style.time.isFull"></v-select>
+                        <v-select dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" background-color="white" :items="time_style" class="font-in-property create-prop-line-height create-prop-dropdown-icon" v-model="dataTableObjectArray[selectedCell].style.time.isFull"></v-select>
                       </td>
                     </tr>
                     <tr v-if="custom_object_timeseccond || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'timebox')">
                       <td class="property-title no-border">{{ textLang.property_type.second }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.time.isSec"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.time.isSec"></v-checkbox>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.time.isSec"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.time.isSec"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="(custom_object_mandatory || (selected_array == 'checkbox' && objectArray[selected_array][selected_object].style.checkBoxGroup.length)) || 
@@ -1504,209 +1522,221 @@
                       || (dataTableObjectArray[selectedCell].object_type == 'checkbox') && dataTableObjectArray[selectedCell].style.checkBoxGroup.length))">
                       <td class="property-title no-border">{{ textLang.property_type.need_fillout }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.mandatory"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.mandatory"></v-checkbox>
                       </td><td class="no-border" v-if="selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.mandatory"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.mandatory"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="custom_object_fixedValue || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'linkdatabox')">
                       <td class="property-title no-border">{{ textLang.property_type.not_allowed }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.fixedValue"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.fixedValue"></v-checkbox>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.fixedValue"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.fixedValue"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="selected_array == 'inputbox' || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'inputbox')">
                       <td class="property-title no-border">{{ textLang.property_type.text_type }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="TextType"  v-model="objectArray[selected_array][selected_object].style.textType"></v-autocomplete>
+                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" color="#4CAF50" background-color="white" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="TextType"  v-model="objectArray[selected_array][selected_object].style.textType"></v-autocomplete>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="TextType" v-model="dataTableObjectArray[selectedCell].style.textType"></v-autocomplete>
+                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" color="#4CAF50" background-color="white" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="TextType" v-model="dataTableObjectArray[selectedCell].style.textType"></v-autocomplete>
                       </td>
                     </tr>
                     <tr v-if="custom_object_isnumber || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'inputbox')">
                       <td class="property-title no-border">{{ textLang.property_type.num_only }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.number_only" @change="change_numberonly"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.number_only" @change="change_numberonly"></v-checkbox>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.number_only"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.number_only"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="selected_array == 'calculatebox' || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'calculatebox')">
                       <td class="property-title no-border">{{ textLang.property_type.show_zero }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.isZero"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.isZero"></v-checkbox>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.isZero"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.isZero"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="selected_array == 'calculatebox' || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'calculatebox')">
                       <td class="property-title no-border">{{ textLang.property_type.infinity }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.isInfinityZero"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.isInfinityZero"></v-checkbox>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.isInfinityZero"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.isInfinityZero"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="objectArray[selected_array][selected_object].style.number_only || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'inputbox')">
                       <td class="property-title no-border">{{ textLang.property_type.format_commas }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.isComma"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.isComma"></v-checkbox>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.isComma"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.isComma"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="custom_object_decimal || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'calculatebox')">
                       <td class="property-title no-border">{{ textLang.property_type.don_show_decimal }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.noDecimal"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.noDecimal"></v-checkbox>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.noDecimal"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.noDecimal"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="(selected_array != 'paper' && (!objectArray[selected_array][selected_object].style.noDecimal && selected_array == 'calculatebox')) || (selectedCell && !dataTableObjectArray[selectedCell].style.noDecimal)&& dataTableObjectArray[selectedCell].object_type == 'calculatebox'">
                       <td class="property-title no-border">{{ textLang.property_type.decimal_num }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.position" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.decimal"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.position" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.decimal"></v-text-field>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.position" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.decimal" @input="changeSelected(selectedCell)"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.position" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.decimal" @input="changeSelected(selectedCell)"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="(selected_array != 'paper' && (!objectArray[selected_array][selected_object].style.noDecimal && selected_array == 'calculatebox')) || (selectedCell && !dataTableObjectArray[selectedCell].style.noDecimal)&& dataTableObjectArray[selectedCell].object_type == 'calculatebox'">
                       <td class="property-title no-border">{{ textLang.property_type.decimal_num_show }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.position" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.decimalShow"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.position" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.decimalShow"></v-text-field>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.position" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.decimalShow" @input="changeSelected(selectedCell)"></v-text-field>
+                        <v-text-field dense height="25px" type="number" :suffix="textLang.property_type.position" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.decimalShow" @input="changeSelected(selectedCell)"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_function || (selectedCell && dataTableObjectArray[selectedCell].object_type == 'calculatebox')">
                       <td class="property-title no-border">{{ textLang.property_type.fuction }}:</td>
                       <td class="py-2 no-border" v-if="!selectedCell">
-                        <v-textarea dense no-resize outlined single-line hide-details rows="4" :color="color_property_Object" class="font-in-property pad-textarea textarea-prop-auto-row" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.function"></v-textarea>
+                        <v-textarea dense no-resize outlined single-line hide-details rows="4" color="#4CAF50" background-color="white" class="font-in-property calc-function-prop-create textarea-prop-auto-row" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.function"></v-textarea>
                       </td>
                       <td class="py-2 no-border" v-if="selectedCell">
-                        <v-textarea dense no-resize outlined single-line hide-details rows="4" :color="color_property_Object" class="font-in-property pad-textarea textarea-prop-auto-row" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.function"></v-textarea>
+                        <v-textarea dense no-resize outlined single-line hide-details rows="4" color="#4CAF50" background-color="white" class="font-in-property calc-function-prop-create textarea-prop-auto-row" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.function"></v-textarea>
                       </td>
                     </tr>
                     <tr v-if="(objectArray[selected_array][selected_object].value == 'function' && selected_array == 'autofillbox')">
                       <td class="property-title no-border">{{ textLang.property_type.condition }}:</td>
                       <td class="py-2 no-border">
-                        <v-textarea dense no-resize outlined single-line hide-details rows="4" :color="color_property_Object" class="font-in-property pad-textarea textarea-prop-auto-row" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.function"></v-textarea>
+                        <v-textarea dense no-resize outlined single-line hide-details rows="4" color="#4CAF50" background-color="white" class="font-in-property calc-function-prop-create textarea-prop-auto-row" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.function"></v-textarea>
                       </td>
                     </tr>
                     <tr v-if="custom_object_defaultvalue || (selectedCell && (dataTableObjectArray[selectedCell].object_type == 'inputbox' || dataTableObjectArray[selectedCell].object_type == 'dropdownbox'))">
                       <td class="property-title no-border">{{ textLang.property_type.default }}:</td>
                       <td class="py-2 no-border" v-if="selected_array == 'textareabox' && !selectedCell"> <!-- for textarea -->
-                        <v-textarea dense no-resize outlined single-line hide-details rows="3" :color="color_property_Object" class="font-in-property pad-textarea textarea-default-value-prop-auto-row" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].value"></v-textarea>
+                        <v-textarea dense no-resize outlined single-line hide-details rows="3" color="#4CAF50" class="font-in-property calc-function-prop-create textarea-default-value-prop-auto-row" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].value"></v-textarea>
                       </td>
                       <td class="no-border" v-if="(selected_array == 'inputbox' || selected_array == 'dropdownbox') && !selectedCell">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].value"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].value"></v-text-field>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].value" @input="changeSelected(selectedCell)"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].value" @input="changeSelected(selectedCell)"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="selected_array == 'inputbox'  || (selectedCell && (dataTableObjectArray[selectedCell].object_type == 'inputbox'))">
                       <td class="property-title no-border">{{ textLang.property_type.default_input }}:</td>
                       <td class="no-border" v-if="selected_array == 'inputbox' && !selectedCell">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.defaultValueObj"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.defaultValueObj"></v-text-field>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.defaultValueObj" @input="changeSelected(selectedCell)"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.defaultValueObj" @input="changeSelected(selectedCell)"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_textareavaliable">
                       <td class="property-title no-border">{{ textLang.property_type.variable_default }}:</td>
                       <td class="no-border">
-                        <div v-for="item in objectArray[selected_array][selected_object].style.textAreaValiable" :key="item">
-                         {{item.text}} <v-icon v-on:click="deleteTextAreaValiable(item)">mdi-trash-can-outline</v-icon><br>
-                        </div>
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" append-outer-icon="mdi-plus" v-model="textAreaValiable" @click:append-outer="addTextAreaValiable()" @click="copyObject = ''"></v-text-field>
+                        <v-row class="property-row">
+                          <v-col v-for="item in objectArray[selected_array][selected_object].style.textAreaValiable" :key="item" cols="auto" align-self="center" class="pl-0 pr-2 pt-1 pb-0">
+                          {{item.text}} <v-icon v-on:click="deleteTextAreaValiable(item)">mdi-trash-can-outline</v-icon>
+                          </v-col>
+                        </v-row>
+                        <v-row class="property-row">
+                          <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" append-outer-icon="mdi-plus" v-model="textAreaValiable" @click:append-outer="addTextAreaValiable()" @click="copyObject = ''"></v-text-field>
+                        </v-row>
                       </td>
                     </tr>
                     <tr v-if="objectArray[selected_array][selected_object].style.number_only">
                       <td rowspan="2" class="property-title no-border">{{ textLang.property_type.condition }}:</td>
                       <td class="no-border">
-                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.property_type.condition" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color property-dropdown-box condition-title-label" :items="logic_fx" v-model="objectArray[selected_array][selected_object].style.validate.fx" @input="change_logictype"></v-autocomplete>
+                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :label="textLang.property_type.condition" color="#4CAF50" background-color="white" class="prop-input create-prop-line-height create-prop-dropdown-icon condition-title-label" :items="logic_fx" v-model="objectArray[selected_array][selected_object].style.validate.fx" @input="change_logictype"></v-autocomplete>
                       </td>
                     </tr>
                     <tr v-if="objectArray[selected_array][selected_object].style.number_only">
                       <td class="pt-2 no-border">
-                        <v-text-field v-if="!betValue" dense height="25px" :label="textLang.property_type.cost" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.validate.value"></v-text-field>
-                        <v-text-field v-if="betValue" dense height="25px" :label="textLang.property_type.since" class="font-in-property condition-start-value-label" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.validate.value"></v-text-field>
-                        <v-text-field v-if="betValue" dense height="25px" :label="textLang.property_type.to" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.validate.value2"></v-text-field>
+                        <v-text-field v-if="!betValue" dense height="25px" :label="textLang.property_type.cost" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.validate.value"></v-text-field>
+                        <v-text-field v-if="betValue" dense height="25px" :label="textLang.property_type.since" class="font-in-property condition-start-value-label" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.validate.value"></v-text-field>
+                        <v-text-field v-if="betValue" dense height="25px" :label="textLang.property_type.to" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.validate.value2"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="selected_array == 'checkbox'  || (selectedCell && (dataTableObjectArray[selectedCell].object_type == 'checkbox'))">
                       <td class="property-title no-border">{{ textLang.property_type.group_options }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <div v-for="item in objectArray[selected_array][selected_object].style.checkBoxGroup" :key="item">
-                          {{item}}
-                          <v-icon small color="grey lighten-1" v-on:click="deleteCheckGroup(item)">mdi-close-circle</v-icon>
-                        </div>
-                        <v-text-field regular dense height="25px" @click="copyObject = ''" v-model="selectedCheckGroup" class="font-in-property" :color="color_property_Object" append-outer-icon="mdi-plus" @click:append-outer="addCheckGroup()"></v-text-field>
+                        <v-row class="property-row">
+                          <v-col v-for="item in objectArray[selected_array][selected_object].style.checkBoxGroup" :key="item" cols="auto" align-self="center" class="pl-0 pr-2 pt-1 pb-0">
+                            {{item}}
+                            <v-icon small color="grey lighten-1" v-on:click="deleteCheckGroup(item)">mdi-close-circle</v-icon>
+                          </v-col>
+                        </v-row>
+                        <v-row class="property-row">
+                          <v-text-field dense height="25px" @click="copyObject = ''" v-model="selectedCheckGroup" class="font-in-property" color="#4CAF50" append-outer-icon="mdi-plus" @click:append-outer="addCheckGroup()"></v-text-field>
+                        </v-row>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <div v-for="item in dataTableObjectArray[selectedCell].style.checkBoxGroup" :key="item">
-                          {{item}}
-                          <v-icon small color="grey lighten-1" v-on:click="deleteCheckGroup(item)">mdi-close-circle</v-icon>
-                        </div>
-                        <v-text-field regular dense height="25px" @click="copyObject = ''" v-model="selectedCheckGroup" class="font-in-property" :color="color_property_Object" append-outer-icon="mdi-plus" @click:append-outer="addCheckGroup()"></v-text-field>
+                        <v-row class="property-row">
+                          <v-col v-for="item in dataTableObjectArray[selectedCell].style.checkBoxGroup" :key="item" cols="auto" align-self="center" class="pl-0 pr-2 pt-1 pb-0">
+                            {{item}}
+                            <v-icon small color="grey lighten-1" v-on:click="deleteCheckGroup(item)">mdi-close-circle</v-icon>
+                          </v-col>
+                        </v-row>
+                        <v-row class="property-row">
+                          <v-text-field dense height="25px" @click="copyObject = ''" v-model="selectedCheckGroup" class="font-in-property" color="#4CAF50" append-outer-icon="mdi-plus" @click:append-outer="addCheckGroup()"></v-text-field>
+                        </v-row>
                       </td>
                     </tr>
                     <tr v-if="custom_object_excel || selectedCell">
                       <td class="property-title no-border">{{ textLang.property_type.cell_excel }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-text-field dense height="25px" placeholder="Ex. A1, D14, B23" :hint="textLang.property_type.used_importing" persistent-hint class="font-in-property" :color="color_property_Object"  @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].excel"></v-text-field>
+                        <v-text-field dense height="25px" placeholder="Ex. A1, D14, B23" :hint="textLang.property_type.used_importing" persistent-hint class="font-in-property" color="#4CAF50"  @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].excel"></v-text-field>
                       </td>
                       <td class="no-border"  v-if="selectedCell">
-                        <v-text-field dense height="25px" placeholder="Ex. A1, D14, B23" :hint="textLang.property_type.used_importing" persistent-hint class="font-in-property" :color="color_property_Object"  @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].excel"></v-text-field>
+                        <v-text-field dense height="25px" placeholder="Ex. A1, D14, B23" :hint="textLang.property_type.used_importing" persistent-hint class="font-in-property" color="#4CAF50"  @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].excel"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="custom_object_hidesection">
                       <td class="property-title no-border">{{ textLang.property_type.show_scope }}:</td>
                       <td class="no-border">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="hidesection"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="hidesection"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="custom_object_refpermission">
                       <td class="property-title no-border">{{ textLang.property_type.con_scope }}:</td>
                       <td class="no-border">
-                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color property-dropdown-box" :items="allPermissionSection" v-model="objectArray[selected_array][selected_object].style.refPermission"></v-autocomplete>
+                        <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" background-color="white" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="allPermissionSection" v-model="objectArray[selected_array][selected_object].style.refPermission"></v-autocomplete>
                       </td>
                     </tr>
                     <tr v-if="custom_object_suffix || (selectedCell && (dataTableObjectArray[selectedCell].object_type == 'calculatebox'|| dataTableObjectArray[selectedCell].object_type == 'inputbox'))">
                       <td class="property-title no-border">{{ textLang.property_type.suffix }}:</td>
                       <td class="no-border" v-if="!selectedCell">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.suffix"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.suffix"></v-text-field>
                       </td>
                       <td class="no-border" v-if="selectedCell">
-                        <v-text-field dense height="25px" class="font-in-property" :color="color_property_Object" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.suffix"></v-text-field>
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.suffix"></v-text-field>
                       </td>
                     </tr>
                     <tr v-if="selected_array == 'signbox'">
                       <td class="property-title no-border">Certificate Authority (CA):</td>
                       <td class="no-border">
-                        <v-checkbox :color="color_property_Object" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.isCa"></v-checkbox>
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="objectArray[selected_array][selected_object].style.isCa"></v-checkbox>
                       </td>
                     </tr>
                     <tr v-if="custom_object_name">
                       <td class="property-title no-border">{{ textLang.property_type.arrange_object }}:</td>
-                      <td class="pr-0 no-border">
+                      <td class="pl-1 pr-0 no-border">
                         <v-tooltip top> 
                           <template v-slot:activator="{ on }"> 
-                            <v-btn outlined small min-width="34" v-on="on" class="mr-2 px-0 arrange-obj-btn" @click="changeZindex('forward')">
+                            <v-btn outlined small min-width="34" v-on="on" class="mr-1 px-0 arrange-obj-btn" @click="changeZindex('forward')">
                               <v-icon>mdi-arrange-bring-forward</v-icon>
                             </v-btn>
                           </template>
@@ -1714,7 +1744,7 @@
                         </v-tooltip>
                         <v-tooltip top> 
                           <template v-slot:activator="{ on }"> 
-                            <v-btn outlined small min-width="34" v-on="on" class="mr-2 px-0 arrange-obj-btn" @click="changeZindex('front')">
+                            <v-btn outlined small min-width="34" v-on="on" class="mr-1 px-0 arrange-obj-btn" @click="changeZindex('front')">
                               <v-icon>mdi-arrange-bring-to-front</v-icon>
                             </v-btn>
                           </template>
@@ -1722,7 +1752,7 @@
                         </v-tooltip>
                         <v-tooltip top> 
                           <template v-slot:activator="{ on }"> 
-                            <v-btn outlined small min-width="34" v-on="on" class="mr-2 px-0 arrange-obj-btn" @click="changeZindex('backward')">
+                            <v-btn outlined small min-width="34" v-on="on" class="mr-1 px-0 arrange-obj-btn" @click="changeZindex('backward')">
                               <v-icon>mdi-arrange-send-backward</v-icon>
                             </v-btn>
                           </template>
@@ -1740,19 +1770,18 @@
                     </tr>
                     <tr v-if="custom_object_name">
                       <td class="property-title no-border">{{ textLang.property_type.hide_object }}:</td>
-                      <td class="no-border">
-                        <v-btn depressed small dark :color="color_property_Object" class="setting-hiding" @click="openHideSetting()">{{ textLang.property_type.set_object }}</v-btn>
+                      <td class="py-1 no-border">
+                        <v-btn depressed small dark color="#525659" class="py-1 setting-hiding set-hiding-obj-btn" @click="openHideSetting()">{{ textLang.property_type.set_object }}</v-btn>
                       </td>
                     </tr>
                   </tbody>
                 </template>
               </v-simple-table>
             </v-row>
-            <!-- Permission Property -->
-            <!-- <br>
-            <v-divider class="divider-permission"></v-divider>
             <br>
-            <div v-if="(custom_object_permission || custom_cell_permission) && !objectArray[selected_array][selected_object].style.refPermission"> 
+            <v-divider class="divider-permission"></v-divider>
+            <!-- Permission Property -->
+            <!-- <div v-if="(custom_object_permission || custom_cell_permission) && !objectArray[selected_array][selected_object].style.refPermission"> 
               <span class="sub-title-property"><b>{{ textLang.property_type.assignment }}</b></span>
               <v-row class="row-prop">
                 <v-checkbox hide-details class="check-grid-block check-ref" :color="color_property_Object" @change="getRefOrder" v-model="objectArray[selected_array][selected_object].style.refOrder">
@@ -1808,14 +1837,14 @@
               </v-row>
             </div> -->
             <!-- Help -->
-            <br>
+            <!-- <br> -->
             <v-row class="row-prop">
-              <v-col cols="2" class="px-0 tips-btn-block">
+              <v-col cols="auto" class="pl-4 pr-0 pb-0">
                 <v-btn color="primary" depressed fab x-small dark class="" @click="help = !help">
                   <v-icon>mdi-help</v-icon>
                 </v-btn>
               </v-col>
-              <v-col cols="9" v-if="help == true" class="px-0">
+              <v-col cols="" v-if="help == true" class="pl-2 pr-0 pb-0">
                 <p class="help-msg" v-html="help_message"></p>
               </v-col>
             </v-row>
@@ -1954,14 +1983,14 @@
               <span class="no-step-word"><v-icon color="#ff8f00" class="no-step-icon">mdi-alert-circle</v-icon> {{ textLang.order_fill.cannot_find }}</span>
             </v-row>
           </v-tab-item> -->
-          <v-tab-item> <!-- Paperless Tab -->
+          <v-tab-item> <!-- Digital Workflow Tab -->
             <span class="header-property"><b>{{ textLang.set_doc_paperless.setting }}</b></span>
             <br>
-            <v-row align="center" class="mt-2 row-prop">
+            <!-- <v-row align="center" class="mt-2 row-prop">
               <v-col cols="4" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_doc_paperless.ppl_subject }}:</span>
               </v-col>
-              <v-col cols="7" class="px-0">
+              <v-col cols="8" class="px-0">
                 <v-text-field outlined dense hide-details :color="color_seting_paperless" class="prop-input pad-input" :placeholder="textLang.set_doc_paperless.subject_placeholder" v-model="paperless_data.option_page.subject_text"></v-text-field>
               </v-col>
             </v-row>
@@ -1969,10 +1998,10 @@
               <v-col cols="4" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_doc_paperless.ppl_message }}:</span>
               </v-col>
-              <v-col cols="7" class="px-0">
+              <v-col cols="8" class="px-0">
                 <v-textarea rows="5" dense outlined hide-details single-line no-resize :color="color_seting_paperless" class="prop-input pad-textarea note-row2" v-model="paperless_data.option_page.body_text"></v-textarea>
               </v-col>
-            </v-row>
+            </v-row> -->
             <!-- <v-row class="row-prop">
               <v-col cols="4" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_doc_paperless.doc_paperless }}:</span>
@@ -1981,27 +2010,27 @@
                 <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_seting_paperless" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="documentTypes" v-model="selectedDocumentType"></v-autocomplete>
               </v-col>
             </v-row> -->
-            <v-row class="row-prop">
-              <v-col cols="4" class="title-prop-block">
+            <v-row class="mt-2 row-prop">
+              <v-col cols="4" align-self="center"  class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_doc_paperless.foermat_paperless }}:</span>
               </v-col>
-              <v-col cols="7" class="px-0 pt-5">
-                <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_seting_paperless" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="ppl_templatelist" v-model="selected_ppltemplate"></v-autocomplete>
+              <v-col cols="8" align-self="center" class="pl-0 pr-2">
+                <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="ppl_templatelist" v-model="selected_ppltemplate"></v-autocomplete>
               </v-col>
             </v-row>
             <v-row class="row-prop">
               <v-col cols="4" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_doc_paperless.note }}:</span>
               </v-col>
-              <v-col cols="7" class="px-0">
-                <v-textarea rows="5" dense outlined hide-details single-line no-resize :color="color_seting_paperless" class="prop-input pad-textarea note-row2" v-model="note_paperless"></v-textarea>
+              <v-col cols="8" class="pl-0 pr-2">
+                <v-textarea rows="5" dense outlined hide-details single-line no-resize color="#4CAF50" class="prop-input pad-textarea note-row2" v-model="note_paperless"></v-textarea>
               </v-col>
             </v-row>
-            <!-- Auto Flow -->
-            <!-- <br>
+            <br>
             <v-divider class="divider-prop"></v-divider>
             <br>
-            <span class="sub-title-property"><b>{{ textLang.set_doc_paperless.set_auto_flow }}</b></span>
+            <!-- Auto Flow -->
+            <!-- <span class="sub-title-property"><b>{{ textLang.set_doc_paperless.set_auto_flow }}</b></span>
             <v-row class="row-prop">
               <v-col cols="11" class="mt-1 pb-0 text-center">
                 <v-btn depressed block small :color="color_varidate_button" class="validate-doc-btn" @click="openFlowCondition()">{{ textLang.set_doc_paperless.set_auto_flow_btn }}</v-btn>
@@ -2009,35 +2038,35 @@
             </v-row> -->
           </v-tab-item>
           <v-tab-item> <!-- Filling Mobile Tab -->
-            <span class="pr-8 header-property"><b>{{ textLang.filling_mobile.title }}</b></span>
+            <span class="pr-2 header-property"><b>{{ textLang.filling_mobile.title }}</b></span>
             <br><br>
             <span class="sub-title-property"><b>{{ textLang.filling_mobile.sub_title }}</b></span>
             <v-subheader class="suggest-checkbox-setting-step">{{ textLang.filling_mobile.define_question_detail }}</v-subheader>
-            <v-row align-self="center" class="row-prop">
-              <v-btn dark depressed :color="color_checkbox_not_show_mobile" class="mt-5 py-1 btn-label-mobile" @click="showAllMobile()">{{ textLang.filling_mobile.show_all_mobile }}</v-btn>
+            <v-row align-self="center" class="mt-5 pl-6 pr-2 property-row">
+              <v-btn dark depressed color="#4CAF50" class="py-1 btn-label-mobile" @click="showAllMobile()">{{ textLang.filling_mobile.show_all_mobile }}</v-btn>
             </v-row>
-            <v-row align-self="center" class="row-prop">
-              <v-btn dark depressed color="red" class="mt-5 py-1 btn-label-mobile" @click="disableAllMobile()">{{ textLang.filling_mobile.not_show_all_mobile }}</v-btn>
+            <v-row align-self="center" class="pl-6 pr-2 property-row">
+              <v-btn dark depressed color="red" class="py-1 btn-label-mobile" @click="disableAllMobile()">{{ textLang.filling_mobile.not_show_all_mobile }}</v-btn>
             </v-row>
             <br>
-            <v-card v-for="item in mobileInputOrder" :key="item.index" outlined class="px-3 pt-1 pb-4 mb-3 question-card" draggable="true" style="cursor:move;" @drop="dropBox(item)" @dragover="allowDrop" @dragstart="dragPage(item)">
+            <v-card v-for="item in mobileInputOrder" :key="item.index" outlined class="px-3 pt-1 pb-4 ml-6 mr-2 mb-3 question-card" draggable="true" style="cursor:move;" @drop="dropBox(item)" @dragover="allowDrop" @dragstart="dragPage(item)">
               <div v-if="item.objType != 'datatable' && !objectArray[item.objType][item.objIndex].deleted">
-                <v-checkbox hide-details :color="color_checkbox_not_show_mobile" class="mt-0" v-model="objectArray[item.objType][item.objIndex].style.showMobile">
+                <v-checkbox hide-details color="#4CAF50" class="mt-0" v-model="objectArray[item.objType][item.objIndex].style.showMobile">
                   <template v-slot:label>
                     <b class="filling-obj-label">{{objectArray[item.objType][item.objIndex].object_name}}</b>
                   </template>
                 </v-checkbox>
                 <br>
-                <v-textarea :disabled="!objectArray[item.objType][item.objIndex].style.showMobile" outlined dense hide-details no-resize rows="3" :label="textLang.filling_mobile.question" :color="color_question_box" class="font-in-property pad-textarea textarea-default-value-prop-auto-row question-label" v-model="objectArray[item.objType][item.objIndex].style.showQuestion"></v-textarea>
+                <v-textarea :disabled="!objectArray[item.objType][item.objIndex].style.showMobile" outlined dense hide-details no-resize rows="3" :label="textLang.filling_mobile.question" color="#4CAF50" class="font-in-property question-form-box textarea-default-value-prop-auto-row" v-model="objectArray[item.objType][item.objIndex].style.showQuestion"></v-textarea>
               </div>
               <div v-if="item.objType == 'datatable'">
-                <v-checkbox hide-details :color="color_checkbox_not_show_mobile" class="mt-0" v-model="dataTableObjectArray[item.objIndex].style.showMobile">
+                <v-checkbox hide-details color="#4CAF50" class="mt-0" v-model="dataTableObjectArray[item.objIndex].style.showMobile">
                   <template v-slot:label>
                     <b class="filling-obj-label">{{dataTableObjectArray[item.objIndex].object_name}}</b>
                   </template>
                 </v-checkbox>
                 <br>
-                <v-textarea :disabled="!dataTableObjectArray[item.objIndex].style.showMobile" outlined dense hide-details no-resize rows="3" :label="textLang.filling_mobile.question" :color="color_question_box" class="font-in-property pad-textarea textarea-default-value-prop-auto-row question-label" v-model="dataTableObjectArray[item.objIndex].style.showQuestion"></v-textarea>
+                <v-textarea :disabled="!dataTableObjectArray[item.objIndex].style.showMobile" outlined dense hide-details no-resize rows="3" :label="textLang.filling_mobile.question" color="#4CAF50" class="font-in-property question-form-box textarea-default-value-prop-auto-row" v-model="dataTableObjectArray[item.objIndex].style.showQuestion"></v-textarea>
               </div>
             </v-card>
             <br>
@@ -2048,8 +2077,8 @@
               <v-col cols="4" class="pb-0 mt-3 title-prop-block">
                 <span class="title-prop">Object:</span>
               </v-col>
-              <v-col cols="7" class="px-0 pb-0 mt-3">
-                <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down"  :color="color_seting_paperless" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="moreObjectMobile" v-model="selectedObjMob">
+              <v-col cols="8" class="pl-0 pr-2 pb-0 mt-3">
+                <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" color="#4CAF50" class="prop-input create-prop-dropdown-icon" :items="moreObjectMobile" v-model="selectedObjMob">
                   <template v-slot:append-outer>
                     <v-tooltip top>
                       <template v-slot:activator="{ on }">
@@ -2076,26 +2105,30 @@
       <sumifToolModal/>
       <flowConditionModal/>
       <!-- Import Image Modal -->
-      <v-dialog v-model="dialogImageUpload" persistent max-width="600px">
+      <v-dialog v-model="dialogImageUpload" persistent max-width="450px">
         <v-card>
-          <v-card-title elevation="4" class="dialog_title">
-            <b>{{ textLang.modal.insert_picture }}</b>
+          <v-card-title>
+            <v-row class="insert-img-modal-row">
+              <span class="inert-img-modal-header">{{ textLang.modal.insert_picture }}</span>
+              <v-spacer></v-spacer>
+              <v-btn icon @click="dialogImageUpload = false" color="black">
+                <v-icon> mdi-close-circle</v-icon> 
+              </v-btn>
+            </v-row>
           </v-card-title>
-          <v-card-text class="pa-10">
-            <v-row justify="center" align="center">
-              <v-col cols="12" md="2" lg="2" class="excel-file-title">
-                {{ textLang.modal.image }}:
-              </v-col>
-              <v-col cols="12" md="9" lg="9">
-                <v-file-input dense outlined single-line hide-details :color="color_image" :placeholder="textLang.modal.select_picture" accept="image/*" class="file-input" id="file" v-model="uploadImage"></v-file-input>
-              </v-col>
+          <v-card-text class="pt-3">
+            <v-row justify="center" align="center" class="insert-img-modal-row">
+              <v-file-input dense outlined single-line hide-details color="#67C25D" :placeholder="textLang.modal.select_picture" truncate-length="50" accept="image/*" class="prop-input" id="file" v-model="uploadImage"></v-file-input>
             </v-row>
           </v-card-text>
-          <v-card-actions class="pt-0 pb-12">
-            <v-spacer></v-spacer>
-            <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialogImageUpload = false">{{ textLang.modal.cancel }}</v-btn>
-            <v-btn depressed large :color="color_imageUpload" class="px-7 ml-4 save-setting-btn save-modal-font-btn" @click="imageUpload()" >{{ textLang.modal.insert_picture }}</v-btn>
-            <v-spacer></v-spacer>
+          <v-card-actions class="">
+            <v-row class="insert-img-modal-row">
+              <v-spacer></v-spacer>
+              <v-col cols="auto" class="px-0 pt-0">
+                <v-btn depressed dark color="#67C25D" class="insert-img-modal-btn" @click="imageUpload()" >{{ textLang.modal.insert_picture }}</v-btn>
+              </v-col>
+              <v-spacer></v-spacer>
+            </v-row>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -2539,7 +2572,7 @@ export default {
     selectedObjectRole: "",
     allObjectRoles: [],
     deleteTempList: [],
-    document_level: [{text:'เอกสารที่ใช้ภายนอก', value: 'outer'},{text:'เอกสารที่ใช้ภายใน', value: 'inner'},{text:'เอกสารชั้นความลับ', value: 'secret'}],
+    document_level: [{text:'แบบฟอร์มที่ใช้ภายนอก', value: 'outer'},{text:'แบบฟอร์มที่ใช้ภายใน', value: 'inner'},{text:'แบบฟอร์มชั้นความลับ', value: 'secret'}],
     step_api_send: [],
     menu_date_force: false,
     roleNameList: [],
@@ -2608,7 +2641,7 @@ export default {
         complete_sequence: "ลำดับการกรอกและเซ็น",
         set_paperless: "ตั้งค่าเอกสาร Digital Workflow",
         filling_mobile: "ตั้งค่าการกรอกในมุมมองเอกสารอย่างง่าย",
-        save: "บันทึกเอกสาร",
+        save: "บันทึกแบบฟอร์ม",
         open_page: "เปิดเพื่อดูหน้ากระดาษ",
         page: "หน้า",
         add_page: "เพิ่มหน้ากระดาษ",
@@ -2627,7 +2660,7 @@ export default {
         en_data: "วันที่บังคับใช้:",
         locking_pdf: "ตั้งค่าการล็อกเอกสาร (pdf):",
         choose: "เลือก",
-        please_fill_in: "กรุณากรอกชื่อรูปแบบเอกสาร",
+        please_fill_in: "กรุณากรอกชื่อแบบฟอร์ม",
         permission_step: " (อ้างอิงลำดับที่",
         step: "ลำดับที่"
       },
@@ -2821,25 +2854,25 @@ export default {
         default_input: `ค่าเริ่มต้นจาก Object อื่น`
       },
       tips_help_message: {
-        box_displaying: "กล่องสำหรับแสดงข้อความบนเอกสาร",
-        box_filling: "กล่องสำหรับกรอกข้อมูลบนเอกสาร (หนึ่งบรรทัด) หากกำหนดการกรอกให้เป็นค่าตัวเลขเท่านั้นจะสามารถกำหนดเงื่อนไขให้กับกล่อง input box ได้ โดยเลือกเงื่อนไขที่ต้องการ และกำหนดค่าให้กับเงื่อนไขนั้นซึ่งอาจเป็นตัวเลข กล่อง input box (กำหนดได้โดยใช้ชื่อ object) หรือกล่อง calculate box (กำหนดได้โดยใช้ชื่อ object)",
-        square_box: "กล่องสี่เหลี่ยมใช้ในการสร้างรูปสี่เหลี่ยมประกอบเอกสาร",
-        box_information: "กล่องสำหรับกรอกข้อมูลบนเอกสาร (มากกว่าหนึ่งบรรทัด) และสามารถเพิ่มตัวแปรให้กับข้อความเริ่มต้นได้",
+        box_displaying: "กล่องสำหรับแสดงข้อความบนแบบฟอร์ม",
+        box_filling: "กล่องสำหรับกรอกข้อมูลบนแบบฟอร์ม (หนึ่งบรรทัด) หากกำหนดการกรอกให้เป็นค่าตัวเลขเท่านั้นจะสามารถกำหนดเงื่อนไขให้กับกล่อง input box ได้ โดยเลือกเงื่อนไขที่ต้องการ และกำหนดค่าให้กับเงื่อนไขนั้นซึ่งอาจเป็นตัวเลข กล่อง input box (กำหนดได้โดยใช้ชื่อ object) หรือกล่อง calculate box (กำหนดได้โดยใช้ชื่อ object)",
+        square_box: "กล่องสี่เหลี่ยมใช้ในการสร้างรูปสี่เหลี่ยมประกอบแบบฟอร์ม",
+        box_information: "กล่องสำหรับกรอกข้อมูลบนแบบฟอร์ม (มากกว่าหนึ่งบรรทัด) และสามารถเพิ่มตัวแปรให้กับข้อความเริ่มต้นได้",
         box_information_editor: "กล่องสำหรับกรอกข้อมูลที่ผู้ใช้งานสามารถปรับแต่งตัวอักษรเองได้",
-        box_selecting: "กล่องสำหรับเลือกข้อมูลวันที่บนเอกสาร",
-        box_for_selecting: "กล่องสำหรับเลือกข้อมูลเวลาบนเอกสาร",
+        box_selecting: "กล่องสำหรับเลือกข้อมูลวันที่บนแบบฟอร์ม",
+        box_for_selecting: "กล่องสำหรับเลือกข้อมูลเวลาบนแบบฟอร์ม",
         check_box: "กล่องทำเครื่องหมายสำหรับเลือกหรือไม่เลือกตัวเลือกนั้น ๆ ซึ่งสามารถจัดกลุ่มของตัวเลือกให้อยู่กลุ่มเดียวกันได้ โดยไปที่ \"จัดกลุ่มตัวเลือก\" แล้วใส่ชื่อของ check box ที่ต้องการให้อยู่กลุ่มเดียวกัน จากนั้นกดปุ่ม \"+\" ด้านหลังช่องกรอกเพื่อเพิ่ม check box นั้นให้อยู่กลุ่มเดียวกัน ซึ่งเมื่อจัดกลุ่มแล้วจะมีคุณสมบัติ “จำเป็นต้องกรอก” ขึ้นมาให้เลือก เพื่อเป็นการบังคับว่าต้องเลือกอย่างน้อย 1 ตัวเลือกจากตัวเลือกในกลุ่มนั้นทั้งหมด",
         pictures: "รูปภาพใช้ประกอบการสร้างเอกสาร",
         box_selecting_one: "กล่องสำหรับเลือกตัวเลือกใดตัวเลือกหนึ่งจากกลุ่มตัวเลือกที่มีหลายตัวเลือก สามารถทำให้กลุ่มตัวเลือกเปลี่ยนตามค่าที่อ้างอิงจาก input box หรือ dropdown input อื่นได้ โดยไปใส่ชื่อ object ที่ต้องการอ้างอิงที่ \"การอ้างอิงกลุ่มตัวเลือก\" แล้วกดปุ่ม \"สร้าง/แก้ไข\" ที่กลุ่มตัวเลือก จากนั้นตั้งชื่อกลุ่มตัวเลือกให้ตรงกับค่าที่จะอ้างอิงจาก input box หรือ dropdown input แล้วใส่ตัวเลือกตามที่ต้องการลงในกลุ่มตัวเลือกนั้น ๆ",
         automatic: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กล่องแสดงข้อมูลอัตโนมัติโดยมีการเชื่อมข้อมูลจากข้อมูลที่ได้เลือกไว้ <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; หากเลือกข้อมูลเป็น \"เงื่อนไข(ระบุ)\" จะเป็นการนำค่าผลลัพธ์มาแสดงตามเงื่อนไขที่กำหนด โดยมีรูปแบบการเขียนเงื่อนไขคือ cond (\"เงื่อนไข\"?show=\"ผลลัพธ์กรณีเป็นจริง\":show=\"ผลลัพธ์กรณีเป็นเท็จ\") หรือเปลี่ยนจาก show=\"ผลลัพธ์\" เป็น hide เพื่อซ่อนกล่อง input box auto ตามเงื่อนไขที่กำหนด และสามารถมีเงื่อนไขซ้อนได้มากกว่าหนึ่งเงื่อนไข เช่น cond(\"เงื่อนไข1\"?show=\"ผลลัพธ์กรณีเป็นจริง1\":\"เงื่อนไข2\"?show=\"ผลลัพธ์กรณีเป็นจริง2\":show=\"ผลลัพธ์กรณีเป็นเท็จ\") ดังตัวอย่างต่อไปนี้ cond($dropdownbox0==\"ใช่\"?show=\"Yes\": $dropdownbox0 == \"ไม่\"?show=\"No\": show=\"Else\") ซึ่งมีเครื่องหมายที่ใช้ในการเปรียบเทียบเงื่อนไขดังนี้ ==(เท่ากับ), !=(ไม่เท่ากับ), >=(มากกว่าเท่ากับ), <=(น้อยกว่าเท่ากับ), >(มากกว่า), <(น้อยกว่า) ส่วนข้อความที่จะนำมาเปรียบเทียบต้องอยู่ภายในเครื่องหมาย (\") หรือ (') และผลลัพธ์ที่จะแสดงต้องนำหน้าด้วย \"show=\" และอยู่ภายในเครื่องหมาย (\") หรือ (') เช่นกัน ซึ่งสามารถใช้ได้กับ input box, dropdown box, calculate box, input box auto และ check box (ข้อความที่จะนำมาเปรียบเทียบของ check box เมื่อมีการทำเครื่องหมายจะเป็น true หากไม่มีการทำเครื่องหมายจะเป็น false และไม่ต้องอยู่ภายในเครื่องหมาย (\") หรือ (')) โดยใส่เครื่องหมาย $ นำหน้าชื่อ Object ที่ต้องการอ้างอิงถึง",
-        box_show: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กล่องแสดงข้อมูลที่ได้จากการนำค่าในกล่อง input box, calculate box, date picker, time picker หรือค่าตัวเลขมาคำนวณตามที่ได้กำหนดไว้ในฟังก์ชัน โดยสามารถใส่การคำนวณไว้ข้างใน calc (...) พร้อมกับการใช้เครื่องหมาย +, -, *, /,( ),% ซึ่งสามารถกำหนดจำนวนตำแหน่งทศนิยมของผลลัพธ์ได้ และหากต้องการนำค่าในกล่อง input box หรือ calculate box มาคำนวณ ให้ใส่เครื่องหมาย $ หน้าชื่อ input box หรือ calculate box นั้น ตัวอย่างเช่น calc(($calculatebox1*2)+ $inputbox2) <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;นอกจากนั้นยังสามารถคำนวณค่าฟังก์ชันอื่นๆได้ดังต่อไปนี้ <br><ul><li>Modulate(%): การหารเพื่อเก็บเศษตัวอย่างเช่น calc(15%10) ผลลัพธ์คือ 5</li><li>ค่าเฉลี่ย: avg(inputbox1,inputbox2,...)</li><li>ค่าน้อยสุด: min(inputbox1,inputbox2,...)</li><li>ค่ามากสุด: max(inputbox1,inputbox2,...)</li><li>ผลต่างจำนวนเดือน: diffMon(datepickerbox1, datepickerbox2)</li><li>ผลต่างวันที่: diffDate(datepickerbox1, datepickerbox2)</li><li>ผลต่างเวลา: diffTime(timebox1,timebox2)</li><li>ระยะเวลาระหว่างวันที่(วัน): lenDate(datepickerbox1, datepickerbox2)</li><li>ผลต่างเวลา: diffTime(timebox1,timebox2)</li><li>ผลต่างเวลา(เอาเฉพาะค่าชั่วโมง): diffTimeHr(timebox1, timebox2)</li><li>ผลต่างเวลา(เอาเฉพาะค่านาที): diffTimeMn(timebox1, timebox2)</li><li>ผลรวมทุกค่าในคอมลัมน์ของตาราง Data Table: sum(datatable1_RXC1)</li><li>ผลรวมค่าในคอมลัมน์ของตาราง Data Table ตามเงื่อนไข: sumif(datatable1_RXC1: เงื่อนไข)</li></ul>",
+        box_show: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กล่องแสดงข้อมูลที่ได้จากการนำค่าในกล่อง input box, calculate box, date picker, time picker หรือค่าตัวเลขมาคำนวณตามที่ได้กำหนดไว้ในฟังก์ชัน โดยสามารถใส่การคำนวณไว้ข้างใน calc (...) พร้อมกับการใช้เครื่องหมาย +, -, *, /,( ),% ซึ่งสามารถกำหนดจำนวนตำแหน่งทศนิยมของผลลัพธ์ได้ และหากต้องการนำค่าในกล่อง input box หรือ calculate box มาคำนวณ ให้ใส่เครื่องหมาย $ หน้าชื่อ input box หรือ calculate box นั้น ตัวอย่างเช่น calc(($calculatebox1*2)+ $inputbox2) <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;นอกจากนั้นยังสามารถคำนวณค่าฟังก์ชันอื่นๆได้ดังต่อไปนี้ <br><ul><li>Modulate(%): การหารเพื่อเก็บเศษตัวอย่างเช่น calc(15%10) ผลลัพธ์คือ 5</li><li>ค่าเฉลี่ย: avg(inputbox1,inputbox2,...)</li><li>ค่าน้อยสุด: min(inputbox1,inputbox2,...)</li><li>ค่ามากสุด: max(inputbox1,inputbox2,...)</li><li>ผลต่างจำนวนเดือน: diffMon(datepickerbox1, datepickerbox2)</li><li>ผลต่างวันที่: diffDate(datepickerbox1, datepickerbox2)</li><li>ระยะเวลาระหว่างวันที่(วัน): lenDate(datepickerbox1, datepickerbox2)</li><li>ผลต่างเวลา: diffTime(timebox1,timebox2)</li><li>ผลต่างเวลา(เอาเฉพาะค่าชั่วโมง): diffTimeHr(timebox1, timebox2)</li><li>ผลต่างเวลา(เอาเฉพาะค่านาที): diffTimeMn(timebox1, timebox2)</li><li>ผลรวมทุกค่าในคอมลัมน์ของตาราง Data Table: sum(datatable1_RXC1)</li><li>ผลรวมค่าในคอมลัมน์ของตาราง Data Table ตามเงื่อนไข: sumif(datatable1_RXC1: เงื่อนไข)</li></ul>",
         box_show_thai: "กล่องแสดงคำอ่านของค่าตัวเลขจากกล่อง input box (ต้องกำหนดค่าเป็นตัวเลขเท่านั้นไว้ด้วย) หรือ calculate box ตามที่ได้เลือกการเชื่อมข้อมูลไว้",
-        scope_box: "กล่องขอบเขตสำหรับการกำหนดสิทธิ์การกรอกเอกสาร โดย Object ภายในขอบเขตจะถูกกำหนดสิทธิ์การกรอกเอกสารตามสิทธิ์ที่กำหนดไว้ของขอบเขต ยกเว้น Object ที่มีการกำหนดสิทธิ์อยู่แล้ว หากกล่องขอบเขตใดอยู่คนละพื้นที่กันและต้องการให้มีสิทธิ์การกรอกอันเดียวกัน (อยู่ลำดับการกรอกเดียวกัน) ให้ไปตั้งค่าที่ \"ขอบเขตต่อเนื่อง\" แล้วเลือกกล่องขอบเขตที่เป็นสิทธิ์การกรอกอันเดียวกัน",
+        scope_box: "กล่องขอบเขตสำหรับการกำหนดสิทธิ์การกรอกแบบฟอร์ม โดย Object ภายในขอบเขตจะถูกกำหนดสิทธิ์การกรอกแบบฟอร์มตามสิทธิ์ที่กำหนดไว้ของขอบเขต ยกเว้น Object ที่มีการกำหนดสิทธิ์อยู่แล้ว หากกล่องขอบเขตใดอยู่คนละพื้นที่กันและต้องการให้มีสิทธิ์การกรอกอันเดียวกัน (อยู่ลำดับการกรอกเดียวกัน) ให้ไปตั้งค่าที่ \"ขอบเขตต่อเนื่อง\" แล้วเลือกกล่องขอบเขตที่เป็นสิทธิ์การกรอกอันเดียวกัน",
         displaying: "ตารางสำหรับแสดงข้อมูลต่าง ๆ ที่สามารถเชื่อมโยงข้อมูลภายในแถวเดียวกันได้เพื่อดึงข้อมูลมาใส่เมื่อเซลล์มีค่าตรงกับข้อมูลที่ได้กำหนดไว้ โดยกดที่ปุ่ม \"ตั้งค่าการเชื่อมโยงของตาราง\" ซึ่งจะทำให้ภายในเซลล์ทุกเซลล์ของตารางกลายเป็น Dropdown Input สำหรับเลือกข้อมูลตามที่ได้กำหนดไว้",
-        consists: "ตารางประกอบการสร้างเอกสารที่สามารถตั้งค่าความกว้างของคอลัมน์ และความสูงของแถวได้ โดยสามารถตั้งค่าทุกคอลัมน์หรือทุกแถวในครั้งเดียว หรือจะตั้งค่าแยกเฉพาะคอมลัมน์หรือแถวนั้น ๆ",
-        straight: "เส้นตรงประกอบการสร้างเอกสารที่สามารถปรับเป็นแนวตั้งหรือแนวนอนได้ และสามารถเปลี่ยนรูปแบบเป็นเส้นตรง, เส้นประ หรือเส้นจุดไข่ปลาได้",
-        area_displaying: "พื้นที่สำหรับแสดงลายเซ็นจาก Paperless",
-        picture_box: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กล่องรูปภาพที่สามารถเลือกได้ว่าจะให้เป็นรูปภาพประกอบเอกสารหรือพื้นที่สำหรับแทรกรูปภาพในเอกสารเมื่อกดใช้งาน<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;หากต้องการให้เป็นรูปภาพประกอบเอกสารให้ใส่รูปภาพลงไปในกล่อง image box ซึ่งสามารถเลือกได้ว่าจะใส่รูปภาพโดยการใส่ลิงค์รูปภาพหรือไฟล์รูปภาพจากในเครื่องคอมพิวเตอร์ (กดที่กล่อง image box เพื่อเลือกไฟล์รูปภาพ) ซึ่งขนาดของรูปภาพจะเป็นไปตามขนาดของกล่อง image box ที่ได้กำหนดไว้<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;หากต้องการให้เป็นพื้นที่สำหรับแทรกรูปภาพในเอกสารเมื่อกดใช้งาน ไม่ต้องใส่รูปภาพลงไปในกล่อง image box ให้กำหนดแค่ขนาดกล่องตามที่ต้องการ ซึ่งขนาดของรูปภาพจะอ้างอิงตามขนาดของกรอบด้านที่สั้นที่สุดตามที่ได้กำหนดไว้ นั่นคือหากด้านกว้างสั้นกว่าด้านยาว รูปภาพจะมีความกว้างเท่ากับกรอบที่ได้กำหนด ส่วนด้านยาวจะถูกปรับให้มีขนาดที่เหมาะสมโดยอัตโนมัติ"
+        consists: "ตารางประกอบการสร้างแบบฟอร์มที่สามารถตั้งค่าความกว้างของคอลัมน์ และความสูงของแถวได้ โดยสามารถตั้งค่าทุกคอลัมน์หรือทุกแถวในครั้งเดียว หรือจะตั้งค่าแยกเฉพาะคอมลัมน์หรือแถวนั้น ๆ",
+        straight: "เส้นตรงประกอบการสร้างแบบฟอร์มที่สามารถปรับเป็นแนวตั้งหรือแนวนอนได้ และสามารถเปลี่ยนรูปแบบเป็นเส้นตรง, เส้นประ หรือเส้นจุดไข่ปลาได้",
+        area_displaying: "พื้นที่สำหรับแสดงลายเซ็น",
+        picture_box: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กล่องรูปภาพที่สามารถเลือกได้ว่าจะให้เป็นรูปภาพประกอบแบบฟอร์มหรือพื้นที่สำหรับแทรกรูปภาพในแบบฟอร์มเมื่อกดใช้งาน<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;หากต้องการให้เป็นรูปภาพประกอบแบบฟอร์มให้ใส่รูปภาพลงไปในกล่อง image box ซึ่งสามารถเลือกได้ว่าจะใส่รูปภาพโดยการใส่ลิงค์รูปภาพหรือไฟล์รูปภาพจากในเครื่องคอมพิวเตอร์ (กดที่กล่อง image box เพื่อเลือกไฟล์รูปภาพ) ซึ่งขนาดของรูปภาพจะเป็นไปตามขนาดของกล่อง image box ที่ได้กำหนดไว้<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;หากต้องการให้เป็นพื้นที่สำหรับแทรกรูปภาพในแบบฟอร์มเมื่อกดใช้งาน ไม่ต้องใส่รูปภาพลงไปในกล่อง image box ให้กำหนดแค่ขนาดกล่องตามที่ต้องการ ซึ่งขนาดของรูปภาพจะอ้างอิงตามขนาดของกรอบด้านที่สั้นที่สุดตามที่ได้กำหนดไว้ นั่นคือหากด้านกว้างสั้นกว่าด้านยาว รูปภาพจะมีความกว้างเท่ากับกรอบที่ได้กำหนด ส่วนด้านยาวจะถูกปรับให้มีขนาดที่เหมาะสมโดยอัตโนมัติ"
       },
       order_fill: {
         order_of: "ลำดับการกรอกและเซ็นเอกสาร",
@@ -2871,7 +2904,7 @@ export default {
         ppl_subject: "เรื่อง",
         subject_placeholder: "<ไม่มีหัวเรื่อง>",
         ppl_message: "ข้อความ", 
-        setting: "ตั้งค่าเริ่มต้นเอกสาร Digital Workflow",
+        setting: "ตั้งค่าเริ่มต้นแบบฟอร์ม Digital Workflow",
         doc_paperless: "ประเภทเอกสาร paperless",
         foermat_paperless: "รูปแบบ Workflow",
         note: "หมายเหตุ",
@@ -2879,13 +2912,13 @@ export default {
         set_auto_flow_btn: "ตั้งค่าประเภทและรูปแบบเอกสาร Paperless"
       },
       filling_mobile: {
-        title: "ตั้งค่าการกรอกเอกสารในมุมมองเอกสารอย่างง่าย",
+        title: "ตั้งค่าการกรอกในมุมมองแบบฟอร์มอย่างง่าย",
         sub_title: "กำหนดคำถามสำหรับแต่ละ Object",
-        define_question_detail: "ทำเครื่องหมายหน้าชื่อ object เพื่อเลือกให้ object นั้นไปแสดงในมุมมองเอกสารอย่างง่ายพร้อมกับคำถาม",
-        not_show_all_mobile: "ไม่แสดงทุก object ในมุมมองเอกสารอย่างง่าย",
-        show_all_mobile: "แสดงทุก object ในมุมมองเอกสารอย่างง่าย",
+        define_question_detail: "ทำเครื่องหมายหน้าชื่อ object เพื่อเลือกให้ object นั้นไปแสดงในมุมมองแบบฟอร์มอย่างง่ายพร้อมกับคำถาม",
+        not_show_all_mobile: "ไม่แสดงทุก object ในมุมมองแบบฟอร์มอย่างง่าย",
+        show_all_mobile: "แสดงทุก object ในมุมมองแบบฟอร์มอย่างง่าย",
         question: "คำถาม",
-        add_obj_title: "สร้าง Object ในมุมมองเอกสารอย่างง่ายเพิ่มเติม",
+        add_obj_title: "สร้าง Object ในมุมมองแบบฟอร์มอย่างง่ายเพิ่มเติม",
         add_obj_hover: "สร้าง Object"
       },
       modal:{
@@ -2908,8 +2941,8 @@ export default {
         change_name: "\" ซ้ำ กรุณาเปลี่ยนชื่อ Object",
         duplicate: "ลำดับการกรอกซ้ำ",
         section_boxes: "Section Box ซ้อนทับกัน กรุณาจัดวาง Section Box ใหม่",
-        save_complete: "บันทึกรูปแบบเอกสารสำเร็จ",
-        fail_save: "บันทึกรูปแบบเอกสารไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
+        save_complete: "บันทึกแบบฟอร์มสำเร็จ",
+        fail_save: "บันทึกแบบฟอร์มล้มเหลว กรุณาลองใหม่ในภายหลัง",
         create_eform: "สร้างรูปแบบเอกสาร"
       },
       dropdown:{
@@ -3096,7 +3129,7 @@ export default {
     template_name(val) {
       if(val == '') {
         this.name_template_error = true
-        this.error_file_name_msg = this.textLang.set_format_form.please_fill_in
+        this.error_file_name_msg = 'กรุณากรอกชื่อแบบฟอร์ม'
       } else {
         this.name_template_error = false
         this.error_file_name_msg = ''
@@ -7173,18 +7206,20 @@ export default {
             if(this.res_saveArray[i].object_name == this.res_saveArray[j].object_name) {
               // this.res_saveArray[j].object_name = this.res_saveArray[j].object_name + "_" + this.res_saveArray[j].page
               this.$swal({
-                type: 'error',
-                html: '<span class="alert-error"><b>'+ this.textLang.alert.name_object + this.res_saveArray[j].object_name + this.textLang.alert.change_name +'</b></span>',
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                text: this.textLang.alert.name_object + this.res_saveArray[j].object_name + this.textLang.alert.change_name,
                 showCloseButton: true,
                 showConfirmButton: false,
-                background: 'white',
-                customClass:{
-                  popup: 'border-error'
-                },
-                position: 'top',
-                timer: 3000,
-                backdrop: false,
-                closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
               $('#' + this.res_saveArray[i].name_input).css("outline-color", "red")
               $('#' + this.res_saveArray[i].name_input).css("outline-style", "solid")
@@ -7223,34 +7258,38 @@ export default {
           this.save()
         } else {
           this.$swal({
-            type: 'error',
-            html: '<span class="alert-error"><b>'+ this.textLang.alert.duplicate +'</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+            text: this.textLang.alert.duplicate,
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
-            customClass:{
-              popup: 'border-error'
-            },
-            position: 'top',
-            timer: 3000,
-            backdrop: false,
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
-          }) 
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
+          })
         }
       } else {
         this.$swal({
-          type: 'error',
-          html: '<span class="alert-error"><b>'+ this.textLang.alert.section_boxes +'</b></span>',
+          backdrop: false,
+          position: 'bottom-end',
+          width: '330px',
+          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+          text: this.textLang.alert.section_boxes,
           showCloseButton: true,
           showConfirmButton: false,
-          background: 'white',
-          customClass:{
-            popup: 'border-error'
-          },
-          position: 'top',
-          timer: 3000,
-          backdrop: false,
-          closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+          timer: 5000,
+          customClass: {
+            popup: 'alert-card',
+            title: 'alert-title-block',
+            closeButton: 'close-alert-btn',
+            htmlContainer: 'alert-text-block'
+          }
         })
       }
     },
@@ -7439,36 +7478,40 @@ export default {
           }
         } else{
           this.$swal({
-            type: 'error',
-            html: '<span class="alert-error"><b>กรุณาเลือก Worflow ของเอกสาร</b></span>',
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+            text: 'กรุณาเลือก Worflow ของแบบฟอร์ม',
             showCloseButton: true,
             showConfirmButton: false,
-            background: 'white',
-            customClass:{
-              popup: 'border-error'
-            },
-            position: 'top',
-            timer: 3000,
-            backdrop: false,
-            closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
           })
         }
       } else {
         this.name_template_error = true
-        this.error_file_name_msg = this.textLang.set_format_form.please_fill_in
+        this.error_file_name_msg = 'กรุณากรอกชื่อแบบฟอร์ม'
         this.$swal({
-          type: 'error',
-          html: '<span class="alert-error"><b>'+ this.textLang.set_format_form.please_fill_in +'</b></span>',
+          backdrop: false,
+          position: 'bottom-end',
+          width: '330px',
+          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+          text: this.textLang.set_format_form.please_fill_in,
           showCloseButton: true,
           showConfirmButton: false,
-          background: 'white',
-          customClass:{
-            popup: 'border-error'
-          },
-          position: 'top',
-          timer: 3000,
-          backdrop: false,
-          closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+          timer: 5000,
+          customClass: {
+            popup: 'alert-card',
+            title: 'alert-title-block',
+            closeButton: 'close-alert-btn',
+            htmlContainer: 'alert-text-block'
+          }
         })
       }
     },
@@ -7986,34 +8029,38 @@ export default {
                 //   this.objectArray[e] = []
                 // })
                 this.$swal({
-                  type: 'success',
-                  html: '<span class="alert"><b>'+ this.textLang.alert.save_complete +'</b></span>',
+                  backdrop: false,
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                  text: this.textLang.alert.save_complete,
                   showCloseButton: true,
                   showConfirmButton: false,
-                  background: 'white',
+                  timer: 5000,
                   customClass: {
-                    popup: 'border-success'
-                  },
-                  position: 'top',
-                  timer: 3000,
-                  backdrop: false,
-                  closeButtonHtml: '<span class="close-alert">&times;</span>'
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
                 this.$router.push({ 'path': '/template'})
               } else {
                 this.$swal({
-                  type: 'error',
-                  html: '<span class="alert-error"><b>'+ this.textLang.alert.fail_save +'</b></span>',
+                  backdrop: false,
+                  position: 'bottom-end',
+                  width: '330px',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                  text: this.textLang.alert.fail_save,
                   showCloseButton: true,
                   showConfirmButton: false,
-                  background: 'white',
-                  customClass:{
-                    popup: 'border-error'
-                  },
-                  position: 'top',
-                  timer: 3000,
-                  backdrop: false,
-                  closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+                  timer: 5000,
+                  customClass: {
+                    popup: 'alert-card',
+                    title: 'alert-title-block',
+                    closeButton: 'close-alert-btn',
+                    htmlContainer: 'alert-text-block'
+                  }
                 })
               }
         } catch (error) {
@@ -8077,34 +8124,38 @@ export default {
               //   this.objectArray[e] = []
               // })
               this.$swal({
-                type: 'success',
-                html: '<span class="alert"><b></b>'+ this.textLang.alert.save_complete +'</b></span>',
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                text: this.textLang.alert.save_complete,
                 showCloseButton: true,
                 showConfirmButton: false,
-                background: 'white',
+                timer: 5000,
                 customClass: {
-                  popup: 'border-success'
-                },
-                position: 'top',
-                timer: 3000,
-                backdrop: false,
-                closeButtonHtml: '<span class="close-alert">&times;</span>'
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
               this.$router.push({ 'path': '/template'})
             } else {
               this.$swal({
-                type: 'error',
-                html: '<span class="alert-error"><b>'+ this.textLang.alert.fail_save +'</b></span>',
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                text: this.textLang.alert.fail_save,
                 showCloseButton: true,
                 showConfirmButton: false,
-                background: 'white',
-                customClass:{
-                  popup: 'border-error'
-                },
-                position: 'top',
-                timer: 3000,
-                backdrop: false,
-                closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
               })
             }
         } catch (error) {
@@ -8732,15 +8783,15 @@ export default {
   display: inline-block;
   white-space: pre-line;
   height: auto !important;
-  width: 85%;
+  /* width: 85%; */
   padding-top: 5px !important;
   padding-bottom: 5px !important;
 }
 
 .question-card {
-  margin-left: 7%;
-  margin-right: 7%;
-  border-color: #1b9900 !important;
+  /* margin-left: 7%;
+  margin-right: 7%; */
+  border-color: #4CAF50 !important;
 }
 
 /* .create-page {
@@ -8754,7 +8805,7 @@ export default {
 
 .name-page {
   font-family: 'Sarabun', sans-serif;
-  width: 13%;
+  width: 15%;
 }
 
 .create-menu {
@@ -8764,6 +8815,12 @@ export default {
 .create-each-menu {
   font-family: 'Sarabun', sans-serif;
   font-size: 16px;
+  text-transform: capitalize;
+}
+
+.create-short-form-menu {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 15px;
   text-transform: capitalize;
 }
 
@@ -8882,14 +8939,15 @@ export default {
 .sub-title-property {
   font-family: 'Sarabun', sans-serif;
   font-size: 14px;
-  color: #1b9900;
+  color: #4CAF50;
   margin-left: 7%;
   display: inline-block;
 }
 
 .row-prop {
   width: 100%;
-  margin-left: 0%;
+  /* margin-left: 0%; */
+  margin: 0%;
   padding-left: 3%;
 }
 
@@ -8906,7 +8964,29 @@ export default {
 
 .prop-input {
   font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
+}
+
+.create-prop-line-height.v-text-field input {
+  line-height: 24px !important;
+}
+
+.create-prop-dropdown-icon .theme--light.v-icon {
+  color: rgba(0, 0, 0, 0.54) !important;
+}
+
+.group-form-box.v-text-field.v-text-field--enclosed:not(.v-text-field--rounded) > .v-input__control > .v-input__slot {
+  padding-left: 1% !important;
+  padding-right: 0% !important;
+}
+
+.group-form-box .v-select__selections {
+  line-height: 24px !important;
+}
+
+.form-force-date-box.v-text-field.v-text-field--enclosed:not(.v-text-field--rounded) > .v-input__control > .v-input__slot {
+  padding-left: 3% !important;
+  padding-right: 0% !important;
 }
 
 .level-doc-box .v-select__selection {
@@ -8914,8 +8994,8 @@ export default {
 }
 
 .divider-prop {
-  margin-left: 7%;
-  margin-right: 7%;
+  margin-left: 6%;
+  margin-right: 3%;
 }
 
 .template-type-block {
@@ -8950,6 +9030,20 @@ export default {
   margin-left: 4%;
 }
 
+.check-paper-grid-block {
+  padding-left: 4% !important;
+}
+
+.grid-size-box.v-text-field.v-text-field--enclosed:not(.v-text-field--rounded) > .v-input__control > .v-input__slot {
+  padding-left: 2% !important;
+  padding-right: 4% !important;
+}
+
+.form-permission-box.v-text-field.v-text-field--enclosed:not(.v-text-field--rounded) > .v-input__control > .v-input__slot {
+  padding-left: 2% !important;
+  padding-right: 0% !important;
+}
+
 .next-temp-box.v-text-field--outlined > .v-input__control > .v-input__slot {
   height: unset !important;
 }
@@ -8977,7 +9071,7 @@ export default {
 .section-object-header {
   font-family: 'Sarabun', sans-serif;
   font-size: 14px;
-  color: #1b9900;
+  color: #4CAF50;
   padding-left: 3%;
   padding-bottom: 4%;
   padding-top: 8%;
@@ -8986,29 +9080,37 @@ export default {
 .object-type-header {
   font-family: 'Sarabun', sans-serif;
   font-size: 14px;
-  color: #1b9900;
+  color: #4CAF50;
   padding-left: 3%;
   padding-bottom: 4%;
   padding-top: 13%;
 }
 
 .line-expan-object {
-  border: solid 1px #1b9900;
+  border: solid 1px #4CAF50;
   margin-right: 6%;
   margin-left: 3%;
 }
 
+.obj-expand-content .v-expansion-panel-content__wrap {
+  padding-left: 0% !important;
+  padding-right: 6% !important;
+}
+
 .obj-group {
+  width: 100%;
+  margin: 0%;
   margin-top: 3%;
 }
 
 .img-of-obj {
   width: 100%;
-  padding-left: 7%;
+  /* padding-left: 7%; */
 }
 
 .img-of-obj:hover {
   opacity: 0.7;
+  cursor: pointer;
 }
 
 .line-block {
@@ -9017,9 +9119,13 @@ export default {
 }
 
 .line-block-row {
+  width: 100%;
   height: 100%;
-  padding-left: 35%;
-  padding-right: 35%;
+  margin: 0%;
+}
+
+.line-block-row:hover{
+  cursor: pointer;
 }
 
 .block-to-line {
@@ -9034,26 +9140,29 @@ export default {
   position: relative;
 }
 
-.img-object-justify-center {
-  position: absolute;
-  top: 33%;
-  left: 0%;
-}
-
 .object-image {
   border-radius: 8px;
-  padding-left: 0% !important;
   width: 70% !important;
-  margin-left: 22%;
+  margin-left: 17%;
+}
+
+.object-image:hover {
+  opacity: 0.7;
+  cursor: pointer;
 }
 
 .object-sign-img {
-  max-width: 70px;
+  width: 75%;
+}
+
+.object-sign-img:hover {
+  opacity: 0.7;
+  cursor: pointer;
 }
 
 .arrange-obj-btn:hover {
-  color: #1b9900;
-  border-color: #1b9900;
+  color: #4CAF50;
+  border-color: #4CAF50;
 }
 
 .divider-obj {
@@ -9084,7 +9193,7 @@ export default {
 .row-table-prop {
   width: 100%;
   margin-top: 3%;
-  margin-left: 0%;
+  margin: 0%;
 }
 
 .table-prop {
@@ -9096,6 +9205,8 @@ export default {
   font-size: 14px !important;
   color: black !important;
   padding-left: 8% !important;
+  padding-right: 0% !important;
+  width: 40%;
 }
 
 .property-header {
@@ -9110,7 +9221,7 @@ export default {
 
 .font-in-property {
   font-family: 'Sarabun', sans-serif;
-  font-size: 14px !important;
+  font-size: 13px !important;
 }
 
 .property-title {
@@ -9153,31 +9264,45 @@ export default {
   width: 95%;
 }
 
+.align-prop-block {
+  display: block !important;
+}
+
 .object-line-type-block {
   margin-top: 1% !important;
   margin-bottom: 2%;
 }
 
 .line-style-active {
-  border-bottom: 3px solid #1b9900 !important;
+  border-bottom: 3px solid #4CAF50 !important;
 }
 
 .solid-line-property2 {
-  width: 40px;
+  width: 30px;
   transform: rotate(-50deg);
   border-top: 1px solid black;
 }
 
 .dashed-line-property2 {
-  width: 40px;
+  width: 30px;
   transform: rotate(-50deg);
   border-top: 2px dashed black;
 }
 
 .dotted-line-property2 {
-  width: 40px;
+  width: 30px;
   transform: rotate(-50deg);
   border-top: 4px dotted black;
+}
+
+.date-default-prop .v-select__selection--comma {
+  white-space: normal !important;
+}
+
+.v-textarea.v-text-field--enclosed.calc-function-prop-create .v-text-field__slot textarea {
+  margin-top: 0px;
+  padding-right: 0%;
+  line-height: 23px;
 }
 
 .v-text-field--outlined.textarea-prop-auto-row > .v-input__control > .v-input__slot {
@@ -9188,9 +9313,14 @@ export default {
   height: 75px !important;
 }
 
+.set-hiding-obj-btn {
+  display: inline-block;
+  white-space: pre-line;
+  height: auto !important;
+}
+
 .v-input.condition-title-label .v-label {
   line-height: 30px;
-  left: 13px !important;
   height: 30px;
   top: 6px !important;
 }
@@ -9223,18 +9353,13 @@ export default {
 
 .delete-object-row {
   width: 100%;
-  margin-left: 0%;
+  margin: 0%;
 }
 
 .delete-object-btn {
   font-family: 'Sarabun', sans-serif;
   font-size: 14px;
   text-transform: capitalize;
-}
-
-.v-input.step-see-label .v-label {
-  left: 12px !important;
-  font-family: "Sarabun", sans-serif;
 }
 
 .step-see-height-box.v-text-field--outlined > .v-input__control > .v-input__slot {
@@ -9367,28 +9492,23 @@ export default {
   opacity: 0.7;
 }
 
-.line-block {
-  padding: 0%;
-  text-align: center;
-}
-
-.line-block-row {
-  height: 100%;
-  padding-left: 35%;
-  padding-right: 35%;
-}
-
-.block-to-line {
-  height: 100%;
-}
-
-.obj-line {
-  border-right: 2px solid black;
-}
-
 .radio-img {
   height: 24px;
   width: 80px;
+}
+
+.insert-img-modal-row {
+  width: 100%;
+  margin: 0%;
+}
+
+.inert-img-modal-header {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 16px;
+}
+
+.insert-img-modal-btn {
+  font-family: 'Sarabun', sans-serif;
 }
 
 .image-block {
@@ -9489,8 +9609,8 @@ export default {
 }
 
 .property-row {
-  padding-left: 6%;
   width: 100%;
+  margin: 0%;
 }
 
 .header-tab {
@@ -9534,11 +9654,6 @@ export default {
 .form-code-input {
   font-family: 'Sarabun', sans-serif;
   font-size: 14px;
-}
-
-.v-text-field.pad-input input {
-  padding-left: 2%;
-  padding-right: 2%;
 }
 
 .version-title-block {
@@ -10151,14 +10266,6 @@ export default {
   font-family: "Sarabun", sans-serif;
 }
 
-.input-px .v-text-field__suffix {
-  margin-right: 6%;
-}
-
-.v-text-field.input-number-px input{
-  padding-left: 6%;
-} 
-
 .setting-hiding{
   text-transform: capitalize;
 }
@@ -10178,34 +10285,38 @@ export default {
   font-family: "Sarabun", sans-serif;
   font-size: 12px !important;
   display: -webkit-inline-box;
-  width: 88%;
+  width: 100%;
   white-space: normal;
-  margin-left: 4%;
+  /* margin-left: 4%; */
   text-align: center;
   text-transform: capitalize;
-  height: 40px !important;
+  height: auto !important;
+}
+
+.v-textarea.v-text-field--enclosed.question-form-box .v-text-field__slot textarea {
+  line-height: 23px;
 }
 
 .icon-eye-inputbox{
-  position: absolute;
+  position: absolute !important;
   left: 0%;
   top: -65%;
 }
 
 .icon-eye-textareabox{
-  position: absolute;
+  position: absolute !important;
   left: 0%;
   top: -25%;
 }
 
 .icon-eye-checkbox{
-  position: absolute;
+  position: absolute !important;
   left: 0%;
   top: -20px;
 }
 
 .icon-eye-autofillbox{
-  position: absolute;
+  position: absolute !important;
   left: 0%;
   top: -60%;
 }
@@ -10215,13 +10326,12 @@ export default {
 }
 
 .icon-eye-datatable{
-  position: absolute;
+  position: absolute !important;
   right: 0%;
 }
 
 .validate-doc-btn {
   font-family: "Sarabun", sans-serif;
-  color: #1b9900 !important;
   text-transform: capitalize;
 }
 
@@ -10229,14 +10339,6 @@ export default {
   font-family: "Sarabun", sans-serif;
   color: black;
   font-size: 14px;
-}
-
-.v-input.question-label .v-label {
-  left: 12px !important;
-  font-family: "Sarabun", sans-serif;
-  top: 9px !important;
-  /* height: 29px;
-  color: #1b9900; */
 }
 
 /*======== style from old file >> Create_Template(old version) ========*/
@@ -10289,25 +10391,6 @@ export default {
 
 .obj-img:hover {
   opacity: 0.7;
-}
-
-.line-block {
-  padding: 0%;
-  text-align: center;
-}
-
-.line-block-row {
-  height: 100%;
-  padding-left: 35%;
-  padding-right: 35%;
-}
-
-.block-to-line {
-  height: 100%;
-}
-
-.obj-line {
-  border-right: 2px solid black;
 }
 
 .radio-img {
@@ -10411,11 +10494,6 @@ export default {
   font-size: 14px;
 }
 
-.property-row {
-  padding-left: 6%;
-  width: 100%;
-}
-
 .header-tab {
   font-family: 'Sarabun', sans-serif;
   color: #757575 !important;
@@ -10457,11 +10535,6 @@ export default {
 .form-code-input {
   font-family: 'Sarabun', sans-serif;
   font-size: 14px;
-}
-
-.v-text-field.pad-input input {
-  padding-left: 2%;
-  padding-right: 2%;
 }
 
 .version-title-block {
@@ -10514,17 +10587,6 @@ export default {
 
 .paper-grid-block {
   padding: 0px;
-}
-
-.template-status-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
-}
-
-.template-status {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-  color: black;
 }
 
 .tempalte-type-title {
@@ -10608,11 +10670,6 @@ export default {
   font-family: 'Sarabun', sans-serif;
   font-size: 14px;
   color: gray;
-}
-
-.table-property-row {
-  width: 100%;
-  margin-left: 0%;
 }
 
 .table-property {

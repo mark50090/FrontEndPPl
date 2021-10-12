@@ -20,9 +20,9 @@
             <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pb-0 px-0">
                   <v-btn color="#67C25D" dark depressed class="front-btn-templateform" @click="createTemplate()"><v-icon left>mdi-plus</v-icon>สร้างแบบฟอร์ม</v-btn>
             </v-col>
-            <!-- <v-col cols="6" md="auto" lg="auto" class="pb-0 pl-2 pr-0">
-                  <v-btn color="#67C25D" dark outlined class="front-btn-templateform"><v-icon left>mdi-inbox-arrow-down-outline</v-icon>นำเข้าแบบฟอร์ม</v-btn>
-            </v-col> -->
+            <v-col cols="6" md="auto" lg="auto" class="pb-0 pl-2 pr-0">
+                  <v-btn color="#67C25D" dark outlined class="front-btn-templateform" @click="ImportForm() "><v-icon left>mdi-inbox-arrow-down-outline</v-icon>นำเข้าแบบฟอร์ม</v-btn>
+            </v-col>
           </v-row>
           <v-row class="table-top-spacer templateform-row">
             <v-data-table fixed-header :loading="false" :headers="templateform_table_header" :items="templateform_data" 
@@ -63,7 +63,7 @@
                           </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item> 
-                    <!-- <v-list-item>
+                    <v-list-item @click="exportTemplate(item)">
                       <v-list-item-icon>
                           <v-icon color="#4CAF50">mdi-open-in-new</v-icon>
                         </v-list-item-icon>
@@ -72,7 +72,17 @@
                             Export
                           </v-list-item-title>
                         </v-list-item-content>
-                    </v-list-item>  -->
+                    </v-list-item>
+                    <!-- <v-list-item @click="optionFormTransfer()">
+                      <v-list-item-icon>
+                          <v-icon color="#4CAF50">mdi-account-edit</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title class="front-templateform-down">
+                            โอนสิทธิการแก้ไข
+                          </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item> -->
                     <v-list-item @click="deletTemplate(item)">
                       <v-list-item-icon>
                           <v-icon color="#4CAF50">mdi-delete</v-icon>
@@ -89,11 +99,17 @@
             </v-data-table>
           </v-row>
     </v-card>
+    <ImportForm/>
+    <showFormDelete/>
+    <showFormTransfer/>
   </div>
 </template>
 
 <script>
 import { EventBus } from '../EventBus'
+import ImportForm  from '../components/ImportForm'
+import showFormDelete from '../components/DeleteForm.vue'
+import showFormTransfer from '../components/TransferEdit.vue'
   export default {
     data: () => ({
       templateform_table_header: [
@@ -115,12 +131,25 @@ import { EventBus } from '../EventBus'
       totalItemsTemplate: 0,
       keyword: ""
     }),
+    components: {
+      ImportForm,
+      showFormDelete,
+      showFormTransfer
+    },
     mounted() {
       this.searchTemplate()
       EventBus.$emit('loadingOverlay', true)
       EventBus.$on('changeBiz', this.changeBiz)
+      EventBus.$on('getTemplateList', this.searchTemplate)
+    },
+    beforeDestroy() {
+      EventBus.$off('changeBiz')
+      EventBus.$off('getTemplateList')
     },
     methods: { 
+      optionFormTransfer() {
+        EventBus.$emit('FormTransfer')
+      },
       emitLoading(isLoad) {
         EventBus.$emit('loadingOverlay', isLoad)
       },
@@ -151,7 +180,7 @@ import { EventBus } from '../EventBus'
                 templateform_department: element.department,
                 templateform_fullname: element.sender_detail,
                 templateform_date: element.updated_at,
-                templateform_status: true,
+                templateform_status: element.template_status == "ACTIVE",
                 template_id: element.template_id
               })
               index++
@@ -200,18 +229,14 @@ import { EventBus } from '../EventBus'
         sessionStorage.setItem('page_action', 'edit')
         this.$router.push({ 'path': '/template/create_template'})
       },
+      async exportTemplate(item) {
+        window.open(this.$api_url + '/template_form/api/v1/template_form/' + item.template_id)
+      },
       async deletTemplate(item) {
-        try {
-          var { data } = await this.axios.get(this.$api_url + '/template_form/api/v1/delete_template_form?template_id=' + item.template_id)
-          if(data.message == 'success') {
-          //Alert ลบสำเร็จ
-          } else {
-            //Alert ลบไม่สำเร็จ
-          }
-          this.searchKeyword()
-        } catch(e) {
-          //Alert ลบไม่สำเร็จ
-        }
+        EventBus.$emit('FormDelete',item)
+      },
+      ImportForm() {
+        EventBus.$emit('importform')
       }
     }
   }

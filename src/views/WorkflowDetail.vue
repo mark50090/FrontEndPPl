@@ -47,6 +47,7 @@
           :server-items-length="count_doc"
           :options.sync="optionsTransaction"
           :footer-props="optionFooter"
+          @click:row="goToDocumentDetail($event._id)"
           class="
             report-detail-table
             report-detail-table-border
@@ -74,11 +75,17 @@
         </v-data-table>
       </v-row>
     </v-card>
+    <DocumentReport/>
   </div>
 </template>
 
 <script>
+import { EventBus } from '../EventBus'
+import DocumentReport from '../components/DocumentReportModal'
 export default {
+  components:{
+    DocumentReport
+    },
   data: () => ({
     report_header: [
       {
@@ -166,6 +173,10 @@ export default {
     this.getCountFlowTransaction()
   },
   methods: {
+    goToDocumentDetail(id) {
+      sessionStorage.setItem('transaction_id', id)
+      this.$router.push('/inbox/detail')
+    },
     async getCountFlowTransaction () {
       const url = `${this.$api_url}/report/api/v1/count_flow_transaction?flow_id=${this.workflow_id}`
       const config = {
@@ -210,7 +221,8 @@ export default {
                 send_date: e.send_date,
                 step: e.step.replaceAll('\n', '<br/>'),
                 completed_time: e.completed_time,
-                process_time: e.process_time
+                process_time: e.process_time,
+                _id: e.transaction_id
               })
             })
         } else {
@@ -225,6 +237,8 @@ export default {
       this.$router.push({ name: 'summary_workflow' })
     },
     exportExcel () {
+      EventBus.$emit('documentreport',this.workflow_id)
+      return
       if (this.$device.windows) window.open(`${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${this.workflow_id}`)
       else window.open(`https://chat-develop.one.th/deeplink-redirect/?url=${`${this.$api_url}/report/api/v1/export_report_transaction?flow_id=${this.workflow_id}`}`)
     }
