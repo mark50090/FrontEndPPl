@@ -1781,63 +1781,20 @@
             <br>
             <v-divider class="divider-permission"></v-divider>
             <!-- Permission Property -->
-            <!-- <div v-if="(custom_object_permission || custom_cell_permission) && !objectArray[selected_array][selected_object].style.refPermission"> 
+            <template v-if="(custom_object_permission || custom_cell_permission) && !objectArray[selected_array][selected_object].style.refPermission">
+              <br>
               <span class="sub-title-property"><b>{{ textLang.property_type.assignment }}</b></span>
-              <v-row class="row-prop">
-                <v-checkbox hide-details class="check-grid-block check-ref" :color="color_property_Object" @change="getRefOrder" v-model="objectArray[selected_array][selected_object].style.refOrder">
-                  <template v-slot:label>
-                    <span class="title-prop">{{ textLang.property_type.reference }}</span>
-                  </template>
-                </v-checkbox>
-              </v-row>
-              <v-row class="row-prop" v-if="objectArray[selected_array][selected_object].style.refOrder">
-                <v-col cols="5" class="title-prop-block">
-                  <span class="title-prop">{{ textLang.property_type.order_refer }}:</span>
+              <v-row class="mt-1 row-prop">
+                <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
+                  <span class="title-prop">ลำดับ Workflow:</span>
                 </v-col>
-                <v-col cols="6" class="px-0">
-                  <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="refOrders" v-model="objectArray[selected_array][selected_object].style.permission.ref"></v-autocomplete>
+                <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
+                  <v-autocomplete outlined dense hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :items="step_choices" color="#4caf50" class="prop-input create-prop-line-height create-prop-dropdown-icon"></v-autocomplete>
                 </v-col>
-              </v-row>
-              <v-row class="row-prop" v-if="!objectArray[selected_array][selected_object].style.refOrder">
-                <v-radio-group row hide-details class="template-type-block" v-model="objectArray[selected_array][selected_object].style.permission.byRole">
-                  <v-radio :color="color_property_Object" :value="true">
-                    <template v-slot:label>
-                      <span class="title-prop">{{ textLang.property_type.by_positio }}</span>
-                    </template>
-                  </v-radio>
-                  <v-radio :color="color_property_Object" :value="false">
-                    <template v-slot:label>
-                      <span class="title-prop">{{ textLang.property_type.by_email }}</span>
-                    </template>
-                  </v-radio>
-                </v-radio-group>
               </v-row>
               <br>
-              <div class="role-name" v-for="item in objectArray[selected_array][selected_object].style.permission.value_role" :key="item">
-                {{item.text}}<v-icon small color="grey lighten-1" v-on:click="deletePermList(item,false)">mdi-close-circle</v-icon>
-              </div>
-              <div class="role-name" v-for="item in objectArray[selected_array][selected_object].style.permission.value_email" :key="item">
-                {{item.text}}<v-icon small color="grey lighten-1" v-on:click="deletePermList(item,false)">mdi-close-circle</v-icon>
-              </div>
-              <v-row class="row-prop" v-show="objectArray[selected_array][selected_object].style.permission.byRole && !objectArray[selected_array][selected_object].style.refOrder" >
-                <v-col cols="4" class="title-prop-block">
-                  <span class="title-prop">{{ textLang.property_type.position }}:</span>
-                </v-col>
-                <v-col cols="7" class="px-0">
-                  <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" append-outer-icon="mdi-plus" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="roles" v-model="selectedPermRole" @click:append-outer="addPermList(false)"></v-autocomplete>
-                </v-col>
-              </v-row>
-              <v-row class="row-prop" v-show="!objectArray[selected_array][selected_object].style.permission.byRole && !objectArray[selected_array][selected_object].style.refOrder">
-                <v-col cols="4" class="title-prop-block">
-                  <span class="title-prop">{{ textLang.property_type.email }}:</span>
-                </v-col>
-                <v-col cols="7" class="px-0">
-                  <v-text-field outlined dense hide-details :color="color_property_Object" append-outer-icon="mdi-plus" class="prop-input pad-input"  @click="copyObject = ''" v-model="selectedPermEmail" @click:append-outer="addPermList(false)"></v-text-field>
-                </v-col>
-              </v-row>
-            </div> -->
+            </template>
             <!-- Help -->
-            <!-- <br> -->
             <v-row class="row-prop">
               <v-col cols="auto" class="pl-4 pr-0 pb-0">
                 <v-btn color="primary" depressed fab x-small dark class="" @click="help = !help">
