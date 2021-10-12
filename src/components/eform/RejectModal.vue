@@ -1,15 +1,18 @@
 <template>
-    <v-dialog v-model="dialog" persistent max-width="500">
+    <v-dialog v-model="dialog" persistent max-width="450">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-         <b>{{ textLang.confirm_reject}}</b>
-        </v-card-title>
-        <v-card-text class="pa-12 confirm-content">{{ textLang.sure_reject }} "{{ dialog_item_name }}" {{ textLang.or }}</v-card-text>
-        <v-card-actions class="pt-0 pb-12">
-          <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" @click="dialog = false" class="px-9 mr-4 save-setting-btn">{{ textLang.cancel }}</v-btn>
-          <v-btn depressed large color="error" @click="rejectItem()" class="px-12 ml-4 save-setting-btn save-modal-font-btn">{{ textLang.reject }}</v-btn>
-          <v-spacer></v-spacer>
+        <v-card-text class="pb-3 pt-7 reject-form-text-modal text-center">{{ textLang.sure_reject }} {{ dialog_item_name }} {{ textLang.or }}</v-card-text>
+        <v-card-actions class="pb-2">
+          <v-row class="reject-modal-row">
+            <v-spacer></v-spacer>
+            <v-col cols="4" md="4" lg="4" class="pl-0 pr-1">
+              <v-btn block depressed dark color="#757575" @click="dialog = false" class="reject-form-modal-btn">{{ textLang.cancel }}</v-btn>
+            </v-col>
+            <v-col cols="4" md="4" lg="4" class="pl-1 pr-0">
+              <v-btn block depressed dark color="#67C25D" @click="rejectItem()" class="reject-form-modal-btn">{{ textLang.reject }}</v-btn>
+            </v-col>
+            <v-spacer></v-spacer>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -29,10 +32,10 @@ export default {
     template_code: '',
     textLang: {
       confirm_reject: "ยืนยันการปฏิเสธอนุมัติเอกสาร",
-      sure_reject: "คุณต้องการปฏิเสธอนุมัติเอกสารที่มีชื่อว่า",
-      or: "หรือไม่",
+      sure_reject: "ต้องการปฏิเสธอนุมัติเอกสาร",
+      or: "หรือไม่ ?",
       cancel: "ยกเลิก",
-      reject: "ปฏิเสธอนุมัติ",
+      reject: "ตกลง",
     }
   }),
   mounted() {
@@ -95,5 +98,20 @@ export default {
   .button-dialog {
     font-family: "Sarabun", sans-serif;
     text-transform: capitalize;
+  }
+
+  .reject-form-text-modal {
+    font-family: "Sarabun", sans-serif;
+    font-size: 14px;
+    color: black !important;
+  }
+
+  .reject-modal-row {
+    width: 100%;
+    margin: 0%;
+  }
+
+  .reject-form-modal-btn {
+    font-family: "Sarabun", sans-serif;
   }
 </style>

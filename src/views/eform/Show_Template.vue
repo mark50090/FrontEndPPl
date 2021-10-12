@@ -10,7 +10,7 @@
       </v-btn>
       <v-spacer></v-spacer>
       <!-- button for web -->
-      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="yellow accent-4" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
+      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="#FBC02D" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
         <v-icon>mdi-reply</v-icon>
         <span class="btn-return-edit">{{ textLang.tabMenubar.return_edit }}</span>
       </v-btn>
@@ -787,7 +787,7 @@
       </v-card>
     </v-dialog>
 
-    <ReverseDocumentModal/>
+    <ReverseWorkFlowModal/>
     <InputDocumentNameModal/>
     <RefDocumentModal/>
     <AttachFileModal/>
@@ -898,7 +898,7 @@
 
 <script>
   import { EventBus } from '../../EventBus'
-  import ReverseDocumentModal from '../../components/eform/ReverseDocumentModal'
+  import ReverseWorkFlowModal from '../../components/ReturnCorrection'
   import InputDocumentNameModal from '../../components/eform/InputDocumentNameModal'
   import AttachFileModal from '../../components/eform/AttachFileModal'
   import RejectModal from '../../components/eform/RejectModal'
@@ -918,7 +918,7 @@
       uploadedFile: state => state.uploadedFile
     }),
     components: {
-      ReverseDocumentModal,
+      ReverseWorkFlowModal,
       InputDocumentNameModal,
       AttachFileModal,
       RejectModal,
@@ -7661,7 +7661,8 @@
       },
       openReverse() {
         var backStepChoice = this.backStepArray
-        EventBus.$emit('reverseDocument',backStepChoice)
+        // EventBus.$emit('reverseDocument',backStepChoice)
+        EventBus.$emit('FormReturn')
       },
       openReject() {
         var eId = this.template_option 
@@ -8779,7 +8780,7 @@
   }
 
   .send-back-btn-icon:hover .btn-return-edit {
-    width: 75px !important;
+    width: 78px !important;
   }
 
   .btn-return-edit {
