@@ -1,44 +1,44 @@
 <template>
-      <v-dialog v-model="dialogSign" persistent max-width="500px">
+      <v-dialog v-model="dialogSign" persistent max-width="360px">
         <v-card>
-          <v-card-title elevation="4" class="dialog_title">
-            <span><b>{{ textLang.sign_approve }}</b></span>
+          <v-card-title>
+            <span class="sign-modal-header">{{ textLang.sign_approve }}</span>
+            <v-spacer></v-spacer>
+            <v-btn icon dark small color="black" @click="closeSignpad">
+              <v-icon>mdi-close-circle</v-icon>
+            </v-btn>
           </v-card-title>
-          <v-card-text class="px-0 pt-5 pb-3">
+          <v-card-text class="pb-0">
             <v-row justify="center" class="sign-opt-row">
-              <v-col md="4" lg="4" cols="12" align-self="center" class="px-0 pt-0">
-                <v-switch readonly inset dense hide-details :color="color_ca_switch" :disabled="false" class="mt-0 ca-block" v-model="isCa">
+              <v-col md="auto" lg="auto" cols="auto" align-self="center" class="pl-0 ">
+                <v-switch inset hide-details color="primary" disabled class="mt-0" v-model="isCa">
                   <template v-slot:label>
                     <span class="switch-ca-modal">Certificate (CA)</span>
                   </template>
                 </v-switch>
               </v-col>
-              <v-col md="3" lg="3" cols="6" align-self="center" class="px-0 sign-opt-block"> <!-- option of sign -->
-                <v-select outlined dense hide-details append-icon="mdi-chevron-down" :disabled="false" :color="color_sign_option_box" v-model="selectedSignStyle" :item-color="color_sign_option_box" :items="option_style" class="business-box-inside icon-dropdown-modal sign-opt"></v-select>
+              <v-spacer></v-spacer>
+              <v-col md="5" lg="5" cols="5" align-self="center" class="px-0"> <!-- option of sign -->
+                <v-select outlined dense hide-details append-icon="mdi-chevron-down" color="#4CAF50" v-model="selectedSignStyle" item-color="#4CAF50" :items="option_style" class="sign-opt sign-pad-dropdown-icon"></v-select>
               </v-col>
             </v-row>
             <v-row justify="center" class="mt-1 sign-opt-row">
-              <v-col v-if="selectedSignStyle == 'Sign Pad'" md="9" lg="9" cols="10" class="pa-0"> <!-- sign pad -->
-                <VueSignaturePad height="188px" ref="signaturePad" :options="{onBegin, onEnd, penColor: '#0D269A'}" class="sign-pad-box" />
-              </v-col>
-              <v-col v-if="selectedSignStyle == 'Default'" md="9" lg="9" cols="10" class="pa-0 sign-img-box"> 
-                <v-img contain max-height="186px" :src="signUrl"></v-img>
-              </v-col>
-            </v-row>
-            <v-row justify="center" align="center" class="sign-opt-row">
-              <v-col md="7" lg="7" cols="8" class="px-0">
-                <v-btn block depressed :color="color_approve_btn" :disabled="false" class="approve-button" @click="summitSign()">{{ textLang.approve }}</v-btn>
-                <v-btn block depressed v-if="false" color="error" :disabled="false" class="mt-2 approve-button" @click="rejectSign()">{{ textLang.reject_approval }}</v-btn>
-              </v-col>
-              <v-col md="2" lg="2" cols="2" class="py-0 pr-0"> <!-- eraser button for erasing sign -->
-                <v-btn block depressed :color="color_eraser_btn" :disabled="false" class="eraser-button" @click="clearSign()"><v-icon color="white">mdi-eraser</v-icon></v-btn>
+              <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pa-0 sign-block-form">
+                <VueSignaturePad v-if="selectedSignStyle == 'Sign Pad'" height="175px" ref="signaturePad" :options="{onBegin, onEnd, penColor: '#0D269A'}" />
+                <v-img v-if="selectedSignStyle == 'Default'" contain max-height="173px" :src="signUrl"></v-img>
               </v-col>
             </v-row>
           </v-card-text>
-          <v-card-actions class="pb-8">
-            <v-spacer></v-spacer>
-            <v-btn outlined large color="#979797" class="px-12 save-setting-btn" @click="closeSignpad">{{ textLang.cancel }}</v-btn>
-            <v-spacer></v-spacer>
+          <v-card-actions class="pb-1">
+            <v-row class="sign-opt-row">
+              <v-spacer></v-spacer>
+              <v-col cols="auto" class="pl-0 pr-2">
+                <v-btn depressed color="#757575" :disabled="selectedSignStyle != 'Sign Pad'" @click="clearSign()" class="approve-button">ล้างค่า</v-btn>
+              </v-col>
+              <v-col cols="auto" class="pl-0 pr-3">
+                <v-btn depressed dark color="#67C25D" @click="summitSign()" class="approve-button">{{ textLang.approve }}</v-btn>
+              </v-col>
+            </v-row>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -59,7 +59,7 @@ export default {
     textLang: {
       sign_approve: "ลงนามอนุมัติ",
       reject_approval: "ปฏิเสธอนุมัติ",
-      approve: "ลงนามอนุมัติ",
+      approve: "อนุมัติ",
       cancel: "ยกเลิก"
     },
     //Color Variable
@@ -185,9 +185,14 @@ export default {
 </script>
 
 <style>
+.sign-modal-header {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 16px;
+}
+
 .sign-opt-row {
   width: 100%;
-  margin-left: 0%;
+  margin: 0%;
 }
 
 .switch-ca-modal {
@@ -199,50 +204,30 @@ export default {
   color: #2ACA9F !important;
 }
 
-.sign-opt-block {
-  margin-left: 5%;
-}
-
 .sign-opt {
   font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
+  font-size: 13px;
 }
 
-.sign-pad-box {
-  border: 1px solid lightgray;
-  border-radius: 4px;
+.sign-pad-dropdown-icon .theme--light.v-icon {
+  color: rgba(0, 0, 0, 0.54) !important;
 }
 
-.sign-img-box {
-  border: 1px solid lightgray;
+.sign-block-form {
+  width: 300px;
+  height: 175px;
+  border: 1.2px dashed grey;
   border-radius: 4px;
-  height: 188px;
-  width: 100%;
+  background-color: #f5f5f5;
   text-align: center;
-  display: flex;
   justify-content: center;
   align-items: center;
+  display: flex;
 }
 
 .approve-button {
   font-family: 'Sarabun', sans-serif;
   color: white !important;
   text-transform: capitalize !important;
-}
-
-.eraser-button {
-  height: 80px !important;
-}
-
-/*========================================*/
-
-@media only screen and (max-width:960px){ /*css for mobile screen*/
-  .ca-block {
-    justify-content: center;
-  }
-
-  .sign-opt-block {
-    margin-left: 0%;
-  }
 }
 </style>

@@ -1,15 +1,18 @@
 <template>
-    <v-dialog v-model="dialog" persistent max-width="500">
+    <v-dialog v-model="dialog" persistent max-width="450">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-         <b> {{ textLang.confirm_delete }} </b>
-        </v-card-title>
-        <v-card-text class="pa-12 confirm-content">{{ textLang.sure_delete }}{{ name_doc }}{{textLang.or_no}}</v-card-text>
-        <v-card-actions class="pt-0 pb-12">
-          <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" @click="dialog = false" class="px-12 mr-4 save-setting-btn">{{ textLang.cancel }} </v-btn>
-          <v-btn depressed large color="#DC143C" @click="summitCancel()" class="px-4 ml-4 save-setting-btn save-modal-font-btn">{{ textLang.yes_canel }} </v-btn>
-          <v-spacer></v-spacer>
+        <v-card-text class="pb-3 pt-7 cancel-form-modal-text text-center">{{ textLang.sure_delete }}{{ name_doc }}{{textLang.or_no}}</v-card-text>
+        <v-card-actions class="pb-2">
+          <v-row class="cancel-form-modal-row">
+            <v-spacer></v-spacer>
+            <v-col cols="4" md="4" lg="4" class="pl-0 pr-1">
+              <v-btn depressed block dark color="#757575" @click="dialog = false" class="cancel-form-modal-btn">{{ textLang.cancel }} </v-btn>
+            </v-col>
+            <v-col cols="4" md="4" lg="4" class="pl-1 pr-0">
+              <v-btn depressed block dark color="#67C25D" @click="summitCancel()" class="cancel-form-modal-btn">{{ textLang.yes_canel }} </v-btn>
+            </v-col>
+            <v-spacer></v-spacer>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -25,10 +28,10 @@ export default {
     eId: '',
     textLang: {
       confirm_delete: "ยืนยันการยกเลิกเอกสาร",
-      sure_delete: "คุณต้องการยกเลิกเอกสาร \"",
-      or_no: "\" หรือไม่ ",
+      sure_delete: "ต้องการยกเลิกเอกสาร ",
+      or_no: " หรือไม่ ?",
       cancel: "ปิด",
-      yes_canel: "ยกเลิกเอกสาร",
+      yes_canel: "ตกลง",
       cancel_success: "ยกเลิกเอกสารสำเร็จ",
       cancel_fail: "ยกเลิกเอกสารไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
     }
@@ -128,5 +131,18 @@ export default {
 </script>
 
 <style>
-  
+  .cancel-form-modal-text {
+    font-family: "Sarabun", sans-serif;
+    font-size: 14px;
+    color: black !important;
+  }
+
+  .cancel-form-modal-row {
+    width: 100%;
+    margin: 0%;
+  }
+
+  .cancel-form-modal-btn {
+    font-family: "Sarabun", sans-serif;
+  }
 </style>
