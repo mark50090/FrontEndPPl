@@ -2015,7 +2015,7 @@
                 <span class="title-prop">{{ textLang.set_doc_paperless.foermat_paperless }}:</span>
               </v-col>
               <v-col cols="8" align-self="center" class="pl-0 pr-2">
-                <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="ppl_templatelist" v-model="selected_ppltemplate"></v-autocomplete>
+                <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="ppl_templatelist" v-model="selected_ppltemplate" @change="getFlowData()"></v-autocomplete>
               </v-col>
             </v-row>
             <v-row class="row-prop">
@@ -2529,6 +2529,7 @@ export default {
     zoom_level: 100,
     order_permission: [],
     all_permission: [],
+    step_choices: [{text: "ผู้ส่งเอกสาร", value: ""}],
     colsize:0,
     rowsize:0,
     note_paperless: "",
@@ -3944,6 +3945,7 @@ export default {
         this.prefixPattern = template.document_detail[0].pattern
         this.prefixDigit = template.document_detail[0].digit
         this.selected_ppltemplate = template.flow_id
+        this.getFlowData()
         this.template_name = template.template_name
         if(template.document_option) {
           this.docOption = template.document_option
@@ -8773,6 +8775,29 @@ export default {
           html = ""
         }
       }
+    },
+    async getFlowData(){
+        try {
+          this.step_choices = [{text: "ผู้ส่งเอกสาร", value: ""}]
+          if(this.selected_ppltemplate){
+            var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+            var url = `/flowdata/api/v1/get1/?_id=${this.selected_ppltemplate}&tax_id=${tax_id}`
+            var {data} = await this.axios.get(this.$api_url + url)
+            if(data.status){
+              data.data.flow_data.forEach(e => {
+                if(e.action == "Fill") {
+                  this.step_choices.push({
+                    text: `ลำดับที่ ${e.index + 1}`,
+                    value: e.index + 1
+                  })
+                }
+                
+              })
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        }
     }
   }
 }
