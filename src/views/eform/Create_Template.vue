@@ -7031,7 +7031,9 @@ export default {
             var section_rect = section.getBoundingClientRect()
             if(position.top > section_rect.top && position.top < (section_rect.top + section_rect.height)) {
               if(position.left > section_rect.left && position.left < (section_rect.left + section_rect.width)) {
-                this.objectArray[selArray][selObj].style.permission_step = this.objectArray['sectionbox'][i].style.permission_step
+                if(!this.objectArray[selArray][selObj].style.permission_step) {
+                  this.objectArray[selArray][selObj].style.permission_step_section = this.objectArray['sectionbox'][i].style.permission_step
+                }
               } 
             }
           }
@@ -7046,7 +7048,9 @@ export default {
             var section_rect = section.getBoundingClientRect()
             if(position.top >= section_rect.top && position.top <= (section_rect.top + section_rect.height)) {
               if(position.left >= section_rect.left && position.left <= (section_rect.left + section_rect.width)) {
-                this.dataTableObjectArray[selObj].style.permission_section = this.objectArray['sectionbox'][i].style.permission_step
+                if(!this.dataTableObjectArray[selObj].style.permission_step) {
+                  this.dataTableObjectArray[selObj].style.permission_step_section = this.objectArray['sectionbox'][i].style.permission_step
+                }
               }
             }
           }
