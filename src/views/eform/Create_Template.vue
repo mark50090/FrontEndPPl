@@ -2060,7 +2060,6 @@
       <hideSettingModal/>
       <docConditionModal/>
       <sumifToolModal/>
-      <flowConditionModal/>
       <!-- Import Image Modal -->
       <v-dialog v-model="dialogImageUpload" persistent max-width="450px">
         <v-card>
@@ -2236,7 +2235,6 @@ import BackFromCreateModal from '../../components/eform/BackFromCreateModal'
 import hideSettingModal from '../../components/eform/hideSettingModal'
 import docConditionModal from '../../components/eform/docConditionModal'
 import sumifToolModal from '../../components/eform/sumifToolModal'
-import flowConditionModal from '../../components/eform/flowConditionModal'
 
 var ArrowEventHandle
 var CrtlEventHandle = false
@@ -2250,7 +2248,6 @@ export default {
     hideSettingModal,
     docConditionModal,
     sumifToolModal,
-    flowConditionModal
   },
 
   data: () => ({
