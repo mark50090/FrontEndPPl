@@ -790,8 +790,6 @@
     <AttachFileModal/>
     <RejectModal/>
     <ConfirmCancelDocumentModal/>
-    <ExportReportModal/>
-    <ExportMyFormReportModal/>
     <AddAttachFileModal/>
     <PermissionTransferenceDocumentModal />
     <!-- <SignaturePadModal/> -->
@@ -909,8 +907,6 @@
   import RefDocumentModal from '../../components/eform/RefDocumentModal'
   import Editor from '@tinymce/tinymce-vue'
   import ConfirmCancelDocumentModal from '../../components/eform/ConfirmCancelDocumentModal'
-  import ExportReportModal from '../../components/eform/ExportReportModal'
-  import ExportMyFormReportModal from '../../components/eform/ExportMyFormReportModal'
   import AddAttachFileModal from '../../components/eform/AddAttachFileModal'
   import PermissionTransferenceDocumentModal from '../../components/eform/PermissionTransferenceDocumentModal'
   import { mapState } from 'vuex'
@@ -928,8 +924,6 @@
       RejectModal,
       RefDocumentModal,
       ConfirmCancelDocumentModal,
-      ExportReportModal,
-      ExportMyFormReportModal,
       'editor': Editor,
       AddAttachFileModal,
       PermissionTransferenceDocumentModal
