@@ -79,22 +79,6 @@ export default {
     justify-content: center;
   }
 
-  .delete-dialog-title-block {
-    padding: 0%;
-  }
-
-  .dialog_text {
-    font-family: "Sarabun", sans-serif;
-    font-size: 16px;
-    color: black !important;
-    margin-top: 3%;
-  }
-
-  .button-dialog-block {
-    padding-bottom: 7%;
-    margin-top: 2%;
-  }
-
   .button-dialog {
     font-family: "Sarabun", sans-serif;
     text-transform: capitalize;

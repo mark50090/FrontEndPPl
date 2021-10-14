@@ -324,8 +324,6 @@
     <SignaturePadModal />
     <AttachFileModal/>
     <ConfirmCancelDocumentModal/>
-    <SetPasswordPDFModal />
-    <ForwardMailModal/>
     <!-- Save Document Modal -->
     <v-dialog v-model="dialog_ppl" scrollable persistent max-width="650px">
       <v-card>
@@ -472,8 +470,6 @@ import RefDocumentModal from "../../components/eform/RefDocumentModal"
 import AttachFileModal from "../../components/eform/AttachFileModal"
 import ConfirmCancelDocumentModal from '../../components/eform/ConfirmCancelDocumentModal'
 import { mapState } from 'vuex'
-import SetPasswordPDFModal from '../../components/eform/SetPasswordPDFModal'
-import ForwardMailModal from '../../components/eform/ForwardMailModal'
 
 export default {
   computed: mapState({
@@ -485,9 +481,7 @@ export default {
     SignaturePadModal,
     RefDocumentModal,
     AttachFileModal,
-    ConfirmCancelDocumentModal,
-    SetPasswordPDFModal,
-    ForwardMailModal
+    ConfirmCancelDocumentModal
   },
   data: () => ({
     alert: false,
