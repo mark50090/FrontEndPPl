@@ -712,15 +712,6 @@ export default {
       max-width: 600px !important;
     }
 
-    .v-dialog__content{
-      justify-content: center !important;
-    }
-
-    .dialog-head-block {
-      padding-left: 3%;
-      padding-right: 3%;
-    }
-
     .name-document-title { 
       text-align: left;
     }
