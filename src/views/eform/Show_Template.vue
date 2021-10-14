@@ -46,14 +46,14 @@
           </v-btn>
         </template>
         <v-list>
-          <!-- <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogRefDoc = true">
-            <v-list-item-icon><v-icon>mdi-package-down</v-icon></v-list-item-icon>
+          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogRefDoc = true">
+            <v-list-item-icon><v-icon>mdi-file-import-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogImport = true">
+          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogImport = true">
             <v-list-item-icon><v-icon>mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
-          </v-list-item> -->
+          </v-list-item>
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="AddAttachFile()">
             <v-list-item-icon><v-icon>mdi-paperclip</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_file_menu }}</v-list-item-title>
@@ -96,14 +96,14 @@
           </v-btn>
         </template>
         <v-list>
-          <!-- <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogRefDoc = true">
-            <v-list-item-icon><v-icon color="#4CAF50">mdi-package-down</v-icon></v-list-item-icon>
+          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogRefDoc = true">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-file-import-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogImport = true">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
-          </v-list-item> -->
+          </v-list-item>
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="AddAttachFile()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-paperclip</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_file_menu }}</v-list-item-title>
@@ -763,25 +763,22 @@
       </v-col>
     </v-row>
     <!-- Import Excel Modal -->
-    <v-dialog v-model="dialogImport" persistent max-width="600px">
+    <v-dialog v-model="dialogImport" persistent max-width="450px">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-         <b> {{ textLang.text_dialog.import }} </b>
-        </v-card-title>
-        <v-card-text class="pa-10">
-          <v-row justify="center" align="center">
-            <v-col cols="12" md="3" lg="3" class="excel-file-title">
-              {{ textLang.text_dialog.files }} 
-            </v-col>
-            <v-col cols="12" md="9" lg="9">
-              <v-file-input dense outlined single-line hide-details :color="color_excel_file" :placeholder="textLang.text_dialog.select" accept=".xlsx" class="file-input" id="file" v-model="excelFile"></v-file-input>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions class="pt-0 pb-12">
+        <v-card-title>
+          <span class="input-form-modal-header">{{ textLang.text_dialog.import }}</span>
           <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialogImport = false">{{ textLang.text_dialog.cancle }} </v-btn>
-          <v-btn depressed large :color="color_import" class="px-12 ml-4 save-setting-btn save-modal-font-btn" @click="importExcel()">Import</v-btn>
+          <v-btn icon dark small color="black" @click="dialogImport = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="pt-4">
+          <v-file-input dense outlined hide-details color="#4CAF50" truncate-length="32" :placeholder="textLang.text_dialog.select" accept=".xlsx" class="insert-image-file" id="file" v-model="excelFile"></v-file-input>
+        </v-card-text>
+        <v-card-actions class="pb-5">
+          <v-spacer></v-spacer>
+          <v-btn outlined color="#4CAF50" class="px-6 mr-2 insert-image-btn-modal" @click="dialogImport = false">{{ textLang.text_dialog.cancle }}</v-btn>
+          <v-btn depressed dark color="#4CAF50" class="px-5 ml-2 insert-image-btn-modal" @click="importExcel()">Import</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -859,40 +856,47 @@
     </v-dialog>
 
     <!-- Import Doc Modal -->
-    <v-dialog v-model="dialogRefDoc" persistent max-width="600px">
+    <v-dialog v-model="dialogRefDoc" persistent max-width="500px">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-         <b> {{ textLang.text_dialog.import_other }} </b>
+        <v-card-title>
+          <span class="input-form-modal-header">{{ textLang.text_dialog.import_other }}</span>
+          <v-spacer></v-spacer>
+          <v-btn icon dark small color="black" @click="dialogRefDoc = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
         </v-card-title>
-        <v-card-text class="pa-10">
-          <v-row justify="center" align="center" class="mb-3">
-            <v-col cols="12" md="3" lg="3" class="pr-0 type-doc-import-title">
+        <v-card-text class="pt-2 pb-0">
+          <v-row class="input-form-row">
+            <v-col cols="12" md="4" lg="4" align-self="center" class="pl-0 type-doc-import-title">
               {{ textLang.text_dialog.document_type_import }}
             </v-col>
-            <v-col cols="12" md="7" lg="7">
-              <v-autocomplete dense outlined hide-details :color="color_document_number" append-icon="mdi-chevron-down" :items="typeDocImport" class="autocomplete-pad icon-select icon-dropdown-modal type-doc-import" v-model="importType"></v-autocomplete>
+            <v-col cols="12" md="8" lg="8" align-self="center" class="px-0">
+              <v-autocomplete dense outlined hide-details color="#4CAF50" append-icon="mdi-chevron-down" :items="typeDocImport" class="type-doc-import type-doc-import-box doc-import-dropdown-icon" v-model="importType"></v-autocomplete>
             </v-col>
           </v-row>
-          <v-row justify="center" align="center">
-            <v-col cols="12" md="3" lg="3" class="pr-0 type-doc-import-title">
+          <v-row class="mt-0 input-form-row">
+            <v-col cols="12" md="4" lg="4" align-self="center" class="pl-0 type-doc-import-title">
              {{ textLang.text_dialog.document_number }}
             </v-col>
-            <v-col cols="12" md="7" lg="7">
-              <v-text-field dense outlined single-line hide-details :color="color_document_number" class="pad-input doc-num-import" v-model="refDocNo"></v-text-field>
+            <v-col cols="12" md="8" lg="8" align-self="center" class="px-0">
+              <v-text-field dense outlined hide-details color="#4CAF50" class="doc-num-import" v-model="refDocNo"></v-text-field>
             </v-col>
           </v-row>
-          <br>
-          <v-divider></v-divider>
         </v-card-text>
-        <v-card-actions class="pt-0 pb-12">
-          <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialogRefDoc = false">{{ textLang.text_dialog.cancle }}</v-btn>
-          <v-btn depressed large :color="color_import" class="px-7 ml-4 save-setting-btn save-modal-font-btn" @click="checkImportType(refDocNo)" >{{ textLang.text_dialog.import_data }}</v-btn>
-          <v-spacer></v-spacer>
+        <v-card-actions class="pb-3">
+          <v-row class="input-form-row">
+            <v-spacer></v-spacer>
+            <v-col cols="6" md="4" lg="4" class="pl-0 pr-2">
+              <v-btn outlined block color="#4CAF50" class="insert-image-btn-modal" @click="dialogRefDoc = false">{{ textLang.text_dialog.cancle }}</v-btn>
+            </v-col>
+            <v-col cols="6" md="4" lg="4" class="pl-2 pr-0">
+              <v-btn depressed block dark color="#4CAF50" class="insert-image-btn-modal" @click="checkImportType(refDocNo)" >{{ textLang.text_dialog.import_data }}</v-btn>
+            </v-col>
+            <v-spacer></v-spacer>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
   </div>
 </template>
 
@@ -9075,12 +9079,20 @@
 
   .type-doc-import {
     font-family: 'Sarabun', sans-serif;
-    line-height: 27px;
+    font-size: 13px;
+  }
+
+  .type-doc-import-box.v-text-field input {
+    line-height: 21px !important;
+  }
+
+  .doc-import-dropdown-icon .theme--light.v-icon {
+    color: rgba(0, 0, 0, 0.54) !important;
   }
 
   .doc-num-import {
     font-family: 'Sarabun', sans-serif;
-    font-size: 16px;
+    font-size: 13px;
   }
 
   .input-form-modal-header {
@@ -9386,7 +9398,6 @@
     }
 
     .type-doc-import-title {
-      text-align: center;
       padding-bottom: 0%;
     }
 
