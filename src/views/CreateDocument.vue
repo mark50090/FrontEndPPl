@@ -234,7 +234,7 @@
                             หน้าที่เซ็น
                           </v-col>
                           <v-col cols="3" md="2" lg="2" class="px-0 py-1">
-                            <v-select multiple outlined dense hide-details label="หน้า" color="#67C25D" @change="reShowSign" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="pdf_page_list" v-model="flow_data_custom.page" item-value="value" item-text="text" class="create-setting page-sign-box page-sign-dropdown-icon create-setting-dropdown-icon">
+                            <v-select multiple outlined dense hide-details label="หน้า" color="#67C25D" item-color="#67C25D" @change="reShowSign" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="pdf_page_list" v-model="flow_data_custom.page" item-value="value" item-text="text" class="create-setting page-sign-box page-sign-dropdown-icon create-setting-dropdown-icon">
                               <template v-slot:selection="{ item, index }">
                                 <span v-if="flow_data_custom.page.length == pdf_page_list.length && index == 0">ทั้งหมด</span>
                                 <span v-if="flow_data_custom.page.length != pdf_page_list.length">{{item.value}}{{index != flow_data_custom.page.length-1 ? ',':''}}</span>
@@ -242,12 +242,12 @@
                               <template v-slot:prepend-item>
                                 <v-list-item ripple @click="togglePage(index)">
                                   <v-list-item-action>
-                                    <v-icon :color="pdf_page_list.length > 0 ? 'indigo darken-4' : ''">
+                                    <v-icon :color="pdf_page_list.length > 0 ? '#0F3852' : ''">
                                       {{ getIcon(flow_data_custom.page) }}
                                     </v-icon>
                                   </v-list-item-action>
                                   <v-list-item-content>
-                                    <v-list-item-title>
+                                    <v-list-item-title class="all-page-select-list">
                                       ทั้งหมด
                                     </v-list-item-title>
                                   </v-list-item-content>
@@ -271,8 +271,8 @@
                             <v-col cols="12" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 py-0">
                               <v-checkbox hide-details label="OneChat" v-model="actor_email.checkbox" class="mt-0 pt-0 onechat-check"></v-checkbox>
                             </v-col>
-                            <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 pl-2 pr-0 add-delete-permission-block"> <!-- delete email in each step button -->
-                              <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn" v-if="flow_data_custom.actor.permission_email.length > 1" @click="removeActor(flow_data_custom.index,actor_email)">
+                            <v-col v-if="flow_data_custom.actor.permission_email.length > 1" cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 pl-2 pr-0 add-delete-permission-block"> <!-- delete email in each step button -->
+                              <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn" @click="removeActor(flow_data_custom.index,actor_email)">
                                 <v-icon>mdi-minus</v-icon>
                               </v-btn>
                             </v-col>
@@ -1015,15 +1015,21 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 
   .page-sign-box.v-text-field--outlined.v-input--dense.v-text-field--outlined > .v-input__control > .v-input__slot {
     min-height: 32px !important;
+    padding-right: 0%;
   }
 
   .page-sign-box.v-text-field--outlined.v-input--dense .v-label {
-    top: 6px !important;
+    top: 8px !important;
     font-size: 13px;
   }
 
   .page-sign-dropdown-icon.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__append-inner {
     margin-top: 5px !important;
+  }
+
+  .all-page-select-list {
+    font-family: 'Sarabun', sans-serif;
+    line-height: 21px !important;
   }
 
   .each-step-mail-row {
@@ -1101,6 +1107,14 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 
     .all-step-block {
       height: unset;
+    }
+
+    .page-sign-box.v-text-field--outlined.v-input--dense.v-text-field--outlined > .v-input__control > .v-input__slot {
+      padding-left: 3%;
+    }
+
+    .page-sign-box.v-text-field--outlined.v-input--dense .v-label {
+      left: 9px !important;
     }
 
     .each-step-mail-row {
