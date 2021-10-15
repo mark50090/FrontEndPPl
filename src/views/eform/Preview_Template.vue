@@ -3770,6 +3770,18 @@ export default {
 </script>
 
 <style>
+.color-password-setting{
+  color: red;
+}
+
+.font-wait-upload{
+  font-size: 10px;
+}
+
+.send-ppl-actions-block{
+  padding-top: 6%;
+  padding-bottom: 6%;
+}
 
 .font-save-doc{
   color: #1b9900 !important;
@@ -3935,20 +3947,20 @@ export default {
   text-align: center;
 }
 
-.back-data-btn {
+.back-data-btn{
     font-family: "Sarabun", sans-serif;
     font-size: 16px !important;
     text-transform: capitalize;
   }
 
-.btn-saveStep {
+.btn-saveStep{
   font-family: "Sarabun", sans-serif;
   padding-left: 1% !important;
   padding-right: 1% !important;
   color: white !important;
 }
 
-.btn-savedraft {
+.btn-savedraft{
   color: #4CAF50 !important;
 }
 
@@ -4049,6 +4061,25 @@ export default {
 
 
 /*======== style from old file >> Preview_Template(old version) ========*/
+.loading-circle-preview {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  z-index: 16;
+}
+
+.page-button-row {
+  margin-top: 3%;
+}
+
+.template-paperless-title-block {
+  padding-top: 3%;
+}
+
+.template-paperless-title {
+  font-family: "Sarabun", sans-serif;
+  font-size: 16px;
+}
 
 .alert {
   font-family: "Sarabun", sans-serif;
@@ -4056,14 +4087,86 @@ export default {
   color: #ADCA5A !important;
 }
 
+.alert-warning {
+  font-family: "Sarabun", sans-serif;
+  font-size: 18px !important;
+  color: #ffe44e !important;
+}
+
+.alert-error {
+  font-family: "Sarabun", sans-serif;
+  font-size: 18px !important;
+  color: #EF9A9A !important;
+}
+
+.alert-bi-success {
+  font-family: "Sarabun", sans-serif;
+  font-size: 16px !important;
+  color: #ADCA5A !important;
+}
+
+.alert-bi-warning {
+  font-family: "Sarabun", sans-serif;
+  font-size: 16px !important;
+  color: #ffe44e !important;
+}
+
+.alert-bi-error {
+  font-family: "Sarabun", sans-serif;
+  font-size: 16px !important;
+  color: #EF9A9A !important;
+}
+
+.border-success{
+  border: 12px double #ADCA5A;
+}
+
+.border-warning{
+  border: 12px double #ffe44e;
+}
 .close-alert {
   color: #ADCA5A !important;
+}
+
+.border-error{
+  border: 12px double #EF9A9A;
+}
+
+.close-alert-warning {
+  color: #ffe44e !important;
+}
+
+.close-alert-error{
+  color: #F44336 !important;
+}
+
+.loading-preview-block {
+  position: fixed;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  z-index: 15;
+  background-color: gray;
+  opacity: 0.3;
+}
+
+.button-dark-theme {
+  color: white !important;
 }
 
 .v-text-field--outlined.body-paperless-row
   > .v-input__control
   > .v-input__slot {
   height: 75px !important;
+}
+
+.button-note-block {
+  padding-left: 5%;
+  margin-bottom: 2%;
+}
+
+.note-button {
+  font-family: "Sarabun", sans-serif;
 }
 
 .note-paperless {
@@ -4100,6 +4203,55 @@ export default {
   border-color: #ffb74d;
 }
 
+.step-button {
+  font-family: "Sarabun", sans-serif;
+}
+
+.email-all-list {
+  width: 100%;
+  /* height: 300px; */
+  overflow: auto;
+  max-height: 265px;
+}
+
+.step-block {
+  width: 95%;
+}
+
+.num-step {
+  font-family: "Sarabun", sans-serif;
+  font-size: 18px;
+  color: white;
+}
+
+.input-mail-paperless {
+  font-family: "Sarabun", sans-serif;
+  font-size: 16px;
+}
+
+.add-file-button {
+  font-family: "Sarabun", sans-serif;
+}
+
+.file-input-paperless {
+  padding-top: 0%;
+}
+
+.alert-email-block {
+  width: 100%;
+  padding-left: 5%;
+}
+
+.alert-email-icon {
+  color: red !important;
+}
+
+.alert-email {
+  font-family: "Sarabun", sans-serif;
+  color: red;
+  font-size: 14px;
+}
+
 .theme--light.v-btn.v-btn--disabled .v-icon.send-ppl-disable-icon {
   color: #bdbdbd !important;
 }
@@ -4118,14 +4270,48 @@ export default {
     top: 0;
   }
 
+  .preview-template-name {
+    visibility: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
+
+  .preview-botton-block {
+    visibility: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
+
+  .botton-in-preview {
+    visibility: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
 }
 
-.row-crad-files {
+.plane-preview {
+  overflow: visible;
+  /* height: calc(100vh - 120px); */
+  height: 100vh;
+  margin-left: 0%;
+}
+
+.alert-email {
+  color: red;
+  margin-left: 5%;
+  font-family: "Sarabun", sans-serif;
+  font-size: 14px !important;
+}
+
+.row-crad-files{
   width: 100%;
   margin: 0%;
 }
 
-.chip-moblie {
+.chip-moblie{
   font-family: "Sarabun", sans-serif;
 }
 
@@ -4184,7 +4370,12 @@ export default {
     padding-top: 0% !important;
   }
 
-  .chip-moblie {
+  .send-ppl-actions-block{
+    padding-top: 3% !important;
+    padding-bottom: 3% !important;
+  }
+
+  .chip-moblie{
     white-space: inherit;
     height: auto !important;
   }
@@ -4198,6 +4389,15 @@ export default {
   }
 
   /*======== style from old file >> Preview_Template(old version) ========*/
-  
+  .loading-circle-preview {
+    position: fixed;
+    top: 13%;
+    left: 13%;
+    z-index: 16;
+  }
+
+  .template-paperless-title-block {
+    padding-bottom: 0%;
+  }
 }
 </style>

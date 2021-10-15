@@ -8727,6 +8727,13 @@
     text-transform: capitalize;
   }
 
+  .import-excel-btn {
+    font-family: 'Sarabun', sans-serif;
+    text-transform: capitalize;
+    color: black !important;
+    margin-right: 1%;
+  }
+
   .send-back-btn {
     font-family: 'Sarabun', sans-serif;
     margin-right: 1%;
@@ -8807,6 +8814,12 @@
     line-height: 22px;
   }
 
+  .send-doc-btn {
+    font-family: 'Sarabun', sans-serif;
+    margin-right: 1%;
+    text-transform: capitalize;
+  }
+
   .preview-btn {
     font-family: 'Sarabun', sans-serif;
     text-transform: capitalize;
@@ -8848,6 +8861,13 @@
   .num-page-input-form {
     font-family: 'Sarabun', sans-serif;
     font-size: 14px;
+  }
+
+  .excel-file-title {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 16px;
+    color: black;
+    text-align: center;
   }
 
   .temp-name {
@@ -9024,6 +9044,10 @@
     line-height: 3px;
   }
 
+  .tox-notifications-container {
+    display: none !important;
+  }
+
   .editor-box {
     border: 1px solid lightgray;
     padding-left: 2px;
@@ -9031,6 +9055,10 @@
     border-radius: 4px;
     height: inherit;
     overflow: auto;
+  }
+
+  .tox .tox-editor-header {
+    z-index: 10 !important;
   }
 
   #workpaper {
@@ -9083,6 +9111,36 @@
   }
 
   /*======== style from old file >> Show_Template(old version) ========*/
+  .content-show-tem {
+    margin-top: 54px;
+    margin-left: 0px;
+  }
+
+  .plane-show-tem {
+    overflow:auto;
+    height: calc(100vh - 70px);
+  }
+
+  .loading-circle-block {
+    position: fixed;
+    /* top:25%; 
+    left:45%;  */
+    width: 100%;
+    height: 100%;
+    z-index: 15;
+    background-color: gray;
+    opacity: 0.3;
+  }
+
+  .tem_name_row {
+    width: 100%;
+    margin-top: 3%;
+    justify-content: center;
+  }
+
+  .template-name-center {
+    text-align: center;
+  }
 
   .textarea-btn {
     position: absolute;
@@ -9099,6 +9157,40 @@
     position: absolute;
     top: -3%;
     right: -3%;
+  }
+
+  .insert-img-icon {
+    margin-right: 10%;
+  }
+
+  .textarea-example-title {
+    font-family: 'Sarabun', sans-serif;
+    color: #1b9900;
+  }
+
+  .textarea-example-block {
+    border-style: solid;
+    border-width: 2px;
+    border-color: #1b9900;
+    border-radius: 5px;
+    padding: 6px;
+    margin-top: 2%;
+  }
+
+  .textarea-example {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    color: black;
+  }
+
+  .textarea-valiable-block {
+    text-align: right;
+  }
+
+  .textarea-valiable {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 16px;
+    color: black;
   }
 
   .add-row-button-block {
@@ -9119,11 +9211,32 @@
     font-size: 13px;
   }
 
+  .comment-block {
+    position: fixed;
+    top: 67px;
+    right: 0px;
+    padding-left: 0%;
+    padding-right: 0%;
+    z-index: 7;
+  }
+
   .comment-header-property {
     font-family: 'Sarabun', sans-serif;
     font-size: 16px;
     text-decoration: underline;
     display: inline-block;
+  }
+
+  .comment-card {
+    height: 92vh;
+  }
+
+  .comment-title {
+    font-family: 'Sarabun', sans-serif;
+    background-color: #1b9900;
+    font-size: 20px;
+    color: white;
+    padding-bottom: 16px;
   }
 
   .comment-row {
@@ -9139,9 +9252,74 @@
     line-height: 23px;
   }
 
+  .send-comment-icon {
+    font-size: 30px !important;
+  }
+
+  .comments-block {
+    padding-left: 4%;
+    padding-right: 4%;
+    overflow: auto;
+    /* height: 72vh; */
+    max-height: 72vh;
+  }
+
+  .user-comment {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 16px;
+  }
+
+  .bubble-block {
+    padding-bottom: 0%;
+  }
+
+  .speech-bubble {
+    position: relative;
+    background: #DCEDC8;
+    border-radius: .4em;
+  }
+
+  .speech-bubble:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20%;
+    width: 0;
+    height: 0;
+    border: 17px solid rgba(187, 187, 187, 0.082);
+    border-bottom-color: #DCEDC8;
+    border-top: 0;
+    margin-left: -17px;
+    margin-top: -17px;
+    box-shadow: 0px -5px 60px rgb(187, 187, 187);
+  }
+
   .comment {
     color: darkslategrey !important;
     font-family: 'Sarabun', sans-serif;
+  }
+
+  .comment-text {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .comment-time-block {
+    text-align: right;
+    padding-top: 0%;
+  }
+
+  .comment-time {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    color: gray;
+  }
+
+  .button-show-comment {
+    position: fixed;
+    top: 82px;
+    right: 15px;
+    z-index: 10;
   }
 
   .theme--light.v-pagination.page-button-use .v-pagination__navigation {
@@ -9165,6 +9343,10 @@
 
   /*========================================*/
   @media only screen and (max-width:600px){ /*css for mobile screen*/
+    .import-excel-btn {
+      padding-left: 2% !important;
+      padding-right: 2% !important;
+    }
 
     .preview-btn {
       padding-left: 2% !important;
@@ -9214,6 +9396,20 @@
     }
 
     /*======== style from old file >> Show_Template(old version) ========*/
-    
+    .content-show-tem {
+      margin-top: 45px;
+    }
+
+    .import-excel-content {
+      padding-left: 0% !important;
+    }
+
+    .button-show-comment {
+      top: 69px;
+    }
+
+    .comment-block {
+      top: 56px;
+    }
   }
 </style>
