@@ -117,7 +117,7 @@
                   <span class="ml-2">SEND EMAIL</span>
                 </v-btn>
               </v-col>
-              <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
+              <v-col v-if="isShowRevertButton" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
                 <v-btn @click="optionFormReturn()" depressed x-small dark color="#FBC02D" class="return-correction-btn">
                   ส่งคืนแก้ไข
                 </v-btn>
@@ -378,7 +378,8 @@ export default {
     comment: '',
     comment_status: true,
     last_step: 0,
-    is_approve: false
+    is_approve: false,
+    isShowRevertButton: true
   }),
   computed: {
   },
@@ -625,6 +626,9 @@ export default {
           if (data.status) {
             const doc_data = data.data
             this.transaction_detail = doc_data
+            if(data.data.flow_step[0].status == "W" || data.data.document_status == "Y" || data.data.document_status == "R") {
+              this.isShowRevertButton = false
+            }
             this.allStatus = doc_data.flow_step.map(
               (element) => element.send_update.action.toLowerCase() === 'sign' || element.send_update.action.toLowerCase() === 'sign-ca'
             )
