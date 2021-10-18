@@ -626,6 +626,11 @@ export default {
           if (data.status) {
             const doc_data = data.data
             this.transaction_detail = doc_data
+            doc_data.flow_step.forEach(element => {
+              if(element.status == 'W'){
+                this.isShowRevertButton = element.name.includes(sessionStorage.getItem('name'))
+              }
+            });
             if(data.data.flow_step[0].status == "W" || data.data.document_status == "Y" || data.data.document_status == "R") {
               this.isShowRevertButton = false
             }
