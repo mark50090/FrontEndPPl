@@ -196,6 +196,7 @@ import { EventBus } from '../EventBus'
       async countTransaction(){
         var status = ""
         if(this.document_status == 'all') status = ""
+        else status = this.document_status
         const { page, itemsPerPage } = this.optionsTransaction
         try {
           var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
