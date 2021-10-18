@@ -258,7 +258,7 @@
                           </v-col>
                         </template>
                       </v-row>
-                      <v-row class="create-row each-step-mail-row" v-for="actor_email in flow_data_custom.actor.permission_email" :key="flow_data_custom.index + actor_email.id"> <!-- each email row in step -->
+                      <v-row class="create-row each-step-mail-row" v-for="(actor_email,index) in flow_data_custom.actor.permission_email" :key="flow_data_custom.index + actor_email.id"> <!-- each email row in step -->
                         <v-col cols="7" md="7" lg="7" class="px-0 pt-1 each-email-step-block">
                           <v-text-field dense outlined hide-details color="#67C25D" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon">
                             <template v-slot:prepend>
@@ -276,7 +276,7 @@
                                 <v-icon>mdi-minus</v-icon>
                               </v-btn>
                             </v-col>
-                            <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 px-2 add-delete-permission-block"> <!-- add email in each step button -->
+                            <v-col v-if="index == flow_data_custom.actor.permission_email.length-1" cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 px-2 add-delete-permission-block"> <!-- add email in each step button -->
                               <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn" @click="addActor(flow_data_custom.index)">
                                 <v-icon>mdi-plus</v-icon>
                               </v-btn>
