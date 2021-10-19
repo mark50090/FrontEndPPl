@@ -305,9 +305,9 @@
                     v-if="sign_type == 'Default'"
                     :src="default_sign"
                     contain
-                    height="150px"
+                    height="248px"
                   />
-                  <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }" w="300" h="150"></vueSignature>
+                  <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }" w="490" h="250" class="sign-pad-box"></vueSignature>
                 </v-col>
               </v-row>
             </template>
@@ -315,7 +315,6 @@
         </v-col>
       </v-row>
     </v-card>
-    <canvas id="canvas" width="300" height="150" style="display:none" ></canvas>
     <StampModal/>
     <showFormMail/>
     <showFromFile/>
@@ -1372,12 +1371,17 @@ export default {
   .sign-block {
     border: 1px solid lightgray;
     border-radius: 4px;
-    height: 150px;
-    width: 300px;
+    height: 250px;
+    width: 490px;
     text-align: center;
     align-items: center;
     justify-content: center;
     display: flex;
+  }
+
+  .sign-pad-box {
+    width: 100%;
+    height: 100%;
   }
 
   /*========================================*/
