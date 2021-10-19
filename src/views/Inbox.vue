@@ -124,10 +124,12 @@ import { EventBus } from '../EventBus'
       typeDocument:[{name: 'ทั้งหมด', _id: "", detail: ""}],
       selectedTypeDocs: {name: 'ทั้งหมด', _id: "", detail: ""},
       isReady: false,
+      isChangeTab: false
     }),
     mounted() {
       this.getdata()
       this.searchTransaction()
+      this.countTransaction()
       EventBus.$emit('loadingOverlay', true)
       EventBus.$on('changeBiz', this.changeBiz)
     },
@@ -136,7 +138,7 @@ import { EventBus } from '../EventBus'
     },
     watch:{
       "optionsTransaction.page"(newValue,oldValue){
-          // if (newValue != 1) 
+        if (newValue != 1 || !this.isChangeTab) 
             this.searchTransaction({page:newValue}).then(data => {})
         },
       "optionsTransaction.itemsPerPage"(newValue,oldValue){
@@ -146,6 +148,8 @@ import { EventBus } from '../EventBus'
       "document_status"(newValue,oldValue){
         this.optionsTransaction.page = 1
         this.searchTransaction({status:newValue}).then(data => {})
+        this.changeTotalItem()
+        this.isChangeTab = true
       }
     },
 
@@ -187,16 +191,16 @@ import { EventBus } from '../EventBus'
                 this.inbox_data.push(element) // ใส่ค่าที่ได้จาก api ลงในตาราง
             });
           }
-          this.countTransaction()
+          // this.countTransaction()
         } catch (error) {
           console.log(error)
         }
         this.emitLoading(false)
+        this.isChangeTab = false
       },
       async countTransaction(){
         var status = ""
         if(this.document_status == 'all') status = ""
-        else status = this.document_status
         const { page, itemsPerPage } = this.optionsTransaction
         try {
           var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
@@ -253,6 +257,7 @@ import { EventBus } from '../EventBus'
       },
       changeBiz(){
         this.searchTransaction()
+        this.countTransaction()
         this.getTypeDocs()
       },
       searchKeyword(){
