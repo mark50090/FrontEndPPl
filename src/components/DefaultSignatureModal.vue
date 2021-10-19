@@ -138,10 +138,12 @@ export default {
     },
     cancelButton() {
       this.signature_dialog = false
-      // this.$refs.signaturePad.clearSignature()
+      if (this.stateDefaultSignature == 'draw') {
+        this.$refs.signaturePad.clearSignature()
+      }
       this.uploadImage = undefined
       this.imageSignature = ''
-      EventBus.$emit('Set_Signature')
+      // EventBus.$emit('Set_Signature')
     },
     async postData() {
       try {
