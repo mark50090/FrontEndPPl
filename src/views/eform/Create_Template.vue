@@ -1983,9 +1983,9 @@
                 <v-textarea rows="5" dense outlined hide-details single-line no-resize color="#4CAF50" class="prop-input pad-textarea note-row2" v-model="note_paperless"></v-textarea>
               </v-col>
             </v-row>
-            <br>
+            <!-- <br>
             <v-divider class="divider-prop"></v-divider>
-            <br>
+            <br> -->
             <!-- Auto Flow -->
             <!-- <span class="sub-title-property"><b>{{ textLang.set_doc_paperless.set_auto_flow }}</b></span>
             <v-row class="row-prop">
@@ -1993,6 +1993,26 @@
                 <v-btn depressed block small :color="color_varidate_button" class="validate-doc-btn" @click="openFlowCondition()">{{ textLang.set_doc_paperless.set_auto_flow_btn }}</v-btn>
               </v-col>
             </v-row> -->
+            <v-card v-if="false" outlined class="mr-2 mt-3 pa-2 all-create-workflow-block"> <!-- example workflow -->
+              <template> <!-- each step --> 
+                <v-row class="workflow-step-row title-prop">
+                  ลำดับที่ 20 : ผู้มีสิทธิ์กรอกและเซ็น <!-- ผู้มีสิทธิ์อนุมัติ / ผู้มีสิทธิ์เซ็น / ผู้มีสิทธิ์กรอก / ผู้มีสิทธิ์กรอกและเซ็น -->
+                </v-row>
+                <v-list dense class="pt-1 pb-5">
+                  <v-list-item dense class="pl-2 pr-0 each-step-workflow"> <!-- each mail in step -->
+                    <v-list-item-icon class="mr-2 my-0 each-step-workflow-icon">
+                      <v-icon>mdi-account</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content class="py-0 each-step-workflow-mail">
+                      workflow.di@one.th
+                    </v-list-item-content>
+                    <v-list-item-icon class="ml-2 my-0 alert-onechat-block"> <!-- show when this mail is set to alert in One Chat -->
+                      <img height="21px" src="https://www.img.in.th/images/a368504d4cdb93225bda2f04c665ead7.png" />
+                    </v-list-item-icon>
+                  </v-list-item>
+                </v-list>
+              </template>
+            </v-card>
           </v-tab-item>
           <v-tab-item> <!-- Filling Mobile Tab -->
             <span class="pr-2 header-property"><b>{{ textLang.filling_mobile.title }}</b></span>
@@ -9009,6 +9029,35 @@ export default {
   font-family: 'Sarabun', sans-serif;
   font-size: 14px;
   color: gray;
+}
+
+.all-create-workflow-block {
+  margin-left: 7%;
+  overflow: auto;
+  max-height: calc(100vh - 445px);
+}
+
+.workflow-step-row {
+  width: 100%;
+  margin: 0%;
+}
+
+.each-step-workflow {
+  min-height: 30px !important;
+}
+
+.each-step-workflow-icon {
+  align-self: center;
+}
+
+.each-step-workflow-mail {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+}
+
+.alert-onechat-block {
+  min-width: 21px !important;
+  align-self: center;
 }
 
 .v-text-field--outlined.condition-auto-row > .v-input__control > .v-input__slot {
