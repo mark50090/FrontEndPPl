@@ -10,15 +10,15 @@
       </v-btn>
       <v-spacer></v-spacer>
       <!-- button for web -->
-      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="#FBC02D" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
+      <v-btn v-if="currentStep != ''" depressed rounded large dark color="#FBC02D" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
         <v-icon>mdi-reply</v-icon>
         <span class="btn-return-edit">{{ textLang.tabMenubar.return_edit }}</span>
       </v-btn>
-      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
+      <v-btn v-if="currentStep != ''" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
         <v-icon>mdi-file-excel-outline</v-icon>
         <span class="btn-reject-doc save-draft-word">{{ textLang.tabMenubar.reject_doc }}</span>
       </v-btn>
-      <v-btn v-if="!isPublic && isOwner && isFlowDoc" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
+      <v-btn v-if="currentStep != '' && isOwner" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
         <v-icon>mdi-file-cancel-outline</v-icon>
         <span class="btn-cancel-doc">{{ textLang.tabMenubar.cancel_doc }}</span>
       </v-btn>
@@ -28,7 +28,7 @@
           <span class="btn-view-attachment save-draft-word">{{ textLang.tabMenubar.view_attachment }}</span>
         </v-btn>
       </v-badge> -->
-      <v-btn v-if="(!isSendStep || isComplete) && isSelf" outlined rounded large color="#4CAF50" class="send-back-btn-icon send-back-btn display-pc-only" @click="save(false, true)">
+      <v-btn outlined rounded large color="#4CAF50" class="send-back-btn-icon send-back-btn display-pc-only" @click="save(false, true)">
         <v-icon>mdi-file-search-outline</v-icon>
         <span class="btn-review-ex save-draft-word">{{ textLang.tabMenubar.review_ex }}</span>
       </v-btn>
@@ -36,7 +36,7 @@
         <v-icon>mdi-file-hidden</v-icon>
         <span class="btn-expan-word save-draft-word">{{ textLang.tabMenubar.save_draft }}</span>
       </v-btn> -->
-      <v-btn v-if="(!isSendStep || isComplete) && isSelf" depressed large dark color="#4CAF50" class="preview-btn" @click="save(false, false)">{{ textLang.tabMenubar.save_doc_btn }}</v-btn>
+      <v-btn depressed large dark color="#4CAF50" class="preview-btn" @click="save(false, false)">{{ textLang.tabMenubar.save_doc_btn }}</v-btn>
 
       <v-menu offset-y z-index="13" v-if="!isPublic && !isSendStep">
         <template v-slot:activator="{ on }">
@@ -54,7 +54,7 @@
             <v-list-item-icon><v-icon>mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="AddAttachFile()">
+          <v-list-item  @click="AddAttachFile()">
             <v-list-item-icon><v-icon>mdi-paperclip</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_file_menu }}</v-list-item-title>
           </v-list-item>
@@ -265,7 +265,7 @@
               </div>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
-                  <v-btn v-show="item.show && item.style.textAreaValiable.length && getHideByValue(item.style.hideOption, item.name, item.style.zIndex)" text icon color="#4CAF50" class="textarea-btn" v-on="on" @click="openTextAreaValModal(item)">
+                  <v-btn v-show="item.show && item.style.textAreaValiable.length && getHideByValue(item.style.hideOption, item.name, item.style.zIndex) && !item.disable" text icon color="#4CAF50" class="textarea-btn" v-on="on" @click="openTextAreaValModal(item)">
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
                 </template>
@@ -1121,7 +1121,7 @@
       importType: "eform",
       isEmailStep: false,
       uploadFolder: "",
-      currentStep: 0,
+      currentStep: "",
       checkContSleep:false,
       contTableArray: [],
       changeHideDict: {},
@@ -1577,13 +1577,14 @@
       getData() {
         if(sessionStorage.getItem('isDocEdit') == 'true') {
           this.option = JSON.parse(sessionStorage.getItem('option'))
-          if(sessionStorage.getItem('onView') == 'true') {
-            this.returnEform(this.option.eform_id).then(res => {
-              this.getTemplateValue(this.option.eform_id)
-            })
-          } else {
-            this.getTemplateValue(this.option.eform_id)
-          }
+          this.getTemplateValue(this.option.transaction_id)
+          // if(sessionStorage.getItem('onView') == 'true') {
+          //   this.returnEform(this.option.eform_id).then(res => {
+          //     this.getTemplateValue(this.option.eform_id)
+          //   })
+          // } else {
+          //   this.getTemplateValue(this.option.eform_id)
+          // }
         } else {
           this.option = JSON.parse(sessionStorage.getItem('option'))
           if(this.option.isCopy) {
@@ -1722,45 +1723,46 @@
               all_template.push(e)
             })
             all_template.sort((a, b) => (a.order > b.order) ? 1 : -1)
-            var flowStep = []
-            if(data.data.status_flow_permission) {
-              flowStep = data.data.flow_permission
-              flowStep.sort((a, b) => (a.step_num > b.step_num) ? 1 : -1)
-              if(flowStep.length) {
-                if(flowStep[0].role.length) {
-                  if(flowStep[0].role[0].name == "all-user") {
-                    sessionStorage.setItem('isDocEdit',false)
-                    sessionStorage.setItem('isDocStep',true)
-                    sessionStorage.setItem('editStep',false)
-                    this.currentStep = 1
-                    this.isSendFirst = false
-                    this.allUserStep = true
-                    this.current_flow = flowStep[0]
-                    this.commentAble = true
-                  }
-                }
-              }
-              if(this.current_flow) {
-                this.current_flow.blind  =[]
-                flowStep.forEach(e => {
-                  if(typeof e.observe.observe !== 'undefined' &&e.observe.observe.includes(e.step_num)) {
-                    e.observe.observe.push(Number(e.step_num) + 1)
-                  }
-                  if(e.step_num != this.current_flow.step_num) {
-                    if(typeof e.observe.choicesSet !== 'undefined' && e.observe.choicesSet) {
-                      if(!e.observe.observe.includes(this.current_flow.step_num) && !e.observe.observe.includes(e.step_num)) {
-                        this.current_flow.blind.push(e.role[0].object_name)
-                      }
-                    }
-                  }
-                })
-              }
-            }
-            if(this.allUserStep) {
-              this.getArrayValue(all_template, true, true)
-            } else {
-              this.getArray(all_template)
-            }
+            // var flowStep = []
+            // if(data.data.status_flow_permission) {
+            //   flowStep = data.data.flow_permission
+            //   flowStep.sort((a, b) => (a.step_num > b.step_num) ? 1 : -1)
+            //   if(flowStep.length) {
+            //     if(flowStep[0].role.length) {
+            //       if(flowStep[0].role[0].name == "all-user") {
+            //         sessionStorage.setItem('isDocEdit',false)
+            //         sessionStorage.setItem('isDocStep',true)
+            //         sessionStorage.setItem('editStep',false)
+            //         this.currentStep = 1
+            //         this.isSendFirst = false
+            //         this.allUserStep = true
+            //         this.current_flow = flowStep[0]
+            //         this.commentAble = true
+            //       }
+            //     }
+            //   }
+            //   if(this.current_flow) {
+            //     this.current_flow.blind  =[]
+            //     flowStep.forEach(e => {
+            //       if(typeof e.observe.observe !== 'undefined' &&e.observe.observe.includes(e.step_num)) {
+            //         e.observe.observe.push(Number(e.step_num) + 1)
+            //       }
+            //       if(e.step_num != this.current_flow.step_num) {
+            //         if(typeof e.observe.choicesSet !== 'undefined' && e.observe.choicesSet) {
+            //           if(!e.observe.observe.includes(this.current_flow.step_num) && !e.observe.observe.includes(e.step_num)) {
+            //             this.current_flow.blind.push(e.role[0].object_name)
+            //           }
+            //         }
+            //       }
+            //     })
+            //   }
+            // }
+            // if(this.allUserStep) {
+            //   this.getArrayValue(all_template, true, true)
+            // } else {
+            //   this.getArray(all_template)
+            // }
+            this.getArrayValue(all_template, true, true)
             var temp_ppl_code = [{'name': 'default', 'code': ''}]
             if(template.template_paperless_code != null) {
               temp_ppl_code = template.template_paperless_code
@@ -1899,20 +1901,20 @@
         //   }
         // }
       },
-      async getTemplateValue(eform_id) {
-        // eform_id = "ccbffd19-0caf-443c-a623-e6902e69199f"
-        // this.returnEform(eform_id)
-        // this.option.statusDraft = true
-        await this.getTemplateExtent(eform_id)
+      async getTemplateValue(transaction_id) {
         var template = {}
         try {
-          var { data } = await this.axios.get(this.$eform_api_v6 + '/upload_eform?eform_id=' + eform_id + '&status_draft=' + this.option.statusDraft)
+          var { data } = await this.axios.get(this.$api_url + '/template_form/api/v1/get_eform?transaction_id=' + transaction_id)
           this.notReady = false
-          if(data.result == 'OK') {
-            template = data.data
+          if(data.status) {
+            template = data.data[0]
             this.template_option = template
-            this.doc_name = this.template_option.document_name
-            this.isOwner = template.create_by == sessionStorage.getItem("oneuser")
+            this.doc_name = this.template_option.transaction_detail.object_text.subject
+            let tempStep = template.transaction_detail.flow_data.find(item => item.status == "W")
+            if(tempStep) {
+              this.currentStep = tempStep.index + 1
+            }
+            this.isOwner = template.account_id == JSON.parse(sessionStorage.getItem("userProfile")).id
             if(sessionStorage.getItem('copyDoc') == 'true') {
               this.template_option.document_name = ""
             }
@@ -1934,179 +1936,140 @@
             }
 
             for(var i=0; i<pageLength; i++) {
-              if(typeof template.url_image !== 'undefined') {
-                var Okey = i+1
-                if(template.url_image[Okey]) {
-                  this.pages[Number(Okey)-1].url_image = template.url_image[Okey]
-                } else {
-                  this.pages[Number(Okey)-1].url_image = "https://www.img.in.th/images/83ca9b38ee2d7d129f1826f75ea05e4f.png"
-                }
+              var Okey = i+1
+              if(template.url_image[Okey]) {
+                this.pages[Number(Okey)-1].url_image = template.url_image[Okey]
               } else {
-                  this.pages[Number(Okey)-1].url_image = "https://www.img.in.th/images/83ca9b38ee2d7d129f1826f75ea05e4f.png"
+                this.pages[Number(Okey)-1].url_image = "https://www.img.in.th/images/83ca9b38ee2d7d129f1826f75ea05e4f.png"
               }
             }
-        
             this.template_side = this.pages[0].template_side
-            this.signing = this.template_option.signing
-            if(typeof this.template_option.Folder_Attachment_Name && this.template_option.Folder_Attachment_Name.length) {
-              this.attachedFiles = this.template_option.Folder_Attachment_Name
-            }
-
+    
             if(this.template_side == "LANDSCAPE") {
               this.current_paper_width = this.paper_size[this.paperSizeIndex].height
-              this.current_paper_height = this.paper_size[this.paperSizeIndex].width
+              this.current_paper_height = this.paper_size[this.paperSizeIndex].width-50
             }
             if(this.template_option.paper_size) {
               this.paperSizeIndex = this.paper_size.find(item => item.text.toUpperCase() == this.template_option.paper_size.toUpperCase()).value
             } 
-
-            if(this.template_option.permission_form.text) {
-              this.template_option.permission_form = this.template_option.permission_form.value
-            }
-
-            if(this.template_option.ref_document_number) {
-              this.refDataDoc = this.template_option.ref_document_number
-            }
-
-            var no_biz = false
-            var doc_no_biz = false
-
-            if(!JSON.parse(sessionStorage.getItem('selected_business')).id) {
-              no_biz = true
-            }
-            if(!this.template_option.permission_form.id) {
-              doc_no_biz = true
-            }
-            if(!(no_biz && doc_no_biz)) {
-              if(no_biz != doc_no_biz) {
-                this.changeBiz(this.template_option.permission_form)
-              }
-              if(this.template_option.permission_form.id_card_num != JSON.parse(sessionStorage.getItem('selected_business')).id_card_num) {
-                this.changeBiz(this.template_option.permission_form)
-              }
-            }
-            this.comments = this.template_option.comment
-            var all_template = []
-            for(var i=0; i<template.template_header.length; i++) {
-              var THkey = Object.keys(template.template_header[i])[0]
-              template.template_header[i][THkey].forEach( e => {
-                e.order = this.getObjectOrder(e)
-                all_template.push(e)
-              })
-              template.template_header[i][THkey]
-              var TBkey = Object.keys(template.template_body[i])[0]
-              template.template_body[i][TBkey].forEach( e => {
-                e.order = this.getObjectOrder(e)
-                all_template.push(e)
-              })
-              var TFkey = Object.keys(template.template_footer[i])[0]
-              template.template_footer[i][TFkey] .forEach( e => {
-                e.order = this.getObjectOrder(e)
-                all_template.push(e)
-              })     
-            }
-            all_template.sort((a, b) => (a.order > b.order) ? 1 : -1)
-            this.isFlowDoc = this.template_option.status_flow_permission
-       
-            if(sessionStorage.getItem('isDocStep') == 'true') {
-              var flows = []
-              if(this.template_option.status_flow_permission) {
-                flows = this.template_option.flow_permission
-                this.commentAble = true
-              }
-              if(flows.length) {
-                this.isSelf = false
-              }
-              this.backStepArray = []
-              flows.forEach(e => {
-                if(e.status == "Incomplete") {
-                  this.currentStep = e.step_num
-                  if(e.step_num == 1) {
-                    this.isSendFirst = false
-                  } else if(e.step_num == flows.length && !this.template_option.signing) {
-                    e.role.forEach(r => {
-                      if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
-                        this.isComplete = true
-                        this.isSendBack = true
-                        this.isEdit = false
-                        sessionStorage.setItem('editStep',false)
-                      }
-                    })
-                    e.email.forEach(em => {
-                      if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
-                        this.isComplete = true
-                        this.isSendBack = true
-                        this.isEdit = false
-                        sessionStorage.setItem('editStep',false)
-                      }
-                    })
-                  }
-                  this.current_flow = e
-                  e.role.forEach(r => {
-                    if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
-                      this.isSelf = true
-                      this.isSendBack = true
-                    }
-                  })
-                  e.email.forEach(em => {
-                    if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
-                      this.isSelf = true
-                      this.isSendBack = true
-                      this.isEmailStep = true
-                    }
-                  })
-                } else if (e.status == "Complete") {
-                  var step_name = ""
-                  if(e.email.length > 0) {
-                    step_name = e.email[0]
-                  } else {
-                    step_name = e.role[0].name
-                  }
-                  if(e.step_num == 1 && this.template_option.e_template_code == "e47aa8d3-5852-47eb-97db-656d532abd83" && e.role[0].object_name == '') {
-                    e.role[0].object_name = 'sectionbox0'
-                  }
-                  this.backStepArray.push({text: this.textLang.tabMenubar.step + e.step_num + ":" + step_name, value: {name: e.role[0].object_name, step: e.step_num} })
-                }
-              })
-            }
             
-            if(this.current_flow) {
-              this.current_flow.blind  =[]
-              if(this.current_flow.step_num != flows.length) {
-                flows.forEach(e => {
-                  if(typeof e.observe.observe !== 'undefined' &&e.observe.observe.includes(e.step_num)) {
-                    e.observe.observe.push(Number(e.step_num) + 1)
-                  }
-                  if(e.step_num != this.current_flow.step_num) {
-                    if(typeof e.observe.choicesSet !== 'undefined' && e.observe.choicesSet) {
-                      if(!e.observe.observe.includes(this.current_flow.step_num) && !e.observe.observe.includes(e.step_num)) {
-                        this.current_flow.blind.push(e.role[0].object_name)
-                      }
-                    }
-                  }
-                })
-              }
-              if(this.isSelf) {
-                this.reserveEform(eform_id)
-              }
-            }
-            var temp_template = await this.checkTemplateExtent(all_template)
-            if(temp_template.length) {
-              this.getArrayValue(temp_template, true)
+            this.signing = this.template_option.signing
+            // if(typeof this.template_option.Folder_Attachment_Name && this.template_option.Folder_Attachment_Name.length) {
+            //   this.attachedFiles = this.template_option.Folder_Attachment_Name
+            // }
+
+          
+            this.comments = this.template_option.comments
+
+            var all_template = []
+            template.template_data.forEach(e => {
+              e.order = this.getObjectOrder(e)
+              all_template.push(e)
+            })
+
+            all_template.sort((a, b) => (a.order > b.order) ? 1 : -1)
+       
+            // if(sessionStorage.getItem('isDocStep') == 'true') {
+            //   var flows = []
+            //   if(this.template_option.status_flow_permission) {
+            //     flows = this.template_option.flow_permission
+            //     this.commentAble = true
+            //   }
+            //   if(flows.length) {
+            //     this.isSelf = false
+            //   }
+            //   this.backStepArray = []
+            //   flows.forEach(e => {
+            //     if(e.status == "Incomplete") {
+            //       this.currentStep = e.step_num
+            //       if(e.step_num == 1) {
+            //         this.isSendFirst = false
+            //       } else if(e.step_num == flows.length && !this.template_option.signing) {
+            //         e.role.forEach(r => {
+            //           if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
+            //             this.isComplete = true
+            //             this.isSendBack = true
+            //             this.isEdit = false
+            //             sessionStorage.setItem('editStep',false)
+            //           }
+            //         })
+            //         e.email.forEach(em => {
+            //           if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
+            //             this.isComplete = true
+            //             this.isSendBack = true
+            //             this.isEdit = false
+            //             sessionStorage.setItem('editStep',false)
+            //           }
+            //         })
+            //       }
+            //       this.current_flow = e
+            //       e.role.forEach(r => {
+            //         if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
+            //           this.isSelf = true
+            //           this.isSendBack = true
+            //         }
+            //       })
+            //       e.email.forEach(em => {
+            //         if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
+            //           this.isSelf = true
+            //           this.isSendBack = true
+            //           this.isEmailStep = true
+            //         }
+            //       })
+            //     } else if (e.status == "Complete") {
+            //       var step_name = ""
+            //       if(e.email.length > 0) {
+            //         step_name = e.email[0]
+            //       } else {
+            //         step_name = e.role[0].name
+            //       }
+            //       if(e.step_num == 1 && this.template_option.e_template_code == "e47aa8d3-5852-47eb-97db-656d532abd83" && e.role[0].object_name == '') {
+            //         e.role[0].object_name = 'sectionbox0'
+            //       }
+            //       this.backStepArray.push({text: this.textLang.tabMenubar.step + e.step_num + ":" + step_name, value: {name: e.role[0].object_name, step: e.step_num} })
+            //     }
+            //   })
+            // }
+            
+            // if(this.current_flow) {
+            //   this.current_flow.blind  =[]
+            //   if(this.current_flow.step_num != flows.length) {
+            //     flows.forEach(e => {
+            //       if(typeof e.observe.observe !== 'undefined' &&e.observe.observe.includes(e.step_num)) {
+            //         e.observe.observe.push(Number(e.step_num) + 1)
+            //       }
+            //       if(e.step_num != this.current_flow.step_num) {
+            //         if(typeof e.observe.choicesSet !== 'undefined' && e.observe.choicesSet) {
+            //           if(!e.observe.observe.includes(this.current_flow.step_num) && !e.observe.observe.includes(e.step_num)) {
+            //             this.current_flow.blind.push(e.role[0].object_name)
+            //           }
+            //         }
+            //       }
+            //     })
+            //   }
+            //   if(this.isSelf) {
+            //     this.reserveEform(eform_id)
+            //   }
+            // }
+            // var temp_template = await this.checkTemplateExtent(all_template)
+            // if(temp_template.length) {
+            //   this.getArrayValue(temp_template, true)
+            // }
+            if(template.others) {
+              this.dataTableObjectArray = template.others.dataTableObjectArray
             }
             this.getArrayValue(all_template)
-            this.template_name = template.template_name
-            this.option.template_id = template.e_template_code
-            sessionStorage.setItem('template_paperless_code',JSON.stringify(template.ppl_template_code))
-            sessionStorage.setItem('code_template',template.code_template)
-            sessionStorage.setItem('version_template',template.version_template)
-            sessionStorage.setItem('Folder_Attachment_Name',JSON.stringify(this.attachedFiles))
-            if(template.Folder_Attachment_Name.length) {
-              sessionStorage.setItem('folder_name',JSON.stringify(template.folder_name))
-              if (sessionStorage.getItem("folder_name") != "undefined") {
-                this.uploadFolder = JSON.parse(sessionStorage.getItem("folder_name"))[0]
-              }
-            }
+            this.template_name = template.document_id
+            this.option.template_id = template.template_id
+            sessionStorage.setItem('code_template',template.document_id)
+            // sessionStorage.setItem('version_template',template.version_template)
+            // sessionStorage.setItem('Folder_Attachment_Name',JSON.stringify(this.attachedFiles))
+            // if(template.Folder_Attachment_Name.length) {
+            //   sessionStorage.setItem('folder_name',JSON.stringify(template.folder_name))
+            //   if (sessionStorage.getItem("folder_name") != "undefined") {
+            //     this.uploadFolder = JSON.parse(sessionStorage.getItem("folder_name"))[0]
+            //   }
+            // }
           } else if(data.result == 'ER') {
             if(data.messageER == 'RESERVED') {
               this.$router.push('/form')
@@ -3099,68 +3062,13 @@
               cmp.style = this.fixObjectStyle(cmp.style)
             }
           }
-            if(sessionStorage.getItem('isDocStep') == 'true') {
-              if(typeof this.template_option.flow_permission !== 'undefined' && this.template_option.flow_permission.length) {
-                cmp.disable = true
-                if(this.current_flow != "" && e.object_type != "dataTableObjectArray") {
-                  if(cmp.style.permission.value_email.length == 1 && cmp.style.permission.value_email[0] == '') {
-                    cmp.style.permission.value_email = []
-                  }
-                  if(cmp.style.permission.value_email.length || cmp.style.permission.value_role.length) {
-                    if(cmp.object_name == this.current_flow.role[0].object_name) {
-                      if(JSON.parse(sessionStorage.getItem('selected_business')).id) {
-                        this.current_flow.role.forEach(r => {
-                          if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
-                            this.isSendBack = true
-                            this.isEditable = true
-                            cmp.textHl = true
-                            cmp.disable = false
-                          }
-                        })
-                        this.current_flow.email.forEach(em => {
-                          if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
-                            this.isSendBack = true
-                            this.isEditable = true
-                            cmp.textHl = true
-                            cmp.disable = false
-                          }
-                        })
-                      }
-                      if(this.current_flow.blind.includes(cmp.object_name)) {
-                        cmp.hideBysection = true
-                      }
-                    }
-                  } else if(cmp.style.permission_section != "") {
-                    if(cmp.style.permission_section.section && cmp.style.permission_section.section.includes(this.current_flow.role[0].object_name)) {
-                      if(JSON.parse(sessionStorage.getItem('selected_business')).id) {
-                        this.current_flow.role.forEach(r => {
-                          if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
-                            this.isSendBack = true
-                            this.isEditable = true
-                            cmp.textHl = true
-                            cmp.disable = false
-                          }
-                        })
-                        this.current_flow.email.forEach(em => {
-                          if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
-                            this.isSendBack = true
-                            this.isEditable = true
-                            cmp.textHl = true
-                            cmp.disable = false
-                          }
-                        })
-                      }
-                    }
-                    this.current_flow.blind.forEach(bl => {
-                      if(cmp.style.permission_section.section && cmp.style.permission_section.section.includes(bl)) {
-                        cmp.hideBysection = true
-                      }
-                    })
-                  } else {
-                    this.isEditable = true
-                    cmp.disable = false
-                  }
-                }
+            if(sessionStorage.getItem('isDocStep') == 'true' && cmp.object_type != "dataTableObjectArray") {
+              cmp.disable = true
+              if((cmp.style.permission_step == this.currentStep &&  !cmp.style.permission_step_section)||(!cmp.style.permission_step && cmp.style.permission_step_section == this.currentStep)) {
+                this.isSendBack = true
+                this.isEditable = true
+                cmp.textHl = true
+                cmp.disable = false
               }
             }
             if(this.isComplete) {
@@ -3262,80 +3170,8 @@
             var objName = this.dataTableObjectArray[k].object_name.split('_')[0]
             if(typeof this.dataDict[objName] !== 'undefined') {
               var tableObjIndex = this.dataDict[objName].arrayIndex
-              if(this.current_flow != "") {
-                if(this.dataTableObjectArray[k].style.permission.value_email.length == 1 && this.dataTableObjectArray[k].style.permission.value_email[0] == '') {
-                  this.dataTableObjectArray[k].style.permission.value_email = []
-                }
-                if(this.dataTableObjectArray[k].style.permission.value_email.length || this.dataTableObjectArray[k].style.permission.value_role.length) {
-                  if(this.dataTableObjectArray[k].object_name == this.current_flow.role[0].object_name) {
-                    if(JSON.parse(sessionStorage.getItem('selected_business')).id) {
-                      this.current_flow.role.forEach(r => {
-                        if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
-                          this.isSendBack = true
-                          this.isEditable = true
-                          this.dataTableObjectArray[k].textHl = true
-                          this.dataTableObjectArray[k].disable = false
-                          if(typeof this.objectArray['datatable'][tableObjIndex] !== 'undefined') {
-                            this.objectArray['datatable'][tableObjIndex].addAble = true
-                          }
-                        }
-                      })
-                      this.current_flow.email.forEach(em => {
-                        if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
-                          this.isSendBack = true
-                          this.isEditable = true
-                          this.dataTableObjectArray[k].textHl = true
-                          this.dataTableObjectArray[k].disable = false
-                          if(typeof this.objectArray['datatable'][tableObjIndex] !== 'undefined') {
-                            this.objectArray['datatable'][tableObjIndex].addAble = true
-                          }
-                        }
-                      })
-                    }
-                    if(this.current_flow.blind.includes(this.dataTableObjectArray[k].object_name)) {
-                      this.dataTableObjectArray[k].hideBysection = true
-                    }
-                  }
-                } else if(this.dataTableObjectArray[k].style.permission_section != "") {
-                  if(this.dataTableObjectArray[k].style.permission_section.section && this.dataTableObjectArray[k].style.permission_section.section.includes(this.current_flow.role[0].object_name)) {
-                    if(JSON.parse(sessionStorage.getItem('selected_business')).id) {
-                      this.current_flow.role.forEach(r => {
-                        if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
-                          this.isSendBack = true
-                          this.isEditable = true
-                          this.dataTableObjectArray[k].textHl = true
-                          this.dataTableObjectArray[k].disable = false
-                          if(typeof this.objectArray['datatable'][tableObjIndex] !== 'undefined') {
-                            this.objectArray['datatable'][tableObjIndex].addAble = true
-                          }
-                        }
-                      })
-                      this.current_flow.email.forEach(em => {
-                        if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
-                          this.isSendBack = true
-                          this.isEditable = true
-                          this.dataTableObjectArray[k].textHl = true
-                          this.dataTableObjectArray[k].disable = false
-                          if(typeof this.objectArray['datatable'][tableObjIndex] !== 'undefined') {
-                            this.objectArray['datatable'][tableObjIndex].addAble = true
-                          }
-                        }
-                      })
-                    }
-                  } else if(this.dataTableObjectArray[k].style.permission_section.section == "" || !this.dataTableObjectArray[k].style.permission_section.section.length){
-                    this.isEditable = true
-                    this.dataTableObjectArray[k].disable = false
-                    if(typeof this.objectArray['datatable'][tableObjIndex] !== 'undefined') {
-                      this.objectArray['datatable'][tableObjIndex].addAble = true
-                    }
-                  }
-                  this.current_flow.blind.forEach(bl => {
-                    if(this.dataTableObjectArray[k].style.permission_section.section && this.dataTableObjectArray[k].style.permission_section.section.includes(bl)) {
-                      this.dataTableObjectArray[k].hideBysection = true
-                    }
-                  })
-                }
-              } else {
+              if((this.dataTableObjectArray[k].style.permission_step == this.currentStep && !this.dataTableObjectArray[k].style.permission_step_section) || (this.dataTableObjectArray[k].style.permission_step_section == this.currentStep && !this.dataTableObjectArray[k].style.permission_step)) {
+                this.isSendBack = true
                 this.isEditable = true
                 this.dataTableObjectArray[k].textHl = true
                 this.dataTableObjectArray[k].disable = false
@@ -7107,6 +6943,11 @@
         if(this.template_option.document_option && typeof this.template_option.document_option['condition'] !== 'undefined' && allValid) {
           allValid = this.checkDocCondition(this.template_option.document_option['condition'] )
         }
+        //New session
+        sessionStorage.setItem("firstSent", this.currentStep == "")
+        sessionStorage.setItem("isInstantSave", isToPreview != true) 
+
+        //Old session
         this.template_option.comment = this.comments
         sessionStorage.setItem('name_template',this.template_name)
         sessionStorage.setItem('template_id',this.option.template_id)
