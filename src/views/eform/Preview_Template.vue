@@ -18,15 +18,15 @@
         <v-icon>mdi-file-cancel-outline</v-icon>
         <span class="btn-expan-word">{{ textLang.tabMenubar.cancel_doc }}</span>
       </v-btn>
-      <!-- <v-badge bordered left overlap color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mr-2 display-pc-only">
+      <v-badge bordered left overlap color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mr-2 display-pc-only">
         <v-btn outlined large color="grey lighten-1" class="mr-2 px-2 export-json-btn" @click="openAttachFile()">
           <v-icon class="mr-2">mdi-text-box-search-outline</v-icon>
             {{ textLang.tabMenubar.view_attachment }}
         </v-btn>
-      </v-badge> -->
+      </v-badge>
 
-      <!-- <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready" large depressed color="#C2EB81" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft display-pc-only" @click="openDocName(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
-      <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" large depressed dark color="#4CAF50" class="save-doc-btn" @click="checkSave()">{{ textLang.tabMenubar.save_doc }}</v-btn>
+      <v-btn v-if="ready && currentStep != ''" large depressed color="#C2EB81" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft display-pc-only" @click="checkSave(true)">{{ textLang.tabMenubar.save_draft }}</v-btn>
+      <v-btn large depressed dark color="#4CAF50" class="save-doc-btn" @click="checkSave(false)">{{ textLang.tabMenubar.save_doc }}</v-btn>
       <!-- <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed color="#C2EB81" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft display-pc-only" :disabled="buttonClicked" @click="saveStep(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
       <!-- <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed color="#4CAF50" class="btn-saveStep" :disabled="buttonClicked" @click="openSignature()">{{ textLang.tabMenubar.save_doc }}</v-btn> -->  <!-- mobile -->
       
@@ -156,12 +156,12 @@
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.forward_mail }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" @click="pplLoadTemplate()">
+          <!-- <v-list-item v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" @click="pplLoadTemplate()">
             <v-list-item-icon>
               <v-icon color="#4CAF50">mdi-draw</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.offer_dialog.offer }}</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
         </v-list>
       </v-menu>
     </v-toolbar>
@@ -385,7 +385,7 @@
           <br />
           <v-row class="mb-2 save-doc-row">
             <v-col v-for="item in attachedFiles"  :key="item.file_id" cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-1 pt-0 pb-1">
-              <v-chip class="attached-file-save-modal" v-if="!item.waitUpload" small dark color="#4CAF50" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.file_name }}</v-chip>
+              <v-chip class="attached-file-save-modal" v-if="!item.waitUpload" small dark color="#4CAF50" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.filename }}</v-chip>
               <!-- <v-chip v-if="item.waitUpload" small label outlined class="ma-1 chip-moblie text-area-front" :color="color_aperless_file_title"><b>{{item.file_name}}</b>&nbsp;<i>({{ textLang.offer_dialog.wait_upload }})</i></v-chip> -->
             </v-col>
           </v-row>
@@ -438,7 +438,7 @@
         <v-card-text class="pt-4 pb-0">
           <v-row v-if="attachedFiles.length > 0" class="row-crad-files">
             <div v-for="item in attachedFiles"  :key="item.file_id">
-              <v-chip class="ma-1 chip-moblie" v-if="!item.waitUpload" small dark color="#4CAF50" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.file_name }}</v-chip>
+              <v-chip class="ma-1 chip-moblie" v-if="!item.waitUpload" small dark color="#4CAF50" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.filename }}</v-chip>
               <v-chip v-if="item.waitUpload" small outlined class="ma-1 chip-moblie" color="#4CAF50" close @click:close="deleteFileWait(item)"><b>{{item.file_name}}</b>&nbsp;<i>({{ textLang.offer_dialog.wait_upload }})</i></v-chip>
             </div>
           </v-row>
@@ -1436,7 +1436,7 @@ export default {
       }
       this.ready = true
       if(sessionStorage.getItem('isInstantSave') == 'true') {
-        this.checkSave()
+        this.checkSave(sessionStorage.getItem('isDraft') == 'true')
       }
     },
     afterSignCheck() {
@@ -1740,11 +1740,11 @@ export default {
         var attFiles = []
         EventBus.$emit('attachFiles', uploadingFiles, attFiles)
       },
-    checkSave() {
+    checkSave(isDraft) {
       if(sessionStorage.getItem("firstSent") == "true") {
-        this.openDocName(false)
+        this.openDocName(isDraft)
       } else {
-        this.updateDocument()
+        this.updateDocument(isDraft)
       }
       // var flowStatus = JSON.parse(sessionStorage.getItem("template_option")).status_flow_permission
       // if(!flowStatus) {
@@ -2342,7 +2342,7 @@ export default {
         console.log(error.message)
       }
     },
-    async updateDocument() {
+    async updateDocument(isDraft) {
       try {
         this.dialog_ppl = false
         var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
@@ -2357,11 +2357,12 @@ export default {
             is_full: true,
             step_index: this.currentStep - 1,
             string_sign: "",
-            comment: "",
+            comment: temp_option.newComment ,
             typesign: "web",
             type: "approve",
             action: "Fill",
-            others: {dataTableObjectArray : this.dataTableObjectArray}
+            others: {dataTableObjectArray : this.dataTableObjectArray},
+            is_draft: isDraft
           }
         )
 
@@ -2483,6 +2484,7 @@ export default {
             document_name: this.doc_name,
             orientation: orientationTemp,
             paper_size: temp_option.paper_size,
+            comment: temp_option.newComment,
             is_full: true,
             others: {dataTableObjectArray : this.dataTableObjectArray}
           }
@@ -3517,16 +3519,16 @@ export default {
       }
     },
     async deleteFile(item) {
-      try {
-        var { data } = await this.axios.get(this.$api + "/attract_file/delete/" + item.file_id)
-        if (data.result == "OK") {
-          var indx = this.attachedFiles.indexOf(item)
-          this.attachedFiles.splice(indx,1)
-          sessionStorage.setItem("Folder_Attachment_Name", JSON.stringify(this.attachedFiles))
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      // try {
+      //   var { data } = await this.axios.get(this.$api + "/attract_file/delete/" + item.file_id)
+      //   if (data.result == "OK") {
+      //     var indx = this.attachedFiles.indexOf(item)
+      //     this.attachedFiles.splice(indx,1)
+      //     sessionStorage.setItem("Folder_Attachment_Name", JSON.stringify(this.attachedFiles))
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      // }
     },
     async updateFolderName(eid) {
       try {
@@ -3544,7 +3546,7 @@ export default {
       this.files.splice(fileIndex, 1)
     },
     async downloadFile(item) {
-      window.open(this.$api + "/attract_file/download/" + item.file_id)
+      window.open(`${this.$api_url}/file-component/api/downloadFile?file_id=${file.file_id}`)
     },
     changeHoldFiles() {
       this.holdFiles.forEach(e => {

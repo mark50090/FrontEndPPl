@@ -11,7 +11,7 @@
         <v-card-text class="pt-4 pb-0">
           <v-row v-if="attachedFiles.length > 0" class="add-file-modal-row">
             <div v-for="item in attachedFiles"  :key="item.file_id">
-              <v-chip class="ma-1 chip-moblie" v-if="!item.waitUpload" small dark color="#4CAF50" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.file_name }}</v-chip>
+              <v-chip class="ma-1 chip-moblie" v-if="!item.waitUpload" small dark color="#4CAF50" :close="item.username == currentUser" @click="fileDownload(item)" @click:close="deleteFile(item)">{{ item.filename }}</v-chip>
               <v-chip v-if="item.waitUpload" small outlined class="ma-1 chip-moblie" color="#4CAF50" close @click:close="deleteFileWait(item)"><b>{{item.file_name}}</b>&nbsp;<i>({{ textLang.wait_upload }})</i></v-chip>
             </div>
           </v-row>
@@ -117,6 +117,9 @@
       deleteFileWait(delItem) {
         var fileIndex = this.files.indexOf(delItem)
         this.files.splice(fileIndex, 1)
+      },
+      fileDownload(file) {
+        window.open(`${this.$api_url}/file-component/api/downloadFile?file_id=${file.file_id}`)
       },
       applyAttachFiles() {
         var holdFiles = this.attachedFiles.filter(item => !item.waitUpload)

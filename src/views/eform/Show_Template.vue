@@ -22,20 +22,20 @@
         <v-icon>mdi-file-cancel-outline</v-icon>
         <span class="btn-cancel-doc">{{ textLang.tabMenubar.cancel_doc }}</span>
       </v-btn>
-      <!-- <v-badge bordered left overlap color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mr-2 display-pc-only">
-        <v-btn v-if="!(isSendStep && !isComplete)" outlined rounded large color="grey lighten-1" class="send-back-btn-icon send-back-btn" @click="openAttachFile()">
+      <v-badge bordered left overlap color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mr-2 display-pc-only">
+        <v-btn outlined rounded large color="grey lighten-1" class="send-back-btn-icon send-back-btn" @click="openAttachFile()">
           <v-icon>mdi-text-box-search-outline</v-icon>
           <span class="btn-view-attachment save-draft-word">{{ textLang.tabMenubar.view_attachment }}</span>
         </v-btn>
-      </v-badge> -->
+      </v-badge>
       <v-btn outlined rounded large color="#4CAF50" class="send-back-btn-icon send-back-btn display-pc-only" @click="save(false, true)">
         <v-icon>mdi-file-search-outline</v-icon>
         <span class="btn-review-ex save-draft-word">{{ textLang.tabMenubar.review_ex }}</span>
       </v-btn>
-      <!-- <v-btn v-if="(!isSendStep || isComplete) && isSelf" depressed rounded large color="#C2EB81" class="btn-savedraft send-back-btn-icon send-back-btn display-pc-only" @click="save(true)">
+      <v-btn v-if="currentStep != ''" depressed rounded large color="#C2EB81" class="btn-savedraft send-back-btn-icon send-back-btn display-pc-only" @click="save(true)">
         <v-icon>mdi-file-hidden</v-icon>
         <span class="btn-expan-word save-draft-word">{{ textLang.tabMenubar.save_draft }}</span>
-      </v-btn> -->
+      </v-btn>
       <v-btn depressed large dark color="#4CAF50" class="preview-btn" @click="save(false, false)">{{ textLang.tabMenubar.save_doc_btn }}</v-btn>
 
       <v-menu offset-y z-index="13" v-if="!isPublic && !isSendStep">
@@ -77,12 +77,12 @@
           <v-list-item v-else-if="isPaperview == false && isSimpleFill" @click="switchView()">
             <v-list-item-icon><v-icon>mdi-script-text-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
-          </v-list-item>
+          </v-list-item>  -->
           <v-list-item @click="downloadFromEid()">
             <v-list-item-icon><v-icon>mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
-          </v-list-item>
-          <v-list-item v-if="isSendBack && isSendFirst && isEmailStep" @click="openPermissionTransference()">
+          </v-list-item> 
+          <!--  <v-list-item v-if="isSendBack && isSendFirst && isEmailStep" @click="openPermissionTransference()">
             <v-list-item-icon><v-icon>mdi-human-greeting-proximity</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.transfer_title }}</v-list-item-title>
           </v-list-item> -->
@@ -104,7 +104,7 @@
             <v-list-item-icon><v-icon color="#4CAF50">mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="AddAttachFile()">
+          <v-list-item @click="AddAttachFile()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-paperclip</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_file_menu }}</v-list-item-title>
           </v-list-item>
@@ -119,8 +119,8 @@
           <v-list-item v-if="false" @click="openRefDoc()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-eye-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.view_ref_doc }}</v-list-item-title>
-          </v-list-item>
-          <v-list-item v-if="false" @click="openAttachFile()">
+          </v-list-item> -->
+          <v-list-item @click="openAttachFile()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-text-box-search-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">
               <v-badge bordered inline color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mt-0">
@@ -128,23 +128,23 @@
               </v-badge>
             </v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isSendBack && isSendFirst" @click="openReverse()">
+          <v-list-item v-if="currentStep != ''" @click="openReverse()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-reply</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.return_edit }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isSendBack && isSendFirst" @click="openReject()">
+          <v-list-item v-if="currentStep != ''" @click="openReject()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-excel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.reject_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item  v-if="!isPublic && isOwner && isFlowDoc" @click="openCancel()">
+          <v-list-item  v-if="currentStep != '' && isOwner" @click="openCancel()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-cancel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.cancel_doc }}</v-list-item-title>
-          </v-list-item> -->
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="save(true, false)"> 
+          </v-list-item>
+          <v-list-item @click="save(true, false)"> 
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-hidden</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.save_draft }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="save(false, true)"> 
+          <v-list-item @click="save(false, true)"> 
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-search-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.review_ex }}</v-list-item-title>
           </v-list-item>
@@ -155,12 +155,12 @@
           <v-list-item v-else-if="(isPaperview == false) && false" @click="switchView() && isSimpleFill">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-script-text-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item v-if="false" @click="downloadFromEid()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isSendBack && isSendFirst && isEmailStep && false" @click="openPermissionTransference()">
+           <!-- <v-list-item v-if="isSendBack && isSendFirst && isEmailStep && false" @click="openPermissionTransference()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-human-greeting-proximity</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.transfer_title }}</v-list-item-title>
           </v-list-item> -->
@@ -738,7 +738,7 @@
         <br>
         <v-textarea rows="1" outlined single-line dense no-resize :placeholder="textLang.text_dialog.write_comment" color="#4CAF50" class="mr-3 pad-textarea show-input-comment-box" :disabled="!isEditable" v-model="inputComment">
           <template v-slot:append-outer>
-            <v-icon size="30" color="#4CAF50" :disabled="!isEditable" @click="addComment()">mdi-send</v-icon>
+            <v-icon size="30" color="#4CAF50" :disabled="newComment != ''" @click="addComment()">mdi-send</v-icon>
           </template>
         </v-textarea>
         <div class="comments-box">
@@ -1101,6 +1101,7 @@
         service_properties: "",
         body_text: ""
       },
+      newComment: "", 
       isCa: false,
       signing: false,
       refDataDoc: [],
@@ -1716,7 +1717,6 @@
             //     }
             //   }
             // }
-            this.comments = this.template_option.comment
             var all_template = []
             template.template_data.forEach(e => {
               e.order = this.getObjectOrder(e)
@@ -1954,12 +1954,24 @@
             } 
             
             this.signing = this.template_option.signing
-            // if(typeof this.template_option.Folder_Attachment_Name && this.template_option.Folder_Attachment_Name.length) {
-            //   this.attachedFiles = this.template_option.Folder_Attachment_Name
-            // }
-
-          
-            this.comments = this.template_option.comments
+            this.attachedFiles = await this.getAttachfile(this.template_option )
+            if(this.template_option.comments.length) {
+              this.template_option.comments[0].comments.forEach(e => {
+                var cm_date = new Date(e.comment_at)
+                var string_date = String(cm_date.getDate()) + "-" + String(cm_date.getMonth() +1) + "-" + String(cm_date.getFullYear())
+                  + " " + String(cm_date.getHours()) + ":" + String(cm_date.getMinutes())
+                this.comments.push({
+                  index: this.comments.length+1,
+                  sender: e.comment_by.name_th,
+                  message: e.message,
+                  date: string_date
+                })
+                if(this.comments) {
+                  this.comments.reverse()
+                }
+              })
+            }
+            
 
             var all_template = []
             template.template_data.forEach(e => {
@@ -1968,7 +1980,7 @@
             })
 
             all_template.sort((a, b) => (a.order > b.order) ? 1 : -1)
-       
+            this.commentAble = true
             // if(sessionStorage.getItem('isDocStep') == 'true') {
             //   var flows = []
             //   if(this.template_option.status_flow_permission) {
@@ -5749,6 +5761,7 @@
       },
       addComment() {
         if(this.inputComment) {
+          this.newComment = this.inputComment
           if(this.comments) {
             this.comments.reverse()
           } else {
@@ -5759,7 +5772,7 @@
             + " " + String(now_date.getHours()) + ":" + String(now_date.getMinutes())
           this.comments.push({
             index: this.comments.length+1,
-            sender: sessionStorage.getItem("onenameTh"),
+            sender: sessionStorage.getItem("name"),
             message: this.inputComment,
             date: string_date
           })
@@ -6945,10 +6958,12 @@
         }
         //New session
         sessionStorage.setItem("firstSent", this.currentStep == "")
-        sessionStorage.setItem("isInstantSave", isToPreview != true) 
+        sessionStorage.setItem("isInstantSave", isToPreview != true)
+        sessionStorage.setItem('isDraft',isDraft)
 
         //Old session
         this.template_option.comment = this.comments
+        this.template_option.newComment = this.newComment
         sessionStorage.setItem('name_template',this.template_name)
         sessionStorage.setItem('template_id',this.option.template_id)
         sessionStorage.setItem('description',this.template_option.description_template)
@@ -8480,7 +8495,7 @@
         return inputWord
       }
     },
-      async downloadFromEid() {
+    async downloadFromEid() {
         var eform_id = this.option.eform_id
         if(eform_id) {
           try {
@@ -8556,6 +8571,17 @@
       },
       openSignpad() {
         EventBus.$emit('openSignpad')
+      },
+      async getAttachfile(template_opt) {
+        var resAttach = []
+        try {
+          const url = `/file-component/api/getListFile?transaction_id=${template_opt.transaction_id}`
+          var { data } = await this.axios.get(`${this.$api_url}${url}`)
+          resAttach = data.data
+        } catch(e) {
+          console.log(e)
+        }
+        return resAttach 
       }
     }
   }
