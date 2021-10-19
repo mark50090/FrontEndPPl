@@ -12,7 +12,7 @@
 				<ol class="attachfile-content">
 					<li v-for="item in files" :key="item.file_id">
 						<v-row class="row-list">
-							<v-col cols="9" md="10" lg="10" class="pl-2 pr-0">{{item.file_name}}</v-col>
+							<v-col cols="9" md="10" lg="10" class="pl-2 pr-0">{{item.filename}}</v-col>
 							<v-spacer></v-spacer> 
 							<!-- <v-icon class="mr-2">mdi-eye-outline</v-icon> -->
 							<v-col v-show="!item.waitUpload" cols="auto" md="auto" lg="auto" class="pr-0 pt-2">
@@ -89,17 +89,22 @@
 			this.color_btn_download_all = this.colorObject.modal.modal_sub_color
     },
 		startAttachFileModal(folderAttach) {
+			folderAttach.forEach(e => {
+				if(!e.filename) {
+					e.filename = e.file_name
+				}
+			})
 			this.files = folderAttach
 			this.changeLange()
 			this.dialog_attach_file = true
 		},
 		fileDownload(file) {
-			window.open(this.$api + "/attract_file/download/" + file.file_id)
+			window.open(`${this.$api_url}/file-component/api/downloadFile?file_id=${file.file_id}`)
 		},
 		fileDownloadAll() {
 			this.files.forEach(e => {
 				if(!e.waitUpload) {
-					window.open(this.$api + "/attract_file/download/" + e.file_id)
+					window.open(`${this.$api_url}/file-component/api/downloadFile?file_id=${e.file_id}`)
 				}
 			})
 		},
