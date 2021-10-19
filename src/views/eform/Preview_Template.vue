@@ -1435,12 +1435,8 @@ export default {
         this.selected_object = hold
       }
       this.ready = true
-      this.draftPreview = sessionStorage.getItem('showDraft') == 'true'
-      if(this.signNoFlow && sessionStorage.getItem('preview') != 'true') {
-        var isNoFlow = true
-        EventBus.$emit('openSignPad', isNoFlow)
-      } else {
-        this.afterSignCheck()
+      if(sessionStorage.getItem('isInstantSave') == 'true') {
+        this.checkSave()
       }
     },
     afterSignCheck() {
@@ -1740,13 +1736,16 @@ export default {
       EventBus.$emit('openAttachFile', folderAttach)
     },
     AddAttachFile() {
-      console.log("yayay")
         var uploadingFiles = this.files
         var attFiles = []
         EventBus.$emit('attachFiles', uploadingFiles, attFiles)
       },
     checkSave() {
-      this.openDocName(false)
+      if(sessionStorage.getItem("firstSent") == "true") {
+        this.openDocName(false)
+      } else {
+        this.updateDocument()
+      }
       // var flowStatus = JSON.parse(sessionStorage.getItem("template_option")).status_flow_permission
       // if(!flowStatus) {
       //   this.pplLoadTemplate()
@@ -1782,30 +1781,8 @@ export default {
     openDocName(draft) {
       this.isSaveDraft = draft
       var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
-      if (temp_option.document_name) {
-        this.isComplete = true
-        this.saveStep(draft)
-      } else {
-        var flowPermission = []
-        if (JSON.parse(sessionStorage.getItem("template_option")).status_flow_permission) {
-          var flowData = JSON.parse(sessionStorage.getItem("template_option")).flow_permission
-          if (!(typeof flowData[0] === "undefined")) {
-            if (flowData[0].step_num != "0") {
-              flowPermission = flowData
-            }
-          }
-        }
-        var caStep = this.isCa
-        var signOnly = sessionStorage.getItem('signOnlyStep') == 'true'
-        // if(!caStep) {
-        //   var flowCa = flowPermission.find(item => item.ppl_sign[0].activity_code.includes("A03"))
-        //   if(flowCa) {
-        //     caStep = this.allUserStep
-        //   }
-        // }
-        // EventBus.$emit("openInputDocName", flowPermission, caStep, signOnly)
-        this.saveDocument(temp_option.template_name, temp_option)
-      }
+      // EventBus.$emit("openInputDocName", flowPermission, caStep, signOnly)
+      this.saveDocument(temp_option.template_name, temp_option)
     },
     // checkName() {
     //   if(this.doc_name != '') {
@@ -2359,6 +2336,114 @@ export default {
             // await this.uploadAttachFile(data.messageText.doc_number_eform, data.messageText.data.e_id)
           }
           this.$router.push({ path: "/form" })
+        }
+      } catch (error) {
+        this.notReady = false
+        console.log(error.message)
+      }
+    },
+    async updateDocument() {
+      try {
+        this.dialog_ppl = false
+        var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
+        var url = this.$api_url + '/template_form/api/v1/update_template_form'
+        var data = {}
+        this.notReady = true
+        var { data } = await this.axios.put(
+          url,
+          {
+            transaction_id: temp_option.transaction_id,
+            template_data: this.template_array,
+            is_full: true,
+            step_index: this.currentStep - 1,
+            string_sign: "",
+            comment: "",
+            typesign: "web",
+            type: "approve",
+            action: "Fill",
+            others: {dataTableObjectArray : this.dataTableObjectArray}
+          }
+        )
+
+        this.notReady = false
+        if(data.status) {
+          if(this.files.length) {
+            this.uploadFiles(temp_option.transaction_id)
+          }
+          if(data.response_bi && data.response_bi.Warning_Detail!=null){
+            if(data.response_bi.Warning_Massager == 'green') {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            } else if(data.response_bi.Warning_Massager == 'yellow') {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            } else if(data.response_bi.Warning_Massager == 'red') {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            }
+          }
+          this.$router.push({ path: "/form" })
+        } else {
+          if(data.response_bi && data.response_bi.Warning_Detail!=null){
+            this.$swal({
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              text: data.response_bi.Warning_Detail,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 15000,
+              customClass: {
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
+            })
+          }
         }
       } catch (error) {
         this.notReady = false
@@ -3690,7 +3775,8 @@ export default {
         var isNoFlow = false
         EventBus.$emit('openSignPad', isNoFlow)
       } else {
-        this.saveStep(false)
+        this.openDocName(false)
+        // this.saveStep(false)
       }
     },
     openNextTemplate(item) {

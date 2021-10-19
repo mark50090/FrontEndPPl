@@ -7050,6 +7050,8 @@ export default {
               if(position.left > section_rect.left && position.left < (section_rect.left + section_rect.width)) {
                 if(!this.objectArray[selArray][selObj].style.permission_step) {
                   this.objectArray[selArray][selObj].style.permission_step_section = this.objectArray['sectionbox'][i].style.permission_step
+                } else {
+                  this.objectArray[selArray][selObj].style.permission_step_section = ""
                 }
               } 
             }
@@ -7067,6 +7069,8 @@ export default {
               if(position.left >= section_rect.left && position.left <= (section_rect.left + section_rect.width)) {
                 if(!this.dataTableObjectArray[selObj].style.permission_step) {
                   this.dataTableObjectArray[selObj].style.permission_step_section = this.objectArray['sectionbox'][i].style.permission_step
+                } else {
+                  this.dataTableObjectArray[selObj].style.permission_step_section = ""
                 }
               }
             }

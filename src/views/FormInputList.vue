@@ -155,7 +155,7 @@ import { EventBus } from '../EventBus'
         }
         sessionStorage.setItem('option',JSON.stringify(tempOption))
         sessionStorage.setItem('isDocEdit',false)
-        sessionStorage.setItem('isDocStep',false)
+        sessionStorage.setItem('isDocStep',true)
         sessionStorage.setItem('isBack',false)
         sessionStorage.setItem('isStep',false)
         sessionStorage.setItem('isOnlyForm',true)

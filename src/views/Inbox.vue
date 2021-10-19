@@ -62,7 +62,7 @@
             </v-btn-toggle>
           </v-row>
           <v-row class="inbox-row">
-            <v-data-table fixed-header :loading="false" :headers="inbox_header" @click:row="goToDocumentDetail($event._id)" :options.sync="optionsTransaction" :server-items-length="totalItemsTransaction" :items="inbox_data" class="inbox-table inbox-table-border inbox-table-header hide-inbox-table-progress inbox-table-data" :footer-props="{'items-per-page-options': [5, 10, 15, 20]}">
+            <v-data-table fixed-header :loading="false" :headers="inbox_header" @click:row="goToDocumentDetail($event._id, $event)" :options.sync="optionsTransaction" :server-items-length="totalItemsTransaction" :items="inbox_data" class="inbox-table inbox-table-border inbox-table-header hide-inbox-table-progress inbox-table-data" :footer-props="{'items-per-page-options': [5, 10, 15, 20]}">
               <template v-slot:loading> <!-- loading data in table -->
                 <v-row align="center" justify="center" class="inbox-row inbox-data-load-block">
                   <img width="100px" src="../assets/loader.gif" class="inbox-load">
@@ -157,9 +157,36 @@ import { EventBus } from '../EventBus'
       emitLoading(isLoad) {
         EventBus.$emit('loadingOverlay', isLoad)
       },
-      goToDocumentDetail(id) {
+      goToDocumentDetail(id, event) {
+        if(event.document_status == "W") {
+          var currentStep = event.flow_data.find(item => item.status == "W")
+          if(currentStep && currentStep.action == "Fill") {
+            this.goToFillPage(event)
+          } else {
+            this.goToDetailPage(id)
+          }
+        } else {
+          this.goToDetailPage(id)
+        }
+      },
+      goToDetailPage(id) {
         sessionStorage.setItem('transaction_id', id)
         this.$router.push('/inbox/detail')
+      },
+      goToFillPage(event) {
+        let tempOption = {
+          template_id: "",
+          isCopy: false,
+          isImport: false,
+          transaction_id: event._id
+        }
+        sessionStorage.setItem('option',JSON.stringify(tempOption))
+        sessionStorage.setItem('isDocEdit',true)
+        sessionStorage.setItem('isDocStep',true)
+        sessionStorage.setItem('isBack',false)
+        sessionStorage.setItem('isStep',false)
+        sessionStorage.setItem('isOnlyForm',true)
+        this.$router.push({ 'path': '/form/input'})
       },
       getdata() {
         // this.tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num //เรียกใช้ค่า id_card_num ของบริษัทที่เลือก จากตัวแปร selected_business ใน session storage
