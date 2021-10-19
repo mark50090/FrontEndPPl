@@ -7550,7 +7550,7 @@ export default {
       var header_size = {}
       var body_size = {}
       var footer_size = {}
-      var ort = [{}]
+      var ort = []
 
       this.pages[this.currentPage - 1] = {
           template_side: this.template_side,
@@ -7561,14 +7561,14 @@ export default {
       }
 
       for(var i = 1; i <= this.pages.length; i++) {
-        ort[0][String(i)] = ""
+        ort.push({})
       }
 
       for(var i=0; i<this.pages.length; i++) {
         header_size[String(i+1)] = this.pages[i].header_section
         body_size[String(i+1)] = this.pages[i].body_section
         footer_size[String(i+1)] = this.pages[i].footer_section
-        ort[0][String(i+1)] = this.pages[i].template_side
+        ort[i][String(i+1)] = this.pages[i].template_side
       }
 
       var cmp = {
