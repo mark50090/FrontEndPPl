@@ -112,7 +112,7 @@
           <v-col v-if="statedefault_Business == true" align-self="center" class="pa-0">
                 <v-row class="font-all">
                   <v-col cols="12" md="6" lg="6" class="position-dropdown-mobile">
-                    <v-autocomplete class="font-dropdown ic-dropdown text-dropdown" placeholder="เลือก Business" append-icon="mdi-chevron-down" auto-select-first outlined dense hide-details color="#67C25D" v-model="selectedBiz" :items="noneForChangeBiz"  return-object></v-autocomplete>
+                    <v-autocomplete class="font-dropdown ic-dropdown text-dropdown" placeholder="เลือก Business" append-icon="mdi-chevron-down" auto-select-first outlined dense hide-details color="#67C25D" v-model="selectedBiz" :items="noneForChangeBiz"></v-autocomplete>
                   </v-col>
                   <v-col cols="auto" md="auto" lg="auto" class="pr-0 position-btn-mobile-cancel" align-self="center">
                     <v-btn depressed color="#757575" small dark @click="stateBusinessOff()">ยกเลิก</v-btn>
@@ -126,11 +126,11 @@
         <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class="py-4 pl-4 all-font-color">
-            Works 
+            Works
           </v-col>
           <v-col  class="font-all pl-4 pr-2 pt-4 all-font-color">
             <ul >
-              <li v-for="item in getBusiness" :key="item"> <!-- each business list -->
+              <li v-for="item in getWork" :key="item"> <!-- each business list -->
                 {{item}} 
               </li>
             </ul>
@@ -195,6 +195,7 @@ export default {
     nameEng: false,
     confirmBusiness: 'Not Found',
     getBusiness: [],
+    getWork: [],
     noneForChangeBiz:[],
     noneInSelectedbiz: "ไม่มี",
     default_Signature: '',
@@ -244,8 +245,10 @@ export default {
       })
       for (let index = 0; index < this.get_biz_detail.length; index++) {
         this.getBusiness.push(this.get_biz_detail[index].getbiz[0].first_name_th)
+        this.getWork.push(this.get_biz_detail[index].getbiz[0].first_name_th)
       }
-      this.getBusiness = [...new Set(this.getBusiness)] 
+      this.getBusiness = [...new Set(this.getBusiness)]
+      this.getWork = [...new Set(this.getWork)]
       if (((this.firstnameEng != '') & (this.lastnameEng != '')) || ((this.firstnameEng != undefined) & (this.lastnameEng != undefined))) {
         this.nameEng = true
       }
@@ -315,7 +318,7 @@ export default {
         this.statedefault_Business = false
       }
       else {
-        this.confirmBusiness = this.selectedBiz[0]
+        this.confirmBusiness = this.selectedBiz
         this.default_Business = this.confirmBusiness
         this.noneForChangeBiz.shift()
         this.statedefault_Business = false
@@ -384,7 +387,7 @@ export default {
     },
     stateBusinessOn() {
       this.statedefault_Business = true
-      this.noneForChangeBiz.push(this.getBusiness)
+      this.noneForChangeBiz = this.getBusiness 
       this.noneForChangeBiz.unshift(this.noneInSelectedbiz)
     },
     stateBusinessOff() {
