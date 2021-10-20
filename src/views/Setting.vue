@@ -33,40 +33,40 @@
             {{thai_email}}
           </v-col>
         </v-row>
-        <v-divider></v-divider>
+        <!-- <v-divider></v-divider>
          <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class="py-4 pl-4 all-font-color" align-self="center">
             ลายเซ็นเริ่มต้น
           </v-col>
           <v-col cols="4" md="5" lg="5" align-self="center" class="py-4  all-font-color">
-            <v-icon v-if="state_Signature == 'Not Found'" class="ic-status-point" size="16" color="#9e9e9e" >mdi-circle</v-icon> <!--FOR NOT FOUND default signature-->
-            <v-icon v-if="state_Signature != 'Not Found'" size="16" class="ic-status-point" color="#8BC34A">mdi-circle</v-icon>  <!--FOR default signature is READY-->
-            {{state_Signature}} <!-- or Ready-->
+            <v-icon v-if="state_Signature == 'Not Found'" class="ic-status-point" size="16" color="#9e9e9e" >mdi-circle</v-icon> <!--FOR NOT FOUND default signature
+            <v-icon v-if="state_Signature != 'Not Found'" size="16" class="ic-status-point" color="#8BC34A">mdi-circle</v-icon>  <!--FOR default signature is READY
+            {{state_Signature}} <!-- or Ready 
           </v-col>
           <v-col align-self="center" cols="3" md="5" lg="5" class="position-btn-mobile">
-            <v-btn depressed dark color="#67C25D" small @click="openSetDefaultSignature()"> <!-- button for setting default signature -->
+            <v-btn depressed dark color="#67C25D" small @click="openSetDefaultSignature()"> <!-- button for setting default signature 
               <v-icon size="16" >mdi-cog</v-icon>
             </v-btn>
           </v-col>
-        </v-row>
+        </v-row> -->
         <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class="pt-6 pl-4 all-font-color">
-            ตราประทับเริ่มต้น 
+            ลายเซ็นเริ่มต้น 
           </v-col>
           <v-col class="pa-0" cols="7" md="10" lg="10">
             <v-row class="font-all">
               <v-col cols="8" md="5" lg="5" class="px-0 pt-4">
-                <v-autocomplete no-data-text="ไม่มีตราประทับ" dense outlined hide-details auto-select-first placeholder="เลือกตราประทับ" color="#67C25D" append-icon="mdi-chevron-down" class="font-dropdown ic-dropdown select-stamp-box" v-model="selectedStamp" :items="default_stamp" item-text="StampName" return-object></v-autocomplete>
+                <v-autocomplete no-data-text="ไม่มีลายเซ็นเริ่มต้น" dense outlined hide-details auto-select-first placeholder="เลือกลายเซ็น" color="#67C25D" append-icon="mdi-chevron-down" class="font-dropdown ic-dropdown select-stamp-box" v-model="selectedStamp" :items="default_stamp" item-text="StampName" return-object></v-autocomplete>
               </v-col>
-              <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pt-4 pr-0 edit-stamp-btn-block">
-                <v-tooltip top v-if="show_Edit_Stamp == true" >
+              <v-col v-if="show_Edit_Stamp == true" cols="auto" md="auto" lg="auto" align-self="center" class="pt-4 pr-0 edit-stamp-btn-block">
+                <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-btn outlined small color="#67C25D" v-on="on" @click="openEditStamp()" class="edit-stamp-btn">
                       <v-icon size="16">mdi-cog</v-icon>
                     </v-btn>
                   </template>
-                  <span>แก้ไขตราประทับเริ่มต้น</span>
+                  <span>แก้ไขลายเซ็นเริ่มต้น</span>
                 </v-tooltip>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pr-0 pt-4 add-stamp-btn-block">
@@ -76,13 +76,13 @@
                       <v-icon size="16">mdi-plus</v-icon>
                     </v-btn>
                   </template>
-                  <span>เพิ่มตราประทับเริ่มต้น</span>
+                  <span>เพิ่มลายเซ็นเริ่มต้น</span>
                 </v-tooltip>
               </v-col>
             </v-row>
             <v-row class="font-all show-stamp-block">
               <v-col cols="12" md="5" lg="5" align-self="center" class="mb-4 pa-0 show-stamp-box">
-                <!-- stamp -->
+                <!-- default signature image -->
                 <v-img :src="selectedStamp.SrcBase"  width="100%" height="100%" contain ></v-img>
               </v-col>
             </v-row>
