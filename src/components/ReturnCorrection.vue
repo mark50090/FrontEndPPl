@@ -68,7 +68,8 @@ import { EventBus } from '../EventBus'
         this.dialog = true
         this.revertable_order = []
         this.transaction_id = data.transaction_id
-        data.flow_step.forEach((element,index) => {
+        var detail = data.flow_step?data.flow_step:data.flow_data
+        detail.forEach((element,index) => {
           if(element.status == 'Y')
           this.revertable_order.push({text: `ลำดับที่ ${index+1}`,value: index, name: element.name})
         });

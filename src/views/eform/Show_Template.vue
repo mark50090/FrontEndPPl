@@ -10,11 +10,11 @@
       </v-btn>
       <v-spacer></v-spacer>
       <!-- button for web -->
-      <v-btn v-if="false" depressed rounded large dark color="#FBC02D" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
+      <v-btn v-if="currentStep != ''" depressed rounded large dark color="#FBC02D" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
         <v-icon>mdi-reply</v-icon>
         <span class="btn-return-edit">{{ textLang.tabMenubar.return_edit }}</span>
       </v-btn>
-      <v-btn v-if="false" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
+      <v-btn v-if="currentStep != ''" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
         <v-icon>mdi-file-excel-outline</v-icon>
         <span class="btn-reject-doc save-draft-word">{{ textLang.tabMenubar.reject_doc }}</span>
       </v-btn>
@@ -128,11 +128,11 @@
               </v-badge>
             </v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="false" @click="openReverse()">
+          <v-list-item v-if="currentStep != ''" @click="openReverse()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-reply</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.return_edit }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="false" @click="openReject()">
+          <v-list-item v-if="currentStep != ''" @click="openReject()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-excel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.reject_doc }}</v-list-item-title>
           </v-list-item>
@@ -1909,6 +1909,7 @@
           if(data.status) {
             template = data.data[0]
             this.template_option = template
+            this.transaction_detail = template.transaction_detail
             this.doc_name = this.template_option.transaction_detail.object_text.subject
             let tempStep = template.transaction_detail.flow_data.find(item => item.status == "W")
             if(tempStep) {
@@ -7516,7 +7517,7 @@
       openReverse() {
         var backStepChoice = this.backStepArray
         // EventBus.$emit('reverseDocument',backStepChoice)
-        EventBus.$emit('FormReturn')
+        EventBus.$emit('FormReturn',this.transaction_detail)
       },
       openReject() {
         var eId = this.template_option 
@@ -7526,17 +7527,33 @@
         var tempOpt = this.option
         EventBus.$emit('ConfirmCancelDoc',tempOpt)
       },
-      async summitReject(eId) {
+      async summitReject(detail) {
         try {
           this.notReady = true
-          var { data } = await this.axios.put(this.$eform_api_v6 + '/upload_eform',
-          {
-            e_id: eId,
-            status:"reject"
-          })
+          // var { data } = await this.axios.put(this.$eform_api_v6 + '/upload_eform',
+          // {
+          //   e_id: eId,
+          //   status:"reject"
+          // })
+          var step_index = 0
+          detail.transaction_detail.flow_data.forEach(element => {
+            if(element.status == 'W') step_index = element.index
+          });
+          var body = {
+            type:'reject',
+            transaction_id: detail.transaction_id,
+            document_id:detail.transaction_detail.document_id,
+            tracking:detail.transaction_detail.tracking,
+            step_index:step_index,
+            action:'reject',
+            string_sign:'',
+            typesign:'web'
+          }
+          const url = '/transaction/api/v1/updatetransaction'
+          var {data} = await this.axios.put(this.$api_url + url, body)
           this.notReady = false
-          if(data.result != 'ER') {
-            this.disableButton(eId)
+          if(data.status) {
+            // this.disableButton(eId)
             this.$swal({
               backdrop: false,
               position: 'bottom-end',

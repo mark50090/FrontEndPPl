@@ -59,11 +59,11 @@ export default {
     rejectConfirm(option) {
       this.dialog = true
       this.my_form_option = option
-      this.dialog_item_name = this.my_form_option.document_name
+      this.dialog_item_name = this.my_form_option.document_id
     },
     rejectItem() {
       this.dialog = false
-      var eId = this.my_form_option.e_id
+      var eId = this.my_form_option
       EventBus.$emit('toRejectTemplate',eId)
     }
   }
