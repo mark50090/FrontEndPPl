@@ -70,7 +70,7 @@
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">Export file Json Key</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="((isPreview && ready && !editStep) || (isPublic && isPreview)) && !draftPreview" @click="download('download')">
+          <v-list-item v-if="ready && currentStep != ''" @click="download('download')">
             <v-list-item-icon>
               <v-icon>mdi-download</v-icon>
             </v-list-item-icon>
@@ -138,7 +138,7 @@
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">Export file Json Key</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isPreview && ready && !editStep && !draftPreview" @click="download('download')">
+          <v-list-item v-if="ready && currentStep != ''" @click="download('download')">
             <v-list-item-icon>
               <v-icon color="#4CAF50">mdi-download</v-icon>
             </v-list-item-icon>
@@ -2770,14 +2770,9 @@ export default {
     },
     async download(action) {
       if (action == "download") {
-        if(this.download_url) {
-          window.open(this.download_url)
-        } else {
-          var html = this.genHtml(false)
-          this.sendHtml(html, true)
-        }
+        window.open(`${this.$api_url}/public/v1/download/${this.templates.tax_id}/${this.templates.transaction_id}`)
       } else {
-        window.open(this.view_url)
+        // window.open(this.view_url)
       }
     },
     openForwardMail() {
@@ -3178,7 +3173,7 @@ export default {
             if(reDownload) {
               this.download("download")
             } else {
-              this.download("view")
+              // this.download("view")
             }
             if (this.reSend) {
               this.pplUploadDocument()
