@@ -8496,22 +8496,8 @@
       }
     },
     async downloadFromEid() {
-        var eform_id = this.option.eform_id
-        if(eform_id) {
-          try {
-            var { data } = await this.axios.post(this.$eform_api + '/pdf_for_eform',
-            {
-                e_id: eform_id
-            })
-            if(data.messageText == 'success') {
-              window.open(data.url_download)
-            }
-          }
-          catch(e) {
-            console.log(e)
-          }
-        }
-      },
+      window.open(`${this.$api_url}/public/v1/download/${this.template_option.tax_id}/${this.template_option.transaction_id}`)
+    },
       clear () {
         this.objectArray['inputbox'].forEach(obj => {
           if(!obj.disable) {
