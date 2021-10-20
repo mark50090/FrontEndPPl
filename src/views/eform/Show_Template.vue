@@ -10,15 +10,15 @@
       </v-btn>
       <v-spacer></v-spacer>
       <!-- button for web -->
-      <v-btn v-if="currentStep != ''" depressed rounded large dark color="#FBC02D" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
+      <v-btn v-if="false" depressed rounded large dark color="#FBC02D" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
         <v-icon>mdi-reply</v-icon>
         <span class="btn-return-edit">{{ textLang.tabMenubar.return_edit }}</span>
       </v-btn>
-      <v-btn v-if="currentStep != ''" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
+      <v-btn v-if="false" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
         <v-icon>mdi-file-excel-outline</v-icon>
         <span class="btn-reject-doc save-draft-word">{{ textLang.tabMenubar.reject_doc }}</span>
       </v-btn>
-      <v-btn v-if="currentStep != '' && isOwner" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
+      <v-btn v-if="false" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
         <v-icon>mdi-file-cancel-outline</v-icon>
         <span class="btn-cancel-doc">{{ textLang.tabMenubar.cancel_doc }}</span>
       </v-btn>
@@ -128,15 +128,15 @@
               </v-badge>
             </v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="currentStep != ''" @click="openReverse()">
+          <v-list-item v-if="false" @click="openReverse()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-reply</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.return_edit }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="currentStep != ''" @click="openReject()">
+          <v-list-item v-if="false" @click="openReject()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-excel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.reject_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item  v-if="currentStep != '' && isOwner" @click="openCancel()">
+          <v-list-item  v-if="false" @click="openCancel()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-cancel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.cancel_doc }}</v-list-item-title>
           </v-list-item>
