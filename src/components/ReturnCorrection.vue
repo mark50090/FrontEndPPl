@@ -68,7 +68,7 @@ import { EventBus } from '../EventBus'
         this.dialog = true
         this.revertable_order = []
         this.transaction_id = data.transaction_id
-        var detail = data.flow_step?data.flow_step:data.flow_data
+        var detail = data.flow_step?data.flow_step:data.transaction_detail.flow_data
         detail.forEach((element,index) => {
           if(element.status == 'Y')
           this.revertable_order.push({text: `ลำดับที่ ${index+1}`,value: index, name: element.name})
@@ -77,7 +77,7 @@ import { EventBus } from '../EventBus'
       async revertTransaction(){
         try {
           var { data } = await this.axios.put(this.$api_url + `/transaction/api/v1/returntoedit?transaction_id=${this.transaction_id}`, {
-            "step_index": this.selected_order
+            step_index: this.selected_order
           })
           if(data.status){
             this.$swal({
