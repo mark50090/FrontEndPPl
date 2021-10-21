@@ -1589,10 +1589,10 @@
         } else {
           this.option = JSON.parse(sessionStorage.getItem('option'))
           if(this.option.isCopy) {
-            this.getTemplate(this.option.code)
+            this.getTemplate(this.option.template_id, this.option.transaction_id)
             this.isSendStep = sessionStorage.getItem('isStep') == 'true'
           } else if(this.option.isImport) {
-            this.getTemplate(this.option.code, true)
+            this.getTemplate(this.option.template_id, true)
             this.isSendStep = sessionStorage.getItem('isStep') == 'true'
           } else {
             this.getTemplate(this.option.template_id)
@@ -1639,7 +1639,7 @@
       getPublicData() {
         // this.getPublicTemplate(sessionStorage.getItem("temp_code"))
       },
-      async getTemplate(template_id) {
+      async getTemplate(template_id, transaction_id) {
         var template = {}
         try {
           var { data } = await this.axios.get(this.$api_url + '/template_form/api/v1/getTemplateFormById?template_id=' + template_id)
@@ -1696,7 +1696,8 @@
             if(this.template_option.paper_size) {
               this.paperSizeIndex = this.paper_size.find(item => item.text.toUpperCase() == this.template_option.paper_size.toUpperCase()).value
             } 
-            var spForm = this.$speacailForm
+
+            // var spForm = this.$speacailForm
             //Check For biz
             // if(!this.option.isCopy && !spForm.includes(template_id)) {
             //   var no_biz = false
@@ -1723,49 +1724,13 @@
               all_template.push(e)
             })
             all_template.sort((a, b) => (a.order > b.order) ? 1 : -1)
-            // var flowStep = []
-            // if(data.data.status_flow_permission) {
-            //   flowStep = data.data.flow_permission
-            //   flowStep.sort((a, b) => (a.step_num > b.step_num) ? 1 : -1)
-            //   if(flowStep.length) {
-            //     if(flowStep[0].role.length) {
-            //       if(flowStep[0].role[0].name == "all-user") {
-            //         sessionStorage.setItem('isDocEdit',false)
-            //         sessionStorage.setItem('isDocStep',true)
-            //         sessionStorage.setItem('editStep',false)
-            //         this.currentStep = 1
-            //         this.isSendFirst = false
-            //         this.allUserStep = true
-            //         this.current_flow = flowStep[0]
-            //         this.commentAble = true
-            //       }
-            //     }
-            //   }
-            //   if(this.current_flow) {
-            //     this.current_flow.blind  =[]
-            //     flowStep.forEach(e => {
-            //       if(typeof e.observe.observe !== 'undefined' &&e.observe.observe.includes(e.step_num)) {
-            //         e.observe.observe.push(Number(e.step_num) + 1)
-            //       }
-            //       if(e.step_num != this.current_flow.step_num) {
-            //         if(typeof e.observe.choicesSet !== 'undefined' && e.observe.choicesSet) {
-            //           if(!e.observe.observe.includes(this.current_flow.step_num) && !e.observe.observe.includes(e.step_num)) {
-            //             this.current_flow.blind.push(e.role[0].object_name)
-            //           }
-            //         }
-            //       }
-            //     })
-            //   }
-            // }
-            // if(this.allUserStep) {
-            //   this.getArrayValue(all_template, true, true)
-            // } else {
-            //   this.getArray(all_template)
-            // }
             this.getArrayValue(all_template, true, true)
             var temp_ppl_code = [{'name': 'default', 'code': ''}]
             if(template.template_paperless_code != null) {
               temp_ppl_code = template.template_paperless_code
+            }
+            if(this.option.isCopy && transaction_id) {
+              this.getTemplateRefdoc("", transaction_id)
             }
             sessionStorage.setItem('template_paperless_code',JSON.stringify(temp_ppl_code))
             sessionStorage.setItem('code_template',template.code_template)
@@ -2185,14 +2150,20 @@
         }
         return holdDate.toISOString().substr(0, 10)
       },
-      async getTemplateRefdoc(doc_no) {
+      async getTemplateRefdoc(doc_no, transaction_id) {
         var template = []
+        var template_id = ""
         try {
           this.onImport = true
-          var { data } = await this.axios.get(this.$eform_api_v6+ '/upload_eform?doc_number=' + doc_no)
+          var url = `${this.$api_url}/template_form/api/v1/get_eform_ref?document_id=${doc_no}`
+          if(transaction_id) {
+            url = `${this.$api_url}/template_form/api/v1/get_eform_ref?transaction_id=${transaction_id}`
+          }
+          var { data } = await this.axios.get(url)
           this.notReady = false
           this.dialogRefDoc = false
-          if(data.result == 'OK') {
+          template_id = data.data.template_id
+          if(data.status) {
             if(!this.option.isCopy) {
               var tempRefDoc = []
               if(this.refDataDoc.length && typeof this.refDataDoc[0].ref_no === 'undefined') {
@@ -2232,24 +2203,7 @@
                 }
               }
             }
-            Object.values(data.data.template_header[0]).forEach(e => {
-              e.forEach(e2 => {
-                template.push(e2)
-              })
-            })
-
-            Object.values(data.data.template_body[0]).forEach(e => {
-              e.forEach(e2 => {
-                template.push(e2)
-              })
-            })
-
-            Object.values(data.data.template_footer[0]).forEach(e => {
-              e.forEach(e2 => {
-                template.push(e2)
-              })
-            })
-
+            template = data.data.template_data
             this.objectTypeInput.forEach(t => {
               this.objectArray[t].forEach(e => {
                 if(typeof e.value !== 'undefined' && e.value && e.value.show == 'ref_data') {
@@ -2303,8 +2257,13 @@
                 }
             })
             this.checkContSleep = true
-            var obj = template.find(item => item.object_type == 'dataTableObjectArray')
-            if(obj) {
+            var obj = {}
+            if(data.data.others && data.data.others.dataTableObjectArray) {
+              obj = {
+                value: data.data.others.dataTableObjectArray
+              }
+            }
+            if(obj && obj.value) {
               if(typeof obj.value !== 'undefined') {
                 Object.keys(obj.value).forEach(e => {
                   if(typeof this.dataTableObjectArray[e] !== 'undefined' && (this.objectTypeInput.includes(this.dataTableObjectArray[e].object_type) || this.dataTableObjectArray[e].object_type == 'linkdatabox') ) {
@@ -2343,6 +2302,7 @@
         } catch (error) {
           console.log(error.message)
         }
+        return template_id
       },
       async getOtherService(doc_no,serviceName, isImportInRow, selectedRow) {
         var path = ""

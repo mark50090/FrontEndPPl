@@ -108,9 +108,9 @@
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
                 <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="download_pdf_fn">ดาวน์โหลด PDF</v-btn>
               </v-col>
-              <!-- <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
-                <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn">คัดลอกเอกสาร</v-btn>
-              </v-col> -->
+              <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
+                <v-btn v-if="template_id" depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="copyDocument()">คัดลอกเอกสาร</v-btn>
+              </v-col>
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from inbox page -->
                 <v-btn @click="optionFormMail()" depressed x-small dark color="#4CAF50" class="download-pdf-btn">
                   <v-icon small>mdi-email-send-outline</v-icon>
@@ -377,6 +377,7 @@ export default {
     comment: '',
     comment_status: true,
     last_step: 0,
+    template_id: "",
     is_approve: false,
     isShowRevertButton: true
   }),
@@ -386,6 +387,7 @@ export default {
     this.token = sessionStorage.getItem('access_token')
     this.my_name = sessionStorage.getItem('name')
     this.transaction_id = sessionStorage.getItem('transaction_id')
+    this.getTemplateId(this.transaction_id )
     if (!this.transaction_id) {
       this.$router.replace({ name: 'inbox' })
       return
@@ -612,6 +614,12 @@ export default {
         .catch(error => {
           // console.log(error)
         })
+    },
+    async getTemplateId(transaction_id) {
+      var {data} = await this.axios.get(`${this.$api_url}/template_form/api/v1/is_eform_by_id?transaction_id=${transaction_id}`)
+      if(data.status) {
+        this.template_id = data.result.template_id
+      }
     },
     async get_detail_fn() {
       const url = `/transaction/api/v1/detailTransaction?transaction_id=${this.transaction_id}`
@@ -1138,6 +1146,21 @@ export default {
       var itemdata = parseInt(maxdata) - parseInt(mindata)
       var itemresult = (itemdata * 100) / itemlength
       return parseFloat(itemresult).toFixed(3)
+    },
+    copyDocument() {
+      let tempOption = {
+        template_id: this.template_id,
+        isCopy: true,
+        isImport: false,
+        transaction_id: this.transaction_id
+      }
+      sessionStorage.setItem('option',JSON.stringify(tempOption))
+      sessionStorage.setItem('isDocEdit',false)
+      sessionStorage.setItem('isDocStep',true)
+      sessionStorage.setItem('isBack',false)
+      sessionStorage.setItem('isStep',false)
+      sessionStorage.setItem('isOnlyForm',true)
+      this.$router.push({ 'path': '/form/input'})
     },
     stringBefore (string, item) {
       var strbefore = string.split(item)[0]

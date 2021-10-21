@@ -151,7 +151,7 @@ import { EventBus } from '../EventBus'
           template_id: item.template_id,
           isCopy: false,
           isImport: false,
-          eform_id: ""
+          transaction_id: ""
         }
         sessionStorage.setItem('option',JSON.stringify(tempOption))
         sessionStorage.setItem('isDocEdit',false)
