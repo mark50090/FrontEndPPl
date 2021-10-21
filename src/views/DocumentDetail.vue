@@ -44,17 +44,29 @@
                     :page="page"
                     ref="pdfComponent"
                   />
-                  <div
-                    :id="item.name"
-                    v-for="(item, index) in signArray"
-                    :key="index"
-                  >
-                    <v-row no-gutters justify="center" align="center">
-                      <span v-if="item.show == true" style="color: grey">
-                        ลำดับที่ {{ item.index }}
-                      </span>
-                    </v-row>
-                  </div>
+                  <template v-for="(signature, index_sign) in signArray">
+                      <vue-draggable-resizable
+                      :id="item.name"
+                      :draggable="false"
+                      :resizable="false"
+                      v-for="(item, index) in signature"
+                      :key="`${index_sign}_${index}`"
+                      :x="item.sign_position_x"
+                      :y="item.sign_position_y"
+                      :w="item.sign_box_width"
+                      :h="item.sign_box_heigth"
+                      :style="{
+                        'background-color': 'rgba(83, 186, 71, 0.2)',
+                        'display': item.show ? 'block' : 'none',
+                        }"
+                    >
+                      <v-row no-gutters justify="center" align="center">
+                        <span style="color: grey">
+                          ลำดับที่ {{ index_sign + 1 }} {{`(${index + 1}/${signature.length})`}}
+                        </span>
+                      </v-row>
+                    </vue-draggable-resizable>
+                    </template>
                 </div>
               </v-row>
             </v-card-text>
@@ -144,39 +156,40 @@
                   <v-timeline align-top dense>
                     <v-timeline-item fill-dot icon small color="white" v-for="(item, index) in step_flow" :key="`flow_${index}`"> <!-- each step -->
                       <template v-slot:icon> <!-- icon for each step -->
-                        <v-icon v-if="item.status == 'W'" size="30" color="rgb(251, 192, 45)">mdi-clock-outline</v-icon> <!-- waiting for approve (current step) -->
-                        <v-icon v-if="item.status == 'Y'" size="30" color="#4caf50">mdi-check-circle-outline</v-icon> <!-- approved -->
-                        <v-icon v-if="item.status == 'R'" size="30" color="#f44336">mdi-close-circle-outline</v-icon> <!-- deny -->
-                        <v-icon v-if="item.status == 'N'" size="30" color="#9e9e9e">mdi-clock-outline</v-icon> <!-- step not arrive yet -->
+                        <v-icon v-if="item.status == 'W' && !is_reject" size="30" color="rgb(251, 192, 45)">mdi-clock-outline</v-icon> <!-- waiting for approve (current step) -->
+                        <v-icon v-else-if="item.status == 'Y'" size="30" color="#4caf50">mdi-check-circle-outline</v-icon> <!-- approved -->
+                        <v-icon v-else-if="item.status == 'R'" size="30" color="#f44336">mdi-close-circle-outline</v-icon> <!-- deny -->
+                        <v-icon v-else-if="item.status == 'N'" size="30" color="#9e9e9e">mdi-clock-outline</v-icon> <!-- step not arrive yet -->
+                        <v-icon v-else-if="is_reject" size="30" color="#9e9e9e">mdi-circle-slice-8</v-icon> <!-- step other if reject transaction -->
                       </template>
                       <v-row class="detail-row">
                         <v-col cols="3" md="2" lg="2" align-self="start" class="px-0 py-0 step-doc-title">
-                          ลำดับ {{ index + 1 }}
+                          ลำดับ {{ index + 1 }} {{ item.sign_count > 1 ? `(${item.active_count}/${item.sign_count})` : null }}
                         </v-col>
                         <v-col cols="7" md="7" lg="7" align-self="start" class="pl-1 pr-0 py-0">
                           <v-icon small color="#0000008A" class="mr-2">mdi-timer-sand-full</v-icon>
                           <span class="step-period">{{ item.diff || '' }}</span>
                         </v-col>
                         <v-spacer></v-spacer>
-                        <!--<v-col cols="auto" md="auto" lg="auto" class="pl-0 py-0 transfer-permission-btn-block"> <!-- show when it is current step and the owner of step is that user
+                        <!-- <v-col cols="auto" md="auto" lg="auto" class="pl-0 py-0 transfer-permission-btn-block"> <!-- show when it is current step and the owner of step is that user
                           <v-btn depressed fab x-small dark color="#074E80">
                             <v-icon>mdi-account-switch</v-icon>
                           </v-btn>
-                        </v-col>-->
+                        </v-col> -->
                       </v-row>
-                      <v-row class="detail-row" v-for="(item_name, index_name) in item.name" :key="`flow_name_${index}${index_name}`"> <!-- each person data -->
+                      <v-row class="detail-row" v-for="(item_name, index_name) in item.actor" :key="`flow_name_${index}${index_name}`"> <!-- each person data -->
                         <v-col cols="8" md="5" lg="5" align-self="start" class="px-0 pt-0 pb-1 step-doc-title">
-                          {{ item_name }}
-                          <span v-if="my_name === item_name"> (คุณ)</span> <!-- when this name is user's name -->
+                          {{ item_name.name }}
+                          <span v-if="my_name === item_name.name"> (คุณ)</span> <!-- when this name is user's name -->
                         </v-col>
                         <v-col cols="auto" md="auto" lg="auto" align-self="start" class="pl-0 pr-1 pt-0 pb-1 step-status-block">
-                          <span v-if="item.status == 'W'" class="wait-user-approve-status">รออนุมัติ</span> <!-- wait for approve status -->
-                          <span v-if="item.status == 'Y' && item.approver.name_approver == item_name" class="approved-status">อนุมัติแล้ว</span> <!-- approved status -->
-                          <span v-if="item.status == 'R' && item.approver.name_approver == item_name" class="deny-status">ปฏิเสธอนุมัติ</span> <!-- deny status -->
+                          <span v-if="!item_name.approved && item.status == 'W' && !is_reject" class="wait-user-approve-status">รออนุมัติ</span> <!-- wait for approve status -->
+                          <span v-if="item_name.approved == 'Y'" class="approved-status">อนุมัติแล้ว</span> <!-- approved status -->
+                          <span v-if="item_name.approved == 'R'" class="deny-status">ปฏิเสธอนุมัติ</span> <!-- deny status -->
                         </v-col>
-                        <v-col v-if="(item.status == 'Y' || item.status == 'R') && item.approver.name_approver == item_name" cols="12" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-0 pb-1 time-approve-block"> <!-- show when status is approved or deny -->
+                        <v-col v-if="item_name.approved && (item_name.approved == 'Y' || item_name.approved == 'R')" cols="12" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-0 pb-1 time-approve-block"> <!-- show when status is approved or deny -->
                           <v-icon small color="black" class="pr-1">mdi-timer-outline</v-icon>
-                          <span class="time-approved">{{ item.approver.time_approver }}</span>
+                          <span class="time-approved">{{ item_name.time_approver }}</span>
                         </v-col>
                       </v-row>
                     </v-timeline-item>
@@ -207,7 +220,7 @@
                         </v-btn>
                         <v-btn icon color="#525659" v-if="item_comment.comment_by == my_name" @click="deletemessage()"> <!-- show when it is user's comment -->
                           <v-icon>mdi-delete</v-icon>
-                        </v-btn> 
+                        </v-btn>
                         <span class="comment-time">{{ item_comment.comment_at }}</span>
                       </v-row>
                     </template>
@@ -261,7 +274,7 @@
             </v-card-text>
           </v-card>
           <!-- sign card -->
-          <v-card outlined class="mt-1" :class="{'pb-5': !is_approve}" v-if="check_sign"> <!-- show when user have to approve in current step -->
+          <v-card outlined class="mt-1" :class="{'pb-5': !is_approve}" v-if="check_sign && !is_reject"> <!-- show when user have to approve in current step -->
             <v-row class="mt-4 mb-2 px-2 detail-row">
               <v-textarea dense outlined hide-details no-resize readonly label="คำอธิบาย" rows="2" color="rgb(158,158,158)" :value="doc_details.detail" class="doc-description"></v-textarea>
             </v-row>
@@ -379,6 +392,7 @@ export default {
     last_step: 0,
     template_id: "",
     is_approve: false,
+    is_reject: false,
     isShowRevertButton: true
   }),
   computed: {
@@ -395,7 +409,7 @@ export default {
     this.get_detail_fn()
     this.get_attachment_file_fn()
     this.get_signature_default_fn()
-    EventBus.$on('confirm_deletemessage',this.delete_comment_fn)
+    EventBus.$on('confirm_deletemessage', this.delete_comment_fn)
   },
   watch: {
     axios_pending (val) {
@@ -413,13 +427,13 @@ export default {
     }
   },
   methods: {
-    optionFormReturn() {
-      EventBus.$emit('FormReturn',this.transaction_detail)
+    optionFormReturn () {
+      EventBus.$emit('FormReturn', this.transaction_detail)
     },
-    optionFormMail() {
+    optionFormMail () {
       EventBus.$emit('FormMail')
     },
-    optionFormFile(file) {
+    optionFormFile (file) {
       const url = `${this.$api_url}/file-component/api/getComponentFile`
       const config = {
         Authorization: `Bearer ${this.token}`,
@@ -440,27 +454,25 @@ export default {
           this.axios_pending--
         })
     },
-    gostamp() {
+    gostamp () {
       EventBus.$emit('stamp')
     },
-    gopdf() {
+    gopdf () {
       EventBus.$emit('showpdf', this.pdf_src)
-    },  
-    back() {
-      this.$router.back();
+    },
+    back () {
+      this.$router.back()
     },
     deletemessage () {
-        EventBus.$emit('deletemessage')
+      EventBus.$emit('deletemessage')
     },
-    change_page_fn(type) {
+    change_page_fn (type) {
       switch (type) {
         case 'next':
-          if(this.page < this.page_count)
-            this.page++
+          if (this.page < this.page_count) { this.page++ }
           break
         case 'prev':
-          if(this.page > 1)
-            this.page--
+          if (this.page > 1) { this.page-- }
           break
       }
     },
@@ -470,7 +482,7 @@ export default {
       else return true
     },
     download_pdf_fn () {
-      let a = document.createElement('a') // Create <a>
+      const a = document.createElement('a') // Create <a>
       a.href = this.pdf_src // Image Base64 Goes here
       a.download = this.doc_details.file_name // File name Here
       a.click() // Downloaded file
@@ -479,7 +491,7 @@ export default {
       window.open(`${this.$api_url}/file-component/api/downloadFile?file_id=${file_id}`)
     },
     convertDateTime () {
-      let datenow = new Date()
+      const datenow = new Date()
       var todate = new Date(datenow).getDate()
       var tomonth = new Date(datenow).getMonth() + 1
       var toyear = new Date(datenow).getFullYear()
@@ -503,7 +515,7 @@ export default {
       }
     },
     add_comment_fn () {
-      let data_comment = {
+      const data_comment = {
         comment_by: this.my_name,
         comment_at: this.convertDateTime(),
         message_comment: this.comment,
@@ -521,7 +533,7 @@ export default {
       this.comment_status = true
       this.comment = ''
     },
-    async set_approve_fn(type) {
+    async set_approve_fn (type) {
       var string_sign, data
       if (this.sign_type === 'Sign Pad') {
         string_sign = this.$refs.signaturePad.save().split(',')[1]
@@ -539,7 +551,6 @@ export default {
         comment: !this.comment_status ? this.comment : null,
         typesign: 'web'
       }
-      // console.log(data)
       if (this.new_attachment_file.length > 0) this.upload_attachment()
       const url = '/transaction/api/v1/updatetransaction'
       const config = {
@@ -621,7 +632,7 @@ export default {
         this.template_id = data.result.template_id
       }
     },
-    async get_detail_fn() {
+    async get_detail_fn () {
       const url = `/transaction/api/v1/detailTransaction?transaction_id=${this.transaction_id}`
       const config = {
         Authorization: `Bearer ${this.token}`
@@ -634,28 +645,41 @@ export default {
             const doc_data = data.data
             this.transaction_detail = doc_data
             doc_data.flow_step.forEach(element => {
-              if(element.status == 'W'){
-                this.isShowRevertButton = element.name.includes(sessionStorage.getItem('name'))
+              if (element.status == 'W') {
+                this.isShowRevertButton = element.actor.map(item => item.name).includes(sessionStorage.getItem('name'))
               }
-            });
-            if(data.data.flow_step[0].status == "W" || data.data.document_status == "Y" || data.data.document_status == "R") {
-              this.isShowRevertButton = false
-            }
-            this.allStatus = doc_data.flow_step.map(
-              (element) => element.send_update.action.toLowerCase() === 'sign' || element.send_update.action.toLowerCase() === 'sign-ca'
-            )
-            const find_w = doc_data.flow_step.findIndex((element) => element.status.toLowerCase() === 'w')
-            if (find_w > -1) {
-              this.last_step = find_w
-              const find_name_in_w = doc_data.flow_step[find_w].name.findIndex((element) => element === this.my_name)
-              if (find_name_in_w > -1 && this.$route.name === 'document_detail') {
-                this.check_sign = true
-                this.ca_switch = doc_data.flow_step[find_w].send_update.action.toLowerCase() === 'sign-ca'
-                this.is_approve = doc_data.flow_step[find_w].send_update.action.toLowerCase() === 'approve'
+            })
+            doc_data.flow_step.forEach((flowData, index) => {
+              flowData.active_count = flowData.actor.filter(item => (item.approved === 'Y' || item.approved === 'R')).length
+              this.$set(this.sign_position, index, flowData.sign_position)
+              this.$set(this.step_flow, index, flowData)
+
+              // chack status waiting and account approve
+              if (flowData.status.toLowerCase() === 'w') {
+                this.last_step = index
+                const find_name_in_w = flowData.actor.findIndex((element) => element.name === this.my_name)
+                if (find_name_in_w > -1 && this.$route.name === 'document_detail') {
+                  if (flowData.actor[find_name_in_w].approved !== undefined) {
+                    const statusMyApprove = flowData.actor[find_name_in_w].approved
+                    if (statusMyApprove === 'Y' || statusMyApprove === 'R') this.check_sign = false
+                    else this.check_sign = true
+                  } else this.check_sign = true
+                  this.ca_switch = flowData.send_update.action.toLowerCase() === 'sign-ca'
+                  this.is_approve = flowData.send_update.action.toLowerCase() === 'approve'
+                }
+              } else if (flowData.status.toLowerCase() === 'r') {
+                this.is_reject = true
               }
-            }else{
-              this.last_step = doc_data.flow_step.length
-            }
+
+              // allow sign position
+              let arrAllowPosition = []
+              if (flowData.send_update.action.toLowerCase() === 'sign' || flowData.send_update.action.toLowerCase() === 'sign-ca') {
+                arrAllowPosition = flowData.sign_position.map(item => item.status === 'Incomplete')
+              } else {
+                arrAllowPosition = new Array(flowData.sign_position.length).fill(false)
+              }
+              this.$set(this.allStatus, index, arrAllowPosition)
+            })
             this.doc_details.transaction_id = doc_data.transaction_id
             this.doc_details.doc_id = doc_data.doc_id
             this.doc_details.sender = doc_data.sender
@@ -664,19 +688,12 @@ export default {
             this.doc_details.create_at = doc_data.create_at
             this.doc_details.file_name = doc_data.file_name
             this.doc_details.comment = doc_data.comment
-            // console.log(this.last_step)
             this.doc_details.step_index = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.step_index : null
             this.doc_details.action = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.action : null
-            for (let index = 0; index < doc_data.flow_step.length; index++) {
-              const element = doc_data.flow_step[index]
-              this.sign_position.push(element.sign_position)
-              this.step_flow.push(element)
-            }
             this.pdf_src = `data:application/pdf;base64,${data.data.pdfbase}`
           }
         })
         .catch((error) => {
-          // console.log(error)
           if (error.response) {
             const errResponse = error.response.data
             if (errResponse.message === 'error read pdf') {
@@ -763,389 +780,70 @@ export default {
       this.padStatus = false
     },
     loadedPDF () {
-      this.sign_position = this.sign_position.map((element) => {
-        if (element.sign_page !== 'all') {
-          element.sign_page = (typeof element.sign_page === 'string' ? element.sign_page : element.sign_page.toString()).split(',')
-          for (var i = 0; i < element.sign_page.length; i++) { element.sign_page[i] = +element.sign_page[i] }
-        } else element.sign_page = Array.from({ length: this.page_count }, (_, i) => i + 1)
-        return element
+      this.sign_position.forEach((stepItem, index) => {
+        const arr = stepItem.map((element) => {
+          if (element.sign_page !== 'all') {
+            element.sign_page = (typeof element.sign_page === 'string' ? element.sign_page : element.sign_page.toString()).split(',')
+            for (var i = 0; i < element.sign_page.length; i++) { element.sign_page[i] = +element.sign_page[i] }
+          } else element.sign_page = Array.from({ length: this.page_count }, (_, i) => i + 1)
+          return element
+        })
+        this.$set(this.sign_position, index, arr)
       })
-      // this.setPreViewImg()
     },
     loaded: function (e) {
       this.reShowSign(this.sign_position)
     },
-    reShowSign(data) {
+    reShowSign (data) {
       this.signArray = []
       for (let index = 0; index < data.length; index++) {
-        if (index == this.focusNoArr) this.signPage = data[index].sign_page
-        let step_array = this.signArray.length
-        this.signArray.push({
-          index: step_array + 1,
-          name: 'draggableDiv' + String(step_array + 1),
-          show: false,
-          sign_page: data[index].sign_page,
-        })
-        setTimeout(() => {
-          if (
-            this.signArray[step_array].sign_page.findIndex(
-              (item) => item == this.page
-            ) >= 0 &&
-            this.allStatus[step_array]
-          ) {
-            this.multiShow(step_array + 1, this.allStatus[index])
-            this.setPositionSign(
-              this.signArray[index].index,
-              data[index].sign_llx,
-              data[index].sign_lly,
-              data[index].sign_urx,
-              data[index].sign_ury
-            )
-            // this.addEventResize(step_array + 1, this.allStatus[index]);
-          } else {
-            // // console.log("sign_page != page", JSON.stringify(data[index]));
-            this.multiShow(step_array + 1, false)
-            this.setPositionSign(
-              this.signArray[index].index,
-              data[index].sign_llx,
-              data[index].sign_lly,
-              data[index].sign_urx,
-              data[index].sign_ury
-            )
-            // this.addEventResize(step_array + 1, false);
-          }
-        }, 100)
-      }
-    },
-    setPreViewImg () {
-      // // console.log("setPreViewImg start");
-      this.signArray = []
-      for (let index = 0; index < this.sign_position.length; index++) {
-        this.createSign()
-      }
-      this.$nextTick(function () {
-        this.changePageSign(this.sign_position)
-      })
-    },
-    changePageSign (data) {
-      for (let index = 0; index < this.sign_position.length; index++) {
-        setTimeout(() => {
-          if (
-            this.signArray[index].sign_page.findIndex(
-              (item) => item == this.page
-            ) >= 0 &&
-            this.allStatus[index]
-          ) {
-            this.multiShow(index + 1, this.allStatus[index])
-            this.setPositionSign(
-              this.signArray[index].index,
-              data[index].sign_llx,
-              data[index].sign_lly,
-              data[index].sign_urx,
-              data[index].sign_ury
-            )
-            // this.addEventResize(index + 1, this.allStatus[index])
-          } else {
-            this.multiShow(index + 1, false)
-            this.setPositionSign(
-              this.signArray[index].index,
-              data[index].sign_llx,
-              data[index].sign_lly,
-              data[index].sign_urx,
-              data[index].sign_ury
-            )
-            // this.addEventResize(index + 1, false)
-          }
-        }, 400)
-      }
-    },
-    createSign () {
-      const step_array = this.signArray.length
-      this.signArray.push({
-        index: step_array + 1,
-        name: 'draggableDiv' + String(step_array + 1),
-        show: false,
-        sign_page: this.sign_position[step_array].sign_page
-      })
-      setTimeout(() => {
-        if (
-          this.signArray[step_array].sign_page.findIndex(
-            (item) => item == this.page
-          ) >= 0 &&
-            this.allStatus[step_array]
-        ) {
-          this.multiShow(step_array + 1, this.allStatus[step_array])
-          // this.addEventResize(step_array + 1, this.allStatus[step_array])
-        } else {
-          this.multiShow(step_array + 1, false)
-          // this.addEventResize(step_array + 1, false)
+        const step = data[index]
+        this.signArray.push([])
+        for (let index2 = 0; index2 < step.length; index2++) {
+          const position = step[index2]
+          this.signArray[index].push({
+            index: index + 1,
+            index2: index2 + 1,
+            name: `draggableDiv${index}_${index2}`,
+            show: false,
+            sign_page: position.sign_page
+          })
+          var shownonPage = this.signArray[index][index2].sign_page
+          var isShow = shownonPage.includes(this.page)
+          this.signArray[index][index2].show = isShow && this.allStatus[index][index2]
+          this.setPositionSign(
+            this.signArray[index][index2].index,
+            this.signArray[index][index2].index2,
+            data[index][index2].sign_llx,
+            data[index][index2].sign_lly,
+            data[index][index2].sign_urx,
+            data[index][index2].sign_ury
+          )
         }
-      }, 400)
-    },
-    multiShow (index, status) {
-      this.signArray[index - 1].show = status
-      $('#draggableDiv' + index).css('cursor', 'context-menu')
-      $('#draggableDiv' + index).css('position', 'absolute')
-      $('#draggableDiv' + index).css('height', '33px')
-      $('#draggableDiv' + index).css('width', '50px')
-      $('#draggableDiv' + index).css(
-        'background-color',
-        'rgba(83, 186, 71, 0.2)'
-      )
-      $('#draggableDiv' + index).css('border', '1.2px dashed grey')
-      $('#draggableDiv' + index).css('color', 'white')
-      $('#draggableDiv' + index).css('text-align', 'center')
-      $('#draggableDiv' + index).css('margin', '1px')
-      if (status && this.last_step < index) {
-        $('#draggableDiv' + index).css('display', 'block')
-        $('#draggableDiv' + index).css('z-index', 5)
-        $('#draggableDiv' + index).css('opacity', 1)
-        // this.setSigntemplate(index)
-      } else $('#draggableDiv' + index).css('display', 'none')
-    },
-    setSigntemplate (index) {
-      this.setPdfAreaMulti(index)
-    },
-    setPdfAreaMulti (index) {
-      // // console.log("setPdfAreaMulti index:", index);
-      try {
-        var clientHeight = document.getElementById('pdfDiv').clientHeight
-        var clientWidth = document.getElementById('pdfDiv').clientWidth
-        var element = document.getElementById('pdfDiv')
-        var rect = element.getBoundingClientRect()
-        // element.addEventListener("click", this.mouseIsMoving);
-
-        var elementLeft, elementTop, elementRight, elementBot // x and y
-
-        var scrollTop = document.documentElement.scrollTop
-          ? document.documentElement.scrollTop
-          : document.body.scrollTop
-        var scrollLeft = document.documentElement.scrollLeft
-          ? document.documentElement.scrollLeft
-          : document.body.scrollLeft
-
-        elementTop = rect.top
-        elementLeft = rect.left
-        elementRight = rect.right
-        elementBot = rect.bottom
-
-        var xMin = elementLeft
-        var xMax = elementRight
-        var yMin = elementTop
-        var yMax = elementBot
-        this.getSignAreaMulti(xMin, xMax, yMin, yMax, index)
-      } catch (error) {
-        // console.error("ล้มเหลว", error);
       }
     },
-    getSignAreaMulti (xMin, xMax, yMin, yMax, index) {
-      // // console.log("getSignAreaMulti index:", index);
-      var element = document.getElementById('draggableDiv' + index)
-      var rect = element.getBoundingClientRect()
-
-      var elementLeft, elementTop, elementRight, elementBot // x and y
-
-      var scrollTop = document.documentElement.scrollTop
-        ? document.documentElement.scrollTop
-        : document.body.scrollTop
-      var scrollLeft = document.documentElement.scrollLeft
-        ? document.documentElement.scrollLeft
-        : document.body.scrollLeft
-      elementTop = rect.top
-      elementLeft = rect.left
-      elementRight = rect.right
-      elementBot = rect.bottom
-
-      // // console.log("getSignAreaMulti left " + elementLeft);
-      // // console.log("getSignAreaMulti top " + elementTop);
-      // // console.log("getSignAreaMulti right " + elementRight);
-      // // console.log("getSignAreaMulti bot " + elementBot);
-
-      var xMinSign = elementLeft
-      var xMaxSign = this.stringBefore(elementRight.toString(), '.')
-      var yMinSign = this.stringBefore(elementTop.toString(), '.')
-      var yMaxSign = elementBot
-      this.getSignResultMulti(
-        xMinSign,
-        xMaxSign,
-        xMin,
-        xMax,
-        yMaxSign,
-        yMinSign,
-        yMin,
-        yMax,
-        index
-      )
-    },
-    getSignResultMulti (
-      xMinSign,
-      xMaxSign,
-      xMin,
-      xMax,
-      yMaxSign,
-      yMinSign,
-      yMin,
-      yMax,
-      index
-    ) {
-      // // console.log("getSignResultMulti index:", index);
-      // // console.log("xMinSign", xMinSign);
-      // // console.log("xMin", xMin);
-      // // console.log("xMax", xMax);
-      var lly = this.getPercent(yMaxSign, yMin, yMax)
-      var sign_llx = this.getPercent(xMinSign, xMin, xMax)
-      var sign_lly = parseFloat(100 - lly)
-      // // console.log("sign_llx", sign_llx);
-      // // console.log("sign_lly", sign_lly);
-
-      var sign_urx = this.getPercentAll(xMinSign, xMaxSign, xMin, xMax)
-      var sign_ury = this.getPercentAll(yMinSign, yMaxSign, yMin, yMax)
-      // // console.log("sign_urx", sign_urx);
-      // // console.log("sign_ury", sign_ury);
-
-      sign_llx = (sign_llx * 0.01).toFixed(3)
-      sign_lly = (sign_lly * 0.01).toFixed(3)
-      sign_urx = (sign_urx * 0.01).toFixed(3)
-      sign_ury = (sign_ury * 0.01).toFixed(3)
-
-      var index_array = parseInt(index) - 1
-      //   this.tempSign[index_array] = {
-      //     sign_llx: sign_llx,
-      //     sign_lly: sign_lly,
-      //     sign_urx: sign_urx,
-      //     sign_ury: sign_ury,
-      //     sign_page: this.signArray[index_array].sign_page,
-      //     status: "incomplete",
-      //   };
-      this.sign_position[index_array] = {
-        sign_llx: sign_llx,
-        sign_lly: sign_lly,
-        sign_urx: sign_urx,
-        sign_ury: sign_ury,
-        sign_page: this.signArray[index_array].sign_page
-      }
-
-      // // console.log(this.preData);
-      // // console.log(this.signArray);
-    },
-    setPositionSign(index, llx, lly, urx, ury) {
-      // console.log('position' + index)
-      // // console.log(`llx: ${llx}\nlly: ${lly}\nurx: ${urx}\nury: ${ury}`)
+    setPositionSign (index, index2, llx, lly, urx, ury) {
       var arr_index = index - 1
-
-      // MainFunction.ShowLog("sign "+index+" row(llx) "+llx)
-      // MainFunction.ShowLog("sign "+index+" column(lly) "+lly)
-      // MainFunction.ShowLog("sign "+index+" row(llx) "+urx)
-      // MainFunction.ShowLog("sign "+index+" column(lly) "+ury)
-
-      var cardWidth = $('#pdfBg_create')[0].getBoundingClientRect().width
-      var cardHeight = $('#pdfBg_create')[0].getBoundingClientRect().height
+      var arr_index2 = index2 - 1
 
       var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
       var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
 
-      // //// console.log(cardWidth)
-      // //// console.log(cardHeight)
-
-      // //// console.log(clientWidth)
-      // //// console.log(clientHeight)
-
-      // var clientHeight = clientWidth * 141.5805606367726
-      // clientHeight = parseFloat(clientHeight) / 100
-      // clientHeight = parseFloat(clientHeight.toFixed(2))
-
-      // MainFunction.ShowLog("cardWidth "+cardWidth)
-      // MainFunction.ShowLog("cardHeight "+cardHeight)
-      // MainFunction.ShowLog("clientWidth "+clientWidth)
-      // MainFunction.ShowLog("clientHeight "+clientHeight)
-
-      var _pxdraggableDivHeight = clientHeight * parseFloat(ury)
-      var _pxdraggableDivWidth = clientWidth * parseFloat(urx)
-
-      // var setWidth  =  (parseFloat(cardWidth)  - parseFloat(clientWidth)) / 2
-      // var setHeight =  (parseFloat(cardHeight) - parseFloat(clientHeight)) / 2
-
-      // setWidth  = setWidth  + (clientWidth * llx)
-      // setHeight = setHeight + (clientHeight * lly)
-
-      var setWidth = parseFloat(clientWidth) * llx
       var setHeight = parseFloat(clientHeight) * lly
 
-      // MainFunction.ShowLog("setWidth "+setWidth)
-      // MainFunction.ShowLog("setHeight "+setHeight)
-      document.getElementById('draggableDiv' + index).style.height =
-        _pxdraggableDivHeight.toFixed(2) + 'px'
-      document.getElementById('draggableDiv' + index).style.width =
-        _pxdraggableDivWidth.toFixed(2) + 'px'
+      var sign = this.signArray[arr_index][arr_index2]
 
-      document
-        .getElementById('draggableDiv' + index)
-        .style.removeProperty('top')
-      document.getElementById('draggableDiv' + index).style.left =
-        setWidth + 'px'
-      document.getElementById('draggableDiv' + index).style.bottom =
-        setHeight + 'px'
-      //  document.getElementById("draggableDiv"+index).style.left   =  0 +"px"
-      //  document.getElementById("draggableDiv"+index).style.bottom =  0 +"px"
+      sign.sign_llx = llx
+      sign.sign_lly = lly
+      sign.sign_urx = urx
+      sign.sign_ury = ury
 
-      //   var cardWidth = $("#pdfBg_create")[0].clientWidth;
-      //   var cardHeight = $("#pdfBg_create")[0].clientHeight;
+      sign.sign_position_x = clientWidth * (+llx)
+      sign.sign_position_y = ((-setHeight) + (Math.abs(ury - lly))) + (-clientHeight) * (+lly + (ury - lly))
+      sign.sign_box_heigth = (clientHeight * (ury))
+      sign.sign_box_width = (clientWidth * urx)
 
-      //   var clientWidth = $("#pdfDiv")[0].getBoundingClientRect().width;
-      //   var clientHeight = $("#pdfDiv")[0].getBoundingClientRect().height;
-
-      //   //   clientWidth = parseFloat(clientWidth.toFixed(2));
-      //   //   clientHeight = parseFloat(clientHeight.toFixed(2));
-
-      //   var _pxdraggableDivHeight = clientHeight * parseFloat(ury);
-      //   var _pxdraggableDivWidth = clientWidth * parseFloat(urx);
-
-      //   var setWidth = parseFloat(clientWidth) * llx;
-      //   var setHeight = parseFloat(clientHeight) * lly;
-
-      //   //// console.log("setWidth", setWidth);
-      //   //// console.log("setHeight", setHeight);
-
-      //   var dragWidth = clientWidth * urx;
-      //   var dragHeight = clientHeight * ury;
-
-      //   document.getElementById("draggableDiv" + index).style.height =
-      //     _pxdraggableDivHeight.toFixed(2) + "px";
-      //   document.getElementById("draggableDiv" + index).style.width =
-      //     _pxdraggableDivWidth.toFixed(2) + "px";
-
-      //   document.getElementById("draggableDiv" + index).style.left =
-      //     setWidth.toFixed(2) + "px";
-      //   document.getElementById("draggableDiv" + index).style.bottom =
-      //     setHeight.toFixed(2) + "px";
-
-      //   this.tempSign[arr_index].sign_llx = llx;
-      //   this.tempSign[arr_index].sign_lly = lly;
-      //   this.tempSign[arr_index].sign_urx = urx;
-      //   this.tempSign[arr_index].sign_ury = ury;
-
-      this.sign_position[arr_index].sign_llx = llx
-      this.sign_position[arr_index].sign_lly = lly
-      this.sign_position[arr_index].sign_urx = urx
-      this.sign_position[arr_index].sign_ury = ury
-      //   //// console.log("cardWidth", cardWidth);
-      //   //// console.log("cardHeight", cardHeight);
-      //   //// console.log("clientWidth", clientWidth);
-      //   //// console.log("clientHeight", clientHeight);
-      //   //// console.log("dragWidth", dragWidth);
-      //   //// console.log("dragHeight", dragHeight);
-    },
-    getPercent (data, min, max) {
-      var itemlength = parseFloat(max) - parseFloat(min)
-      var itemdata = parseFloat(data) - parseFloat(min)
-      var itemresult = (itemdata * 100) / itemlength
-      return parseFloat(itemresult).toFixed(3)
-    },
-    getPercentAll (mindata, maxdata, min, max) {
-      var itemlength = parseInt(max) - parseInt(min)
-      var itemdata = parseInt(maxdata) - parseInt(mindata)
-      var itemresult = (itemdata * 100) / itemlength
-      return parseFloat(itemresult).toFixed(3)
+      this.$set(this.signArray[arr_index], arr_index2, sign)
     },
     copyDocument() {
       let tempOption = {
@@ -1161,10 +859,6 @@ export default {
       sessionStorage.setItem('isStep',false)
       sessionStorage.setItem('isOnlyForm',true)
       this.$router.push({ 'path': '/form/input'})
-    },
-    stringBefore (string, item) {
-      var strbefore = string.split(item)[0]
-      return strbefore
     }
   },
   beforeDestroy () {
