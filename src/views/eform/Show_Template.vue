@@ -1872,7 +1872,6 @@
           if(data.status) {
             template = data.data[0]
             this.template_option = template
-            this.transaction_detail = template.transaction_detail
             this.doc_name = this.template_option.transaction_detail.object_text.subject
             let tempStep = template.transaction_detail.flow_data.find(item => item.status == "W")
             if(tempStep) {
@@ -7450,7 +7449,7 @@
       openReverse() {
         var backStepChoice = this.backStepArray
         // EventBus.$emit('reverseDocument',backStepChoice)
-        EventBus.$emit('FormReturn',this.transaction_detail)
+        EventBus.$emit('FormReturn',this.template_option)
       },
       openReject() {
         var eId = this.template_option 
