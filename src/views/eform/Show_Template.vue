@@ -3037,6 +3037,12 @@
           }
             if(sessionStorage.getItem('isDocStep') == 'true' && cmp.object_type != "dataTableObjectArray") {
               cmp.disable = true
+              if(typeof cmp.style.permission_step === 'undefined') {
+                cmp.style.permission_step = ""
+              }
+              if(typeof cmp.style.permission_step_section === 'undefined') {
+                cmp.style.permission_step = ""
+              }
               if((cmp.style.permission_step == this.currentStep &&  !cmp.style.permission_step_section)||(!cmp.style.permission_step && cmp.style.permission_step_section == this.currentStep)) {
                 this.isSendBack = true
                 this.isEditable = true

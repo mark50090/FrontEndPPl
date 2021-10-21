@@ -410,10 +410,6 @@
           </v-col>
         </v-row>
         <v-card-actions>
-          <!-- <v-btn outlined large color="#979797" class="px-12 mr-4 save-setting-btn hidden-sm-and-down" @click="dialog_ppl = false">{{ textLang.offer_dialog.cancel }}</v-btn>
-          <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" large depressed :color="color_btn_save_ppl" class="px-8 mr-2 save-setting-btn save-modal-font-btn hidden-sm-and-down font-save-doc" @click="saveName(false)">{{ textLang.tabMenubar.save_doc }}</v-btn>
-          <v-btn v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" :disabled="!(selectedDocumentType && template_paperless_code)" depressed large :color="color_save" class="px-12 ml-4 save-setting-btn save-modal-font-btn hidden-sm-and-down" @click="checkPplUpload()"><b>{{ textLang.offer_dialog.offer }}</b></v-btn>
-          <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" :disabled="!(selectedDocumentType && template_paperless_code)" depressed large :color="color_save" class="px-12 ml-4 save-setting-btn save-modal-font-btn hidden-sm-and-down" @click="saveAndUpload()"><b>{{ textLang.offer_dialog.offer }}</b></v-btn> -->
           <v-row justify="center" class="save-doc-row">
             <v-col cols="5" md="3" lg="3" class="pl-0 pr-2">
               <v-btn block outlined color="#67C25D" class="cancel-efrom-modal-btn" @click="dialog_ppl = false">{{ textLang.offer_dialog.cancel }}</v-btn>
@@ -588,6 +584,7 @@ export default {
     isOwner: false,
     option: {},
     contTableArray: [],
+    flow_data: [],
     signNoFlow: false,
     noFlowSignPic: "",
     thenOpenPpl: false,
@@ -715,6 +712,7 @@ export default {
     this.currentStep = Number(sessionStorage.getItem('current_step'))
     this.getData()
     this.getLocation()
+    this.getFlowData()
     this.currentUser = sessionStorage.getItem("oneuser")
     if (sessionStorage.getItem("all_user_step")) {
       this.allUserStep = JSON.parse(sessionStorage.getItem("all_user_step"))
@@ -1230,6 +1228,21 @@ export default {
         })
       }
       this.sleep = true
+    },
+    async getFlowData() {
+        try {
+          if(JSON.parse(sessionStorage.getItem('template_option')).flow_id){
+            var tax_id = JSON.parse(sessionStorage.getItem('template_option')).tax_id
+            var url = `/flowdata/api/v1/get1/?_id=${JSON.parse(sessionStorage.getItem('template_option')).flow_id}&tax_id=${tax_id}`
+            var {data} = await this.axios.get(this.$api_url + url)
+            if(data.status){
+              this.flow_data = data.data.flow_data
+              console.log(data.data)
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        }
     },
     async setPosition() {
       var pageLength = this.pages.length
@@ -1781,7 +1794,12 @@ export default {
     openDocName(draft) {
       this.isSaveDraft = draft
       var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
-      // EventBus.$emit("openInputDocName", flowPermission, caStep, signOnly)
+      // this.dialog_ppl = true
+      // if(!this.pplSubject) {
+      //   this.pplSubject = temp_option.template_name
+      // }
+      
+      // EventBus.$emit("openInputDocName", temp_option.template_name, temp_option, this.flow_data)
       this.saveDocument(temp_option.template_name, temp_option)
     },
     // checkName() {
