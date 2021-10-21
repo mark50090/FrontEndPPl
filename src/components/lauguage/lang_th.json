@@ -537,7 +537,7 @@
      },
      "offer_dialog": {
        "offer": "เสนอเซ็น",
-       "offer_paperless_new": "บันทึกและเสนอเซ็นผ่านระบบ Paperless",
+       "offer_paperless_new": "บันทึกเอกสาร",
        "offer_paperless_old": "เสนอเซ็นผ่านระบบ Paperless",
        "subject_new": "ชื่อเอกสาร(เรื่อง):",
        "subject_old": "เรื่อง:",
@@ -546,7 +546,7 @@
        "message": "ข้อความ:",
        "doc_type": "ประเภทเอกสาร paperless:",
        "doc_format": "รูปแบบเอกสาร paperless:",
-       "seq_approval": "ลำดับการอนุมัติ",
+       "seq_approval": "Workflow",
        "add_attachments": "เอกสารแนบเพิ่มเติม",
        "please_choose": "กรุณาเลือกเอกสารแนบ",
        "doc_system": "แนบเอกสารเข้าระบบ Paperless",
@@ -558,7 +558,7 @@
         "default": "(ค่าเริ่มต้น)",
         "please_input": "กรุณากรอกข้อมูล Email ให้ครบถ้วน",
         "email_found": "ไม่พบอีเมล์ต่อไปนี้ในระบบ",
-        "name_ppl_error": "กรุณากรอกชื่อเอกสาร(เรื่อง)",
+        "name_ppl_error": "กรุณากรอกชื่อเอกสาร",
         "pdf_setting_error":"กรุณาตั้งค่ารหัสผ่าน",
         "wait_upload": "รอการอัพโหลด",
         "already_save": "เอกสารในลำดับนี้ ถูกบันทึกแล้ว"
