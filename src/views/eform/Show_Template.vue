@@ -707,7 +707,7 @@
                   <img v-if="item.value" :width="'100%'" :src="item.value">
                   <img v-if="!item.value && item.style.signUrl" :width="'100%'" :src="item.style.signUrl">
                 </div>
-                <div v-if="!(item.value || item.style.signUrl) && (!item.disable || allUserStep || isSendStep)" style="background-color:#64B5F6; width:100%; height:100%; opacity:0.3; border:3px dashed #2196F3;"></div>
+                <div v-if="!(item.value || item.style.signUrl) && !item.disable" style="background-color:#64B5F6; width:100%; height:100%; opacity:0.3; border:3px dashed #2196F3;"></div>
               </div>
             </div>
           </v-sheet>
@@ -1284,6 +1284,7 @@
       sessionStorage.setItem('sendBackAndFirst',false)
       sessionStorage.setItem('isNoFlowSign', false)
       sessionStorage.setItem('isLastStep', false)
+      sessionStorage.setItem('signStep', false)
       if(sessionStorage.getItem("public_eform") != 'true') {
         if((sessionStorage.getItem("first_login") == 'true') && (sessionStorage.getItem("wait") == 'true')) {
           sessionStorage.setItem("first_login",false)
@@ -1729,9 +1730,6 @@
             if(template.template_paperless_code != null) {
               temp_ppl_code = template.template_paperless_code
             }
-            if(this.option.isCopy && transaction_id) {
-              this.getTemplateRefdoc("", transaction_id)
-            }
             sessionStorage.setItem('template_paperless_code',JSON.stringify(temp_ppl_code))
             sessionStorage.setItem('code_template',template.code_template)
             sessionStorage.setItem('version_template',template.version_template)
@@ -2151,6 +2149,7 @@
         return holdDate.toISOString().substr(0, 10)
       },
       async getTemplateRefdoc(doc_no, transaction_id) {
+        console.log(transaction_id)
         var template = []
         var template_id = ""
         try {
@@ -2668,15 +2667,8 @@
               }
             }
             if(e.object_type == "signbox" ) {
-              cmp.style.signUrl = ""
-              if(!cmp.disable && !this.isSendStep) {
-                if(e.style.isCa) {
-                  sessionStorage.setItem('caStep', true)
-                  sessionStorage.setItem('caStepName', e.object_name)
-                }
-              }
-              if(e.style.isCa) {
-                this.isCa = true
+              if(!cmp.disable) {
+                sessionStorage.setItem('signStep', true)
               }
             }
             if(e.object_type != "sectionbox" && e.object_type != "dataTableObjectArray") {
@@ -3041,7 +3033,7 @@
                 cmp.style.permission_step = ""
               }
               if(typeof cmp.style.permission_step_section === 'undefined') {
-                cmp.style.permission_step = ""
+                cmp.style.permission_step_section = ""
               }
               if((cmp.style.permission_step == this.currentStep &&  !cmp.style.permission_step_section)||(!cmp.style.permission_step && cmp.style.permission_step_section == this.currentStep)) {
                 this.isSendBack = true
@@ -3094,33 +3086,8 @@
               }
             }
             if(e.object_type == "signbox" ) {
-              cmp.style.signUrl = ""
-              if(!cmp.disable && !this.isSendStep) {
-                sessionStorage.setItem('caStepName', e.object_name)
-                if(e.style.isCa) {
-                  sessionStorage.setItem('caStep', true)
-                } else {
-                  sessionStorage.setItem('signOnlyStep', true)
-                }
-              }
-              var signStep = this.template_option.flow_permission.find(item => item.role[0].object_name == e.object_name)
-              var url = ""
-              if(signStep) {
-                url = signStep.url_sign
-              } else {
-                if(typeof e.style.permission_section.section !== 'undefined') {
-                  signStep = this.template_option.flow_permission.find(item => e.style.permission_section.section.includes(item.role[0].object_name))
-                }
-                if(signStep) {
-                  url = signStep.url_sign
-                } else {
-                  url = ""
-                }
-              }
-              if(e.style.isCa) {
-                cmp.style.signUrl = url
-              } else {
-                cmp.value = url
+              if(!cmp.disable) {
+                sessionStorage.setItem('signStep', true)
               }
             }
             if(e.object_type != "sectionbox" && e.object_type != "dataTableObjectArray") {
@@ -3796,7 +3763,7 @@
           this.getBackValue()
         }
         if(this.option.isCopy && !(sessionStorage.getItem('isBack') == 'true')) {
-          this.getTemplateRefdoc(this.option.doc_no)
+          this.getTemplateRefdoc("", this.option.transaction_id)
         }
         if(this.option.isImport && !(sessionStorage.getItem('isBack') == 'true')) {
           this.getTemplateRefdoc(this.option.doc_no)

@@ -126,7 +126,7 @@
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.save_draft }}</v-list-item-title>
           </v-list-item> -->
-          <v-list-item v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && false " @click="openDocName(true)">
+          <v-list-item v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && false " @click="openDocName(false)">
             <v-list-item-icon>
               <v-icon color="#4CAF50">mdi-file-hidden</v-icon>
             </v-list-item-icon>
@@ -371,12 +371,13 @@
           </v-row>
           <v-row v-if="step_show == true" class="mt-0 save-doc-row all-workflow-block">
             <v-timeline align-top dense class="pt-6 all-step">
-              <v-timeline-item fill-dot icon color="#4CAF50" v-for="item in steps" :key="item">
+              <v-timeline-item fill-dot icon color="#4CAF50" v-for="item in flow_data" :key="item.index">
                 <template v-slot:icon>
-                  <span class="number-step">{{item.step_num}}</span>
+                  <span class="number-step">{{(item.index + 1)}}</span>
                 </template>
-                <v-text-field v-show="!item.ref_step || (item.ref_step == 'ref-undefined')" outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" v-for="e in item.one_email" :key="e.ex_email" v-model="e.email"></v-text-field>
-                <v-text-field v-show="item.ref_step &&  (item.ref_step != 'ref-undefined')" readonly outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" :value="textLang.offer_dialog.re_number + item.ref_step"></v-text-field>
+                <!-- <v-text-field v-show="!item.ref_step || (item.ref_step == 'ref-undefined')" outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" v-for="e in item.one_email" :key="e.ex_email" v-model="e.email"></v-text-field>
+                <v-text-field v-show="item.ref_step &&  (item.ref_step != 'ref-undefined')" readonly outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" :value="textLang.offer_dialog.re_number + item.ref_step"></v-text-field> -->
+                 <v-text-field v-for="actor in item.actor[0].permission_email" :key="actor.account_id" v-show="!item.editable" readonly outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" :value="actor.thai_email"></v-text-field>
               </v-timeline-item>
             </v-timeline>
           </v-row>
@@ -415,7 +416,7 @@
               <v-btn block outlined color="#67C25D" class="cancel-efrom-modal-btn" @click="dialog_ppl = false">{{ textLang.offer_dialog.cancel }}</v-btn>
             </v-col>
             <v-col cols="5" md="3" lg="3" class="pl-2 pr-0">
-              <v-btn block depressed color="#67C25D" class="save-eform-modal-btn">{{ textLang.tabMenubar.save_doc }}</v-btn>
+              <v-btn block depressed color="#67C25D" class="save-eform-modal-btn" @click="checkName()">{{ textLang.tabMenubar.save_doc }}</v-btn>
             </v-col>
           </v-row>
         </v-card-actions>
@@ -1457,7 +1458,7 @@ export default {
         if(this.editStep && !this.allUserStep ) {
           this.saveStep(true)
         } else {
-          this.openDocName(true)
+          this.openDocName(false)
         }
       } else if(sessionStorage.getItem('saveDoc') == 'true' && sessionStorage.getItem('preview_save') == 'false') {
         if((((!this.isPreview && !this.editStep && !this.allUserStep) || this.allUserStep) || (this.isPublic && !this.isPreview)) && this.ready && !this.draftPreview ) {
@@ -1754,10 +1755,15 @@ export default {
         EventBus.$emit('attachFiles', uploadingFiles, attFiles)
       },
     checkSave(isDraft) {
+      this.isSaveDraft = isDraft
       if(sessionStorage.getItem("firstSent") == "true") {
-        this.openDocName(isDraft)
+        this.openDocName()
       } else {
-        this.updateDocument(isDraft)
+        if(sessionStorage.getItem('signStep') == 'true') {
+          EventBus.$emit('openSignPad')
+        } else {
+          this.updateDocument()
+        } 
       }
       // var flowStatus = JSON.parse(sessionStorage.getItem("template_option")).status_flow_permission
       // if(!flowStatus) {
@@ -1791,38 +1797,28 @@ export default {
         this.saveName(true)
       }
     },
-    openDocName(draft) {
-      this.isSaveDraft = draft
+    openDocName() {
       var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
-      // this.dialog_ppl = true
-      // if(!this.pplSubject) {
-      //   this.pplSubject = temp_option.template_name
-      // }
-      
-      // EventBus.$emit("openInputDocName", temp_option.template_name, temp_option, this.flow_data)
-      this.saveDocument(temp_option.template_name, temp_option)
+      this.pplSubject = temp_option.template_name
+      this.dialog_ppl = true
     },
-    // checkName() {
-    //   if(this.doc_name != '') {
-    //     this.dialog = false
-    //     this.save()
-    //   }
-    // },
-    async saveSign(sign64, isNoFlow) {
-      if(isNoFlow) {
-        await this.uploadSign(sign64)
-        this.afterSignCheck()
-      } else {
-        if(!this.allUserStep) {
-          this.pplSignBase = sign64
-          if(sign64) {
-            this.currentSignStep.sign = sign64
-          } else {
-            this.currentSignStep.sign = sessionStorage.getItem("sign_url")
-          }
-          this.saveStep(false)
+    checkName() {
+      if(this.pplSubject != '') {
+        if(sessionStorage.getItem('signStep') == 'true') {
+          EventBus.$emit('openSignPad')
+        } else {
+          var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
+          this.saveDocument(temp_option)
         }
-      }      
+      }
+    },
+    async saveSign(sign64) {
+      if(sessionStorage.getItem("firstSent") == "true") {
+         var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
+        this.saveDocument(temp_option, sign64)
+      } else {
+        this.updateDocument(sign64)
+      }
     },
     async uploadSign(sign64) {
       try {
@@ -2360,7 +2356,7 @@ export default {
         console.log(error.message)
       }
     },
-    async updateDocument(isDraft) {
+    async updateDocument(sign64) {
       try {
         this.dialog_ppl = false
         var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
@@ -2374,13 +2370,13 @@ export default {
             template_data: this.template_array,
             is_full: true,
             step_index: this.currentStep - 1,
-            string_sign: "",
+            string_sign: sign64,
             comment: temp_option.newComment ,
             typesign: "web",
             type: "approve",
             action: "Fill",
             others: {dataTableObjectArray : this.dataTableObjectArray},
-            is_draft: isDraft
+            is_draft: this.isSaveDraft
           }
         )
 
@@ -2469,11 +2465,10 @@ export default {
         console.log(error.message)
       }
     },
-    async saveDocument(document_name, opsPage) {
+    async saveDocument(opsPage, sign64) {
       try {
         this.dialog_ppl = false
         this.optionsPage = opsPage
-        this.doc_name = document_name
         var sizeTemp = [{}]
         var orientationTemp = [{}]
         for (var i = 1; i <= this.pageOrientation.length; i++) {
@@ -2499,9 +2494,10 @@ export default {
             size_header: sizeTemp,
             size_body: sizeTemp,
             size_footer: sizeTemp,
-            document_name: this.doc_name,
+            document_name: this.pplSubject,
             orientation: orientationTemp,
             paper_size: temp_option.paper_size,
+            string_sign: sign64,
             comment: temp_option.newComment,
             is_full: true,
             others: {dataTableObjectArray : this.dataTableObjectArray}
