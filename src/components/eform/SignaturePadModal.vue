@@ -91,6 +91,7 @@ export default {
   },
    beforeDestroy() {
     EventBus.$off('changeLang')
+    EventBus.$off('openSignPad')
   },
   methods: {
     changeColor() {
@@ -113,14 +114,10 @@ export default {
           this.textLang = lang_en.components.SignaturePadModal
       }
     },
-    openSignpad(isNoFlow) {
-      this.noFlowSign = isNoFlow
+    openSignpad() {
       this.dialogSign = true
-      this.signUrl = sessionStorage.getItem("sign_url")
-      this.isCa = !(sessionStorage.getItem('signOnlyStep') == 'true')
-      if(this.noFlowSign) {
-        this.isCa = false
-      }
+      this.isCa = false
+      this.option_style = ['Default', 'Sign Pad']
       if(!this.signUrl) {
         this.selectedSignStyle = 'Sign Pad'
         this.option_style.splice(0,1)
@@ -155,14 +152,14 @@ export default {
         const { data } = this.$refs.signaturePad.saveSignature()
         if(data) {
           sign64 = data
-          var isNoFlow = this.noFlowSign
-          EventBus.$emit('saveSign',sign64, isNoFlow)
+          // var isNoFlow = this.noFlowSign
+          EventBus.$emit('saveSign',sign64)
           this.dialogSign = false
         }
       } else {
-        var isNoFlow = this.noFlowSign
-        EventBus.$emit('saveSign',sign64, isNoFlow)
-        this.dialogSign = false
+        // var isNoFlow = this.noFlowSign
+        // EventBus.$emit('saveSign',sign64)
+        // this.dialogSign = false
       }
     },
     rejectSign() {
