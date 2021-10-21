@@ -25,17 +25,17 @@
     "ConfirmCancelDocumentModal": {
       "confirm_delete": "ยืนยันการยกเลิกเอกสาร",
       "sure_delete": "คุณต้องการยกเลิกเอกสาร \"",
-      "or_no": "\" หรือไม่ ",
+      "or_no": "\" หรือไม่\"?",
       "cancel": "ปิด",
-      "yes_canel": "ยกเลิกเอกสาร",
+      "yes_canel": "ตกลง",
       "cancel_success": "ยกเลิกเอกสารสำเร็จ",
       "cancel_fail": "ยกเลิกเอกสารไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
     },
     "ConfirmSaveTempModal": {
        "confirm_save": "ยืนยันการบันทึกรูปแบบเอกสาร",
-       "sure_save": "คุณต้องการบันทึกรูปแบบเอกสารนี้หรือไม่",
+       "sure_save": "ต้องการบันทึกแบบฟอร์มนี้หรือไม่\"?",
        "cancel": "ยกเลิก",
-       "save": "บันทึกเอกสาร" 
+       "save": "บันทึก" 
     },
     "CreateDropdownDataSetModal": {
        "create_edit": "สร้าง / แก้ไข กลุ่มตัวเลือก",
@@ -122,15 +122,15 @@
     "SignaturePadModal":{
       "sign_approve": "ลงนามอนุมัติ",
       "reject_approval": "ปฏิเสธอนุมัติ",
-      "approve": "ลงนามอนุมัติ",
+      "approve": "อนุมัติ",
       "cancel": "ยกเลิก"
     },
     "rejectModal": {
       "confirm_reject": "ยืนยันการปฏิเสธอนุมัติเอกสาร",
-      "sure_reject": "คุณต้องการปฏิเสธอนุมัติเอกสารที่มีชื่อว่า",
-      "or": "หรือไม่",
+      "sure_reject": "ต้องการปฏิเสธอนุมัติเอกสาร",
+      "or": "หรือไม่ ?",
       "cancel": "ยกเลิก",
-      "reject": "ปฏิเสธอนุมัติ"
+      "reject": "ตกลง"
     },
     "RefDocumentModal":{
       "ref_doc_title": "รายการเอกสารอ้างอิง",
