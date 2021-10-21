@@ -22,18 +22,6 @@
        "cancel": "ยกเลิก",
        "back": "ออก" 
     },
-    "ChangePermissionTemplateModal": {
-      "transfer_modal_title": "โอนสิทธิ์การแก้ไข",
-      "template_type": "รูปแบบเอกสาร",
-      "structure_type": "โครงสร้าง",
-      "mail_title": "One E-mail ที่ต้องการโอนสิทธิ์",
-      "note_transfer1": "หมายเหตุ : หลังจากที่ทำการโอนสิทธิ์การแก้ไขไปแล้วจะไม่สามารถกลับมาแก้ไข",
-      "note_transfer2": "นี้ได้อีก ยกเว้นผู้ใช้งานของ One E-mail ที่ได้ทำการโอนสิทธิ์ไปให้",
-      "cancel_btn": "ยกเลิก",
-      "transfer_btn": "โอนสิทธิ์",
-      "tranfer_success": "โอนสิทธิ์สำเร็จ",
-      "tranfer_fail": "โอนสิทธิ์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
-    },
     "ConfirmCancelDocumentModal": {
       "confirm_delete": "ยืนยันการยกเลิกเอกสาร",
       "sure_delete": "คุณต้องการยกเลิกเอกสาร \"",
@@ -59,61 +47,6 @@
        "sub_choices": "ตัวเลือก",
        "cancel": "ยกเลิก",
        "save": "บันทึกกลุ่มตัวเลือก"
-    },
-    "CreateFolderModal": {
-       "document_folder": "แฟ้มรูปแบบเอกสาร",
-       "folder_name": "ชื่อแฟ้มรูปแบบเอกสาร",
-       "folder_tag": "กลุ่มของแฟ้มรูปแบบเอกสาร",
-       "cancel": "ยกเลิก",
-       "folder": "แฟ้ม"
-    },
-    "DeleteModal": {
-       "confirm_delete": "ยืนยันการลบ",
-       "sure_delete": "คุณต้องการลบ",
-       "name": "ที่ชื่อว่า",
-       "or": "หรือไม่",
-       "cancel": "ยกเลิก",
-       "delete": "ลบ",
-       "my_document": "เอกสารของฉัน",
-       "document": "เอกสาร",
-       "template": "รูปแบบเอกสาร E-Form",
-       "eform_template": "รูปแบบเอกสาร E-Form",
-       "structure_eform": "โครงสร้าง E-Form",
-       "structure": "โครงสร้าง"
-    },
-    "DraftModal": {
-       "fillout_draft": "กรอกเอกสารต่อจากแบบร่าง",
-       "you_fillout": "คุณต้องการกรอกเอกสาร",
-       "continue" :"ต่อจากแบบร่างที่บันทึกไว้หรือไม่",
-       "yes": "ใช่, กรอกเอกสารต่อ",
-       "no": "ไม่, เริ่มกรอกเอกสารใหม่",
-       "cancel": "ยกเลิก"
-    },
-    "ExportReportModal": {
-       "export_report": "Export รายงานการใช้งานเอกสารในรูปแบบ Excel",
-       "setting_export": "ตั้งค่าการ Export ข้อมูลการใช้งานเอกสาร",
-       "export_doc_all": "Export ข้อมูลการใช้งานเอกสารทั้งหมด",
-       "export_doc": "Export ข้อมูลการใช้งานเอกสารในช่วงวันที่ที่กำหนด",
-       "cancel": "Cancel",
-       "ok": "OK",
-       "export_email": "Export ข้อมูลการใช้งานเอกสารของอีเมลตามที่กำหนด",
-       "cancel1": "ยกเลิก",
-       "export_excel": "Export Excel",
-       "no_data": "ไม่พบข้อมูล",
-       "to": "ถึง"
-    },
-    "ExportMyFormReportModal": {
-      "export_myform": "Export รายงานการใช้งานเอกสารของฉันในรูปแบบ Excel",
-      "setting_export_myform": "ตั้งค่าการ Export รายงานการใช้งานเอกสารของฉัน",
-      "export_doc_all_myform": "Export รายการใช้งานเอกสารของฉันทั้งหมด",
-      "export_doc_myform": "Export รายการใช้งานเอกสารของฉันในช่วงวันที่ที่กำหนด",
-      "cancel": "Cancel",
-      "ok": "OK",
-      "cancel1": "ยกเลิก",
-      "export_excel": "Export Excel",
-      "no_data": "ไม่พบข้อมูล",
-      "to": "ถึง",
-      "no_permission": "ไม่พบสิทธิ์ในการเข้าถึงข้อมูล"
     },
     "hideSettingModal": {
        "setting_object": "ตั้งค่าเงื่อนไขการซ่อน Object",
@@ -177,13 +110,6 @@
       "tranfer_success": "โอนสิทธิ์สำเร็จ",
       "tranfer_fail": "โอนสิทธิ์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
     },
-    "ReverseDocumentModal": {
-       "return_doc_edit": "ส่งเอกสารคืนเพื่อแก้ไข",
-       "return_doc_to": "ส่งเอกสารคืนไปยัง",
-       "cancel": "ยกเลิก",
-       "send_edit": "ส่งคืนแก้ไข",
-       "order_return_edit": "ลำดับที่ต้องการส่งเอกสารคืนเพื่อแก้ไข"
-    },
     "SettingLinkDataTableModal": {
        "setting": "ตั้งค่าการเชื่อมโยงข้อมูลของตาราง",
        "row": "แถวที่",
@@ -244,51 +170,6 @@
         "or_sign": "หรือ (ใช้เชื่อมเงื่อนไขย่อยหลายๆเงื่อนไข โดยใส่วงเล็บครอบแต่ละเงื่อนไขก่อนที่จะใส่เครื่องหมายเชื่อม)",
         "condition_example": "ตัวอย่างเงื่อนไข"
       }
-    },
-    "flowConditionModal": {
-      "validation_doc_modal_title": "ตั้งค่าประเภทและรูปแบบเอกสาร Paperless อัตโนมัติ",
-      "validate_list_title": "รายการเงื่อนไขที่จะตรวจสอบ",
-      "condition_num": "เงื่อนไขที่",
-      "condition_title": "เงื่อนไข",
-      "flow_title": "ประเภทและรูปแบบเอกสาร Paperless",
-      "doc_paperless": "ประเภทเอกสาร paperless",
-      "format_paperless": "รูปแบบเอกสาร paperless",
-      "choose": "ไม่เลือก",
-      "add_condition_btn": "เพิ่มเงื่อนไข",
-      "delete_condition_btn": "ลบเงื่อนไข",
-      "cancel_modal_btn": "ยกเลิก",
-      "save_setting_btn": "บันทึกการตั้งค่า",
-      "help_card": {
-        "help_validate": "เป็นเงื่อนไขสำหรับตรวจสอบความถูกต้องในการกรอกเอกสาร โดยสามารถเลือกตรวจสอบ object ตามเงื่อนไขที่กำหนดเองได้ ซึ่งในการใส่ชื่อ object จะใช้เครื่องหมาย $ นำหน้าชื่อ ส่วนเครื่องหมายที่ใช้ในการเปรียบเทียบต่างๆจะมีดังนี้",
-        "plus_sign": "บวก",
-        "minus_sign": "ลบ",
-        "multiple_sign": "คูณ",
-        "divide_sign": "หาร",
-        "equal_sign": "เท่ากับ",
-        "not_equal_sign": "ไม่เท่ากับ",
-        "less_sign": "น้อยกว่า",
-        "less_eq_sign": "น้อยกว่าหรือเท่ากับ",
-        "more_sign": "มากกว่า",
-        "more_eq_sign": "มากกว่าหรือเท่ากับ",
-        "length_meaning": "ค่าจำนวนตัวอักษรในข้อความ โดยใส่ต่อหลังจากชื่อ object ที่ต้องการค่า",
-        "and_sign": "และ (ใช้เชื่อมเงื่อนไขย่อยหลายๆเงื่อนไข โดยใส่วงเล็บครอบแต่ละเงื่อนไขก่อนที่จะใส่เครื่องหมายเชื่อม)",
-        "or_sign": "หรือ (ใช้เชื่อมเงื่อนไขย่อยหลายๆเงื่อนไข โดยใส่วงเล็บครอบแต่ละเงื่อนไขก่อนที่จะใส่เครื่องหมายเชื่อม)",
-        "condition_example": "ตัวอย่างเงื่อนไข"
-      }
-    },
-    "SetPasswordPDFModal":{
-      "password_setting": "ตั้งค่ารหัสผ่านเอกสาร (pdf)",
-      "password": "รหัสผ่าน",
-      "pleaseSet_password": "กรุณาตั้งค่ารหัสผ่าน",
-      "password_download": "ตั้งค่าและดาวน์โหลดเอกสาร",
-      "cancel": "ยกเลิก"
-    },
-    "ForwardMailModal": {
-      "forward_mail_dialog_title": "ส่งเอกสารผ่านทางอีเมล",
-      "forward_mail_heder": "เอกสารจะถูกส่งในรูปแบบไฟล์ PDF ไปยังที่อยู่อีเมลต่อไปนี้",
-      "alert_mail": "รูปแบบอีเมลไม่ถูกต้อง",
-      "cancel_dialog_btn": "ยกเลิก",
-      "send_email_btn": "ส่งอีเมล"
     }
   },
   "Create_Template": {
@@ -634,136 +515,6 @@
       "email": "อีเมล"
     }
   },
-  "Document_Admin": {
-    "textLang": {
-      "tabsMenu": {
-        "all_document": "เอกสารทั้งหมด",
-        "search": "ค้นหา",
-        "document_type": "ประเภทเอกสาร:",
-        "document_format": "รูปแบบเอกสาร:",
-        "choose": "เลือก"
-      },
-      "tools": {
-        "items": "รายการ",
-        "view_document": "ดูเอกสาร",
-        "documents_deleted": "เอกสารถูกลบ",
-        "trace_document": "ติดตามเอกสาร",
-        "cancel_doc": "ยกเลิกเอกสาร",
-        "doc_no_tiltle_hover": "หมายเลขเอกสาร",
-        "doc_ref_title_hover": "มีหมายเลขเอกสารอ้างอิงดังต่อไปนี้"
-      },
-      "tableTab": {
-        "azsort": "จัดเรียงตามตัวอักษร",
-        "listview": "มุมมองรายการ",
-        "tableview": "มุมมองตาราง"
-      },
-      "status_documents": {
-        "sign_offered": "เสนอเซ็นแล้ว",
-        "wait_approval": "รออนุมัติ",
-        "approval": "อนุมัติแล้ว",
-        "progress": "กำลังดำเนินการ",
-        "reject_approval": "ปฏิเสธอนุมัติ",
-        "cancel": "เอกสารถูกยกเลิก",
-        "documents_returned": "เอกสารที่ส่งคืนแก้ไข",
-        "not_uploaded": "ยังไม่ได้อัพโหลด",
-        "inprogress_input": "กำลังดำเนินการ",
-        "wait_send_ppl": "รอการตรวจสอบ",
-        "step_input": "ลำดับที่",
-        "already_input": "กรอกแล้ว",
-        "inputting": "กำลังกรอก",
-        "pending": "รอดำเนินการ"
-      },
-      "headers": {
-        "no": "ลำดับ", 
-        "doc": "รูปแบบเอกสาร", 
-        "name": "ชื่อเอกสาร", 
-        "doc_no": "หมายเลขเอกสาร",
-        "create_by": "สร้างโดย",
-        "create_date": "วันที่สร้าง",
-        "status": "สถานะ",
-        "track": "ติดตามเอกสาร"
-      },
-      "no_pdf": "ไม่สามารถเปิดเอกสารได้"
-    }
-  },
-  "my_form": {
-    "textLang": {
-      "tabsMenu": {
-        "my_documents": "เอกสารของฉัน",
-        "pending_documents": "เอกสารรอดำเนินการ"
-      },
-      "tools": {
-        "search": "ค้นหา",
-        "doc_type":  "ประเภทเอกสาร:",
-        "doc_template": "รูปแบบเอกสาร:",
-        "choose": "เลือก",
-        "ppl_status": "สถานะ Paperless:",
-        "ppl_items": ["ทั้งหมด", "กำลังดำเนินการ", "อนุมัติแล้ว", "ปฏิเสธอนุมัติ", "เอกสารถูกยกเลิก"],
-        "document_status": "สถานะเอกสาร:",
-        "status_items": ["ทั้งหมด", "รอการกรอก", "กำลังดำเนินการ", "รอการตรวจสอบ"],
-        "wait_ppl": "กำลังดำเนินการ",
-        "ppl_approved": "อนุมัติแล้ว",
-        "ppl_reject": "ปฏิเสธอนุมัติ",
-        "ppl_cancel": "เอกสารถูกยกเลิก",
-        "waiting": "รอการกรอก",
-        "progress": "กำลังดำเนินการ",
-        "awaiting": "รอการตรวจสอบ",
-        "return_edit": "ส่งคืนแก้ไข",
-        "items": "รายการ",
-        "sort":"จัดเรียงตามตัวอักษร",
-        "list_view": "มุมมองรายการ",
-        "grid_view": "มุมมองตาราง",
-        "review_doc": "ดูเอกสาร",
-        "copy": "คัดลอก",
-        "dowload": "ดาวน์โหลด",
-        "delete": "ลบเอกสาร",
-        "fill_doc": "กรอกเอกสาร",
-        "track_document": "ติดตามเอกสาร",
-        "no": "ลำดับที่",
-        "you": "(คุณ)",
-        "doc_no_tiltle_hover": "หมายเลขเอกสาร",
-        "doc_ref_title_hover": "มีหมายเลขเอกสารอ้างอิงดังต่อไปนี้",
-        "no_pdf": "ไม่สามารถเปิดเอกสารได้"
-      },
-      "status": {
-        "sent_signing": "เสนอเซ็นแล้ว",
-        "wait_approval": "รออนุมัติ",
-        "approval": "อนุมัติแล้ว",
-        "reject_approval": "ปฏิเสธอนุมัติ",
-        "doc_cancel": "เอกสารถูกยกเลิก",
-        "documents_returned": "เอกสารที่ส่งคืนแก้ไข",
-        "not_uploaded": "ยังไม่ได้อัพโหลด",
-        "waiting_fillout": "รอการกรอก (คุณ)",
-        "completed": "กรอกแล้ว",
-        "return": "ส่งคืนแก้ไข",
-        "in_completed": "กำลังกรอก",
-        "pending": "รอดำเนินการ"
-      },
-      "headers": {
-        "order": "ลำดับ",
-        "doc_format": "รูปแบบเอกสาร",
-        "name": "ชื่อเอกสาร", 
-        "doc_no": "หมายเลขเอกสาร",
-        "creat": "วันที่สร้าง",
-        "status": "สถานะ Paperless",
-        "trace": "ติดตามเอกสาร",
-        "management": "จัดการ"
-      },
-      "headers_waiting": {
-        "order": "ลำดับ", 
-        "doc_format": "รูปแบบเอกสาร",
-        "name": "ชื่อเอกสาร",
-        "type": "ประเภทเอกสาร",
-        "creat_by": "สร้างโดย",
-        "creat_date": "วันที่สร้าง",
-        "status": "สถานะเอกสาร",
-        "management": "จัดการ"
-      }
-    }
-  },
-  "Page_Error": {
-    "back": "ย้อนกลับ"
-  },
    "preview_template": {
      "tabMenubar": {
        "back_page": "ย้อนกลับไปหน้ากรอกข้อมูล",
@@ -818,24 +569,6 @@
         "upload_fail" : "อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
      }
    },
-  "setting": {
-    "setting_data": {
-       "settings": "ตั้งค่าทั่วไป",
-       "firstname_lastname": "ชื่อ - นามสกุล",
-       "position": "ตำแหน่ง",
-       "notifications": "Email สำหรับแจ้งเตือน",
-       "default_id": "Business ID เริ่มต้น",
-       "edit": "แก้ไข",
-       "save": "บันทึก",
-       "cancel": "ยกเลิก",
-       "default": "รูปแบบลายเซ็นเริ่มต้น",
-       "default_signature": "* หากไม่มีรูปแบบลายเซ็นเริ่มต้นสามารถไปตั้งค่าได้ที่ ",
-       "signature": {
-         "yes": "มี",
-         "no": "ไม่มี"
-        }
-      } 
-  },
   "show_template": {
     "textLang": {
       "tabMenubar": {
@@ -918,171 +651,6 @@
         "upload_fail" : "อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
       }
     }
-  },
-  "template": {
-    "textLang": {
-      "tabsMenu": {
-        "document": "รูปแบบเอกสาร E-FORM",
-        "template": "โครงสร้าง"
-      },
-      "tools": {
-         "search": "ค้นหา",
-         "document_type": "ประเภทเอกสาร:",
-         "department": "แผนก:",
-         "choose": "เลือก",
-         "items": "รายการ",
-         "edit": "แก้ไข",
-         "change_edit": "โอนสิทธิ์การแก้ไข",
-         "delete": "ลบ",
-         "use_template": "ใช้งานโครงสร้าง",
-         "edit_template": "แก้ไขโครงสร้าง"
-      },
-      "buttons": {
-         "create_doc": "สร้างรูปแบบเอกสาร",
-         "import_doc": "นำเข้ารูปแบบเอกสาร"
-      },
-      "tableTab": {
-        "azsort": "จัดเรียงตามตัวอักษร",
-        "listview": "มุมมองรายการ",
-        "tableview": "มุมมองตาราง"
-      },
-      "status_doc": {
-        "ready": "พร้อมใช้งาน",
-        "not_ready": "ยังไม่พร้อมใช้งาน"
-      },
-      "modal":{
-        "import_doc_e_form": "นำเข้ารูปแบบเอกสาร E-Form",
-        "doc_file": "ไฟล์รูปแบบเอกสาร E-Form :",
-        "select_file":"กรุณาเลือกไฟล์",
-        "cancel": "ยกเลิก",
-        "exports": "นำเข้า"
-      },
-      "headers": {
-        "no": "ลำดับ",
-        "name": "ชื่อรูปแบบเอกสาร",
-        "id": "รหัสเอกสาร",
-        "department": "แผนก",
-        "create_by": "สร้างโดย",
-        "create_date": "วันที่สร้าง",
-        "status": "สถานะ",
-        "manage": "จัดการ"
-      },
-      "headers_structure": {
-        "no": "ลำดับ",
-        "name": "ชื่อโครงสร้าง",
-        "id": "รหัสเอกสาร",
-        "department": "แผนก",
-        "create_by": "สร้างโดย",
-        "create_date": "วันที่สร้าง",
-        "status": "สถานะ",
-        "manage": "จัดการ"
-      }
-    }
-  },
-  "toolbar": {
-    "logout": "ออกจากระบบ",
-    "start": "เริ่มต้นใช้งาน",
-    "doc": "เอกสารของฉัน",
-    "all_doc": "เอกสารทั้งหมด",
-    "doc_tem": "รูปแบบเอกสาร",
-    "other_service": "บริการที่เชื่อมต่อ",
-    "setting": "ตั้งค่า",
-    "menuinMenusLeft": "รูปแบบเอกสารทั้งหมด",
-    "creaet_file_doc_format": "สร้างแฟ้มรูปแบบเอกสาร"
-  },
-  "use_template": {
-    "tabsMenu": {
-      "tab1": "เอกสารพร้อมใช้งาน",
-      "tab2": "กำหนดสิทธิ์การกรอกเอกสาร",
-      "items": "รายการ"
-    },
-    "tools": {
-      "search": "ค้นหา" ,
-      "doctype": "ประเภทเอกสาร" ,
-      "dep": "แผนก" ,
-      "use": "เปิดใช้งานเอกสาร",
-      "copy": "คัดลอกลิงก์" ,
-      "copypublic": "คัดลอกลิงก์สำหรับบุคคลทั่วไป" ,
-      "send": "ยื่นเอกสาร",
-      "export_excel_use_doc": "Export Excel ข้อมูลในเอกสารของผู้ใช้",
-      "export_excel_work_my": "Export Excel การใช้งานเอกสารของฉัน"
-    },
-    "tableTab": {
-      "azsort": "จัดเรียงตามตัวอักษร",
-      "listview": "มุมมองรายการ",
-      "tableview": "มุมมองตาราง"
-    },
-    "headers_normal": {
-      "no": "ลำดับ",
-      "eform": "ชื่อเอกสาร",
-      "dep": "แผนก",
-      "eform_type": "ประเภทเอกสาร",
-      "code": "รหัสเอกสาร",
-      "use_date": "วันที่บังคับใช้",
-      "version": "เวอร์ชัน"
-    },
-    "headers_step": {
-      "no": "ลำดับ",
-      "eform": "ชื่อเอกสาร",
-      "dep": "แผนก",
-      "eform_type": "ประเภทเอกสาร",
-      "code": "รหัสเอกสาร",
-      "use_date": "วันที่บังคับใช้",
-      "version": "เวอร์ชัน"
-    },
-    "no_permission": "ไม่พบสิทธิ์ในการเข้าถึงข้อมูล"
-  },
-  "use_form": {
-    "waiting_tab": {
-      "tab_name": "เอกสารรอการกรอกและอนุมัติ",
-      "title": "เอกสารรอการกรอกและอนุมัติ",
-      "doc_unit": "รายการ",
-      "wait_doc_table_header": {
-        "no": "ลำดับ",
-        "eform": "รูปแบบเอกสาร",
-        "doc_name": "ชื่อเอกสาร",
-        "doc_no": "หมายเลขเอกสาร",
-        "creator": "สร้างโดย",
-        "create_date": "วันที่สร้าง",
-        "status_doc": "สถานะเอกสาร",
-        "manage_menu": "จัดการ"
-      },
-      "doc_no_hover": "หมายเลขเอกสาร",
-      "doc_ref_title_hover": "มีหมายเลขเอกสารอ้างอิงดังต่อไปนี้",
-      "wait_filling_status": "รอการกรอก",
-      "no_step_title": "ลำดับที่",
-      "you": "คุณ",
-      "already_inputed_sub_status": "กรอกแล้ว",
-      "inputting_sub_status": "กำลังกรอก",
-      "wait_checking_sub_status": "รอการตรวจสอบ",
-      "wait_approving_ppl_status": "รออนุมัติ",
-      "input_doc_btn": "กรอกเอกสาร",
-      "check_doc_btn": "ตรวจสอบเอกสาร",
-      "approve_doc_btn": "อนุมัติเอกสาร"
-    },
-    "eform_tab": {
-      "tab_name": "สร้างเอกสารใหม่",
-      "title": "เอกสารพร้อมใช้งาน",
-      "eform_unit": "รายการ",
-      "filter_fav_btn": "ดูรายการเอกสารโปรด",
-      "eform_table_header": {
-        "no": "ลำดับ",
-        "name": "ชื่อเอกสาร",
-        "department": "แผนก",
-        "type_doc": "ประเภทเอกสาร",
-        "code": "รหัสเอกสาร",
-        "date_force": "วันที่บังคับใช้",
-        "version": "เวอร์ชัน"
-      },
-      "add_fav_tooltip": "เพิ่มลงในรายการเอกสารโปรด",
-      "delete_fav_tooltip": "นำออกจากรายการเอกสารโปรด",
-      "use_eform_menu": "เปิดใช้งานเอกสาร",
-      "send_eform_menu": "ยื่นเอกสาร",
-      "copy_link_menu": "คัดลอกลิงก์",
-      "copy_public_link_menu": "คัดลอกลิงก์สำหหรับบุคคลทั่วไป",
-      "export_data_in_doc": "Export Excel ข้อมูลในเอกสารของผู้ใช้",
-      "export_using_doc_menu": "Export Excel การใช้งานเอกสารของฉัน"
-    },
-    "search_placeholder": "ค้นหา"
   }
+
 }
