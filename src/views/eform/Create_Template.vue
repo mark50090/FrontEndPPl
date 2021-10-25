@@ -2607,6 +2607,7 @@ export default {
     AlphabetType: [{text: 'ไม่กำหนด', value: ""},{text: 'ตัวอักษรพิมพ์ใหญ่', value: "UpperCase"},{text: 'ตัวอักษรพิมพ์เล็ก', value: "LowwerCase"}],
     allEformList: [],
     TextType: [{text: 'ไม่กำหนด', value: ""},{text: 'อีเมล', value: "Email"}],
+    currentSelectedFlow: {},
     textLang:{
       tabMenubar: {
         create_doc: "สร้างเอกสาร",
@@ -7542,6 +7543,8 @@ export default {
                   temp_ppl_code: [{name:'default', code:this.selected_ppltemplate, document_type:this.selectedDocumentType}],
                   structure_template_type: this.template_type,
                   flow_id: this.selected_ppltemplate,
+                  is_permission: this.currentSelectedFlow.is_permission,
+                  set_role: this.currentSelectedFlow.set_role,
                   template_status: this.template_status,
                   template_name: temp_name,
                   code_template: this.code_template,
@@ -7630,6 +7633,8 @@ export default {
                   tax_id: business,
                   temp_ppl_code: [{name:'default', code:this.selected_ppltemplate, document_type:this.selectedDocumentType}],
                   flow_id:this.selected_ppltemplate,
+                  is_permission: this.currentSelectedFlow.is_permission,
+                  set_role: this.currentSelectedFlow.set_role,
                   structure_template_type: this.template_type,
                   template_status: this.template_status,
                   template_id: temp_code,
@@ -8323,6 +8328,7 @@ export default {
             var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
             var url = `/flowdata/api/v1/get1/?_id=${this.selected_ppltemplate}&tax_id=${tax_id}`
             var {data} = await this.axios.get(this.$api_url + url)
+            this.currentSelectedFlow = data.data
             if(data.status){
               data.data.flow_data.forEach(e => {
                 if(e.action == "Fill") {
