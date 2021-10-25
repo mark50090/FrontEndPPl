@@ -96,7 +96,8 @@ import { EventBus } from '../EventBus'
             keyword: this.keyword,
             lim: itemsPerPage, 
             offset: (page-1)*itemsPerPage || 0, 
-            is_active: true
+            is_active: true,
+            is_fill: true
           })
           if(data.status){
             let index = 1
@@ -130,7 +131,8 @@ import { EventBus } from '../EventBus'
           var { data } = await this.axios.post(this.$api_url + '/template_form/api/v1/countTemplate', {
             tax_id : tax_id,
             keyword: this.keyword,
-            is_active: true
+            is_active: true,
+            is_fill: true
           })
           if(data.status){
             this.totalItemsTemplate = data.result
@@ -151,11 +153,11 @@ import { EventBus } from '../EventBus'
           template_id: item.template_id,
           isCopy: false,
           isImport: false,
-          eform_id: ""
+          transaction_id: ""
         }
         sessionStorage.setItem('option',JSON.stringify(tempOption))
         sessionStorage.setItem('isDocEdit',false)
-        sessionStorage.setItem('isDocStep',false)
+        sessionStorage.setItem('isDocStep',true)
         sessionStorage.setItem('isBack',false)
         sessionStorage.setItem('isStep',false)
         sessionStorage.setItem('isOnlyForm',true)

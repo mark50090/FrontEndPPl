@@ -10,33 +10,33 @@
       </v-btn>
       <v-spacer></v-spacer>
       <!-- button for web -->
-      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="yellow accent-4" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
+      <v-btn v-if="currentStep != ''" depressed rounded large dark color="#FBC02D" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
         <v-icon>mdi-reply</v-icon>
         <span class="btn-return-edit">{{ textLang.tabMenubar.return_edit }}</span>
       </v-btn>
-      <v-btn v-if="isSendBack && isSendFirst" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
+      <v-btn v-if="currentStep != ''" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
         <v-icon>mdi-file-excel-outline</v-icon>
         <span class="btn-reject-doc save-draft-word">{{ textLang.tabMenubar.reject_doc }}</span>
       </v-btn>
-      <v-btn v-if="!isPublic && isOwner && isFlowDoc" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
+      <v-btn v-if="false" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
         <v-icon>mdi-file-cancel-outline</v-icon>
         <span class="btn-cancel-doc">{{ textLang.tabMenubar.cancel_doc }}</span>
       </v-btn>
-      <!-- <v-badge bordered left overlap color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mr-2 display-pc-only">
-        <v-btn v-if="!(isSendStep && !isComplete)" outlined rounded large color="grey lighten-1" class="send-back-btn-icon send-back-btn" @click="openAttachFile()">
+      <v-badge bordered left overlap color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mr-2 display-pc-only">
+        <v-btn outlined rounded large color="grey lighten-1" class="send-back-btn-icon send-back-btn" @click="openAttachFile()">
           <v-icon>mdi-text-box-search-outline</v-icon>
           <span class="btn-view-attachment save-draft-word">{{ textLang.tabMenubar.view_attachment }}</span>
         </v-btn>
-      </v-badge> -->
-      <v-btn v-if="(!isSendStep || isComplete) && isSelf" outlined rounded large color="#4CAF50" class="send-back-btn-icon send-back-btn display-pc-only" @click="save(false, true)">
+      </v-badge>
+      <v-btn outlined rounded large color="#4CAF50" class="send-back-btn-icon send-back-btn display-pc-only" @click="save(false, true)">
         <v-icon>mdi-file-search-outline</v-icon>
         <span class="btn-review-ex save-draft-word">{{ textLang.tabMenubar.review_ex }}</span>
       </v-btn>
-      <!-- <v-btn v-if="(!isSendStep || isComplete) && isSelf" depressed rounded large color="#C2EB81" class="btn-savedraft send-back-btn-icon send-back-btn display-pc-only" @click="save(true)">
+      <v-btn v-if="currentStep != ''" depressed rounded large color="#C2EB81" class="btn-savedraft send-back-btn-icon send-back-btn display-pc-only" @click="save(true)">
         <v-icon>mdi-file-hidden</v-icon>
         <span class="btn-expan-word save-draft-word">{{ textLang.tabMenubar.save_draft }}</span>
-      </v-btn> -->
-      <v-btn v-if="(!isSendStep || isComplete) && isSelf" depressed large dark color="#4CAF50" class="preview-btn" @click="save(false, false)">{{ textLang.tabMenubar.save_doc_btn }}</v-btn>
+      </v-btn>
+      <v-btn depressed large dark color="#4CAF50" class="preview-btn" @click="save(false, false)">{{ textLang.tabMenubar.save_doc_btn }}</v-btn>
 
       <v-menu offset-y z-index="13" v-if="!isPublic && !isSendStep">
         <template v-slot:activator="{ on }">
@@ -46,15 +46,15 @@
           </v-btn>
         </template>
         <v-list>
-          <!-- <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogRefDoc = true">
-            <v-list-item-icon><v-icon>mdi-package-down</v-icon></v-list-item-icon>
+          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogRefDoc = true">
+            <v-list-item-icon><v-icon>mdi-file-import-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogImport = true">
+          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogImport = true">
             <v-list-item-icon><v-icon>mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
-          </v-list-item> -->
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="AddAttachFile()">
+          </v-list-item>
+          <v-list-item  @click="AddAttachFile()">
             <v-list-item-icon><v-icon>mdi-paperclip</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_file_menu }}</v-list-item-title>
           </v-list-item>
@@ -77,12 +77,12 @@
           <v-list-item v-else-if="isPaperview == false && isSimpleFill" @click="switchView()">
             <v-list-item-icon><v-icon>mdi-script-text-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
-          </v-list-item>
+          </v-list-item>  -->
           <v-list-item @click="downloadFromEid()">
             <v-list-item-icon><v-icon>mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
-          </v-list-item>
-          <v-list-item v-if="isSendBack && isSendFirst && isEmailStep" @click="openPermissionTransference()">
+          </v-list-item> 
+          <!--  <v-list-item v-if="isSendBack && isSendFirst && isEmailStep" @click="openPermissionTransference()">
             <v-list-item-icon><v-icon>mdi-human-greeting-proximity</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.transfer_title }}</v-list-item-title>
           </v-list-item> -->
@@ -96,15 +96,15 @@
           </v-btn>
         </template>
         <v-list>
-          <!-- <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogRefDoc = true">
-            <v-list-item-icon><v-icon color="#4CAF50">mdi-package-down</v-icon></v-list-item-icon>
+          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogRefDoc = true">
+            <v-list-item-icon><v-icon color="#4CAF50">mdi-file-import-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogImport = true">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
-          </v-list-item> -->
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="AddAttachFile()">
+          </v-list-item>
+          <v-list-item @click="AddAttachFile()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-paperclip</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_file_menu }}</v-list-item-title>
           </v-list-item>
@@ -119,8 +119,8 @@
           <v-list-item v-if="false" @click="openRefDoc()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-eye-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.view_ref_doc }}</v-list-item-title>
-          </v-list-item>
-          <v-list-item v-if="false" @click="openAttachFile()">
+          </v-list-item> -->
+          <v-list-item @click="openAttachFile()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-text-box-search-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">
               <v-badge bordered inline color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mt-0">
@@ -128,23 +128,23 @@
               </v-badge>
             </v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isSendBack && isSendFirst" @click="openReverse()">
+          <v-list-item v-if="currentStep != ''" @click="openReverse()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-reply</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.return_edit }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isSendBack && isSendFirst" @click="openReject()">
+          <v-list-item v-if="currentStep != ''" @click="openReject()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-excel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.reject_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item  v-if="!isPublic && isOwner && isFlowDoc" @click="openCancel()">
+          <v-list-item  v-if="false" @click="openCancel()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-cancel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.cancel_doc }}</v-list-item-title>
-          </v-list-item> -->
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="save(true, false)"> 
+          </v-list-item>
+          <v-list-item @click="save(true, false)"> 
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-hidden</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.save_draft }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="save(false, true)"> 
+          <v-list-item @click="save(false, true)"> 
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-search-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.review_ex }}</v-list-item-title>
           </v-list-item>
@@ -155,12 +155,12 @@
           <v-list-item v-else-if="(isPaperview == false) && false" @click="switchView() && isSimpleFill">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-script-text-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item v-if="false" @click="downloadFromEid()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isSendBack && isSendFirst && isEmailStep && false" @click="openPermissionTransference()">
+           <!-- <v-list-item v-if="isSendBack && isSendFirst && isEmailStep && false" @click="openPermissionTransference()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-human-greeting-proximity</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.transfer_title }}</v-list-item-title>
           </v-list-item> -->
@@ -265,7 +265,7 @@
               </div>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
-                  <v-btn v-show="item.show && item.style.textAreaValiable.length && getHideByValue(item.style.hideOption, item.name, item.style.zIndex)" text icon color="#4CAF50" class="textarea-btn" v-on="on" @click="openTextAreaValModal(item)">
+                  <v-btn v-show="item.show && item.style.textAreaValiable.length && getHideByValue(item.style.hideOption, item.name, item.style.zIndex) && !item.disable" text icon color="#4CAF50" class="textarea-btn" v-on="on" @click="openTextAreaValModal(item)">
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
                 </template>
@@ -707,7 +707,7 @@
                   <img v-if="item.value" :width="'100%'" :src="item.value">
                   <img v-if="!item.value && item.style.signUrl" :width="'100%'" :src="item.style.signUrl">
                 </div>
-                <div v-if="!(item.value || item.style.signUrl) && (!item.disable || allUserStep || isSendStep)" style="background-color:#64B5F6; width:100%; height:100%; opacity:0.3; border:3px dashed #2196F3;"></div>
+                <div v-if="!(item.value || item.style.signUrl) && !item.disable" style="background-color:#64B5F6; width:100%; height:100%; opacity:0.3; border:3px dashed #2196F3;"></div>
               </div>
             </div>
           </v-sheet>
@@ -729,76 +729,67 @@
           <ShowTemplateMobile/>
         </v-row> -->
       </v-col>
-      <v-col :cols="col_comment_sm" :md="col_comment" :lg="col_comment" v-if="show_comment == true && commentAble" class="comment-block2"> <!-- Comment -->
-        <v-row>
-          <span class="mt-4 header-property"><b>{{ textLang.text_dialog.comment }}</b></span>
-          <v-spacer class="hidden-md-and-up"></v-spacer>
-          <v-btn icon class="mt-2 hidden-md-and-up" @click="toggleComment()"><v-icon large>mdi-chevron-right</v-icon></v-btn>
+      <v-col :cols="col_comment_sm" :md="col_comment" :lg="col_comment" v-if="show_comment == true && commentAble" class="pr-0 pb-0 comment-block2"> <!-- Comment -->
+        <v-row class="pr-3 show-form-block">
+          <span class="mt-4 comment-header-property"><b>{{ textLang.text_dialog.comment }}</b></span>
+          <v-spacer class="display-mobile-only"></v-spacer>
+          <v-btn icon class="mt-2 display-mobile-only" @click="toggleComment()"><v-icon large>mdi-chevron-right</v-icon></v-btn>
         </v-row>
         <br>
-        <v-textarea rows="1" outlined single-line dense no-resize :placeholder="textLang.text_dialog.write_comment" :color="color_inputComment" class="px-1 pad-textarea" :disabled="!isEditable" v-model="inputComment">
+        <v-textarea rows="1" outlined single-line dense no-resize :placeholder="textLang.text_dialog.write_comment" color="#4CAF50" class="mr-3 pad-textarea show-input-comment-box" :disabled="!isEditable" v-model="inputComment">
           <template v-slot:append-outer>
-            <v-icon :color="color_inputComment" class="send-comment-icon2" :disabled="!isEditable" @click="addComment()">mdi-telegram</v-icon>
+            <v-icon size="30" color="#4CAF50" :disabled="newComment != ''" @click="addComment()">mdi-send</v-icon>
           </template>
         </v-textarea>
-        <br>
         <div class="comments-box">
-        <v-row class="mb-5 comment-set" v-for="item in comments" :key="item.index"> <!-- set of one comment -->
-          <v-col cols="1" class="mr-2 pt-1">
-            <v-icon :color="color_icon_human_greeting" >mdi-human-greeting</v-icon>
-          </v-col>
-          <v-col cols="10" class="pt-0 pl-4 pr-5">
-            <v-card outlined class="comment-box">
-              <v-card-title class="pt-1 px-2">
-                <b class="comment-name">{{item.sender}}</b>
-              </v-card-title>
-              <v-card-text class="pr-2">
+          <v-row v-for="item in comments" :key="item.index" class="mb-5 comment-set"> <!-- set of one comment -->
+            <v-col cols="auto" class="px-0 pt-0">
+              <v-icon size="30">mdi-account-circle</v-icon>
+            </v-col>
+            <v-col cols="" class="pa-0">
+              <v-row class="show-comment-row comment-name">
+                {{item.sender}}
+              </v-row>
+              <v-card outlined class="mr-3 mt-3 pa-3">
                 <pre class="comment-sentence">{{item.message}}</pre>
-                <br>
-                <v-row class="comment-date-row">
-                  <v-spacer></v-spacer>
-                  <v-card-subtitle class="comment-date">{{item.date}}</v-card-subtitle>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
+              </v-card>
+              <v-row class="pr-3 show-comment-row">
+                <v-spacer></v-spacer>
+                <span class="comment-date">{{item.date}}</span>
+              </v-row>
+            </v-col>
+          </v-row>
         </div>
       </v-col>
     </v-row>
     <!-- Import Excel Modal -->
-    <v-dialog v-model="dialogImport" persistent max-width="600px">
+    <v-dialog v-model="dialogImport" persistent max-width="450px">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-         <b> {{ textLang.text_dialog.import }} </b>
-        </v-card-title>
-        <v-card-text class="pa-10">
-          <v-row justify="center" align="center">
-            <v-col cols="12" md="3" lg="3" class="excel-file-title">
-              {{ textLang.text_dialog.files }} 
-            </v-col>
-            <v-col cols="12" md="9" lg="9">
-              <v-file-input dense outlined single-line hide-details :color="color_excel_file" :placeholder="textLang.text_dialog.select" accept=".xlsx" class="file-input" id="file" v-model="excelFile"></v-file-input>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions class="pt-0 pb-12">
+        <v-card-title>
+          <span class="input-form-modal-header">{{ textLang.text_dialog.import }}</span>
           <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialogImport = false">{{ textLang.text_dialog.cancle }} </v-btn>
-          <v-btn depressed large :color="color_import" class="px-12 ml-4 save-setting-btn save-modal-font-btn" @click="importExcel()">Import</v-btn>
+          <v-btn icon dark small color="black" @click="dialogImport = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="pt-4">
+          <v-file-input dense outlined hide-details color="#4CAF50" truncate-length="32" :placeholder="textLang.text_dialog.select" accept=".xlsx" class="insert-image-file" id="file" v-model="excelFile"></v-file-input>
+        </v-card-text>
+        <v-card-actions class="pb-5">
+          <v-spacer></v-spacer>
+          <v-btn outlined color="#4CAF50" class="px-6 mr-2 insert-image-btn-modal" @click="dialogImport = false">{{ textLang.text_dialog.cancle }}</v-btn>
+          <v-btn depressed dark color="#4CAF50" class="px-5 ml-2 insert-image-btn-modal" @click="importExcel()">Import</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-    <ReverseDocumentModal/>
+    <ReverseWorkFlowModal/>
     <InputDocumentNameModal/>
     <RefDocumentModal/>
     <AttachFileModal/>
     <RejectModal/>
     <ConfirmCancelDocumentModal/>
-    <ExportReportModal/>
-    <ExportMyFormReportModal/>
     <AddAttachFileModal/>
     <PermissionTransferenceDocumentModal />
     <!-- <SignaturePadModal/> -->
@@ -863,54 +854,59 @@
     </v-dialog>
 
     <!-- Import Doc Modal -->
-    <v-dialog v-model="dialogRefDoc" persistent max-width="600px">
+    <v-dialog v-model="dialogRefDoc" persistent max-width="500px">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-         <b> {{ textLang.text_dialog.import_other }} </b>
+        <v-card-title>
+          <span class="input-form-modal-header">{{ textLang.text_dialog.import_other }}</span>
+          <v-spacer></v-spacer>
+          <v-btn icon dark small color="black" @click="dialogRefDoc = false">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
         </v-card-title>
-        <v-card-text class="pa-10">
-          <v-row justify="center" align="center" class="mb-3">
-            <v-col cols="12" md="3" lg="3" class="pr-0 type-doc-import-title">
+        <v-card-text class="pt-2 pb-0">
+          <v-row class="input-form-row">
+            <v-col cols="12" md="4" lg="4" align-self="center" class="pl-0 type-doc-import-title">
               {{ textLang.text_dialog.document_type_import }}
             </v-col>
-            <v-col cols="12" md="7" lg="7">
-              <v-autocomplete dense outlined hide-details :color="color_document_number" append-icon="mdi-chevron-down" :items="typeDocImport" class="autocomplete-pad icon-select icon-dropdown-modal type-doc-import" v-model="importType"></v-autocomplete>
+            <v-col cols="12" md="8" lg="8" align-self="center" class="px-0">
+              <v-autocomplete dense outlined hide-details color="#4CAF50" append-icon="mdi-chevron-down" :items="typeDocImport" class="type-doc-import type-doc-import-box doc-import-dropdown-icon" v-model="importType"></v-autocomplete>
             </v-col>
           </v-row>
-          <v-row justify="center" align="center">
-            <v-col cols="12" md="3" lg="3" class="pr-0 type-doc-import-title">
+          <v-row class="mt-0 input-form-row">
+            <v-col cols="12" md="4" lg="4" align-self="center" class="pl-0 type-doc-import-title">
              {{ textLang.text_dialog.document_number }}
             </v-col>
-            <v-col cols="12" md="7" lg="7">
-              <v-text-field dense outlined single-line hide-details :color="color_document_number" class="pad-input doc-num-import" v-model="refDocNo"></v-text-field>
+            <v-col cols="12" md="8" lg="8" align-self="center" class="px-0">
+              <v-text-field dense outlined hide-details color="#4CAF50" class="doc-num-import" v-model="refDocNo"></v-text-field>
             </v-col>
           </v-row>
-          <br>
-          <v-divider></v-divider>
         </v-card-text>
-        <v-card-actions class="pt-0 pb-12">
-          <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" dark class="px-12 mr-4 save-setting-btn" @click="dialogRefDoc = false">{{ textLang.text_dialog.cancle }}</v-btn>
-          <v-btn depressed large :color="color_import" class="px-7 ml-4 save-setting-btn save-modal-font-btn" @click="checkImportType(refDocNo)" >{{ textLang.text_dialog.import_data }}</v-btn>
-          <v-spacer></v-spacer>
+        <v-card-actions class="pb-3">
+          <v-row class="input-form-row">
+            <v-spacer></v-spacer>
+            <v-col cols="6" md="4" lg="4" class="pl-0 pr-2">
+              <v-btn outlined block color="#4CAF50" class="insert-image-btn-modal" @click="dialogRefDoc = false">{{ textLang.text_dialog.cancle }}</v-btn>
+            </v-col>
+            <v-col cols="6" md="4" lg="4" class="pl-2 pr-0">
+              <v-btn depressed block dark color="#4CAF50" class="insert-image-btn-modal" @click="checkImportType(refDocNo)" >{{ textLang.text_dialog.import_data }}</v-btn>
+            </v-col>
+            <v-spacer></v-spacer>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
   </div>
 </template>
 
 <script>
   import { EventBus } from '../../EventBus'
-  import ReverseDocumentModal from '../../components/eform/ReverseDocumentModal'
+  import ReverseWorkFlowModal from '../../components/ReturnCorrection'
   import InputDocumentNameModal from '../../components/eform/InputDocumentNameModal'
   import AttachFileModal from '../../components/eform/AttachFileModal'
   import RejectModal from '../../components/eform/RejectModal'
   import RefDocumentModal from '../../components/eform/RefDocumentModal'
   import Editor from '@tinymce/tinymce-vue'
   import ConfirmCancelDocumentModal from '../../components/eform/ConfirmCancelDocumentModal'
-  import ExportReportModal from '../../components/eform/ExportReportModal'
-  import ExportMyFormReportModal from '../../components/eform/ExportMyFormReportModal'
   import AddAttachFileModal from '../../components/eform/AddAttachFileModal'
   import PermissionTransferenceDocumentModal from '../../components/eform/PermissionTransferenceDocumentModal'
   import { mapState } from 'vuex'
@@ -922,14 +918,12 @@
       uploadedFile: state => state.uploadedFile
     }),
     components: {
-      ReverseDocumentModal,
+      ReverseWorkFlowModal,
       InputDocumentNameModal,
       AttachFileModal,
       RejectModal,
       RefDocumentModal,
       ConfirmCancelDocumentModal,
-      ExportReportModal,
-      ExportMyFormReportModal,
       'editor': Editor,
       AddAttachFileModal,
       PermissionTransferenceDocumentModal
@@ -1107,6 +1101,7 @@
         service_properties: "",
         body_text: ""
       },
+      newComment: "", 
       isCa: false,
       signing: false,
       refDataDoc: [],
@@ -1127,7 +1122,7 @@
       importType: "eform",
       isEmailStep: false,
       uploadFolder: "",
-      currentStep: 0,
+      currentStep: "",
       checkContSleep:false,
       contTableArray: [],
       changeHideDict: {},
@@ -1156,8 +1151,8 @@
           open_page: "เปิดเพื่อดูหน้ากระดาษ",
           show_page_tootip: "แสดงหน้ากระดาษ",
           hide_page_tootip: "ซ่อนหน้ากระดาษ",
-          show_tab:"เปิดแถบ",
-          reviews: "แสดงความคิดเห็น",
+          show_tab:"เปิดแถบแสดง",
+          reviews: "ความคิดเห็น",
           add_variable: "เพิ่มค่าตัวแปรให้กับข้อความ",
           not_show_obj_icon: "ไม่แสดงในหน้าเอกสาร",
           fill: "ช่อง ",
@@ -1289,6 +1284,7 @@
       sessionStorage.setItem('sendBackAndFirst',false)
       sessionStorage.setItem('isNoFlowSign', false)
       sessionStorage.setItem('isLastStep', false)
+      sessionStorage.setItem('signStep', false)
       if(sessionStorage.getItem("public_eform") != 'true') {
         if((sessionStorage.getItem("first_login") == 'true') && (sessionStorage.getItem("wait") == 'true')) {
           sessionStorage.setItem("first_login",false)
@@ -1583,20 +1579,21 @@
       getData() {
         if(sessionStorage.getItem('isDocEdit') == 'true') {
           this.option = JSON.parse(sessionStorage.getItem('option'))
-          if(sessionStorage.getItem('onView') == 'true') {
-            this.returnEform(this.option.eform_id).then(res => {
-              this.getTemplateValue(this.option.eform_id)
-            })
-          } else {
-            this.getTemplateValue(this.option.eform_id)
-          }
+          this.getTemplateValue(this.option.transaction_id)
+          // if(sessionStorage.getItem('onView') == 'true') {
+          //   this.returnEform(this.option.eform_id).then(res => {
+          //     this.getTemplateValue(this.option.eform_id)
+          //   })
+          // } else {
+          //   this.getTemplateValue(this.option.eform_id)
+          // }
         } else {
           this.option = JSON.parse(sessionStorage.getItem('option'))
           if(this.option.isCopy) {
-            this.getTemplate(this.option.code)
+            this.getTemplate(this.option.template_id, this.option.transaction_id)
             this.isSendStep = sessionStorage.getItem('isStep') == 'true'
           } else if(this.option.isImport) {
-            this.getTemplate(this.option.code, true)
+            this.getTemplate(this.option.template_id, true)
             this.isSendStep = sessionStorage.getItem('isStep') == 'true'
           } else {
             this.getTemplate(this.option.template_id)
@@ -1643,7 +1640,7 @@
       getPublicData() {
         // this.getPublicTemplate(sessionStorage.getItem("temp_code"))
       },
-      async getTemplate(template_id) {
+      async getTemplate(template_id, transaction_id) {
         var template = {}
         try {
           var { data } = await this.axios.get(this.$api_url + '/template_form/api/v1/getTemplateFormById?template_id=' + template_id)
@@ -1700,7 +1697,8 @@
             if(this.template_option.paper_size) {
               this.paperSizeIndex = this.paper_size.find(item => item.text.toUpperCase() == this.template_option.paper_size.toUpperCase()).value
             } 
-            var spForm = this.$speacailForm
+
+            // var spForm = this.$speacailForm
             //Check For biz
             // if(!this.option.isCopy && !spForm.includes(template_id)) {
             //   var no_biz = false
@@ -1721,52 +1719,13 @@
             //     }
             //   }
             // }
-            this.comments = this.template_option.comment
             var all_template = []
             template.template_data.forEach(e => {
               e.order = this.getObjectOrder(e)
               all_template.push(e)
             })
             all_template.sort((a, b) => (a.order > b.order) ? 1 : -1)
-            var flowStep = []
-            if(data.data.status_flow_permission) {
-              flowStep = data.data.flow_permission
-              flowStep.sort((a, b) => (a.step_num > b.step_num) ? 1 : -1)
-              if(flowStep.length) {
-                if(flowStep[0].role.length) {
-                  if(flowStep[0].role[0].name == "all-user") {
-                    sessionStorage.setItem('isDocEdit',false)
-                    sessionStorage.setItem('isDocStep',true)
-                    sessionStorage.setItem('editStep',false)
-                    this.currentStep = 1
-                    this.isSendFirst = false
-                    this.allUserStep = true
-                    this.current_flow = flowStep[0]
-                    this.commentAble = true
-                  }
-                }
-              }
-              if(this.current_flow) {
-                this.current_flow.blind  =[]
-                flowStep.forEach(e => {
-                  if(typeof e.observe.observe !== 'undefined' &&e.observe.observe.includes(e.step_num)) {
-                    e.observe.observe.push(Number(e.step_num) + 1)
-                  }
-                  if(e.step_num != this.current_flow.step_num) {
-                    if(typeof e.observe.choicesSet !== 'undefined' && e.observe.choicesSet) {
-                      if(!e.observe.observe.includes(this.current_flow.step_num) && !e.observe.observe.includes(e.step_num)) {
-                        this.current_flow.blind.push(e.role[0].object_name)
-                      }
-                    }
-                  }
-                })
-              }
-            }
-            if(this.allUserStep) {
-              this.getArrayValue(all_template, true, true)
-            } else {
-              this.getArray(all_template)
-            }
+            this.getArrayValue(all_template, true, true)
             var temp_ppl_code = [{'name': 'default', 'code': ''}]
             if(template.template_paperless_code != null) {
               temp_ppl_code = template.template_paperless_code
@@ -1905,20 +1864,20 @@
         //   }
         // }
       },
-      async getTemplateValue(eform_id) {
-        // eform_id = "ccbffd19-0caf-443c-a623-e6902e69199f"
-        // this.returnEform(eform_id)
-        // this.option.statusDraft = true
-        await this.getTemplateExtent(eform_id)
+      async getTemplateValue(transaction_id) {
         var template = {}
         try {
-          var { data } = await this.axios.get(this.$eform_api_v6 + '/upload_eform?eform_id=' + eform_id + '&status_draft=' + this.option.statusDraft)
+          var { data } = await this.axios.get(this.$api_url + '/template_form/api/v1/get_eform?transaction_id=' + transaction_id)
           this.notReady = false
-          if(data.result == 'OK') {
-            template = data.data
+          if(data.status) {
+            template = data.data[0]
             this.template_option = template
-            this.doc_name = this.template_option.document_name
-            this.isOwner = template.create_by == sessionStorage.getItem("oneuser")
+            this.doc_name = this.template_option.transaction_detail.object_text.subject
+            let tempStep = template.transaction_detail.flow_data.find(item => item.status == "W")
+            if(tempStep) {
+              this.currentStep = tempStep.index + 1
+            }
+            this.isOwner = template.account_id == JSON.parse(sessionStorage.getItem("userProfile")).id
             if(sessionStorage.getItem('copyDoc') == 'true') {
               this.template_option.document_name = ""
             }
@@ -1940,179 +1899,152 @@
             }
 
             for(var i=0; i<pageLength; i++) {
-              if(typeof template.url_image !== 'undefined') {
-                var Okey = i+1
-                if(template.url_image[Okey]) {
-                  this.pages[Number(Okey)-1].url_image = template.url_image[Okey]
-                } else {
-                  this.pages[Number(Okey)-1].url_image = "https://www.img.in.th/images/83ca9b38ee2d7d129f1826f75ea05e4f.png"
-                }
+              var Okey = i+1
+              if(template.url_image[Okey]) {
+                this.pages[Number(Okey)-1].url_image = template.url_image[Okey]
               } else {
-                  this.pages[Number(Okey)-1].url_image = "https://www.img.in.th/images/83ca9b38ee2d7d129f1826f75ea05e4f.png"
+                this.pages[Number(Okey)-1].url_image = "https://www.img.in.th/images/83ca9b38ee2d7d129f1826f75ea05e4f.png"
               }
             }
-        
             this.template_side = this.pages[0].template_side
-            this.signing = this.template_option.signing
-            if(typeof this.template_option.Folder_Attachment_Name && this.template_option.Folder_Attachment_Name.length) {
-              this.attachedFiles = this.template_option.Folder_Attachment_Name
-            }
-
+    
             if(this.template_side == "LANDSCAPE") {
               this.current_paper_width = this.paper_size[this.paperSizeIndex].height
-              this.current_paper_height = this.paper_size[this.paperSizeIndex].width
+              this.current_paper_height = this.paper_size[this.paperSizeIndex].width-50
             }
             if(this.template_option.paper_size) {
               this.paperSizeIndex = this.paper_size.find(item => item.text.toUpperCase() == this.template_option.paper_size.toUpperCase()).value
             } 
-
-            if(this.template_option.permission_form.text) {
-              this.template_option.permission_form = this.template_option.permission_form.value
-            }
-
-            if(this.template_option.ref_document_number) {
-              this.refDataDoc = this.template_option.ref_document_number
-            }
-
-            var no_biz = false
-            var doc_no_biz = false
-
-            if(!JSON.parse(sessionStorage.getItem('selected_business')).id) {
-              no_biz = true
-            }
-            if(!this.template_option.permission_form.id) {
-              doc_no_biz = true
-            }
-            if(!(no_biz && doc_no_biz)) {
-              if(no_biz != doc_no_biz) {
-                this.changeBiz(this.template_option.permission_form)
-              }
-              if(this.template_option.permission_form.id_card_num != JSON.parse(sessionStorage.getItem('selected_business')).id_card_num) {
-                this.changeBiz(this.template_option.permission_form)
-              }
-            }
-            this.comments = this.template_option.comment
-            var all_template = []
-            for(var i=0; i<template.template_header.length; i++) {
-              var THkey = Object.keys(template.template_header[i])[0]
-              template.template_header[i][THkey].forEach( e => {
-                e.order = this.getObjectOrder(e)
-                all_template.push(e)
-              })
-              template.template_header[i][THkey]
-              var TBkey = Object.keys(template.template_body[i])[0]
-              template.template_body[i][TBkey].forEach( e => {
-                e.order = this.getObjectOrder(e)
-                all_template.push(e)
-              })
-              var TFkey = Object.keys(template.template_footer[i])[0]
-              template.template_footer[i][TFkey] .forEach( e => {
-                e.order = this.getObjectOrder(e)
-                all_template.push(e)
-              })     
-            }
-            all_template.sort((a, b) => (a.order > b.order) ? 1 : -1)
-            this.isFlowDoc = this.template_option.status_flow_permission
-       
-            if(sessionStorage.getItem('isDocStep') == 'true') {
-              var flows = []
-              if(this.template_option.status_flow_permission) {
-                flows = this.template_option.flow_permission
-                this.commentAble = true
-              }
-              if(flows.length) {
-                this.isSelf = false
-              }
-              this.backStepArray = []
-              flows.forEach(e => {
-                if(e.status == "Incomplete") {
-                  this.currentStep = e.step_num
-                  if(e.step_num == 1) {
-                    this.isSendFirst = false
-                  } else if(e.step_num == flows.length && !this.template_option.signing) {
-                    e.role.forEach(r => {
-                      if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
-                        this.isComplete = true
-                        this.isSendBack = true
-                        this.isEdit = false
-                        sessionStorage.setItem('editStep',false)
-                      }
-                    })
-                    e.email.forEach(em => {
-                      if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
-                        this.isComplete = true
-                        this.isSendBack = true
-                        this.isEdit = false
-                        sessionStorage.setItem('editStep',false)
-                      }
-                    })
-                  }
-                  this.current_flow = e
-                  e.role.forEach(r => {
-                    if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
-                      this.isSelf = true
-                      this.isSendBack = true
-                    }
-                  })
-                  e.email.forEach(em => {
-                    if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
-                      this.isSelf = true
-                      this.isSendBack = true
-                      this.isEmailStep = true
-                    }
-                  })
-                } else if (e.status == "Complete") {
-                  var step_name = ""
-                  if(e.email.length > 0) {
-                    step_name = e.email[0]
-                  } else {
-                    step_name = e.role[0].name
-                  }
-                  if(e.step_num == 1 && this.template_option.e_template_code == "e47aa8d3-5852-47eb-97db-656d532abd83" && e.role[0].object_name == '') {
-                    e.role[0].object_name = 'sectionbox0'
-                  }
-                  this.backStepArray.push({text: this.textLang.tabMenubar.step + e.step_num + ":" + step_name, value: {name: e.role[0].object_name, step: e.step_num} })
+            
+            this.signing = this.template_option.signing
+            this.attachedFiles = await this.getAttachfile(this.template_option )
+            if(this.template_option.comments.length) {
+              this.template_option.comments[0].comments.forEach(e => {
+                var cm_date = new Date(e.comment_at)
+                var string_date = String(cm_date.getDate()) + "-" + String(cm_date.getMonth() +1) + "-" + String(cm_date.getFullYear())
+                  + " " + String(cm_date.getHours()) + ":" + String(cm_date.getMinutes())
+                this.comments.push({
+                  index: this.comments.length+1,
+                  sender: e.comment_by.name_th,
+                  message: e.message,
+                  date: string_date
+                })
+                if(this.comments) {
+                  this.comments.reverse()
                 }
               })
             }
             
-            if(this.current_flow) {
-              this.current_flow.blind  =[]
-              if(this.current_flow.step_num != flows.length) {
-                flows.forEach(e => {
-                  if(typeof e.observe.observe !== 'undefined' &&e.observe.observe.includes(e.step_num)) {
-                    e.observe.observe.push(Number(e.step_num) + 1)
-                  }
-                  if(e.step_num != this.current_flow.step_num) {
-                    if(typeof e.observe.choicesSet !== 'undefined' && e.observe.choicesSet) {
-                      if(!e.observe.observe.includes(this.current_flow.step_num) && !e.observe.observe.includes(e.step_num)) {
-                        this.current_flow.blind.push(e.role[0].object_name)
-                      }
-                    }
-                  }
-                })
-              }
-              if(this.isSelf) {
-                this.reserveEform(eform_id)
-              }
-            }
-            var temp_template = await this.checkTemplateExtent(all_template)
-            if(temp_template.length) {
-              this.getArrayValue(temp_template, true)
+
+            var all_template = []
+            template.template_data.forEach(e => {
+              e.order = this.getObjectOrder(e)
+              all_template.push(e)
+            })
+
+            all_template.sort((a, b) => (a.order > b.order) ? 1 : -1)
+            this.commentAble = true
+            // if(sessionStorage.getItem('isDocStep') == 'true') {
+            //   var flows = []
+            //   if(this.template_option.status_flow_permission) {
+            //     flows = this.template_option.flow_permission
+            //     this.commentAble = true
+            //   }
+            //   if(flows.length) {
+            //     this.isSelf = false
+            //   }
+            //   this.backStepArray = []
+            //   flows.forEach(e => {
+            //     if(e.status == "Incomplete") {
+            //       this.currentStep = e.step_num
+            //       if(e.step_num == 1) {
+            //         this.isSendFirst = false
+            //       } else if(e.step_num == flows.length && !this.template_option.signing) {
+            //         e.role.forEach(r => {
+            //           if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
+            //             this.isComplete = true
+            //             this.isSendBack = true
+            //             this.isEdit = false
+            //             sessionStorage.setItem('editStep',false)
+            //           }
+            //         })
+            //         e.email.forEach(em => {
+            //           if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
+            //             this.isComplete = true
+            //             this.isSendBack = true
+            //             this.isEdit = false
+            //             sessionStorage.setItem('editStep',false)
+            //           }
+            //         })
+            //       }
+            //       this.current_flow = e
+            //       e.role.forEach(r => {
+            //         if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
+            //           this.isSelf = true
+            //           this.isSendBack = true
+            //         }
+            //       })
+            //       e.email.forEach(em => {
+            //         if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
+            //           this.isSelf = true
+            //           this.isSendBack = true
+            //           this.isEmailStep = true
+            //         }
+            //       })
+            //     } else if (e.status == "Complete") {
+            //       var step_name = ""
+            //       if(e.email.length > 0) {
+            //         step_name = e.email[0]
+            //       } else {
+            //         step_name = e.role[0].name
+            //       }
+            //       if(e.step_num == 1 && this.template_option.e_template_code == "e47aa8d3-5852-47eb-97db-656d532abd83" && e.role[0].object_name == '') {
+            //         e.role[0].object_name = 'sectionbox0'
+            //       }
+            //       this.backStepArray.push({text: this.textLang.tabMenubar.step + e.step_num + ":" + step_name, value: {name: e.role[0].object_name, step: e.step_num} })
+            //     }
+            //   })
+            // }
+            
+            // if(this.current_flow) {
+            //   this.current_flow.blind  =[]
+            //   if(this.current_flow.step_num != flows.length) {
+            //     flows.forEach(e => {
+            //       if(typeof e.observe.observe !== 'undefined' &&e.observe.observe.includes(e.step_num)) {
+            //         e.observe.observe.push(Number(e.step_num) + 1)
+            //       }
+            //       if(e.step_num != this.current_flow.step_num) {
+            //         if(typeof e.observe.choicesSet !== 'undefined' && e.observe.choicesSet) {
+            //           if(!e.observe.observe.includes(this.current_flow.step_num) && !e.observe.observe.includes(e.step_num)) {
+            //             this.current_flow.blind.push(e.role[0].object_name)
+            //           }
+            //         }
+            //       }
+            //     })
+            //   }
+            //   if(this.isSelf) {
+            //     this.reserveEform(eform_id)
+            //   }
+            // }
+            // var temp_template = await this.checkTemplateExtent(all_template)
+            // if(temp_template.length) {
+            //   this.getArrayValue(temp_template, true)
+            // }
+            if(template.others) {
+              this.dataTableObjectArray = template.others.dataTableObjectArray
             }
             this.getArrayValue(all_template)
-            this.template_name = template.template_name
-            this.option.template_id = template.e_template_code
-            sessionStorage.setItem('template_paperless_code',JSON.stringify(template.ppl_template_code))
-            sessionStorage.setItem('code_template',template.code_template)
-            sessionStorage.setItem('version_template',template.version_template)
-            sessionStorage.setItem('Folder_Attachment_Name',JSON.stringify(this.attachedFiles))
-            if(template.Folder_Attachment_Name.length) {
-              sessionStorage.setItem('folder_name',JSON.stringify(template.folder_name))
-              if (sessionStorage.getItem("folder_name") != "undefined") {
-                this.uploadFolder = JSON.parse(sessionStorage.getItem("folder_name"))[0]
-              }
-            }
+            this.template_name = template.document_id
+            this.option.template_id = template.template_id
+            sessionStorage.setItem('code_template',template.document_id)
+            // sessionStorage.setItem('version_template',template.version_template)
+            // sessionStorage.setItem('Folder_Attachment_Name',JSON.stringify(this.attachedFiles))
+            // if(template.Folder_Attachment_Name.length) {
+            //   sessionStorage.setItem('folder_name',JSON.stringify(template.folder_name))
+            //   if (sessionStorage.getItem("folder_name") != "undefined") {
+            //     this.uploadFolder = JSON.parse(sessionStorage.getItem("folder_name"))[0]
+            //   }
+            // }
           } else if(data.result == 'ER') {
             if(data.messageER == 'RESERVED') {
               this.$router.push('/form')
@@ -2215,14 +2147,21 @@
         }
         return holdDate.toISOString().substr(0, 10)
       },
-      async getTemplateRefdoc(doc_no) {
+      async getTemplateRefdoc(doc_no, transaction_id) {
+        console.log(transaction_id)
         var template = []
+        var template_id = ""
         try {
           this.onImport = true
-          var { data } = await this.axios.get(this.$eform_api_v6+ '/upload_eform?doc_number=' + doc_no)
+          var url = `${this.$api_url}/template_form/api/v1/get_eform_ref?document_id=${doc_no}`
+          if(transaction_id) {
+            url = `${this.$api_url}/template_form/api/v1/get_eform_ref?transaction_id=${transaction_id}`
+          }
+          var { data } = await this.axios.get(url)
           this.notReady = false
           this.dialogRefDoc = false
-          if(data.result == 'OK') {
+          template_id = data.data.template_id
+          if(data.status) {
             if(!this.option.isCopy) {
               var tempRefDoc = []
               if(this.refDataDoc.length && typeof this.refDataDoc[0].ref_no === 'undefined') {
@@ -2262,24 +2201,7 @@
                 }
               }
             }
-            Object.values(data.data.template_header[0]).forEach(e => {
-              e.forEach(e2 => {
-                template.push(e2)
-              })
-            })
-
-            Object.values(data.data.template_body[0]).forEach(e => {
-              e.forEach(e2 => {
-                template.push(e2)
-              })
-            })
-
-            Object.values(data.data.template_footer[0]).forEach(e => {
-              e.forEach(e2 => {
-                template.push(e2)
-              })
-            })
-
+            template = data.data.template_data
             this.objectTypeInput.forEach(t => {
               this.objectArray[t].forEach(e => {
                 if(typeof e.value !== 'undefined' && e.value && e.value.show == 'ref_data') {
@@ -2333,8 +2255,13 @@
                 }
             })
             this.checkContSleep = true
-            var obj = template.find(item => item.object_type == 'dataTableObjectArray')
-            if(obj) {
+            var obj = {}
+            if(data.data.others && data.data.others.dataTableObjectArray) {
+              obj = {
+                value: data.data.others.dataTableObjectArray
+              }
+            }
+            if(obj && obj.value) {
               if(typeof obj.value !== 'undefined') {
                 Object.keys(obj.value).forEach(e => {
                   if(typeof this.dataTableObjectArray[e] !== 'undefined' && (this.objectTypeInput.includes(this.dataTableObjectArray[e].object_type) || this.dataTableObjectArray[e].object_type == 'linkdatabox') ) {
@@ -2373,6 +2300,7 @@
         } catch (error) {
           console.log(error.message)
         }
+        return template_id
       },
       async getOtherService(doc_no,serviceName, isImportInRow, selectedRow) {
         var path = ""
@@ -2738,15 +2666,8 @@
               }
             }
             if(e.object_type == "signbox" ) {
-              cmp.style.signUrl = ""
-              if(!cmp.disable && !this.isSendStep) {
-                if(e.style.isCa) {
-                  sessionStorage.setItem('caStep', true)
-                  sessionStorage.setItem('caStepName', e.object_name)
-                }
-              }
-              if(e.style.isCa) {
-                this.isCa = true
+              if(!cmp.disable) {
+                sessionStorage.setItem('signStep', true)
               }
             }
             if(e.object_type != "sectionbox" && e.object_type != "dataTableObjectArray") {
@@ -3105,68 +3026,19 @@
               cmp.style = this.fixObjectStyle(cmp.style)
             }
           }
-            if(sessionStorage.getItem('isDocStep') == 'true') {
-              if(typeof this.template_option.flow_permission !== 'undefined' && this.template_option.flow_permission.length) {
-                cmp.disable = true
-                if(this.current_flow != "" && e.object_type != "dataTableObjectArray") {
-                  if(cmp.style.permission.value_email.length == 1 && cmp.style.permission.value_email[0] == '') {
-                    cmp.style.permission.value_email = []
-                  }
-                  if(cmp.style.permission.value_email.length || cmp.style.permission.value_role.length) {
-                    if(cmp.object_name == this.current_flow.role[0].object_name) {
-                      if(JSON.parse(sessionStorage.getItem('selected_business')).id) {
-                        this.current_flow.role.forEach(r => {
-                          if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
-                            this.isSendBack = true
-                            this.isEditable = true
-                            cmp.textHl = true
-                            cmp.disable = false
-                          }
-                        })
-                        this.current_flow.email.forEach(em => {
-                          if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
-                            this.isSendBack = true
-                            this.isEditable = true
-                            cmp.textHl = true
-                            cmp.disable = false
-                          }
-                        })
-                      }
-                      if(this.current_flow.blind.includes(cmp.object_name)) {
-                        cmp.hideBysection = true
-                      }
-                    }
-                  } else if(cmp.style.permission_section != "") {
-                    if(cmp.style.permission_section.section && cmp.style.permission_section.section.includes(this.current_flow.role[0].object_name)) {
-                      if(JSON.parse(sessionStorage.getItem('selected_business')).id) {
-                        this.current_flow.role.forEach(r => {
-                          if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
-                            this.isSendBack = true
-                            this.isEditable = true
-                            cmp.textHl = true
-                            cmp.disable = false
-                          }
-                        })
-                        this.current_flow.email.forEach(em => {
-                          if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
-                            this.isSendBack = true
-                            this.isEditable = true
-                            cmp.textHl = true
-                            cmp.disable = false
-                          }
-                        })
-                      }
-                    }
-                    this.current_flow.blind.forEach(bl => {
-                      if(cmp.style.permission_section.section && cmp.style.permission_section.section.includes(bl)) {
-                        cmp.hideBysection = true
-                      }
-                    })
-                  } else {
-                    this.isEditable = true
-                    cmp.disable = false
-                  }
-                }
+            if(sessionStorage.getItem('isDocStep') == 'true' && cmp.object_type != "dataTableObjectArray") {
+              cmp.disable = true
+              if(typeof cmp.style.permission_step === 'undefined') {
+                cmp.style.permission_step = ""
+              }
+              if(typeof cmp.style.permission_step_section === 'undefined') {
+                cmp.style.permission_step_section = ""
+              }
+              if((cmp.style.permission_step == this.currentStep &&  !cmp.style.permission_step_section)||(!cmp.style.permission_step && cmp.style.permission_step_section == this.currentStep)) {
+                this.isSendBack = true
+                this.isEditable = true
+                cmp.textHl = true
+                cmp.disable = false
               }
             }
             if(this.isComplete) {
@@ -3213,33 +3085,8 @@
               }
             }
             if(e.object_type == "signbox" ) {
-              cmp.style.signUrl = ""
-              if(!cmp.disable && !this.isSendStep) {
-                sessionStorage.setItem('caStepName', e.object_name)
-                if(e.style.isCa) {
-                  sessionStorage.setItem('caStep', true)
-                } else {
-                  sessionStorage.setItem('signOnlyStep', true)
-                }
-              }
-              var signStep = this.template_option.flow_permission.find(item => item.role[0].object_name == e.object_name)
-              var url = ""
-              if(signStep) {
-                url = signStep.url_sign
-              } else {
-                if(typeof e.style.permission_section.section !== 'undefined') {
-                  signStep = this.template_option.flow_permission.find(item => e.style.permission_section.section.includes(item.role[0].object_name))
-                }
-                if(signStep) {
-                  url = signStep.url_sign
-                } else {
-                  url = ""
-                }
-              }
-              if(e.style.isCa) {
-                cmp.style.signUrl = url
-              } else {
-                cmp.value = url
+              if(!cmp.disable) {
+                sessionStorage.setItem('signStep', true)
               }
             }
             if(e.object_type != "sectionbox" && e.object_type != "dataTableObjectArray") {
@@ -3268,80 +3115,8 @@
             var objName = this.dataTableObjectArray[k].object_name.split('_')[0]
             if(typeof this.dataDict[objName] !== 'undefined') {
               var tableObjIndex = this.dataDict[objName].arrayIndex
-              if(this.current_flow != "") {
-                if(this.dataTableObjectArray[k].style.permission.value_email.length == 1 && this.dataTableObjectArray[k].style.permission.value_email[0] == '') {
-                  this.dataTableObjectArray[k].style.permission.value_email = []
-                }
-                if(this.dataTableObjectArray[k].style.permission.value_email.length || this.dataTableObjectArray[k].style.permission.value_role.length) {
-                  if(this.dataTableObjectArray[k].object_name == this.current_flow.role[0].object_name) {
-                    if(JSON.parse(sessionStorage.getItem('selected_business')).id) {
-                      this.current_flow.role.forEach(r => {
-                        if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
-                          this.isSendBack = true
-                          this.isEditable = true
-                          this.dataTableObjectArray[k].textHl = true
-                          this.dataTableObjectArray[k].disable = false
-                          if(typeof this.objectArray['datatable'][tableObjIndex] !== 'undefined') {
-                            this.objectArray['datatable'][tableObjIndex].addAble = true
-                          }
-                        }
-                      })
-                      this.current_flow.email.forEach(em => {
-                        if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
-                          this.isSendBack = true
-                          this.isEditable = true
-                          this.dataTableObjectArray[k].textHl = true
-                          this.dataTableObjectArray[k].disable = false
-                          if(typeof this.objectArray['datatable'][tableObjIndex] !== 'undefined') {
-                            this.objectArray['datatable'][tableObjIndex].addAble = true
-                          }
-                        }
-                      })
-                    }
-                    if(this.current_flow.blind.includes(this.dataTableObjectArray[k].object_name)) {
-                      this.dataTableObjectArray[k].hideBysection = true
-                    }
-                  }
-                } else if(this.dataTableObjectArray[k].style.permission_section != "") {
-                  if(this.dataTableObjectArray[k].style.permission_section.section && this.dataTableObjectArray[k].style.permission_section.section.includes(this.current_flow.role[0].object_name)) {
-                    if(JSON.parse(sessionStorage.getItem('selected_business')).id) {
-                      this.current_flow.role.forEach(r => {
-                        if(r.name == sessionStorage.getItem('selected_role') || r.name == "all-user") {
-                          this.isSendBack = true
-                          this.isEditable = true
-                          this.dataTableObjectArray[k].textHl = true
-                          this.dataTableObjectArray[k].disable = false
-                          if(typeof this.objectArray['datatable'][tableObjIndex] !== 'undefined') {
-                            this.objectArray['datatable'][tableObjIndex].addAble = true
-                          }
-                        }
-                      })
-                      this.current_flow.email.forEach(em => {
-                        if(JSON.parse(sessionStorage.getItem("one_email_list")).includes(em)) {
-                          this.isSendBack = true
-                          this.isEditable = true
-                          this.dataTableObjectArray[k].textHl = true
-                          this.dataTableObjectArray[k].disable = false
-                          if(typeof this.objectArray['datatable'][tableObjIndex] !== 'undefined') {
-                            this.objectArray['datatable'][tableObjIndex].addAble = true
-                          }
-                        }
-                      })
-                    }
-                  } else if(this.dataTableObjectArray[k].style.permission_section.section == "" || !this.dataTableObjectArray[k].style.permission_section.section.length){
-                    this.isEditable = true
-                    this.dataTableObjectArray[k].disable = false
-                    if(typeof this.objectArray['datatable'][tableObjIndex] !== 'undefined') {
-                      this.objectArray['datatable'][tableObjIndex].addAble = true
-                    }
-                  }
-                  this.current_flow.blind.forEach(bl => {
-                    if(this.dataTableObjectArray[k].style.permission_section.section && this.dataTableObjectArray[k].style.permission_section.section.includes(bl)) {
-                      this.dataTableObjectArray[k].hideBysection = true
-                    }
-                  })
-                }
-              } else {
+              if((this.dataTableObjectArray[k].style.permission_step == this.currentStep && !this.dataTableObjectArray[k].style.permission_step_section) || (this.dataTableObjectArray[k].style.permission_step_section == this.currentStep && !this.dataTableObjectArray[k].style.permission_step)) {
+                this.isSendBack = true
                 this.isEditable = true
                 this.dataTableObjectArray[k].textHl = true
                 this.dataTableObjectArray[k].disable = false
@@ -3987,7 +3762,7 @@
           this.getBackValue()
         }
         if(this.option.isCopy && !(sessionStorage.getItem('isBack') == 'true')) {
-          this.getTemplateRefdoc(this.option.doc_no)
+          this.getTemplateRefdoc("", this.option.transaction_id)
         }
         if(this.option.isImport && !(sessionStorage.getItem('isBack') == 'true')) {
           this.getTemplateRefdoc(this.option.doc_no)
@@ -5919,6 +5694,7 @@
       },
       addComment() {
         if(this.inputComment) {
+          this.newComment = this.inputComment
           if(this.comments) {
             this.comments.reverse()
           } else {
@@ -5929,7 +5705,7 @@
             + " " + String(now_date.getHours()) + ":" + String(now_date.getMinutes())
           this.comments.push({
             index: this.comments.length+1,
-            sender: sessionStorage.getItem("onenameTh"),
+            sender: sessionStorage.getItem("name"),
             message: this.inputComment,
             date: string_date
           })
@@ -7113,7 +6889,14 @@
         if(this.template_option.document_option && typeof this.template_option.document_option['condition'] !== 'undefined' && allValid) {
           allValid = this.checkDocCondition(this.template_option.document_option['condition'] )
         }
+        //New session
+        sessionStorage.setItem("firstSent", this.currentStep == "")
+        sessionStorage.setItem("isInstantSave", isToPreview != true)
+        sessionStorage.setItem('isDraft',isDraft)
+
+        //Old session
         this.template_option.comment = this.comments
+        this.template_option.newComment = this.newComment
         sessionStorage.setItem('name_template',this.template_name)
         sessionStorage.setItem('template_id',this.option.template_id)
         sessionStorage.setItem('description',this.template_option.description_template)
@@ -7665,7 +7448,8 @@
       },
       openReverse() {
         var backStepChoice = this.backStepArray
-        EventBus.$emit('reverseDocument',backStepChoice)
+        // EventBus.$emit('reverseDocument',backStepChoice)
+        EventBus.$emit('FormReturn',this.template_option)
       },
       openReject() {
         var eId = this.template_option 
@@ -7675,17 +7459,33 @@
         var tempOpt = this.option
         EventBus.$emit('ConfirmCancelDoc',tempOpt)
       },
-      async summitReject(eId) {
+      async summitReject(detail) {
         try {
           this.notReady = true
-          var { data } = await this.axios.put(this.$eform_api_v6 + '/upload_eform',
-          {
-            e_id: eId,
-            status:"reject"
-          })
+          // var { data } = await this.axios.put(this.$eform_api_v6 + '/upload_eform',
+          // {
+          //   e_id: eId,
+          //   status:"reject"
+          // })
+          var step_index = 0
+          detail.transaction_detail.flow_data.forEach(element => {
+            if(element.status == 'W') step_index = element.index
+          });
+          var body = {
+            type:'reject',
+            transaction_id: detail.transaction_id,
+            document_id:detail.transaction_detail.document_id,
+            tracking:detail.transaction_detail.tracking,
+            step_index:step_index,
+            action:'reject',
+            string_sign:'',
+            typesign:'web'
+          }
+          const url = '/transaction/api/v1/updatetransaction'
+          var {data} = await this.axios.put(this.$api_url + url, body)
           this.notReady = false
-          if(data.result != 'ER') {
-            this.disableButton(eId)
+          if(data.status) {
+            // this.disableButton(eId)
             this.$swal({
               backdrop: false,
               position: 'bottom-end',
@@ -8644,23 +8444,9 @@
         return inputWord
       }
     },
-      async downloadFromEid() {
-        var eform_id = this.option.eform_id
-        if(eform_id) {
-          try {
-            var { data } = await this.axios.post(this.$eform_api + '/pdf_for_eform',
-            {
-                e_id: eform_id
-            })
-            if(data.messageText == 'success') {
-              window.open(data.url_download)
-            }
-          }
-          catch(e) {
-            console.log(e)
-          }
-        }
-      },
+    async downloadFromEid() {
+      window.open(`${this.$api_url}/public/v1/download/${this.template_option.tax_id}/${this.template_option.transaction_id}`)
+    },
       clear () {
         this.objectArray['inputbox'].forEach(obj => {
           if(!obj.disable) {
@@ -8720,6 +8506,17 @@
       },
       openSignpad() {
         EventBus.$emit('openSignpad')
+      },
+      async getAttachfile(template_opt) {
+        var resAttach = []
+        try {
+          const url = `/file-component/api/getListFile?transaction_id=${template_opt.transaction_id}`
+          var { data } = await this.axios.get(`${this.$api_url}${url}`)
+          resAttach = data.data
+        } catch(e) {
+          console.log(e)
+        }
+        return resAttach 
       }
     }
   }
@@ -8730,13 +8527,6 @@
     font-family: 'Sarabun', sans-serif;
     font-size: 16px !important;
     text-transform: capitalize;
-  }
-
-  .import-excel-btn {
-    font-family: 'Sarabun', sans-serif;
-    text-transform: capitalize;
-    color: black !important;
-    margin-right: 1%;
   }
 
   .send-back-btn {
@@ -8783,7 +8573,7 @@
   }
 
   .send-back-btn-icon:hover .btn-return-edit {
-    width: 75px !important;
+    width: 78px !important;
   }
 
   .btn-return-edit {
@@ -8817,12 +8607,6 @@
 
   .save-draft-word {
     line-height: 22px;
-  }
-
-  .send-doc-btn {
-    font-family: 'Sarabun', sans-serif;
-    margin-right: 1%;
-    text-transform: capitalize;
   }
 
   .preview-btn {
@@ -8866,13 +8650,6 @@
   .num-page-input-form {
     font-family: 'Sarabun', sans-serif;
     font-size: 14px;
-  }
-
-  .excel-file-title {
-    font-family: 'Sarabun', sans-serif;
-    font-size: 16px;
-    color: black;
-    text-align: center;
   }
 
   .temp-name {
@@ -8960,13 +8737,13 @@
   }
 
   .comments-box {
-    height: calc(100vh - 293px);
+    height: calc(100vh - 271px);
     overflow: auto;
   }
 
   .comment-set {
     width: 100%;
-    margin-left: 0%;
+    margin: 0%;
   }
 
   .comment-block2 {
@@ -8976,35 +8753,29 @@
     z-index: 12;
   }
 
-  .send-comment-icon2 {
-    font-size: 30px !important;
-  }
-
-  .comment-box {
-    border: 1px solid #1b9900 !important;
-  }
-
   .comment-name {
     font-family: 'Sarabun', sans-serif;
-    color: #1b9900;
-    font-size: 16px;
+    color: black;
+    font-size: 14px;
   }
 
   .comment-sentence {
     font-family: 'Sarabun', sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     color: black;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
 
-  .comment-date-row {
+  .show-comment-row {
     width: 100%;
-    margin-left: 0%;
+    margin: 0%;
   }
 
   .comment-date {
     font-family: 'Sarabun', sans-serif;
-    font-size: 12px;
-    color: #1b9900;
+    font-size: 13px;
+    color: #808080;
   }
 
   .variable-textarea-ex-title {
@@ -9055,10 +8826,6 @@
     line-height: 3px;
   }
 
-  .tox-notifications-container {
-    display: none !important;
-  }
-
   .editor-box {
     border: 1px solid lightgray;
     padding-left: 2px;
@@ -9066,10 +8833,6 @@
     border-radius: 4px;
     height: inherit;
     overflow: auto;
-  }
-
-  .tox .tox-editor-header {
-    z-index: 10 !important;
   }
 
   #workpaper {
@@ -9084,12 +8847,20 @@
 
   .type-doc-import {
     font-family: 'Sarabun', sans-serif;
-    line-height: 27px;
+    font-size: 13px;
+  }
+
+  .type-doc-import-box.v-text-field input {
+    line-height: 21px !important;
+  }
+
+  .doc-import-dropdown-icon .theme--light.v-icon {
+    color: rgba(0, 0, 0, 0.54) !important;
   }
 
   .doc-num-import {
     font-family: 'Sarabun', sans-serif;
-    font-size: 16px;
+    font-size: 13px;
   }
 
   .input-form-modal-header {
@@ -9114,15 +8885,6 @@
   }
 
   /*======== style from old file >> Show_Template(old version) ========*/
-  .content-show-tem {
-    margin-top: 54px;
-    margin-left: 0px;
-  }
-
-  .plane-show-tem {
-    overflow:auto;
-    height: calc(100vh - 70px);
-  }
 
   .loading-circle-block {
     position: fixed;
@@ -9133,16 +8895,6 @@
     z-index: 15;
     background-color: gray;
     opacity: 0.3;
-  }
-
-  .tem_name_row {
-    width: 100%;
-    margin-top: 3%;
-    justify-content: center;
-  }
-
-  .template-name-center {
-    text-align: center;
   }
 
   .textarea-btn {
@@ -9162,40 +8914,6 @@
     right: -3%;
   }
 
-  .insert-img-icon {
-    margin-right: 10%;
-  }
-
-  .textarea-example-title {
-    font-family: 'Sarabun', sans-serif;
-    color: #1b9900;
-  }
-
-  .textarea-example-block {
-    border-style: solid;
-    border-width: 2px;
-    border-color: #1b9900;
-    border-radius: 5px;
-    padding: 6px;
-    margin-top: 2%;
-  }
-
-  .textarea-example {
-    font-family: 'Sarabun', sans-serif;
-    font-size: 14px;
-    color: black;
-  }
-
-  .textarea-valiable-block {
-    text-align: right;
-  }
-
-  .textarea-valiable {
-    font-family: 'Sarabun', sans-serif;
-    font-size: 16px;
-    color: black;
-  }
-
   .add-row-button-block {
     position: absolute;
     right: -75px;
@@ -9209,30 +8927,16 @@
     margin-top: -25px;
   }
 
-  .comment-block {
-    position: fixed;
-    top: 67px;
-    right: 0px;
-    padding-left: 0%;
-    padding-right: 0%;
-    z-index: 7;
-  }
-
-  .comment-card {
-    height: 92vh;
-  }
-
-  .comment-title {
+  .show-input-comment-box {
     font-family: 'Sarabun', sans-serif;
-    background-color: #1b9900;
-    font-size: 20px;
-    color: white;
-    padding-bottom: 16px;
+    font-size: 13px;
   }
 
-  .comment-row {
-    width: 100%;
-    margin-left: 0%;
+  .comment-header-property {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 16px;
+    text-decoration: underline;
+    display: inline-block;
   }
 
   .v-textarea.v-text-field--enclosed.pad-textarea .v-text-field__slot textarea {
@@ -9243,74 +8947,9 @@
     line-height: 23px;
   }
 
-  .send-comment-icon {
-    font-size: 30px !important;
-  }
-
-  .comments-block {
-    padding-left: 4%;
-    padding-right: 4%;
-    overflow: auto;
-    /* height: 72vh; */
-    max-height: 72vh;
-  }
-
-  .user-comment {
-    font-family: 'Sarabun', sans-serif;
-    font-size: 16px;
-  }
-
-  .bubble-block {
-    padding-bottom: 0%;
-  }
-
-  .speech-bubble {
-    position: relative;
-    background: #DCEDC8;
-    border-radius: .4em;
-  }
-
-  .speech-bubble:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 20%;
-    width: 0;
-    height: 0;
-    border: 17px solid rgba(187, 187, 187, 0.082);
-    border-bottom-color: #DCEDC8;
-    border-top: 0;
-    margin-left: -17px;
-    margin-top: -17px;
-    box-shadow: 0px -5px 60px rgb(187, 187, 187);
-  }
-
   .comment {
     color: darkslategrey !important;
     font-family: 'Sarabun', sans-serif;
-  }
-
-  .comment-text {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-
-  .comment-time-block {
-    text-align: right;
-    padding-top: 0%;
-  }
-
-  .comment-time {
-    font-family: 'Sarabun', sans-serif;
-    font-size: 14px;
-    color: gray;
-  }
-
-  .button-show-comment {
-    position: fixed;
-    top: 82px;
-    right: 15px;
-    z-index: 10;
   }
 
   .theme--light.v-pagination.page-button-use .v-pagination__navigation {
@@ -9334,10 +8973,6 @@
 
   /*========================================*/
   @media only screen and (max-width:600px){ /*css for mobile screen*/
-    .import-excel-btn {
-      padding-left: 2% !important;
-      padding-right: 2% !important;
-    }
 
     .preview-btn {
       padding-left: 2% !important;
@@ -9374,30 +9009,17 @@
       top: 112px;
     }
 
+    .comments-box {
+      height: calc(100vh - 259px);
+    }
+
     .show-paper-block { 
       height: calc(100vh - 214px);
     }
 
     .type-doc-import-title {
-      text-align: center;
       padding-bottom: 0%;
     }
 
-    /*======== style from old file >> Show_Template(old version) ========*/
-    .content-show-tem {
-      margin-top: 45px;
-    }
-
-    .import-excel-content {
-      padding-left: 0% !important;
-    }
-
-    .button-show-comment {
-      top: 69px;
-    }
-
-    .comment-block {
-      top: 56px;
-    }
   }
 </style>

@@ -38,7 +38,7 @@
           </v-row>
           <v-row v-if="step_show == true && flowPerm.length" class="step-input-all-block">
             <v-timeline align-top class="pt-11 step-input-all set-line-oopsite">
-              <v-timeline-item fill-dot right icon class="btn-opposite set-time-line-justify set-time-line-mb set-timeline-divider-mb" :color="color_icon" v-for="item in flowPerm" :key="item">
+              <v-timeline-item fill-dot right icon class="btn-opposite set-time-line-justify set-time-line-mb set-timeline-divider-mb" :color="color_icon" v-for="item in flowPerm" :key="item.index">
                 <!-- <v-tooltip top slot="opposite">                
                   <template v-slot:activator="{ on }">
                     <v-btn v-on="on" icon color="error" v-if="item.isEdit && !(item.step_num == 1 && (item.role && item.role[0].value.name == 'all-user') && false)" @click="deleteStep(item)">
@@ -48,7 +48,7 @@
                   <span>{{ textLang.delete_no }}  {{item.step_num}}</span>
                 </v-tooltip> -->
                 <template v-slot:icon>
-                  <b class="number-step">{{item.step_num}}</b>
+                  <b class="number-step">{{item.index}}</b>
                 </template>
                 <!-- {{orderMessage[item.step_num]}} -->
                 <v-text-field :label="orderMessage[item.step_num]" v-show="item.isEmail && !item.isRef && !item.isLeader" :readonly="!item.isEdit" outlined dense hide-details :color="color_item_email" class="mb-3 note-inputmail-label pad-input input-mail-step input-mail-box add-delete-mail-block" v-for="e in item.email" :key="e.index" v-model="e.value">
@@ -207,6 +207,7 @@ export default {
     EventBus.$off('changeLang')
     EventBus.$off('saveSign')
     EventBus.$off('cancelSign')
+    EventBus.$off('openInputDocName')
   },
   methods: {
     changeColor() {
@@ -238,130 +239,11 @@ export default {
           this.textLang = lang_en.components.InputDocumentNameModal
       }
     },
-    async openInputDocName(flowPermission, caStep, signOnly) {
-      this.isCa = caStep
-      this.signOnlyStep = signOnly
-      this.currentStepCa = sessionStorage.getItem('caStep') == 'true'
-      this.tempFlowPerm = flowPermission
-      this.flowPerm = []
-      var paperless_data = JSON.parse(sessionStorage.getItem("template_option")).paperless_data
-      if(paperless_data && paperless_data.option_page) {
-        this.optionsPage = paperless_data.option_page
-      }
-      if(!this.doc_name && this.optionsPage.subject_text) {
-        this.doc_name = this.optionsPage.subject_text
-      }
-      // if(!this.isCa) {
-      //   for(let i=0; i<flowPermission.length-1; i++) {
-      //     var isEmail = false
-      //     if(flowPermission[i].ref) {
-      //       this.flowPerm.push({index:i, isRef:true, ref: this.textLang.reference + flowPermission[i].ref, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
-      //     } else if(flowPermission[i].email.length && !flowPermission[i].ref) {
-      //       isEmail = true
-      //       var emailList = []
-      //       var indx = 0
-      //       flowPermission[i].email.forEach(e => {
-      //         emailList.push({index: indx, value: e})
-      //         indx++
-      //       })
-      //       this.flowPerm.push({index:i, isEmail: isEmail, email: emailList, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
-      //     } else if(flowPermission[i].role.length && !flowPermission[i].ref){
-      //       if(flowPermission[i].role[0].name != "" && !flowPermission[i].role.find(r => r.name == 'leader-user')) {
-      //         var roleList = []
-      //         var indx = 0
-      //         flowPermission[i].role.forEach(e => {
-      //           roleList.push({index: indx, value: e})
-      //           indx++
-      //         })
-      //         this.flowPerm.push({index:i, isEmail: isEmail, role: roleList, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
-      //       } else if(flowPermission[i].role[0].name != "" && flowPermission[i].role.find(r => r.name == 'leader-user')) {
-      //         await this.getLeaderArray(JSON.parse(sessionStorage.getItem('selected_business')).id_card_num).then(res => {
-      //           isEmail = true
-      //           var emailList = []
-      //           if(res.length) {
-      //             emailList.push({index:0, value:res[0]})
-      //           }
-      //           this.flowPerm.push({index:i, isEmail: isEmail, email: emailList, step_num: flowPermission[i].step_num, isEdit: true, isLeader: true})
-      //         })
-      //       }
-      //     }
-      //     if(typeof flowPermission[i].role[0].text !== 'undefined') {
-      //       this.orderMessage[flowPermission[i].step_num] = flowPermission[i].role[0].text
-      //     } else {
-      //       this.orderMessage[flowPermission[i].step_num] = ""
-      //     }
-      //   }
-      //   if(flowPermission.length) {
-      //     var senderIndex = flowPermission.length-1
-      //     var isEmail = false
-      //     if(typeof flowPermission[senderIndex].role[0] === 'undefined'){
-      //       flowPermission[senderIndex].role[0] = {name: "", editable: true}
-      //     }
-      //     if(flowPermission[senderIndex].ref) {
-      //       isEmail = 'ref'
-      //       this.senderPerm = {isEmail: isEmail, refValue: flowPermission[senderIndex].ref, ref: this.textLang.reference +  flowPermission[senderIndex].ref, isEdit:false}
-      //     } else if(flowPermission[senderIndex].email.length) {
-      //       isEmail = true
-      //       var emailList = []
-      //       var indx = 0
-      //       flowPermission[senderIndex].email.forEach(e => {
-      //         emailList.push({index: indx, value: e})
-      //         indx++
-      //       })
-      //       this.senderPerm = {isEmail: isEmail, email: emailList, isEdit:flowPermission[senderIndex].role[0].editable}
-      //     } else if(flowPermission[senderIndex].role.length){
-      //       if(flowPermission[senderIndex].role[0].name != "") {
-      //         var roleList = []
-      //         var indx = 0
-      //         flowPermission[senderIndex].role.forEach(e => {
-      //           roleList.push({index: indx, value: e})
-      //           indx++
-      //         })
-      //         this.senderPerm = {isEmail: isEmail, role: roleList, isEdit:flowPermission[senderIndex].role[0].editable}
-      //       }
-      //     } else {
-      //       this.senderPerm = {isEmail: true, role: [], isEdit: true, email: [""]}
-      //     }
-      //   }
-      // } else {
-      //   for(let i=0; i<flowPermission.length; i++) {
-      //     var isEmail = false
-      //     if(flowPermission[i].ref) {
-      //       this.flowPerm.push({index:i, isRef:true, ref: this.textLang.reference + flowPermission[i].ref, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
-      //     } else if(flowPermission[i].email.length && !flowPermission[i].ref) {
-      //       isEmail = true
-      //       var emailList = []
-      //       var indx = 0
-      //       flowPermission[i].email.forEach(e => {
-      //         emailList.push({index: indx, value: e})
-      //         indx++
-      //       })
-      //       this.flowPerm.push({index:i, isEmail: isEmail, email: emailList, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
-      //     } else if(flowPermission[i].role.length && !flowPermission[i].ref){
-      //       if(flowPermission[i].role[0].name != "") {
-      //         var roleList = []
-      //         var indx = 0
-      //         flowPermission[i].role.forEach(e => {
-      //           roleList.push({index: indx, value: e})
-      //           indx++
-      //         })
-      //         this.flowPerm.push({index:i, isEmail: isEmail, role: roleList, step_num: flowPermission[i].step_num, isEdit: flowPermission[i].role[0].editable})
-      //       }
-      //     }
-      //     if(typeof flowPermission[i].role[0].text !== 'undefined') {
-      //       this.orderMessage[flowPermission[i].step_num] = flowPermission[i].role[0].text
-      //     } else {
-      //       this.orderMessage[flowPermission[i].step_num] = ""
-      //     }
-      //   }
-      // }
-      // var template_code = JSON.parse(sessionStorage.getItem('template_option')).template_code
-      // var speacailForm = this.$speacailForm
-      // if(speacailForm.includes(template_code)) {
-      //   this.checkName()
-      // } else {
-      //   this.dialog = true
-      // }
+    async openInputDocName(template_name, temp_option, flowData) {
+      this.flowPerm = flowData
+      console.log(this.flowPerm)
+      this.doc_name = template_name
+    
       this.dialog = true
     },
     checkName() {
@@ -710,15 +592,6 @@ export default {
     .v-dialog {
       margin: 13px !important;
       max-width: 600px !important;
-    }
-
-    .v-dialog__content{
-      justify-content: center !important;
-    }
-
-    .dialog-head-block {
-      padding-left: 3%;
-      padding-right: 3%;
     }
 
     .name-document-title { 

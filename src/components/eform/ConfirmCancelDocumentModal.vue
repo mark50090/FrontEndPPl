@@ -1,15 +1,18 @@
 <template>
-    <v-dialog v-model="dialog" persistent max-width="500">
+    <v-dialog v-model="dialog" persistent max-width="450">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-         <b> {{ textLang.confirm_delete }} </b>
-        </v-card-title>
-        <v-card-text class="pa-12 confirm-content">{{ textLang.sure_delete }}{{ name_doc }}{{textLang.or_no}}</v-card-text>
-        <v-card-actions class="pt-0 pb-12">
-          <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" @click="dialog = false" class="px-12 mr-4 save-setting-btn">{{ textLang.cancel }} </v-btn>
-          <v-btn depressed large color="#DC143C" @click="summitCancel()" class="px-4 ml-4 save-setting-btn save-modal-font-btn">{{ textLang.yes_canel }} </v-btn>
-          <v-spacer></v-spacer>
+        <v-card-text class="pb-3 pt-7 cancel-form-modal-text text-center">{{ textLang.sure_delete }}{{ name_doc }}{{textLang.or_no}}</v-card-text>
+        <v-card-actions class="pb-2">
+          <v-row class="cancel-form-modal-row">
+            <v-spacer></v-spacer>
+            <v-col cols="4" md="4" lg="4" class="pl-0 pr-1">
+              <v-btn depressed block dark color="#757575" @click="dialog = false" class="cancel-form-modal-btn">{{ textLang.cancel }}</v-btn>
+            </v-col>
+            <v-col cols="4" md="4" lg="4" class="pl-1 pr-0">
+              <v-btn depressed block dark color="#67C25D" @click="summitCancel()" class="cancel-form-modal-btn">{{ textLang.yes_canel }}</v-btn>
+            </v-col>
+            <v-spacer></v-spacer>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -25,12 +28,12 @@ export default {
     eId: '',
     textLang: {
       confirm_delete: "ยืนยันการยกเลิกเอกสาร",
-      sure_delete: "คุณต้องการยกเลิกเอกสาร \"",
-      or_no: "\" หรือไม่ ",
+      sure_delete: "ต้องการยกเลิกเอกสาร ",
+      or_no: " หรือไม่ ?",
       cancel: "ปิด",
-      yes_canel: "ยกเลิกเอกสาร",
+      yes_canel: "ตกลง",
       cancel_success: "ยกเลิกเอกสารสำเร็จ",
-      cancel_fail: "ยกเลิกเอกสารไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
+      cancel_fail: "ยกเลิกเอกสารล้มเหลว กรุณาลองใหม่ในภายหลัง",
     }
   }),
   mounted() {
@@ -107,18 +110,20 @@ export default {
       } catch(err) {
         this.notReady = false
         this.$swal({
-          type: 'error',
-          html: '<span class="alert-error"><b>' + this.textLang.cancel_fail +  '</b></span>',
+          backdrop: false,
+          position: 'bottom-end',
+          width: '330px',
+          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+          text: this.textLang.cancel_fail,
           showCloseButton: true,
           showConfirmButton: false,
-          background: 'white',
-          customClass:{
-            popup: 'border-error'
-          },
-          position: 'top',
-          timer: 3000,
-          backdrop: false,
-          closeButtonHtml: '<span class="close-alert-error">&times;</span>'
+          timer: 5000,
+          customClass: {
+            popup: 'alert-card',
+            title: 'alert-title-block',
+            closeButton: 'close-alert-btn',
+            htmlContainer: 'alert-text-block'
+          }
         })
         console.log(err)
       }
@@ -128,5 +133,18 @@ export default {
 </script>
 
 <style>
-  
+  .cancel-form-modal-text {
+    font-family: "Sarabun", sans-serif;
+    font-size: 14px;
+    color: black !important;
+  }
+
+  .cancel-form-modal-row {
+    width: 100%;
+    margin: 0%;
+  }
+
+  .cancel-form-modal-btn {
+    font-family: "Sarabun", sans-serif;
+  }
 </style>

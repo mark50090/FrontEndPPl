@@ -385,9 +385,6 @@
   padding-bottom: 2%;
 }
 
-.input-data-link {
-  padding-left: 3% !important;
-}
 
 .delete-selecter-btn {
   /* margin-left: 2%; */
@@ -445,7 +442,4 @@
   text-transform: capitalize;
 }
 
-.save-setting-icon {
-  margin-right: 7%;
-}
 </style>

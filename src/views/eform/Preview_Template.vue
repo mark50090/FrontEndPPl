@@ -18,17 +18,17 @@
         <v-icon>mdi-file-cancel-outline</v-icon>
         <span class="btn-expan-word">{{ textLang.tabMenubar.cancel_doc }}</span>
       </v-btn>
-      <!-- <v-badge bordered left overlap color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mr-2 display-pc-only">
+      <v-badge bordered left overlap color="red" :value="attachedFiles.length" :content="attachedFiles.length" class="mr-2 display-pc-only">
         <v-btn outlined large color="grey lighten-1" class="mr-2 px-2 export-json-btn" @click="openAttachFile()">
           <v-icon class="mr-2">mdi-text-box-search-outline</v-icon>
             {{ textLang.tabMenubar.view_attachment }}
         </v-btn>
-      </v-badge> -->
+      </v-badge>
 
-      <!-- <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready" large depressed color="#C2EB81" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft display-pc-only" @click="openDocName(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
-      <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" large depressed dark color="#4CAF50" class="save-doc-btn" @click="checkSave()">{{ textLang.tabMenubar.save_doc }}</v-btn>
+      <v-btn v-if="ready && currentStep != ''" large depressed color="#C2EB81" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft display-pc-only" @click="checkSave(true)">{{ textLang.tabMenubar.save_draft }}</v-btn>
+      <v-btn large depressed dark color="#4CAF50" class="save-doc-btn" @click="checkSave(false)">{{ textLang.tabMenubar.save_doc }}</v-btn>
       <!-- <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed color="#C2EB81" class="mr-4 pl-3 pr-3 save-doc-btn btn-savedraft display-pc-only" :disabled="buttonClicked" @click="saveStep(true)">{{ textLang.tabMenubar.save_draft }}</v-btn> -->
-      <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed color="#4CAF50" class="btn-saveStep" :disabled="buttonClicked" @click="openSignature()">{{ textLang.tabMenubar.save_doc }}</v-btn>  <!-- mobile -->
+      <!-- <v-btn v-if="editStep && !allUserStep && !isPublic && ready && !draftPreview" large depressed color="#4CAF50" class="btn-saveStep" :disabled="buttonClicked" @click="openSignature()">{{ textLang.tabMenubar.save_doc }}</v-btn> -->  <!-- mobile -->
       
       <!-- select next template button -->
       <v-menu offset-y z-index="11">
@@ -70,7 +70,7 @@
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">Export file Json Key</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="((isPreview && ready && !editStep) || (isPublic && isPreview)) && !draftPreview" @click="download('download')">
+          <v-list-item v-if="ready && currentStep != ''" @click="download('download')">
             <v-list-item-icon>
               <v-icon>mdi-download</v-icon>
             </v-list-item-icon>
@@ -120,13 +120,13 @@
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.attach_doc }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="editStep && !allUserStep && !isPublic && !draftPreview" :disabled="buttonClicked" @click="saveStep(true)">
+          <!-- <v-list-item v-if="editStep && !allUserStep && !isPublic && !draftPreview" :disabled="buttonClicked" @click="saveStep(true)">
             <v-list-item-icon>
               <v-icon :disabled="buttonClicked" color="#4CAF50">mdi-file-hidden</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.save_draft }}</v-list-item-title>
-          </v-list-item>
-          <v-list-item v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && false " @click="openDocName(true)">
+          </v-list-item> -->
+          <v-list-item v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && false " @click="openDocName(false)">
             <v-list-item-icon>
               <v-icon color="#4CAF50">mdi-file-hidden</v-icon>
             </v-list-item-icon>
@@ -138,7 +138,7 @@
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">Export file Json Key</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isPreview && ready && !editStep && !draftPreview" @click="download('download')">
+          <v-list-item v-if="ready && currentStep != ''" @click="download('download')">
             <v-list-item-icon>
               <v-icon color="#4CAF50">mdi-download</v-icon>
             </v-list-item-icon>
@@ -156,12 +156,12 @@
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.forward_mail }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" @click="pplLoadTemplate()">
+          <!-- <v-list-item v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" @click="pplLoadTemplate()">
             <v-list-item-icon>
               <v-icon color="#4CAF50">mdi-draw</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.offer_dialog.offer }}</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
         </v-list>
       </v-menu>
     </v-toolbar>
@@ -290,32 +290,29 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col v-if="open_comment == true && docComment.length" :cols="col_comment_sm" :md="col_comment" :lg="col_comment" class="pr-0 comment-part"> <!-- Comment Part -->
-        <v-row>
+      <v-col v-if="open_comment == true && docComment.length" :cols="col_comment_sm" :md="col_comment" :lg="col_comment" class="pr-0 pb-0 comment-part"> <!-- Comment Part -->
+        <v-row class="pr-3 preview-comment-row">
           <b class="mt-4 comment-header">{{ textLang.tabMenubar.comment_header }}</b>
-          <v-spacer class="hidden-md-and-up"></v-spacer>
-          <v-btn icon @click="toggleComment()" class="mt-2 mr-4 hidden-md-and-up"><v-icon large>mdi-chevron-right</v-icon></v-btn>
+          <v-spacer class="display-mobile-only"></v-spacer>
+          <v-btn icon @click="toggleComment()" class="mt-2 display-mobile-only"><v-icon large>mdi-chevron-right</v-icon></v-btn>
         </v-row>
         <div class="comment-boxes">
           <br>
-          <v-row class="mb-5 each-comment" v-for="item in docComment" :key="item.index"> <!-- set of one comment -->
-            <v-col cols="1" class="mr-2 pt-1">
-              <v-icon :color="color_comment_icon">mdi-human-greeting</v-icon>
+          <v-row  v-for="item in docComment" :key="item.index" class="mb-5 each-comment"> <!-- set of one comment -->
+            <v-col cols="auto" class="px-0 pt-0">
+              <v-icon size="30">mdi-account-circle</v-icon>
             </v-col>
-            <v-col cols="10" class="pt-0 pr-0">
-              <v-card outlined class="comment-box">
-                <v-card-title class="pt-1 px-2">
-                  <b class="comment-name">{{item.sender}}</b>
-                </v-card-title>
-                <v-card-text class="pr-2">
-                  <pre class="comment-sentence">{{item.message}}</pre>
-                  <br>
-                  <v-row class="comment-date-row">
-                    <v-spacer></v-spacer>
-                    <v-card-subtitle class="comment-date">{{item.date}}</v-card-subtitle>
-                  </v-row>
-                </v-card-text>
+            <v-col cols="" class="pa-0">
+              <v-row class="preview-comment-row comment-name">
+                {{item.sender}}
+              </v-row>
+              <v-card outlined class="mr-3 mt-3 pa-3">
+                <pre class="comment-sentence">{{item.message}}</pre>
               </v-card>
+              <v-row class="pr-3 preview-comment-row">
+                <v-spacer></v-spacer>
+                <span class="comment-date">{{item.date}}</span>
+              </v-row>
             </v-col>
           </v-row>
         </div>
@@ -327,35 +324,26 @@
     <SignaturePadModal />
     <AttachFileModal/>
     <ConfirmCancelDocumentModal/>
-    <SetPasswordPDFModal />
-    <ForwardMailModal/>
-    <!-- Send Paperless Modal -->
+    <!-- Save Document Modal -->
     <v-dialog v-model="dialog_ppl" scrollable persistent max-width="650px">
       <v-card>
-        <v-card-title elevation="4" class="dialog_title">
-          <!-- <b>{{ textLang.offer_dialog.offer_paperless_old }}</b> -->
-          <b>{{ textLang.offer_dialog.offer_paperless_new }}</b>
+        <v-card-title class="py-2 save-doc-modal-header">
+          {{ textLang.offer_dialog.offer_paperless_new }}
         </v-card-title>
-        <v-card-text class="px-12 pt-5">
-          <v-row>
-            <v-col cols="12" md="3" lg="3" align-self="top" class="pt-4 pb-0 title-name-paperless"><!--{{ textLang.offer_dialog.subject_old }}-->{{ textLang.offer_dialog.subject_new }} </v-col>
-            <v-col cols="12" md="9" lg="9">
-              <v-text-field outlined dense class="pad-input title-name-paperless-value paperless-input-line" :color="color_title_name_paperless" :placeholder="textLang.offer_dialog.no_subject" v-model="pplSubject" :error="name_ppl_error" :error-messages="error_file_name_ppl_msg"></v-text-field>
+        <v-card-text class="pt-4">
+          <v-row class="save-doc-row">
+            <v-col cols="12" md="2" lg="2" align-self="start" class="pl-0 pt-5 pb-0 title-name-paperless">{{ textLang.offer_dialog.subject_new }} </v-col>
+            <v-col cols="12" md="10" lg="10" class="px-0 pb-0">
+              <v-text-field outlined dense class="title-name-paperless-value paperless-input-line" color="#4CAF50" v-model="pplSubject" :error="name_ppl_error" :error-messages="error_file_name_ppl_msg"></v-text-field>
             </v-col>
           </v-row>
-          <v-row v-show="isPdfLock">
-            <v-col cols="12" md="3" lg="3" align-self="top" class="pt-4 pb-0 title-name-paperless">{{ textLang.offer_dialog.password_setting }}<span class="color-password-setting"> * </span>:</v-col>
-            <v-col cols="12" md="9" lg="9">
-              <v-text-field outlined dense class="pad-input title-name-paperless-value paperless-input-line error_messages_set" :color="color_title_name_paperless" v-model="pdfPasswordSetting" :error="pdf_setting_error" :error-messages="error_pdf_setting_password"></v-text-field>
+          <v-row class="mt-0 save-doc-row">
+            <v-col cols="12" md="2" lg="2" class="pl-0 pt-0 title-name-paperless">{{ textLang.offer_dialog.message }}</v-col>
+            <v-col cols="12" md="10" lg="10" class="px-0 pt-0">
+              <v-textarea outlined dense hide-details no-resize rows="6" color="#4CAF50" class="pad-textarea message-paperless-row title-name-paperless-value" v-model="pplBody"></v-textarea>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="12" md="3" lg="3" class="pt-4 pb-0 title-name-paperless">{{ textLang.offer_dialog.message }}</v-col>
-            <v-col cols="12" md="9" lg="9">
-              <v-textarea outlined single-line dense hide-details no-resize rows="6" :color="color_message_paperless" class="pad-textarea message-paperless-row title-name-paperless-value" v-model="pplBody"></v-textarea>
-            </v-col>
-          </v-row>
-          <v-row justify="center" class="mb-3">
+          <!-- <v-row justify="center" class="mb-3">
             <v-col cols="12" md="3" lg="3" class="pb-0 type-paperless-title">{{ textLang.offer_dialog.doc_type }}</v-col>
             <v-col cols="12" md="7" lg="7">
               <v-autocomplete dense outlined hide-details :color="color_type_paperless_title" append-icon="mdi-chevron-down" :placeholder="textLang.offer_dialog.choose" class="type-paperless autocomplete-pad icon-select dropdown-icon-color" :items="documentTypes" v-model="selectedDocumentType"></v-autocomplete>
@@ -366,84 +354,71 @@
             <v-col cols="12" md="7" lg="7">
               <v-autocomplete dense outlined hide-details :color="color_document_format_paperless" append-icon="mdi-chevron-down" :placeholder="textLang.offer_dialog.choose" class="type-paperless autocomplete-pad icon-select dropdown-icon-color" :items="ppl_templatelist" v-model="template_paperless_code"></v-autocomplete>
             </v-col>
+          </v-row> -->
+          <!-- <br /> -->
+          <v-row v-if="templates.description" class="save-doc-row">
+            <v-textarea outlined dense readonly hide-details no-resize :label="textLang.offer_dialog.note" color="#FF9800" rows="6" class="message-paperless-row digital-workflow-not-line note-paperless-title note-paperless-content note-paperless-box" :value="templates.description"></v-textarea>
           </v-row>
-          <br />
-          <v-row justify="center" v-if="templates.description">
-            <v-col cols="12" md="10" lg="10">
-              <v-textarea outlined readonly no-resize :label="textLang.offer_dialog.note" :color="color_templates_description" rows="6" class="pad-textarea message-paperless-row note-paperless-title note-paperless-content note-paperless-box" :value="templates.description"></v-textarea>
-            </v-col>
-          </v-row>
+          <br>
           <v-divider></v-divider>
-          <v-row class="mt-8 step-btn-block">
-            <v-btn depressed large dark :color="color_step_btn" class="step-btn" @click="step_show = !step_show">
+          <br>
+          <v-row class="save-doc-row">
+            <v-btn depressed large dark color="#4CAF50" class="step-btn" @click="step_show = !step_show">
               {{ textLang.offer_dialog.seq_approval }}
               <v-icon v-if="step_show == true" large class="ml-12">mdi-chevron-up</v-icon>
               <v-icon v-else-if="step_show == false" large class="ml-12">mdi-chevron-down</v-icon>
             </v-btn>
           </v-row>
-          <v-row v-if="step_show == true" class="all-step-block">
-            <v-timeline align-top dense class="pt-11 all-step">
-              <v-timeline-item fill-dot icon :color="color_all_step_block" v-for="item in steps" :key="item">
+          <v-row v-if="step_show == true" class="mt-0 save-doc-row all-workflow-block">
+            <v-timeline align-top dense class="pt-6 all-step">
+              <v-timeline-item fill-dot icon color="#4CAF50" v-for="item in flow_data" :key="item.index">
                 <template v-slot:icon>
-                  <span class="number-step">{{item.step_num}}</span>
+                  <span class="number-step">{{(item.index + 1)}}</span>
                 </template>
-                <v-text-field v-show="!item.ref_step || (item.ref_step == 'ref-undefined')" outlined dense hide-details :color="color_all_step_block" class="mb-3 pad-input type-paperless" v-for="e in item.one_email" :key="e.ex_email" v-model="e.email"></v-text-field>
-                <v-text-field v-show="item.ref_step &&  (item.ref_step != 'ref-undefined')" readonly outlined dense hide-details :color="color_all_step_block" class="mb-3 pad-input type-paperless" :value="textLang.offer_dialog.re_number + item.ref_step"></v-text-field>
+                <!-- <v-text-field v-show="!item.ref_step || (item.ref_step == 'ref-undefined')" outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" v-for="e in item.one_email" :key="e.ex_email" v-model="e.email"></v-text-field>
+                <v-text-field v-show="item.ref_step &&  (item.ref_step != 'ref-undefined')" readonly outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" :value="textLang.offer_dialog.re_number + item.ref_step"></v-text-field> -->
+                 <v-text-field v-for="actor in item.actor[0].permission_email" :key="actor.account_id" v-show="!item.editable" readonly outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" :value="actor.thai_email"></v-text-field>
               </v-timeline-item>
             </v-timeline>
           </v-row>
           <br />
           <v-divider></v-divider>
           <br />
-          <v-row class="show-form-block">
-            <div v-for="item in attachedFiles"  :key="item.file_id">
-              <v-chip class="ma-1 chip-moblie" v-if="!item.waitUpload" small label dark :color="color_downloadfile" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.file_name }}</v-chip>
+          <v-row class="mb-2 save-doc-row">
+            <v-col v-for="item in attachedFiles"  :key="item.file_id" cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-1 pt-0 pb-1">
+              <v-chip class="attached-file-save-modal" v-if="!item.waitUpload" small dark color="#4CAF50" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.filename }}</v-chip>
               <!-- <v-chip v-if="item.waitUpload" small label outlined class="ma-1 chip-moblie text-area-front" :color="color_aperless_file_title"><b>{{item.file_name}}</b>&nbsp;<i>({{ textLang.offer_dialog.wait_upload }})</i></v-chip> -->
-            </div>
+            </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="12" md="4" lg="4" align-self="center" class="paperless-file-title">{{ textLang.offer_dialog.add_attachments }}</v-col>
-            <v-col cols="12" md="8" lg="8">
-              <v-file-input show-size dense counter multiple :color="color_paperless_file_title" :placeholder="textLang.offer_dialog.offer_dialog" class="file-input" id="file" v-model="files">
+          <v-row class="mt-0 save-doc-row">
+            <v-col cols="12" md="auto" lg="auto" class="pl-0 pb-0 attach-title-save-modal paperless-file-title">{{ textLang.offer_dialog.add_attachments }}:</v-col>
+            <v-col cols="12" md="" lg="" class="px-0 pb-0">
+              <v-file-input show-size dense outlined counter multiple color="#4CAF50" truncate-length="600" placeholder="เลือกเอกสารแนบ" class="attach-file-preview-box" id="file" v-model="files">
                 <template v-slot:selection="{ text }">
-                  <v-chip small label dark :color="color_paperless_file_title">{{ text }}</v-chip>
+                  <v-chip small dark color="#4CAF50" class="py-1 attach-file-preview-chip">{{ text }}</v-chip>
                 </template>
               </v-file-input>
             </v-col>
           </v-row>
-          <br />
-          <v-divider></v-divider>
         </v-card-text>
-        <v-row class="paperless-alert-row" v-show="alert_text">
-          <v-col cols="1">
+        <v-divider class="mx-6"></v-divider>
+        <v-row class="px-6 paperless-alert-row" v-show="alert_text">
+          <v-col cols="auto" class="pl-0 pt-2">
             <v-icon color="red">mdi-alert</v-icon>
           </v-col>
-          <v-col cols="11">
+          <v-col cols="" class="px-0">
             <span class="paperless-alert" v-html="alert_text"></span>
           </v-col>
         </v-row>
-        <v-card-actions class="send-ppl-actions-block">
-          <v-spacer></v-spacer>
-          <v-btn outlined large color="#979797" class="px-12 mr-4 save-setting-btn hidden-sm-and-down" @click="dialog_ppl = false">{{ textLang.offer_dialog.cancel }}</v-btn>
-          <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" large depressed :color="color_btn_save_ppl" class="px-8 mr-2 save-setting-btn save-modal-font-btn hidden-sm-and-down font-save-doc" @click="saveName(false)">{{ textLang.tabMenubar.save_doc }}</v-btn>
-          <v-btn v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" :disabled="!(selectedDocumentType && template_paperless_code)" depressed large :color="color_save" class="px-12 ml-4 save-setting-btn save-modal-font-btn hidden-sm-and-down" @click="checkPplUpload()"><b>{{ textLang.offer_dialog.offer }}</b></v-btn>
-          <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" :disabled="!(selectedDocumentType && template_paperless_code)" depressed large :color="color_save" class="px-12 ml-4 save-setting-btn save-modal-font-btn hidden-sm-and-down" @click="saveAndUpload()"><b>{{ textLang.offer_dialog.offer }}</b></v-btn>
-          <!-- mobile -->
-          <v-row justify="center" class="hidden-md-and-up">
-            <v-col cols="9">
-              <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" block large depressed :color="color_btn_save_ppl" class="save-setting-btn save-modal-font-btn font-save-doc" @click="saveName(false)">{{ textLang.tabMenubar.save_doc }}</v-btn>
+        <v-card-actions>
+          <v-row justify="center" class="save-doc-row">
+            <v-col cols="5" md="3" lg="3" class="pl-0 pr-2">
+              <v-btn block outlined color="#67C25D" class="cancel-efrom-modal-btn" @click="dialog_ppl = false">{{ textLang.offer_dialog.cancel }}</v-btn>
             </v-col>
-            <v-col cols="9">
-              <v-btn v-if="isPreview && uploadAble && !editStep && isBiz && !isPublic && !draftPreview" :disabled="!(selectedDocumentType && template_paperless_code)" block depressed large :color="color_save" class="ml-0 save-setting-btn save-modal-font-btn" @click="checkPplUpload()"><b>{{ textLang.offer_dialog.offer }}</b></v-btn>
-            </v-col>
-            <v-col cols="9">
-              <v-btn v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && !draftPreview" :disabled="!(selectedDocumentType && template_paperless_code)" block depressed large :color="color_save" class="ml-0 save-setting-btn save-modal-font-btn" @click="saveAndUpload()"><b>{{ textLang.offer_dialog.offer }}</b></v-btn>
-            </v-col>
-            <v-col cols="9">
-              <v-btn block outlined large color="#979797" class="ml-0 save-setting-btn" @click="dialog_ppl = false">{{ textLang.offer_dialog.cancel }}</v-btn>
+            <v-col cols="5" md="3" lg="3" class="pl-2 pr-0">
+              <v-btn block depressed color="#67C25D" class="save-eform-modal-btn" @click="checkName()">{{ textLang.tabMenubar.save_doc }}</v-btn>
             </v-col>
           </v-row>
-          <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -460,7 +435,7 @@
         <v-card-text class="pt-4 pb-0">
           <v-row v-if="attachedFiles.length > 0" class="row-crad-files">
             <div v-for="item in attachedFiles"  :key="item.file_id">
-              <v-chip class="ma-1 chip-moblie" v-if="!item.waitUpload" small dark color="#4CAF50" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.file_name }}</v-chip>
+              <v-chip class="ma-1 chip-moblie" v-if="!item.waitUpload" small dark color="#4CAF50" :close="item.username == currentUser" @click="downloadFile(item)" @click:close="deleteFile(item)">{{ item.filename }}</v-chip>
               <v-chip v-if="item.waitUpload" small outlined class="ma-1 chip-moblie" color="#4CAF50" close @click:close="deleteFileWait(item)"><b>{{item.file_name}}</b>&nbsp;<i>({{ textLang.offer_dialog.wait_upload }})</i></v-chip>
             </div>
           </v-row>
@@ -492,8 +467,6 @@ import RefDocumentModal from "../../components/eform/RefDocumentModal"
 import AttachFileModal from "../../components/eform/AttachFileModal"
 import ConfirmCancelDocumentModal from '../../components/eform/ConfirmCancelDocumentModal'
 import { mapState } from 'vuex'
-import SetPasswordPDFModal from '../../components/eform/SetPasswordPDFModal'
-import ForwardMailModal from '../../components/eform/ForwardMailModal'
 
 export default {
   computed: mapState({
@@ -505,9 +478,7 @@ export default {
     SignaturePadModal,
     RefDocumentModal,
     AttachFileModal,
-    ConfirmCancelDocumentModal,
-    SetPasswordPDFModal,
-    ForwardMailModal
+    ConfirmCancelDocumentModal
   },
   data: () => ({
     alert: false,
@@ -614,6 +585,7 @@ export default {
     isOwner: false,
     option: {},
     contTableArray: [],
+    flow_data: [],
     signNoFlow: false,
     noFlowSignPic: "",
     thenOpenPpl: false,
@@ -640,16 +612,16 @@ export default {
       },
       offer_dialog: {
         offer: "เสนอเซ็น",
-        offer_paperless_new: "บันทึกและเสนอเซ็นผ่านระบบ Paperless",
+        offer_paperless_new: "บันทึกเอกสาร",
         offer_paperless_old: "เสนอเซ็นผ่านระบบ Paperless",
-        subject_new: "ชื่อเอกสาร(เรื่อง):",
+        subject_new: "ชื่อเอกสาร:",
         subject_old: "เรื่อง:",
         password_setting: "ตั้งค่ารหัสผ่านเอกสาร (pdf)",
         no_subject: "<ไม่มีหัวเรื่อง>",
         message: "ข้อความ:",
         doc_type: "ประเภทเอกสาร paperless:",
         doc_format: "รูปแบบเอกสาร paperless:",
-        seq_approval: "ลำดับการอนุมัติ",
+        seq_approval: "Workflow",
         add_attachments: "เอกสารแนบเพิ่มเติม",
         please_choose: "กรุณาเลือกเอกสารแนบ",
         doc_system: "แนบเอกสารเข้าระบบ Paperless",
@@ -661,7 +633,7 @@ export default {
         default: "(ค่าเริ่มต้น)",
         please_input: "กรุณากรอกข้อมูล Email ให้ครบถ้วน",
         email_found: "ไม่พบอีเมล์ต่อไปนี้ในระบบ",
-        name_ppl_error: "กรุณากรอกชื่อเอกสาร(เรื่อง)",
+        name_ppl_error: "กรุณากรอกชื่อเอกสาร",
         pdf_setting_error:"กรุณาตั้งค่ารหัสผ่าน",
         wait_upload: "รอการอัพโหลด",
         already_save: "เอกสารในลำดับนี้ ถูกบันทึกแล้ว"
@@ -741,6 +713,7 @@ export default {
     this.currentStep = Number(sessionStorage.getItem('current_step'))
     this.getData()
     this.getLocation()
+    this.getFlowData()
     this.currentUser = sessionStorage.getItem("oneuser")
     if (sessionStorage.getItem("all_user_step")) {
       this.allUserStep = JSON.parse(sessionStorage.getItem("all_user_step"))
@@ -1257,6 +1230,21 @@ export default {
       }
       this.sleep = true
     },
+    async getFlowData() {
+        try {
+          if(JSON.parse(sessionStorage.getItem('template_option')).flow_id){
+            var tax_id = JSON.parse(sessionStorage.getItem('template_option')).tax_id
+            var url = `/flowdata/api/v1/get1/?_id=${JSON.parse(sessionStorage.getItem('template_option')).flow_id}&tax_id=${tax_id}`
+            var {data} = await this.axios.get(this.$api_url + url)
+            if(data.status){
+              this.flow_data = data.data.flow_data
+              console.log(data.data)
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        }
+    },
     async setPosition() {
       var pageLength = this.pages.length
       for (var i = 1; i <= pageLength; i++) {
@@ -1461,12 +1449,8 @@ export default {
         this.selected_object = hold
       }
       this.ready = true
-      this.draftPreview = sessionStorage.getItem('showDraft') == 'true'
-      if(this.signNoFlow && sessionStorage.getItem('preview') != 'true') {
-        var isNoFlow = true
-        EventBus.$emit('openSignPad', isNoFlow)
-      } else {
-        this.afterSignCheck()
+      if(sessionStorage.getItem('isInstantSave') == 'true') {
+        this.checkSave(sessionStorage.getItem('isDraft') == 'true')
       }
     },
     afterSignCheck() {
@@ -1474,7 +1458,7 @@ export default {
         if(this.editStep && !this.allUserStep ) {
           this.saveStep(true)
         } else {
-          this.openDocName(true)
+          this.openDocName(false)
         }
       } else if(sessionStorage.getItem('saveDoc') == 'true' && sessionStorage.getItem('preview_save') == 'false') {
         if((((!this.isPreview && !this.editStep && !this.allUserStep) || this.allUserStep) || (this.isPublic && !this.isPreview)) && this.ready && !this.draftPreview ) {
@@ -1766,13 +1750,21 @@ export default {
       EventBus.$emit('openAttachFile', folderAttach)
     },
     AddAttachFile() {
-      console.log("yayay")
         var uploadingFiles = this.files
         var attFiles = []
         EventBus.$emit('attachFiles', uploadingFiles, attFiles)
       },
-    checkSave() {
-      this.openDocName(false)
+    checkSave(isDraft) {
+      this.isSaveDraft = isDraft
+      if(sessionStorage.getItem("firstSent") == "true") {
+        this.openDocName()
+      } else {
+        if(sessionStorage.getItem('signStep') == 'true') {
+          EventBus.$emit('openSignPad')
+        } else {
+          this.updateDocument()
+        } 
+      }
       // var flowStatus = JSON.parse(sessionStorage.getItem("template_option")).status_flow_permission
       // if(!flowStatus) {
       //   this.pplLoadTemplate()
@@ -1805,55 +1797,28 @@ export default {
         this.saveName(true)
       }
     },
-    openDocName(draft) {
-      this.isSaveDraft = draft
+    openDocName() {
       var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
-      if (temp_option.document_name) {
-        this.isComplete = true
-        this.saveStep(draft)
-      } else {
-        var flowPermission = []
-        if (JSON.parse(sessionStorage.getItem("template_option")).status_flow_permission) {
-          var flowData = JSON.parse(sessionStorage.getItem("template_option")).flow_permission
-          if (!(typeof flowData[0] === "undefined")) {
-            if (flowData[0].step_num != "0") {
-              flowPermission = flowData
-            }
-          }
+      this.pplSubject = temp_option.template_name
+      this.dialog_ppl = true
+    },
+    checkName() {
+      if(this.pplSubject != '') {
+        if(sessionStorage.getItem('signStep') == 'true') {
+          EventBus.$emit('openSignPad')
+        } else {
+          var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
+          this.saveDocument(temp_option)
         }
-        var caStep = this.isCa
-        var signOnly = sessionStorage.getItem('signOnlyStep') == 'true'
-        // if(!caStep) {
-        //   var flowCa = flowPermission.find(item => item.ppl_sign[0].activity_code.includes("A03"))
-        //   if(flowCa) {
-        //     caStep = this.allUserStep
-        //   }
-        // }
-        // EventBus.$emit("openInputDocName", flowPermission, caStep, signOnly)
-        this.saveDocument(temp_option.template_name, temp_option)
       }
     },
-    // checkName() {
-    //   if(this.doc_name != '') {
-    //     this.dialog = false
-    //     this.save()
-    //   }
-    // },
-    async saveSign(sign64, isNoFlow) {
-      if(isNoFlow) {
-        await this.uploadSign(sign64)
-        this.afterSignCheck()
+    async saveSign(sign64) {
+      if(sessionStorage.getItem("firstSent") == "true") {
+         var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
+        this.saveDocument(temp_option, sign64)
       } else {
-        if(!this.allUserStep) {
-          this.pplSignBase = sign64
-          if(sign64) {
-            this.currentSignStep.sign = sign64
-          } else {
-            this.currentSignStep.sign = sessionStorage.getItem("sign_url")
-          }
-          this.saveStep(false)
-        }
-      }      
+        this.updateDocument(sign64)
+      }
     },
     async uploadSign(sign64) {
       try {
@@ -2391,11 +2356,119 @@ export default {
         console.log(error.message)
       }
     },
-    async saveDocument(document_name, opsPage) {
+    async updateDocument(sign64) {
+      try {
+        this.dialog_ppl = false
+        var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
+        var url = this.$api_url + '/template_form/api/v1/update_template_form'
+        var data = {}
+        this.notReady = true
+        var { data } = await this.axios.put(
+          url,
+          {
+            transaction_id: temp_option.transaction_id,
+            template_data: this.template_array,
+            is_full: true,
+            step_index: this.currentStep - 1,
+            string_sign: sign64,
+            comment: temp_option.newComment ,
+            typesign: "web",
+            type: "approve",
+            action: "Fill",
+            others: {dataTableObjectArray : this.dataTableObjectArray},
+            is_draft: this.isSaveDraft
+          }
+        )
+
+        this.notReady = false
+        if(data.status) {
+          if(this.files.length) {
+            this.uploadFiles(temp_option.transaction_id)
+          }
+          if(data.response_bi && data.response_bi.Warning_Detail!=null){
+            if(data.response_bi.Warning_Massager == 'green') {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            } else if(data.response_bi.Warning_Massager == 'yellow') {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            } else if(data.response_bi.Warning_Massager == 'red') {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                text: data.response_bi.Warning_Detail,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 15000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            }
+          }
+          this.$router.push({ path: "/form" })
+        } else {
+          if(data.response_bi && data.response_bi.Warning_Detail!=null){
+            this.$swal({
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              text: data.response_bi.Warning_Detail,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 15000,
+              customClass: {
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
+            })
+          }
+        }
+      } catch (error) {
+        this.notReady = false
+        console.log(error.message)
+      }
+    },
+    async saveDocument(opsPage, sign64) {
       try {
         this.dialog_ppl = false
         this.optionsPage = opsPage
-        this.doc_name = document_name
         var sizeTemp = [{}]
         var orientationTemp = [{}]
         for (var i = 1; i <= this.pageOrientation.length; i++) {
@@ -2421,9 +2494,11 @@ export default {
             size_header: sizeTemp,
             size_body: sizeTemp,
             size_footer: sizeTemp,
-            document_name: this.doc_name,
+            document_name: this.pplSubject,
             orientation: orientationTemp,
             paper_size: temp_option.paper_size,
+            string_sign: sign64,
+            comment: temp_option.newComment,
             is_full: true,
             others: {dataTableObjectArray : this.dataTableObjectArray}
           }
@@ -2709,14 +2784,9 @@ export default {
     },
     async download(action) {
       if (action == "download") {
-        if(this.download_url) {
-          window.open(this.download_url)
-        } else {
-          var html = this.genHtml(false)
-          this.sendHtml(html, true)
-        }
+        window.open(`${this.$api_url}/public/v1/download/${this.templates.tax_id}/${this.templates.transaction_id}`)
       } else {
-        window.open(this.view_url)
+        // window.open(this.view_url)
       }
     },
     openForwardMail() {
@@ -3117,7 +3187,7 @@ export default {
             if(reDownload) {
               this.download("download")
             } else {
-              this.download("view")
+              // this.download("view")
             }
             if (this.reSend) {
               this.pplUploadDocument()
@@ -3458,16 +3528,16 @@ export default {
       }
     },
     async deleteFile(item) {
-      try {
-        var { data } = await this.axios.get(this.$api + "/attract_file/delete/" + item.file_id)
-        if (data.result == "OK") {
-          var indx = this.attachedFiles.indexOf(item)
-          this.attachedFiles.splice(indx,1)
-          sessionStorage.setItem("Folder_Attachment_Name", JSON.stringify(this.attachedFiles))
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      // try {
+      //   var { data } = await this.axios.get(this.$api + "/attract_file/delete/" + item.file_id)
+      //   if (data.result == "OK") {
+      //     var indx = this.attachedFiles.indexOf(item)
+      //     this.attachedFiles.splice(indx,1)
+      //     sessionStorage.setItem("Folder_Attachment_Name", JSON.stringify(this.attachedFiles))
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      // }
     },
     async updateFolderName(eid) {
       try {
@@ -3485,7 +3555,7 @@ export default {
       this.files.splice(fileIndex, 1)
     },
     async downloadFile(item) {
-      window.open(this.$api + "/attract_file/download/" + item.file_id)
+      window.open(`${this.$api_url}/file-component/api/downloadFile?file_id=${file.file_id}`)
     },
     changeHoldFiles() {
       this.holdFiles.forEach(e => {
@@ -3716,7 +3786,8 @@ export default {
         var isNoFlow = false
         EventBus.$emit('openSignPad', isNoFlow)
       } else {
-        this.saveStep(false)
+        this.openDocName(false)
+        // this.saveStep(false)
       }
     },
     openNextTemplate(item) {
@@ -3796,18 +3867,6 @@ export default {
 </script>
 
 <style>
-.color-password-setting{
-  color: red;
-}
-
-.font-wait-upload{
-  font-size: 10px;
-}
-
-.send-ppl-actions-block{
-  padding-top: 6%;
-  padding-bottom: 6%;
-}
 
 .font-save-doc{
   color: #1b9900 !important;
@@ -3869,17 +3928,19 @@ export default {
 
 .title-name-paperless-value {
   font-family: "Sarabun", sans-serif;
-  font-size: 16px;
+  font-size: 13px;
 }
 
 .v-text-field.paperless-input-line input {
-  line-height: 25px;
+  line-height: 21px;
 }
 
-.v-text-field--outlined.message-paperless-row
-  > .v-input__control
-  > .v-input__slot {
+.v-text-field--outlined.message-paperless-row > .v-input__control > .v-input__slot {
   height: 150px !important;
+}
+
+.digital-workflow-not-line.v-textarea textarea {
+  line-height: 21px !important;
 }
 
 .type-paperless-title {
@@ -3890,41 +3951,36 @@ export default {
 
 .type-paperless {
   font-family: "Sarabun", sans-serif;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .v-input.note-paperless-title .v-label {
-  left: 12px !important;
+  /* left: 12px !important; */
   font-family: "Sarabun", sans-serif;
   font-size: 19px;
-  top: 14px !important;
+  top: 6px !important;
   height: 29px;
-  color: #1b9900;
+  color: #FF9800;
 }
 
-.v-textarea.v-text-field--enclosed.note-paperless-content
-  .v-text-field__slot
-  textarea {
+.v-textarea.v-text-field--enclosed.note-paperless-content .v-text-field__slot textarea {
   font-family: "Sarabun", sans-serif;
   font-size: 13px;
   color: #616161;
 }
 
 .theme--light.v-text-field--outlined.note-paperless-box fieldset {
-  border-color: #1b9900;
-}
-
-.step-btn-block {
-  padding-left: 6%;
+  border-color: #FF9800;
 }
 
 .step-btn {
   font-family: "Sarabun", sans-serif;
+  font-size: 15px !important;
   text-transform: capitalize;
 }
 
-.all-step-block {
-  padding-left: 6%;
+.all-workflow-block {
+  /* padding-left: 6%; */
   overflow: auto;
   max-height: 265px;
 }
@@ -3942,12 +3998,11 @@ export default {
   font-family: "Sarabun", sans-serif;
   font-size: 16px;
   color: black;
-  text-align: right;
 }
 
 .paperless-alert-row {
   width: 100%;
-  padding-left: 10%;
+  margin: 0%;
 }
 
 .paperless-alert {
@@ -4007,21 +4062,25 @@ export default {
   border-left: solid 1px #E0E0E0;
 }
 
+.preview-comment-row {
+  width: 100%;
+  margin: 0%;
+}
+
 .comment-header {
   font-family: "Sarabun", sans-serif;
   font-size: 16px;
   text-decoration: underline;
-  margin-left: 4%;
 }
 
 .comment-boxes {
-  height: calc(100vh - 178px);
+  height: calc(100vh - 181px);
   overflow: auto;
 }
 
 .each-comment {
   width: 100%;
-  margin-left: 0%;
+  margin: 0%;
 }
 
 .attach-preview-modal-header {
@@ -4047,26 +4106,52 @@ export default {
   font-family: "Sarabun", sans-serif;
 }
 
+.save-doc-modal-header {
+  font-family: "Sarabun", sans-serif;
+  font-size: 16px !important;
+  color: white;
+  background-color: #67c25d;
+}
+
+.save-doc-row {
+  width: 100%;
+  margin: 0%;
+}
+
+.attached-file-save-modal {
+  font-family: "Sarabun", sans-serif;
+}
+
+.attached-file-save-modal {
+  white-space: inherit;
+  height: auto !important;
+}
+
+.attached-file-save-modal .v-chip__content {
+  display: flex !important;
+}
+
+.attach-title-save-modal {
+  padding-top: 3% !important;
+}
+
+.cancel-efrom-modal-btn {
+  font-family: "Sarabun", sans-serif;
+}
+
+.save-eform-modal-btn {
+  font-family: "Sarabun", sans-serif;
+  color: white !important;
+}
+
 
 /*======== style from old file >> Preview_Template(old version) ========*/
+
 .loading-circle-preview {
   position: fixed;
   top: 40%;
   left: 50%;
   z-index: 16;
-}
-
-.page-button-row {
-  margin-top: 3%;
-}
-
-.template-paperless-title-block {
-  padding-top: 3%;
-}
-
-.template-paperless-title {
-  font-family: "Sarabun", sans-serif;
-  font-size: 16px;
 }
 
 .alert {
@@ -4075,86 +4160,14 @@ export default {
   color: #ADCA5A !important;
 }
 
-.alert-warning {
-  font-family: "Sarabun", sans-serif;
-  font-size: 18px !important;
-  color: #ffe44e !important;
-}
-
-.alert-error {
-  font-family: "Sarabun", sans-serif;
-  font-size: 18px !important;
-  color: #EF9A9A !important;
-}
-
-.alert-bi-success {
-  font-family: "Sarabun", sans-serif;
-  font-size: 16px !important;
-  color: #ADCA5A !important;
-}
-
-.alert-bi-warning {
-  font-family: "Sarabun", sans-serif;
-  font-size: 16px !important;
-  color: #ffe44e !important;
-}
-
-.alert-bi-error {
-  font-family: "Sarabun", sans-serif;
-  font-size: 16px !important;
-  color: #EF9A9A !important;
-}
-
-.border-success{
-  border: 12px double #ADCA5A;
-}
-
-.border-warning{
-  border: 12px double #ffe44e;
-}
 .close-alert {
   color: #ADCA5A !important;
-}
-
-.border-error{
-  border: 12px double #EF9A9A;
-}
-
-.close-alert-warning {
-  color: #ffe44e !important;
-}
-
-.close-alert-error{
-  color: #F44336 !important;
-}
-
-.loading-preview-block {
-  position: fixed;
-  left: 0%;
-  width: 100%;
-  height: 100%;
-  z-index: 15;
-  background-color: gray;
-  opacity: 0.3;
-}
-
-.button-dark-theme {
-  color: white !important;
 }
 
 .v-text-field--outlined.body-paperless-row
   > .v-input__control
   > .v-input__slot {
   height: 75px !important;
-}
-
-.button-note-block {
-  padding-left: 5%;
-  margin-bottom: 2%;
-}
-
-.note-button {
-  font-family: "Sarabun", sans-serif;
 }
 
 .note-paperless {
@@ -4191,55 +4204,6 @@ export default {
   border-color: #ffb74d;
 }
 
-.step-button {
-  font-family: "Sarabun", sans-serif;
-}
-
-.email-all-list {
-  width: 100%;
-  /* height: 300px; */
-  overflow: auto;
-  max-height: 265px;
-}
-
-.step-block {
-  width: 95%;
-}
-
-.num-step {
-  font-family: "Sarabun", sans-serif;
-  font-size: 18px;
-  color: white;
-}
-
-.input-mail-paperless {
-  font-family: "Sarabun", sans-serif;
-  font-size: 16px;
-}
-
-.add-file-button {
-  font-family: "Sarabun", sans-serif;
-}
-
-.file-input-paperless {
-  padding-top: 0%;
-}
-
-.alert-email-block {
-  width: 100%;
-  padding-left: 5%;
-}
-
-.alert-email-icon {
-  color: red !important;
-}
-
-.alert-email {
-  font-family: "Sarabun", sans-serif;
-  color: red;
-  font-size: 14px;
-}
-
 .theme--light.v-btn.v-btn--disabled .v-icon.send-ppl-disable-icon {
   color: #bdbdbd !important;
 }
@@ -4257,41 +4221,6 @@ export default {
     left: 0;
     top: 0;
   }
-
-  .preview-template-name {
-    visibility: hidden;
-    position: fixed;
-    left: 0;
-    top: 0;
-  }
-
-  .preview-botton-block {
-    visibility: hidden;
-    position: fixed;
-    left: 0;
-    top: 0;
-  }
-
-  .botton-in-preview {
-    visibility: hidden;
-    position: fixed;
-    left: 0;
-    top: 0;
-  }
-}
-
-.plane-preview {
-  overflow: visible;
-  /* height: calc(100vh - 120px); */
-  height: 100vh;
-  margin-left: 0%;
-}
-
-.alert-email {
-  color: red;
-  margin-left: 5%;
-  font-family: "Sarabun", sans-serif;
-  font-size: 14px !important;
 }
 
 .row-crad-files{
@@ -4323,17 +4252,8 @@ export default {
     height: calc(100vh - 211px);
   }
 
-  .all-step-block {
-    padding-left: 0%;
-    padding-right: 2%;
-  }
-
   .all-step {
     width: 100%;
-  }
-
-  .paperless-file-title {
-    text-align: left;
   }
 
   .back-data-btn {
@@ -4359,9 +4279,12 @@ export default {
     z-index: 12;
   }
 
-  .send-ppl-actions-block{
-    padding-top: 3% !important;
-    padding-bottom: 3% !important;
+  .comment-boxes {
+    height: calc(100vh - 169px);
+  }
+
+  .attach-title-save-modal {
+    padding-top: 0% !important;
   }
 
   .chip-moblie{
@@ -4383,10 +4306,6 @@ export default {
     top: 13%;
     left: 13%;
     z-index: 16;
-  }
-
-  .template-paperless-title-block {
-    padding-bottom: 0%;
   }
 }
 </style>

@@ -800,7 +800,7 @@
                   </v-row>
                 </v-expansion-panel-content>
               </v-expansion-panel>
-              <!-- <v-expansion-panel> <!-- Paperless Object 
+              <!-- <v-expansion-panel> 
                 <v-expansion-panel-header class="object-type-header">
                   <b>Paperless Object</b>
                   <template v-slot:actions>
@@ -1781,63 +1781,20 @@
             <br>
             <v-divider class="divider-permission"></v-divider>
             <!-- Permission Property -->
-            <!-- <div v-if="(custom_object_permission || custom_cell_permission) && !objectArray[selected_array][selected_object].style.refPermission"> 
+            <template v-if="(custom_object_permission || custom_cell_permission)">
+              <br>
               <span class="sub-title-property"><b>{{ textLang.property_type.assignment }}</b></span>
-              <v-row class="row-prop">
-                <v-checkbox hide-details class="check-grid-block check-ref" :color="color_property_Object" @change="getRefOrder" v-model="objectArray[selected_array][selected_object].style.refOrder">
-                  <template v-slot:label>
-                    <span class="title-prop">{{ textLang.property_type.reference }}</span>
-                  </template>
-                </v-checkbox>
-              </v-row>
-              <v-row class="row-prop" v-if="objectArray[selected_array][selected_object].style.refOrder">
-                <v-col cols="5" class="title-prop-block">
-                  <span class="title-prop">{{ textLang.property_type.order_refer }}:</span>
+              <v-row class="mt-1 row-prop">
+                <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
+                  <span class="title-prop">ลำดับ Workflow:</span>
                 </v-col>
-                <v-col cols="6" class="px-0">
-                  <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="refOrders" v-model="objectArray[selected_array][selected_object].style.permission.ref"></v-autocomplete>
+                <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
+                  <v-autocomplete outlined dense hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :items="step_choices" v-model="objectArray[selected_array][selected_object].style.permission_step" color="#4caf50" class="prop-input create-prop-line-height create-prop-dropdown-icon"></v-autocomplete>
                 </v-col>
-              </v-row>
-              <v-row class="row-prop" v-if="!objectArray[selected_array][selected_object].style.refOrder">
-                <v-radio-group row hide-details class="template-type-block" v-model="objectArray[selected_array][selected_object].style.permission.byRole">
-                  <v-radio :color="color_property_Object" :value="true">
-                    <template v-slot:label>
-                      <span class="title-prop">{{ textLang.property_type.by_positio }}</span>
-                    </template>
-                  </v-radio>
-                  <v-radio :color="color_property_Object" :value="false">
-                    <template v-slot:label>
-                      <span class="title-prop">{{ textLang.property_type.by_email }}</span>
-                    </template>
-                  </v-radio>
-                </v-radio-group>
               </v-row>
               <br>
-              <div class="role-name" v-for="item in objectArray[selected_array][selected_object].style.permission.value_role" :key="item">
-                {{item.text}}<v-icon small color="grey lighten-1" v-on:click="deletePermList(item,false)">mdi-close-circle</v-icon>
-              </div>
-              <div class="role-name" v-for="item in objectArray[selected_array][selected_object].style.permission.value_email" :key="item">
-                {{item.text}}<v-icon small color="grey lighten-1" v-on:click="deletePermList(item,false)">mdi-close-circle</v-icon>
-              </div>
-              <v-row class="row-prop" v-show="objectArray[selected_array][selected_object].style.permission.byRole && !objectArray[selected_array][selected_object].style.refOrder" >
-                <v-col cols="4" class="title-prop-block">
-                  <span class="title-prop">{{ textLang.property_type.position }}:</span>
-                </v-col>
-                <v-col cols="7" class="px-0">
-                  <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" append-outer-icon="mdi-plus" :placeholder="textLang.set_format_form.choose" :color="color_property_Object" class="prop-input autocomplete-pad icon-select dropdown-icon-color" :items="roles" v-model="selectedPermRole" @click:append-outer="addPermList(false)"></v-autocomplete>
-                </v-col>
-              </v-row>
-              <v-row class="row-prop" v-show="!objectArray[selected_array][selected_object].style.permission.byRole && !objectArray[selected_array][selected_object].style.refOrder">
-                <v-col cols="4" class="title-prop-block">
-                  <span class="title-prop">{{ textLang.property_type.email }}:</span>
-                </v-col>
-                <v-col cols="7" class="px-0">
-                  <v-text-field outlined dense hide-details :color="color_property_Object" append-outer-icon="mdi-plus" class="prop-input pad-input"  @click="copyObject = ''" v-model="selectedPermEmail" @click:append-outer="addPermList(false)"></v-text-field>
-                </v-col>
-              </v-row>
-            </div> -->
+            </template>
             <!-- Help -->
-            <!-- <br> -->
             <v-row class="row-prop">
               <v-col cols="auto" class="pl-4 pr-0 pb-0">
                 <v-btn color="primary" depressed fab x-small dark class="" @click="help = !help">
@@ -2015,7 +1972,7 @@
                 <span class="title-prop">{{ textLang.set_doc_paperless.foermat_paperless }}:</span>
               </v-col>
               <v-col cols="8" align-self="center" class="pl-0 pr-2">
-                <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="ppl_templatelist" v-model="selected_ppltemplate"></v-autocomplete>
+                <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4CAF50" class="prop-input create-prop-line-height create-prop-dropdown-icon" :items="ppl_templatelist" v-model="selected_ppltemplate" @change="getFlowData()"></v-autocomplete>
               </v-col>
             </v-row>
             <v-row class="row-prop">
@@ -2026,9 +1983,9 @@
                 <v-textarea rows="5" dense outlined hide-details single-line no-resize color="#4CAF50" class="prop-input pad-textarea note-row2" v-model="note_paperless"></v-textarea>
               </v-col>
             </v-row>
-            <br>
+            <!-- <br>
             <v-divider class="divider-prop"></v-divider>
-            <br>
+            <br> -->
             <!-- Auto Flow -->
             <!-- <span class="sub-title-property"><b>{{ textLang.set_doc_paperless.set_auto_flow }}</b></span>
             <v-row class="row-prop">
@@ -2036,6 +1993,26 @@
                 <v-btn depressed block small :color="color_varidate_button" class="validate-doc-btn" @click="openFlowCondition()">{{ textLang.set_doc_paperless.set_auto_flow_btn }}</v-btn>
               </v-col>
             </v-row> -->
+            <v-card v-if="false" outlined class="mr-2 mt-3 pa-2 all-create-workflow-block"> <!-- example workflow -->
+              <template> <!-- each step --> 
+                <v-row class="workflow-step-row title-prop">
+                  ลำดับที่ 20 : ผู้มีสิทธิ์กรอกและเซ็น <!-- ผู้มีสิทธิ์อนุมัติ / ผู้มีสิทธิ์เซ็น / ผู้มีสิทธิ์กรอก / ผู้มีสิทธิ์กรอกและเซ็น -->
+                </v-row>
+                <v-list dense class="pt-1 pb-5">
+                  <v-list-item dense class="pl-2 pr-0 each-step-workflow"> <!-- each mail in step -->
+                    <v-list-item-icon class="mr-2 my-0 each-step-workflow-icon">
+                      <v-icon>mdi-account</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content class="py-0 each-step-workflow-mail">
+                      workflow.di@one.th
+                    </v-list-item-content>
+                    <v-list-item-icon class="ml-2 my-0 alert-onechat-block"> <!-- show when this mail is set to alert in One Chat -->
+                      <img height="21px" src="https://www.img.in.th/images/a368504d4cdb93225bda2f04c665ead7.png" />
+                    </v-list-item-icon>
+                  </v-list-item>
+                </v-list>
+              </template>
+            </v-card>
           </v-tab-item>
           <v-tab-item> <!-- Filling Mobile Tab -->
             <span class="pr-2 header-property"><b>{{ textLang.filling_mobile.title }}</b></span>
@@ -2103,7 +2080,6 @@
       <hideSettingModal/>
       <docConditionModal/>
       <sumifToolModal/>
-      <flowConditionModal/>
       <!-- Import Image Modal -->
       <v-dialog v-model="dialogImageUpload" persistent max-width="450px">
         <v-card>
@@ -2279,7 +2255,6 @@ import BackFromCreateModal from '../../components/eform/BackFromCreateModal'
 import hideSettingModal from '../../components/eform/hideSettingModal'
 import docConditionModal from '../../components/eform/docConditionModal'
 import sumifToolModal from '../../components/eform/sumifToolModal'
-import flowConditionModal from '../../components/eform/flowConditionModal'
 
 var ArrowEventHandle
 var CrtlEventHandle = false
@@ -2293,7 +2268,6 @@ export default {
     hideSettingModal,
     docConditionModal,
     sumifToolModal,
-    flowConditionModal
   },
 
   data: () => ({
@@ -2529,6 +2503,7 @@ export default {
     zoom_level: 100,
     order_permission: [],
     all_permission: [],
+    step_choices: [{text: "ผู้ส่งเอกสาร", value: ""}],
     colsize:0,
     rowsize:0,
     note_paperless: "",
@@ -2632,6 +2607,7 @@ export default {
     AlphabetType: [{text: 'ไม่กำหนด', value: ""},{text: 'ตัวอักษรพิมพ์ใหญ่', value: "UpperCase"},{text: 'ตัวอักษรพิมพ์เล็ก', value: "LowwerCase"}],
     allEformList: [],
     TextType: [{text: 'ไม่กำหนด', value: ""},{text: 'อีเมล', value: "Email"}],
+    currentSelectedFlow: {},
     textLang:{
       tabMenubar: {
         create_doc: "สร้างเอกสาร",
@@ -3944,6 +3920,7 @@ export default {
         this.prefixPattern = template.document_detail[0].pattern
         this.prefixDigit = template.document_detail[0].digit
         this.selected_ppltemplate = template.flow_id
+        await this.getFlowData()
         this.template_name = template.template_name
         if(template.document_option) {
           this.docOption = template.document_option
@@ -4026,10 +4003,7 @@ export default {
       this.body_section = this.pages[0].body_section 
       this.footer_section = this.pages[0].footer_section 
   
-      this.getAllPermission()
-      if(template.status_flow_permission) {
-        this.getStep(template.flow_permission)
-      }
+      // this.getAllPermission()
       this.objectType.forEach( e => {
         this.formatObjectId(e)
       })
@@ -4059,7 +4033,10 @@ export default {
             page: e.page
           }
           if(cmp.style) {
-             if(!cmp.style.permission) {
+            if(typeof cmp.style.permission_step === "undefined") {
+              cmp.style.permission_step = ""
+            }
+            if(!cmp.style.permission) {
               cmp.style.permission =  {byRole:true, value_role:[], value_email:[]}
             }
             if(typeof cmp.style.permission.value_email == 'string') {
@@ -6576,7 +6553,7 @@ export default {
       }
     },
     getSectionPermission() {
-      this.getAllPermission()
+      // this.getAllPermission()
       this.allPermissionSection = [{text: this.textLang.dropdown.no_setting , value: ''}]
       this.all_permission.forEach(e => {
         if(e.value.object_name != this.objectArray[this.selected_array][this.selected_object].object_name) {
@@ -7063,37 +7040,20 @@ export default {
       }
     },
     getPermissionSection(selArray, selObj) {
-      var perm = {}
-      var allSection = []
       if(selArray != 'datacell') {
         var element = document.getElementById(this.objectArray[selArray][selObj].name)
         var position = element.getBoundingClientRect()
         for(var i=0; i<this.objectArray['sectionbox'].length-1; i++) {
-          if(this.objectArray['sectionbox'][i].style.permission && this.objectArray['sectionbox'][i].page == this.currentPage) {
+          if(this.objectArray['sectionbox'][i].style.permission_step && this.objectArray['sectionbox'][i].page == this.currentPage) {
             var section = document.getElementById(this.objectArray['sectionbox'][i].name + '-section-box')
             var section_rect = section.getBoundingClientRect()
             if(position.top > section_rect.top && position.top < (section_rect.top + section_rect.height)) {
               if(position.left > section_rect.left && position.left < (section_rect.left + section_rect.width)) {
-                if(!this.objectArray['sectionbox'][i].style.refPermission) {
-                  allSection.push(this.objectArray['sectionbox'][i].object_name)
-                  perm = {
-                    role_id: "",
-                    role_level: "",
-                    role_level_number: "",
-                    role_name: "",
-                    section: allSection
-                  }
+                if(!this.objectArray[selArray][selObj].style.permission_step) {
+                  this.objectArray[selArray][selObj].style.permission_step_section = this.objectArray['sectionbox'][i].style.permission_step
                 } else {
-                  allSection.push(this.objectArray['sectionbox'][i].style.refPermission)
-                  perm = {
-                    role_id: "",
-                    role_level: "",
-                    role_level_number: "",
-                    role_name: "",
-                    section: allSection
-                  }
+                  this.objectArray[selArray][selObj].style.permission_step_section = ""
                 }
-                this.objectArray[selArray][selObj].style.permission_section = perm
               } 
             }
           }
@@ -7101,34 +7061,18 @@ export default {
       } else {
         var element = document.getElementById(this.dataTableObjectArray[selObj].name)
         var position = element.getBoundingClientRect()
-        this.dataTableObjectArray[selObj].style.permission_section = {role_id: "",role_level: "",role_level_number: "",role_name: "",section: []}
         for(var i=0; i<this.objectArray['sectionbox'].length-1; i++) {
           this.objectArray['sectionbox'][i].show = true
-          if((this.objectArray['sectionbox'][i].style.permission || this.objectArray['sectionbox'][i].style.refPermission) && this.dataTableObjectArray[selObj].page == this.objectArray['sectionbox'][i].page) {
+          if(this.objectArray['sectionbox'][i].style.permission_step && this.dataTableObjectArray[selObj].page == this.objectArray['sectionbox'][i].page) {
             var section = document.getElementById(this.objectArray['sectionbox'][i].name + '-section-box')
             var section_rect = section.getBoundingClientRect()
             if(position.top >= section_rect.top && position.top <= (section_rect.top + section_rect.height)) {
               if(position.left >= section_rect.left && position.left <= (section_rect.left + section_rect.width)) {
-                if(!this.objectArray['sectionbox'][i].style.refPermission.length) {
-                  allSection.push(this.objectArray['sectionbox'][i].object_name)
-                  perm = {
-                    role_id: "",
-                    role_level: "",
-                    role_level_number: "",
-                    role_name: "",
-                    section: allSection
-                  }
+                if(!this.dataTableObjectArray[selObj].style.permission_step) {
+                  this.dataTableObjectArray[selObj].style.permission_step_section = this.objectArray['sectionbox'][i].style.permission_step
                 } else {
-                  allSection.push(this.objectArray['sectionbox'][i].style.refPermission)
-                  perm = {
-                    role_id: "",
-                    role_level: "",
-                    role_level_number: "",
-                    role_name: "",
-                    section: allSection
-                  }
+                  this.dataTableObjectArray[selObj].style.permission_step_section = ""
                 }
-                this.dataTableObjectArray[selObj].style.permission_section = perm
               }
             }
           }
@@ -7297,7 +7241,7 @@ export default {
       var saveArray = []
       this.res_saveArray = []
       this.allObjectRoles = []
-      this.getAllPermission()
+      // this.getAllPermission()
       var work_paper = document.getElementById('workpaper')
       var paper_rect = work_paper.getBoundingClientRect()
       for(let i = 0; i < this.mobileInputOrder.length; i++) {
@@ -7580,409 +7524,11 @@ export default {
 
       return cmp
     },
-    setStep() {
-      var signStep = {}
-      var defaultSignStep = [ {
-        activity_code: ["A04"],
-        activity_data: [{
-            sign_llx:'',
-            sign_lly: '',
-            sign_page: 1,
-            sign_urx: '',
-            sign_ury: '',
-            status: "incomplete"}],
-        activity_description: [ "EFORM_FILL"],
-        activity_status: [ "Incomplete" ],
-        activity_time: [ new Date().toISOString().substr(0, 10)+ " " + new Date().toISOString().substr(11, 8)],
-        one_email: "",
-        sign_position: {
-          sign_latitude: "",
-          sign_longitude: "",
-          sign_time: ""
-        }
-      }]
-
-      if(this.objectArray['signbox'].length > 1) {
-        for(let i = 0; i<this.objectArray['signbox'].length-1; i++) {
-          if(typeof this.objectArray['signbox'][i] !== 'undefined' && this.objectArray['signbox'][i].style.isCa && !this.objectArray['signbox'][i].deleted) {
-            if(this.objectArray['signbox'][i].style.permission.value_email.length || this.objectArray['signbox'][i].style.permission.value_role.length || this.objectArray['signbox'][i].style.permission_section.section.length){
-              var signLly = String((1 - ((this.objectArray['signbox'][i].top + this.objectArray['signbox'][i].height) /this.current_paper_height)).toFixed(3))
-              var signLlx = String((this.objectArray['signbox'][i].left /this.current_paper_width).toFixed(3))
-              var signUry = String((this.objectArray['signbox'][i].height /this.current_paper_height).toFixed(3))
-              var signUrx = String((this.objectArray['signbox'][i].width /this.current_paper_width).toFixed(3))
-              var focusSection = ""
-              var signOnlyStep = false
-              if(this.objectArray['signbox'][i].style.permission.value_email.length || this.objectArray['signbox'][i].style.permission.value_role.length) {
-                focusSection = this.objectArray['signbox'][i].object_name
-                signOnlyStep = true
-              } else if(this.objectArray['signbox'][i].style.permission_section.section.length) {
-                focusSection = this.objectArray['signbox'][i].style.permission_section.section[0]
-                var stepObj = this.objectArray['sectionbox'].find(item => item.object_name == focusSection)
-                if(typeof stepObj !== 'undefined') {
-                  if(stepObj.style.permission.ref) {
-                    focusSection = this.order_permission[Number(stepObj.style.permission.ref)-1].value.object_name
-                  }
-                }
-              }
-              if(typeof focusSection !== 'undefined' && focusSection != "") {
-                var sendEmail = []
-                var emailObj = this.order_permission.find(item => item.value.object_name == focusSection)
-                var activiy = [ "A03","A04"]
-                var activity_description = [ "PAPERLESS_SIGNATURE","EFORM_FILL"]
-                var activity_status = [ "Incomplete" , "Incomplete" ]
-                var activity_time =  [ new Date().toISOString().substr(0, 10)+ " " + new Date().toISOString().substr(11, 8) , new Date().toISOString().substr(0, 10)+ " " + new Date().toISOString().substr(11, 8)]
-                var activity_data = [{
-                  sign_llx: signLlx,
-                  sign_lly: signLly,
-                  sign_page: this.objectArray['signbox'][i].page,
-                  sign_urx: signUrx,
-                  sign_ury: signUry,
-                  status: "incomplete"
-                },{
-                    sign_llx: "",
-                    sign_lly: "",
-                    sign_page: this.objectArray['signbox'][i].page,
-                    sign_urx: "",
-                    sign_ury: "",
-                    status: "incomplete"
-                  }]
-                if(signOnlyStep) {
-                  activiy = [ "A03" ]
-                  activity_description = [ "PAPERLESS_SIGNATURE"]
-                  activity_status = [ "Incomplete"  ]
-                  activity_time =  [ new Date().toISOString().substr(0, 10)+ " " + new Date().toISOString().substr(11, 8) ]
-                  activity_data = [{
-                    sign_lly: signLlx,
-                    sign_llx: signLly,
-                    sign_page: this.objectArray['signbox'][i].page,
-                    sign_urx: signUrx,
-                    sign_ury: signUry,
-                    status: "incomplete"
-                  }]
-                }
-                if(emailObj) {
-                  if(!emailObj.value.permission.byRole) {
-                    emailObj.value.permission.value_email.forEach(e2 => {
-                      sendEmail.push(e2.value)
-                    })
-                  }
-                }
-                if(sendEmail.length) {
-                  signStep[focusSection] = []
-                    sendEmail.forEach(se => {
-                      se = se.toLowerCase()
-                      se = se.trim()
-                      se = se.replace(/ /g, "")
-                      se = se.split(" ").join("")
-                      var emailStep = {
-                        activity_code: activiy,
-                        activity_data: activity_data,
-                        activity_description: activity_description,
-                        activity_status: activity_status,
-                        activity_time: activity_time,
-                        one_email: se,
-                        sign_position: {
-                          sign_latitude: "",
-                          sign_longitude: "",
-                          sign_time: ""
-                        }
-                      }
-                      signStep[focusSection].push(emailStep)
-                    })
-                  } else {
-                    signStep[focusSection] = [ {
-                      activity_code: activiy,
-                      activity_data: activity_data,
-                        activity_description: activity_description,
-                        activity_status: activity_status,
-                        activity_time: activity_time,
-                        one_email: "",
-                        sign_position: {
-                          sign_latitude: "",
-                          sign_longitude: "",
-                          sign_time: ""
-                        }
-                      }
-                    ]
-                  }
-                }
-            }
-          }
-        }
-      }
-      var business = JSON.parse(sessionStorage.getItem('selected_business'))
-      var tax_id = ""
-      if(business.id) {
-        tax_id = business.id_card_num
-      }
-      var all_steps = []
-      if(this.order_permission.length) {
-        this.order_permission.forEach(e => {
-          if(e.value.permission.ref) {
-            var step = 
-            { email:[],
-              name:[],
-              role:[{"id":"","name":"","level":"","position":"","object_name":e.value.object_name, editable:e.value.isEditable, text: this.orderMessage[Number(e.index)-1]}],
-              dept:[{"id":"","name":"","level":"","position":""}],
-              tax_id:tax_id ,
-              ppl_sign: defaultSignStep,
-              ref: e.value.permission.ref,
-              observe: {choices:e.choices, observe: e.observe, choicesSet: e.choicesSet},
-              block_email: e.blockEmail,
-              step_num:String(e.index),
-            }
-            all_steps.push(step)
-          } else if(e.value.permission.byRole && !e.value.permission.ref) {
-            var roleList = []
-            e.value.permission.value_role.forEach(e2 => {
-              roleList.push({
-                id:e2.value.role_id,
-                name:e2.value.role_name,
-                level:e2.value.role_level,
-                position:"",
-                object_name:e.value.object_name,
-                editable:e.value.isEditable,
-                text: this.orderMessage[Number(e.index)-1]
-              })
-            })
-            var step = 
-            { email:[],
-              name:[],
-              role:roleList,
-              dept:[{"id":"","name":"","level":"","position":""}],
-              tax_id:tax_id ,
-              ppl_sign: defaultSignStep ,
-              ref: "",
-              observe: {choices:e.choices, observe: e.observe, choicesSet: e.choicesSet},
-              block_email: [],
-              step_num:String(e.index),
-            }
-            if(typeof signStep[e.value.object_name] !== 'undefined') {
-              step.ppl_sign = signStep[e.value.object_name]
-            }
-            all_steps.push(step)
-          } else if(!e.value.permission.byRole && !e.value.permission.ref){
-            var emailList = []
-            e.value.permission.value_email.forEach(e2 => {
-              emailList.push(e2.value)
-            })
-            var step = 
-            { 
-              email: emailList,
-              name:[],
-              role:[{"id":"","name":"","level":"","position":"","object_name":e.value.object_name, editable:e.value.isEditable, text: this.orderMessage[Number(e.index)-1]}],
-              dept:[{"id":"","name":"","level":"","position":""}],
-              tax_id:tax_id ,
-              ppl_sign: defaultSignStep,
-              ref: "",
-              editable:e.value.isEditable,
-              observe: {choices:e.choices, observe: e.observe, choicesSet: e.choicesSet},
-              block_email: e.blockEmail,
-              step_num:String(e.index),
-            }
-            if(typeof signStep[e.value.object_name] !== 'undefined') {
-              step.ppl_sign = signStep[e.value.object_name]
-            }
-            all_steps.push(step)
-          }
-        })
-      }
-
-      if(all_steps.length && !this.caStep) {
-        if(Number(this.step_sender.ref) >= 1) {
-          this.step_sender.value_email = []
-          this.step_sender.value_role = []
-        }
-        if(!this.step_sender.value_email.length && !this.step_sender.value_role.length && !this.step_sender.ref) {
-          var sender = {
-            email: all_steps[0].email,
-            name: all_steps[0].name,
-            role: all_steps[0].role,
-            dept: all_steps[0].dept,
-            tax_id: all_steps[0].tax_id,
-            ppl_sign: defaultSignStep,
-            ref: this.step_sender.ref,
-            editable: this.step_sender.isEditable,
-            step_num:String(all_steps.length + 1)
-          }
-          all_steps.push(sender)
-        } else {
-          var senderRole = [{id:"", name:"", level:"", position:"" , editable:this.step_sender.isEditable}]
-          if(this.step_sender.value_role.length) {
-            senderRole = []
-            this.step_sender.value_role.forEach(sr => {
-              var stepRole = {
-                id: sr.role_id,
-                level: sr.role_level,
-                name: sr.role_name,
-                position:"",
-              }
-              stepRole.editable = this.step_sender.isEditable
-              senderRole.push(stepRole)
-            })
-          }
-          var sender = {
-            email: this.step_sender.value_email,
-            name: all_steps[0].name,
-            role: senderRole,
-            dept: all_steps[0].dept,
-            tax_id: all_steps[0].tax_id,
-            ppl_sign: defaultSignStep,
-            ref: this.step_sender.ref,
-            editable: this.step_sender.isEditable,
-            step_num:String(all_steps.length + 1)
-          }
-          all_steps.push(sender)
-        }
-      }
-
-      return all_steps
-    },
-    getStep(step) {
-      this.order_permission = []
-      var temp_step = []
-      this.orderMessage = []
-      if(step.length) {
-        if(step[0].step_num != 0) {
-          step.sort((a, b) => (a.step_num > b.step_num) ? 1 : -1)
-          if(step) {
-            step.forEach(e => {
-              if(step.length != e.step_num) {
-                if(e.ref) {
-                  if(typeof e.observe === 'undefined') {
-                    e.observe = {
-                      choices: [],
-                      observe: [],
-                      choicesSet: false,
-                    }
-                  }
-                  var val = {
-                    object_name: e.role[0].object_name,
-                    permission: {
-                      byRole:false,
-                      value_role:[],
-                      value_email:[],
-                      ref: e.ref
-                    }
-                  }
-                  this.order_permission.push({
-                    index: "0",
-                    value:val,
-                    isEditable: e.role[0].editable,
-                    choices: e.observe.choices,
-                    observe: e.observe.observe,
-                    choicesSet: e.observe.choicesSet,
-                    blockEmail: e.block_email,
-                  })
-                } else if(e.email.length > 0) {
-                  if(typeof e.observe === 'undefined') {
-                    e.observe = {
-                      choices: [],
-                      observe: [],
-                      choicesSet: false,
-                    }
-                  }
-                  var val = {
-                    object_name: e.role[0].object_name,
-                    permission: {
-                      byRole:false,
-                      value_role:[],
-                      value_email: e.email[0],
-                      ref: ""
-                    },
-                    isEditable: e.role[0].editable
-                  }
-                  this.order_permission.push({
-                    index: "0", 
-                    value:val,
-                    choices: e.observe.choices,
-                    observe: e.observe.observe,
-                    choicesSet: e.observe.choicesSet,
-                    blockEmail: e.block_email,
-                  })
-                } else {
-                  if(typeof e.observe === 'undefined') {
-                    e.observe = {
-                      choices: [],
-                      observe: [],
-                      choicesSet: false,
-                    }
-                  }
-                  this.all_permission.forEach(e2 => {
-                    if(e2.value.object_name == e.role[0].object_name) {
-                      this.order_permission.push({
-                        index: "0", 
-                        value: {
-                          object_name: e.role[0].object_name,
-                          permission:e2.value.permission,
-                          isEditable: e.role[0].editable,
-                        },
-                        choices: e.observe.choices,
-                        observe: e.observe.observe,
-                        choicesSet: e.observe.choicesSet,
-                        blockEmail: e.block_email,
-                      })
-                    }
-                  })
-                }
-                if(typeof e.role[0].text !== 'undefined') {
-                  this.orderMessage.push(e.role[0].text)
-                } else {
-                  this.orderMessage.push('')
-                }
-              } else {
-                if(e.email.length > 0){
-                  if(typeof e.role[0] === 'undefined') {
-                    e.role[0] = {editable: true}
-                  }
-                  this.step_sender = {
-                    byRole: false,
-                    value_role:[],
-                    value_email: e.email,
-                    ref: e.ref,
-                    isEditable: e.role[0].editable
-                  }
-                } else {
-                  var sendRole = []
-                  if(e.role[0].name != "") {
-                    sendRole = e.role
-                    if(sendRole.length) {
-                      var newValueRole = []
-                      sendRole.forEach(e => {
-                        if(this.roles.find(item => item.value.role_id == e.id)) {
-                          newValueRole.push(this.roles.find(item => item.value.role_id == e.id).value)
-                        }
-                      })
-                      sendRole = newValueRole
-                    }
-                  }
-                  this.step_sender = {
-                    byRole: true,
-                    value_role: sendRole,
-                    value_email: [],
-                    ref: Number(e.ref),
-                    isEditable: e.role[0].editable
-                  }
-                }
-                if(Number(this.step_sender.ref) >= 1) {
-                  this.step_sender.byRole = 'ref'
-                }
-              }
-            })
-
-            for(var i=0; i< this.order_permission.length; i++) {
-              this.order_permission[i].index = i +1 
-            }
-          }
-        }
-      }
-    },
     async sendData() {
       if(sessionStorage.getItem('page_action') == 'create') {
         this.classifySection()
         var pageCompoment = this.classifyPage()
         // this.preGen()
-        var stepPermission = this.setStep()
         try {
               this.notReady = true
               var temp_name = this.template_name
@@ -7997,6 +7543,8 @@ export default {
                   temp_ppl_code: [{name:'default', code:this.selected_ppltemplate, document_type:this.selectedDocumentType}],
                   structure_template_type: this.template_type,
                   flow_id: this.selected_ppltemplate,
+                  is_permission: this.currentSelectedFlow.is_permission,
+                  set_role: this.currentSelectedFlow.set_role,
                   template_status: this.template_status,
                   template_name: temp_name,
                   code_template: this.code_template,
@@ -8070,10 +7618,7 @@ export default {
       }
       else if(sessionStorage.getItem('page_action') == 'edit') {
         this.classifySection()
-        // this.preGen()
         var pageCompoment = this.classifyPage()
-        // var stepPermission = []
-        // var stepPermission = this.setStep()
         try {
               this.notReady = true
               var temp_name = this.template_name
@@ -8088,6 +7633,8 @@ export default {
                   tax_id: business,
                   temp_ppl_code: [{name:'default', code:this.selected_ppltemplate, document_type:this.selectedDocumentType}],
                   flow_id:this.selected_ppltemplate,
+                  is_permission: this.currentSelectedFlow.is_permission,
+                  set_role: this.currentSelectedFlow.set_role,
                   structure_template_type: this.template_type,
                   template_status: this.template_status,
                   template_id: temp_code,
@@ -8186,7 +7733,7 @@ export default {
               e.choicesSet = false
             })
             $('#' +  this.objectArray[selArray][selIndex].name).css('z-index', 0)
-            this.getAllPermission()
+            // this.getAllPermission()
           }
           this.selectPlain()
       } else if(this.selectedObjectGroup.length) {
@@ -8773,6 +8320,30 @@ export default {
           html = ""
         }
       }
+    },
+    async getFlowData(){
+        try {
+          this.step_choices = [{text: "ผู้ส่งเอกสาร", value: ""}]
+          if(this.selected_ppltemplate){
+            var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+            var url = `/flowdata/api/v1/get1/?_id=${this.selected_ppltemplate}&tax_id=${tax_id}`
+            var {data} = await this.axios.get(this.$api_url + url)
+            this.currentSelectedFlow = data.data
+            if(data.status){
+              data.data.flow_data.forEach(e => {
+                if(e.action == "Fill") {
+                  this.step_choices.push({
+                    text: `ลำดับที่ ${e.index + 1}`,
+                    value: e.index + 1
+                  })
+                }
+                
+              })
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        }
     }
   }
 }
@@ -8989,10 +8560,6 @@ export default {
   padding-right: 0% !important;
 }
 
-.level-doc-box .v-select__selection {
-  line-height: 22px;
-}
-
 .divider-prop {
   margin-left: 6%;
   margin-right: 3%;
@@ -9136,10 +8703,6 @@ export default {
   border-right: 2px solid black;
 }
 
-.object-table-block {
-  position: relative;
-}
-
 .object-image {
   border-radius: 8px;
   width: 70% !important;
@@ -9168,10 +8731,6 @@ export default {
 .divider-obj {
   margin-left: 7%;
   margin-right: 5%;
-}
-
-.tips-btn-block {
-  margin-left: 3%;
 }
 
 .tips-btn {
@@ -9260,10 +8819,6 @@ export default {
   background-color: #EEEEEE !important;
 }
 
-.property-dropdown-box {
-  width: 95%;
-}
-
 .align-prop-block {
   display: block !important;
 }
@@ -9334,11 +8889,6 @@ export default {
   margin-right: 3%;
 }
 
-.check-ref {
-  margin-top: 3% !important;
-  margin-bottom: 3%;
-}
-
 .role-name {
   font-family: 'Sarabun', sans-serif;
   font-size: 14px;
@@ -9404,18 +8954,10 @@ export default {
   font-size: 20px;
 }
 
-.button-show-prop {
-  background-color: #BDBDBD !important;
-  color: grey !important;
-}
 
 .theme--light.v-btn.v-btn--disabled.button-drag:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
   background-color: #C2EB81 !important;
   min-width: 32px;
-}
-
-.create-tem-block {
-  margin-top: 45px;
 }
 
 .section-name {
@@ -9451,52 +8993,6 @@ export default {
   height: 100%;
 }
 
-.object-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
-.object-card {
-  height: 92vh;
-  /* padding-left: 4%;
-  padding-top: 3%; */
-}
-
-.title-card {
-  font-family: 'Sarabun', sans-serif;
-  padding-left: 4%;
-  padding-bottom: 2%;
-  background-color: #BDBDBD;
-  color: gray;
-}
-
-.content-object > .v-expansion-panel-content__wrap {
-  padding-left: 0% !important;
-  padding-right: 0% !important;
-  padding-bottom: 0% !important;
-}
-
-.object-group {
-  padding-right: 3%;
-  padding-left: 3%;
-  width: 100%;
-  margin-left: 0%;
-}
-
-.obj-img {
-  width: 100%;
-  padding-left: 10%;
-}
-
-.obj-img:hover {
-  opacity: 0.7;
-}
-
-.radio-img {
-  height: 24px;
-  width: 80px;
-}
-
 .insert-img-modal-row {
   width: 100%;
   margin: 0%;
@@ -9511,74 +9007,11 @@ export default {
   font-family: 'Sarabun', sans-serif;
 }
 
-.image-block {
-  margin-top: 3%;
-  margin-left: 0%;
-  width: 100%;
-}
-
-.image-header {
-  font-family: 'Sarabun', sans-serif;
-  background-color: #F5F5F5;
-}
-
-.insert-image-block {
-  padding-left: 3%;
-}
-
-.image-url-block {
-  margin-top: 5%;
-}
-
-.image-url-title {
-  font-family: 'Sarabun', sans-serif;
-}
-
-.input-image-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
-.obj-table {
-  width: 50%;
-  height: 10%;
-}
-
-.obj-table-border {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-
-.obj-table-header {
-  padding-left: 5%;
-  padding-right: 5%;
-}
-
-.upload-image-button-block {
-  padding-top: 6%;
-}
-
-.upload-image-button {
-  font-family: 'Sarabun', sans-serif;
-  min-width: 35px !important;
-}
-
-.plane-block {
-  margin-top: 3%;
-  overflow: unset;
-  margin-left: 2%;
-}
-
 .input-box {
   border: 1px solid lightgray;
   /* color: black; */
   border-radius: 5px;
   width: 100%;
-}
-
-.text-area {
-  border: 1px dashed lightgray;
-  padding: 1%;
 }
 
 .rectangle {
@@ -9587,130 +9020,9 @@ export default {
   height: 150px;
 }
 
-.property-block {
-  padding-left: 0%;
-  padding-right: 0%;
-  position: fixed;
-  top: 55px;
-  /* height: calc(100vh - 55px); */
-  right: 0px;
-  z-index: 7;
-  /* overflow:auto; */
-}
-
-.property-content {
-  height: calc(100vh - 120px);
-  overflow: auto;
-}
-
-.template-name-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
 .property-row {
   width: 100%;
   margin: 0%;
-}
-
-.header-tab {
-  font-family: 'Sarabun', sans-serif;
-  color: #757575 !important;
-  background-color: #BDBDBD;
-}
-
-.template-name-title-block {
-  padding-left: 0%;
-  padding-right: 0%;
-  padding-bottom: 0%;
-}
-
-.template-name-input-block {
-  padding-left: 0%;
-  padding-bottom: 0%;
-}
-
-.template-name-input {
-  font-size: 14px;
-  font-family: 'Sarabun', sans-serif;
-}
-
-.form-code-block {
-  padding-left: 0%;
-  padding-right: 0%;
-  padding-bottom: 0%;
-}
-
-.form-code-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.form-code-input-block {
-  padding-left: 0%;
-  padding-bottom: 0%;
-}
-
-.form-code-input {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.version-title-block {
-  padding-left: 0%;
-  padding-right: 0%;
-  padding-bottom: 0%;
-}
-
-.version-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.version-input-block {
- 	padding-left: 0%;
-  padding-bottom: 0%;
-}
-
-.type-title-block {
-  padding-left: 0%;
-  padding-right: 0%;
-  padding-bottom: 0%;
-}
-
-.type-block {
-  padding-left: 0%;
-  padding-bottom: 0%;
-}
-
-.input-eform-type.v-select.v-text-field input {
-  padding-left: 4px !important;
-  line-height: 30px;
-}
-
-.tempalte-setting-paper-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
-  margin-top: 2%;
-}
-
-.check-grid {
-  margin-top: 0%;
-}
-
-.grid-label {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-  color: black;
-}
-
-.paper-grid-block {
-  padding: 0px;
-}
-
-.template-status-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
 }
 
 .template-status {
@@ -9719,81 +9031,8 @@ export default {
   color: black;
 }
 
-.tempalte-type-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
-}
-
-.paperless-tem-title-block {
-  padding-left: 0%;
-  padding-right: 0%;
-  margin-top: 2%;
-}
-
-.paper-less-tem-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.paperless-tem-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
-.note-paperless-title-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
-.note-paperless-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.note-paperless-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
 .v-text-field--outlined.note-row > .v-input__control > .v-input__slot {
   height: 90px !important;
-}
-
-.num-input-step {
-  padding-top: 7%;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.input-role-step-block {
-  padding-left: 0%;
-}
-
-.note-sentence {
-  width: 100%;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 12px;
-  color: #EF6C00;
-}
-
-.alert-no-step-block {
-  padding-top: 5%;
-}
-
-.icon-alert-no-step {
-  font-size: 36px !important;
-  color: #FF8F00 !important;
-}
-
-.alert-no-step {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
-  color: #FF8F00;
-  padding-top: 2%;
-}
-
-.button-tips {
-  font-family: 'Sarabun', sans-serif;
 }
 
 .tips {
@@ -9802,174 +9041,45 @@ export default {
   color: gray;
 }
 
-.table-property-row {
+.all-create-workflow-block {
+  margin-left: 7%;
+  overflow: auto;
+  max-height: calc(100vh - 445px);
+}
+
+.workflow-step-row {
   width: 100%;
-  margin-left: 0%;
+  margin: 0%;
 }
 
-.table-property {
-  width: 100%;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-  color: black;
+.each-step-workflow {
+  min-height: 30px !important;
 }
 
-.property-head-row {
-  background-color: #F5F5F5;
+.each-step-workflow-icon {
+  align-self: center;
 }
 
-.property-head {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.table-property-border-right {
-  border-right: 1px solid lightgray;
-}
-
-.input-property {
-  line-height: 30px !important;
-}
-
-.font-style-property {
+.each-step-workflow-mail {
   font-family: 'Sarabun', sans-serif;
   font-size: 14px;
 }
 
-.font-color-box {
-  padding-top: 0%;
-}
-
-.text-input-property {
-  line-height: 30px !important;
-}
-
-.vertical-horizon-line-property {
-  margin-top: 1% !important;
-  margin-bottom: 2%;
-}
-
-.line-style-button {
-  padding: 0% !important;
-}
-
-.line-style-button-active {
-  border-bottom: 3px solid #1b9900 !important;
-}
-
-.solid-line-property {
-  width: 40px;
-  transform: rotate(-50deg);
-  border-top: 1px solid black;
-}
-
-.dashed-line-property {
-  width: 40px;
-  transform: rotate(-50deg);
-  border-top: 2px dashed black;
-}
-
-.dotted-line-property {
-  width: 40px;
-  transform: rotate(-50deg);
-  border-top: 4px dotted black;
-}
-
-.condition-auto-block {
-  padding-bottom: 3% !important;
-  padding-top: 3% !important;
+.alert-onechat-block {
+  min-width: 21px !important;
+  align-self: center;
 }
 
 .v-text-field--outlined.condition-auto-row > .v-input__control > .v-input__slot {
   height: 100px !important;
 }
 
-.condition-auto-font {
-  font-size: 14px;
-  font-family: 'Sarabun', sans-serif;
-}
-
-.condition-title-block {
-  padding-right: 0%;
-  padding-left: 3%;
-  padding-top: 10%;
-}
-
-.condition-value-title-block {
-  padding-right: 0%;
-  padding-left: 4%;
-  padding-top: 7%;
-}
-
-.condition-start-title-block {
-  padding-right: 0%;
-  padding-top: 7%;
-}
-
 .v-text-field--outlined.textarea-default-value-row > .v-input__control > .v-input__slot {
   height: 75px !important;
 }
 
-.width-box-title {
-  padding-right: 0%;
-}
-
-.property-round-check {
-  margin-top: 0% !important;
-  margin-bottom: 2%;
-}
-
-.property-num-row {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.help-button-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
-.description-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
-.setting-colunm-header {
-  padding: 0% !important;
-}
-
-.setting-colunm-content > .v-expansion-panel-content__wrap {
-  padding-left: 0%;
-  padding-right: 0%;
-  padding-bottom: 0%;
-}
-
-.setting-value-table {
-  padding-top: 3% !important;
-  padding-bottom: 3% !important;
-}
-
 .v-text-field.input-cell-name input {
   line-height: 22px !important;
-}
-
-.create-choice-group-block {
-  padding-top: 2% !important;
-  padding-bottom: 2% !important;
-}
-
-.help-description {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-  color: gray;
-}
-
-.delete-object-button {
-  margin-left: 40%;
-  margin-top: 5%;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
-  margin-bottom: 5%;
 }
 
 .suggest-checkbox-setting-step {
@@ -9977,11 +9087,6 @@ export default {
   font-family: 'Sarabun', sans-serif;
   font-size: 13px !important;
   height: unset;
-}
-
-.save-create-template-button {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
 }
 
 /* .v-text-field--outlined > .v-input__control > .v-input__slot  {
@@ -10059,62 +9164,6 @@ export default {
 
 <style>
 
-.create-tem-block {
-  margin-top: 45px;
-}
-
-.object-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
-.body-card {
-  height: calc(92vh - 74px);
-  overflow: auto;
-}
-
-.obj-img {
-  width: 100%;
-  padding-left: 10%;
-}
-
-.obj-img:hover {
-  opacity: 0.7;
-}
-
-.sign-box-img {
-  max-width: 70px;
-}
-
-.radio-img {
-  height: 24px;
-  width: 80px;
-}
-
-.image-block {
-  margin-top: 3%;
-  margin-left: 0%;
-  width: 100%;
-}
-
-.image-header {
-  font-family: 'Sarabun', sans-serif;
-  background-color: #F5F5F5;
-}
-
-.image-url-block {
-  margin-top: 5%;
-}
-
-.image-url-title {
-  font-family: 'Sarabun', sans-serif;
-}
-
-.input-image-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
 .v-text-field--outlined.date-input > .v-input__control > .v-input__slot  {
     font-size: 20px;
     height: 25px !important;
@@ -10122,63 +9171,10 @@ export default {
     padding: 0 0 0 0;
 }
 
-.object-button-block-center {
-  position: relative;
-}
-
-.img-center {
-  position: absolute;
-  top: 33%;
-  left: 0%;
-}
-
-.obj-table {
-  width: 50%;
-  height: 10%;
-}
-
-.obj-table-border {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-
-.obj-table-header {
-  padding-left: 5%;
-  padding-right: 5%;
-}
-
-.obj-image-img {
-  border-radius: 8px;
-  padding-left: 0% !important;
-  width: 70% !important;
-  margin-left: 22%;
-}
-
-.upload-image-button-block {
-  padding-top: 6%;
-}
-
-.upload-image-button {
-  font-family: 'Sarabun', sans-serif;
-  min-width: 35px !important;
-}
-
-.text-area {
-  border: 1px dashed lightgray;
-  padding: 1%;
-}
-
 .rectangle {
   border: 2px solid black;
   width: 300px;
   height: 150px;
-}
-
-.toggleButton {
-  position: fixed;
-  top: 67px;
-  /* right: 20px; */
-  z-index: 10;
 }
 
 .textareabox {
@@ -10204,35 +9200,9 @@ export default {
   max-height: 22px;
 }
 
-.zoom-button {
-  position: absolute;
-  top: 65px;
-  left: 0px;
-  z-index: 10;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
-  background-color: rgb(206, 206, 206);
-  color: #757575;
-}
-
-.zoom-icon {
-  color: #757575 !important;
-}
-
 .object-table {
   border:1px solid black;
   border-collapse:collapse;
-}
-
-.page-button {
-  position: absolute;
-  top: 65px;
-  left: 180px;
-  z-index: 10;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
-  /* background-color: rgb(206, 206, 206); */
-  color: #757575;
 }
 
 .page {
@@ -10241,14 +9211,6 @@ export default {
   padding-bottom: 2%;
   padding-left: 7px;
   padding-right: 7px;
-}
-
-.add-page-button {
-  margin-left: 10px;
-}
-
-.delete-page-button {
-  margin-left: 3px;
 }
 
 .paper {
@@ -10268,17 +9230,6 @@ export default {
 
 .setting-hiding{
   text-transform: capitalize;
-}
-
-.checkbox-no-all-obj {
-  padding-left: 6%;
-  padding-right: 3%;
-}
-
-.checkbox-no-all-obj-label {
-  font-family: "Sarabun", sans-serif;
-  color: black;
-  font-size: 14px;
 }
 
 .btn-label-mobile {
@@ -10341,10 +9292,7 @@ export default {
   font-size: 14px;
 }
 
-/*======== style from old file >> Create_Template(old version) ========*/
-.create-tem-block {
-  margin-top: 45px;
-}
+/*======== style from old file >> Create_Template(old version) ========*
 
 .section-box {
   border: dashed 3px #7CB342;
@@ -10352,119 +9300,17 @@ export default {
   height: 250px;
 }
 
-.object-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
 .object-card {
   height: 92vh;
   /* padding-left: 4%;
-  padding-top: 3%; */
-}
-
-.title-card {
-  font-family: 'Sarabun', sans-serif;
-  padding-left: 4%;
-  padding-bottom: 2%;
-  background-color: #BDBDBD;
-  color: gray;
-}
-
-.content-object > .v-expansion-panel-content__wrap {
-  padding-left: 0% !important;
-  padding-right: 0% !important;
-  padding-bottom: 0% !important;
-}
-
-.object-group {
-  padding-right: 3%;
-  padding-left: 3%;
-  width: 100%;
-  margin-left: 0%;
-}
-
-.obj-img {
-  width: 100%;
-  padding-left: 10%;
-}
-
-.obj-img:hover {
-  opacity: 0.7;
-}
-
-.radio-img {
-  height: 24px;
-  width: 80px;
-}
-
-.image-block {
-  margin-top: 3%;
-  margin-left: 0%;
-  width: 100%;
-}
-
-.image-header {
-  font-family: 'Sarabun', sans-serif;
-  background-color: #F5F5F5;
-}
-
-.insert-image-block {
-  padding-left: 3%;
-}
-
-.image-url-block {
-  margin-top: 5%;
-}
-
-.image-url-title {
-  font-family: 'Sarabun', sans-serif;
-}
-
-.input-image-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
-.obj-table {
-  width: 50%;
-  height: 10%;
-}
-
-.obj-table-border {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-
-.obj-table-header {
-  padding-left: 5%;
-  padding-right: 5%;
-}
-
-.upload-image-button-block {
-  padding-top: 6%;
-}
-
-.upload-image-button {
-  font-family: 'Sarabun', sans-serif;
-  min-width: 35px !important;
-}
-
-.plane-block {
-  margin-top: 3%;
-  overflow: unset;
-  margin-left: 2%;
-}
+  padding-top: 3%;
+  } 
+*/
 
 .text-feild {
   border: 1px dashed lightgray;
   /* color: black; */
   width: 100%;
-}
-
-.text-area {
-  border: 1px dashed lightgray;
-  padding: 1%;
 }
 
 .rectangle {
@@ -10473,197 +9319,8 @@ export default {
   height: 150px;
 }
 
-.property-block {
-  padding-left: 0%;
-  padding-right: 0%;
-  position: fixed;
-  top: 55px;
-  /* height: calc(100vh - 55px); */
-  right: 0px;
-  z-index: 7;
-  /* overflow:auto; */
-}
-
-.property-content {
-  height: calc(100vh - 120px);
-  overflow: auto;
-}
-
-.template-name-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.header-tab {
-  font-family: 'Sarabun', sans-serif;
-  color: #757575 !important;
-  background-color: #BDBDBD;
-}
-
-.template-name-title-block {
-  padding-left: 0%;
-  padding-right: 0%;
-  padding-bottom: 0%;
-}
-
-.template-name-input-block {
-  padding-left: 0%;
-  padding-bottom: 0%;
-}
-
-.template-name-input {
-  font-size: 14px;
-  font-family: 'Sarabun', sans-serif;
-}
-
-.form-code-block {
-  padding-left: 0%;
-  padding-right: 0%;
-  padding-bottom: 0%;
-}
-
-.form-code-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.form-code-input-block {
-  padding-left: 0%;
-  padding-bottom: 0%;
-}
-
-.form-code-input {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.version-title-block {
-  padding-left: 0%;
-  padding-right: 0%;
-  padding-bottom: 0%;
-}
-
-.version-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.version-input-block {
- 	padding-left: 0%;
-  padding-bottom: 0%;
-}
-
-.type-title-block {
-  padding-left: 0%;
-  padding-right: 0%;
-  padding-bottom: 0%;
-}
-
-.type-block {
-  padding-left: 0%;
-  padding-bottom: 0%;
-}
-
-.input-eform-type.v-select.v-text-field input {
-  padding-left: 4px !important;
-  line-height: 30px;
-}
-
-.tempalte-setting-paper-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
-  margin-top: 2%;
-}
-
-.check-grid {
-  margin-top: 0%;
-}
-
-.grid-label {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-  color: black;
-}
-
-.paper-grid-block {
-  padding: 0px;
-}
-
-.tempalte-type-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
-}
-
-.paperless-tem-title-block {
-  padding-left: 0%;
-  padding-right: 0%;
-  margin-top: 2%;
-}
-
-.paper-less-tem-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.paperless-tem-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
-.note-paperless-title-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
-.note-paperless-title {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.note-paperless-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
 .v-text-field--outlined.note-row > .v-input__control > .v-input__slot {
   height: 90px !important;
-}
-
-.num-input-step {
-  padding-top: 7%;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.input-role-step-block {
-  padding-left: 0%;
-}
-
-.note-sentence {
-  width: 100%;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 12px;
-  color: #EF6C00;
-}
-
-.alert-no-step-block {
-  padding-top: 5%;
-}
-
-.icon-alert-no-step {
-  font-size: 36px !important;
-  color: #FF8F00 !important;
-}
-
-.alert-no-step {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
-  color: #FF8F00;
-  padding-top: 2%;
-}
-
-.button-tips {
-  font-family: 'Sarabun', sans-serif;
 }
 
 .tips {
@@ -10672,174 +9329,16 @@ export default {
   color: gray;
 }
 
-.table-property {
-  width: 100%;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-  color: black;
-}
-
-.property-head-row {
-  background-color: #F5F5F5;
-}
-
-.property-head {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.table-property-border-right {
-  border-right: 1px solid lightgray;
-}
-
-.input-property {
-  line-height: 30px !important;
-}
-
-.font-style-property {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.font-color-box {
-  padding-top: 0%;
-}
-
-.text-input-property {
-  line-height: 30px !important;
-}
-
-.vertical-horizon-line-property {
-  margin-top: 1% !important;
-  margin-bottom: 2%;
-}
-
-.line-style-button {
-  padding: 0% !important;
-}
-
-.line-style-button-active {
-  border-bottom: 3px solid #8BC34A !important;
-}
-
-.solid-line-property {
-  width: 40px;
-  transform: rotate(-50deg);
-  border-top: 1px solid black;
-}
-
-.dashed-line-property {
-  width: 40px;
-  transform: rotate(-50deg);
-  border-top: 2px dashed black;
-}
-
-.dotted-line-property {
-  width: 40px;
-  transform: rotate(-50deg);
-  border-top: 4px dotted black;
-}
-
-.condition-auto-block {
-  padding-bottom: 3% !important;
-  padding-top: 3% !important;
-}
-
 .v-text-field--outlined.condition-auto-row > .v-input__control > .v-input__slot {
   height: 100px !important;
-}
-
-.condition-auto-font {
-  font-size: 14px;
-  font-family: 'Sarabun', sans-serif;
-}
-
-.condition-title-block {
-  padding-right: 0%;
-  padding-left: 3%;
-  padding-top: 10%;
-}
-
-.condition-value-title-block {
-  padding-right: 0%;
-  padding-left: 4%;
-  padding-top: 7%;
-}
-
-.condition-start-title-block {
-  padding-right: 0%;
-  padding-top: 7%;
 }
 
 .v-text-field--outlined.textarea-default-value-row > .v-input__control > .v-input__slot {
   height: 75px !important;
 }
 
-.width-box-title {
-  padding-right: 0%;
-}
-
-.property-round-check {
-  margin-top: 0% !important;
-  margin-bottom: 2%;
-}
-
-.property-num-row {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-}
-
-.help-button-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
-.description-block {
-  padding-left: 0%;
-  padding-right: 0%;
-}
-
-.setting-colunm-header {
-  padding: 0% !important;
-}
-
-.setting-colunm-content > .v-expansion-panel-content__wrap {
-  padding-left: 0%;
-  padding-right: 0%;
-  padding-bottom: 0%;
-}
-
-.setting-value-table {
-  padding-top: 3% !important;
-  padding-bottom: 3% !important;
-}
-
 .v-text-field.input-cell-name input {
   line-height: 22px !important;
-}
-
-.create-choice-group-block {
-  padding-top: 2% !important;
-  padding-bottom: 2% !important;
-}
-
-.help-description {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-  color: gray;
-}
-
-.delete-object-button {
-  margin-left: 40%;
-  margin-top: 5%;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
-  margin-bottom: 5%;
-}
-
-.save-create-template-button {
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
 }
 
 /* .v-text-field--outlined > .v-input__control > .v-input__slot  {
@@ -10847,44 +9346,11 @@ export default {
   padding: 0px !important;
 } */
 
-.body-card {
-  height: calc(92vh - 74px);
-  overflow: auto;
-}
-
-.sign-box-img {
-  max-width: 70px;
-}
-
 .v-text-field--outlined.date-input > .v-input__control > .v-input__slot  {
   font-size: 20px;
   height: 25px !important;
   min-height: 20px; 
   padding: 0 0 0 0;
-}
-
-.object-button-block-center {
-  position: relative;
-}
-
-.img-center {
-  position: absolute;
-  top: 33%;
-  left: 0%;
-}
-
-.obj-image-img {
-  border-radius: 8px;
-  padding-left: 0% !important;
-  width: 70% !important;
-  margin-left: 22%;
-}
-
-.toggleButton {
-  position: fixed;
-  top: 67px;
-  /* right: 20px; */
-  z-index: 10;
 }
 
 .textareabox {
@@ -10906,46 +9372,12 @@ export default {
   max-height: 22px;
 }
 
-.zoom-button {
-  position: absolute;
-  top: 65px;
-  left: 0px;
-  z-index: 10;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
-  background-color: rgb(206, 206, 206);
-  color: #757575;
-}
-
-.zoom-icon {
-  color: #757575 !important;
-}
-
-.page-button {
-  position: absolute;
-  top: 65px;
-  left: 180px;
-  z-index: 10;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 16px;
-  /* background-color: rgb(206, 206, 206); */
-  color: #757575;
-}
-
 .page {
   background-color: rgb(206, 206, 206);
   padding-top: 1%;
   padding-bottom: 2%;
   padding-left: 7px;
   padding-right: 7px;
-}
-
-.add-page-button {
-  margin-left: 10px;
-}
-
-.delete-page-button {
-  margin-left: 3px;
 }
 
 .paper {
@@ -10956,10 +9388,6 @@ export default {
 /*=====================================================================*/
 
 /*======== style from old file >> Edit_Template(old version) ========*/
-.button-show-prop {
-  background-color: #BDBDBD !important;
-  color: grey !important;
-}
 
 .theme--light.v-btn.v-btn--disabled .v-btn__loading .icon-drag {
   color: #1b9900 !important;

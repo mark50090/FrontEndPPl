@@ -89,7 +89,7 @@
             <v-form v-model="isFormValid">
             <v-overlay absolute opacity="0.5" color="white" :value="!uploadedFile"></v-overlay> <!-- overlay show when it doesn't has document file -->
             <v-card-title class="pa-0">
-              <v-tabs grow height="40px" color="#4CAF50" v-model="create_tab" @change="clearTabData">
+              <v-tabs grow height="40px" color="#4CAF50" v-model="create_tab">
                 <v-tab class="create-tab-title">ตั้งค่าการส่ง</v-tab>
                 <v-tab class="create-tab-title">รูปแบบอนุมัติ</v-tab>
                 <v-tab class="create-tab-title">กำหนดเอง</v-tab>
@@ -105,7 +105,7 @@
                       ชื่อเอกสาร :
                     </v-col>
                     <v-col cols="8" md="9" lg="9" align-self="center" class="px-0 pt-4">
-                      <v-text-field dense outlined hide-details color="#4CAF50" class="create-setting create-setting-input"></v-text-field>
+                      <v-text-field dense outlined hide-details color="#4CAF50" class="create-setting create-setting-input" v-model="documentName"></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row class="create-row">
@@ -113,7 +113,7 @@
                       ข้อความ :
                     </v-col>
                     <v-col cols="8" md="9" lg="9" align-self="center" class="px-0 pt-0">
-                      <v-text-field dense outlined hide-details color="#4CAF50" class="create-setting create-setting-input"></v-text-field>
+                      <v-text-field dense outlined hide-details color="#4CAF50" class="create-setting create-setting-input" v-model="documentComment"></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row class="create-row">
@@ -121,7 +121,7 @@
                       แนบไฟล์ :
                     </v-col>
                     <v-col cols="12" md="9" lg="9" class="pr-0 pt-0 create-attach-file-block">
-                      <v-file-input dense outlined multiple counter show-size chips small-chips color="#4CAF50" prepend-icon="" append-outer-icon="$file" placeholder="เลือกไฟล์แนบ" class="create-setting">
+                      <v-file-input dense outlined multiple counter show-size chips small-chips color="#4CAF50" prepend-icon="" append-outer-icon="$file" placeholder="เลือกไฟล์แนบ" class="create-setting" v-model="attachedFile">
                         <template v-slot:selection="{ text }">
                           <v-chip small dark close color="#4CAF50">{{ text }}</v-chip>
                         </template>
@@ -234,7 +234,7 @@
                             หน้าที่เซ็น
                           </v-col>
                           <v-col cols="3" md="2" lg="2" class="px-0 py-1">
-                            <v-select multiple outlined dense hide-details label="หน้า" color="#67C25D" @change="reShowSign" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="pdf_page_list" v-model="flow_data_custom.page" item-value="value" item-text="text" class="create-setting page-sign-box page-sign-dropdown-icon create-setting-dropdown-icon">
+                            <v-select multiple outlined dense hide-details label="หน้า" color="#67C25D" item-color="#67C25D" @change="reShowSign" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="pdf_page_list" v-model="flow_data_custom.page" item-value="value" item-text="text" class="create-setting page-sign-box page-sign-dropdown-icon create-setting-dropdown-icon">
                               <template v-slot:selection="{ item, index }">
                                 <span v-if="flow_data_custom.page.length == pdf_page_list.length && index == 0">ทั้งหมด</span>
                                 <span v-if="flow_data_custom.page.length != pdf_page_list.length">{{item.value}}{{index != flow_data_custom.page.length-1 ? ',':''}}</span>
@@ -242,12 +242,12 @@
                               <template v-slot:prepend-item>
                                 <v-list-item ripple @click="togglePage(index)">
                                   <v-list-item-action>
-                                    <v-icon :color="pdf_page_list.length > 0 ? 'indigo darken-4' : ''">
+                                    <v-icon :color="pdf_page_list.length > 0 ? '#0F3852' : ''">
                                       {{ getIcon(flow_data_custom.page) }}
                                     </v-icon>
                                   </v-list-item-action>
                                   <v-list-item-content>
-                                    <v-list-item-title>
+                                    <v-list-item-title class="all-page-select-list">
                                       ทั้งหมด
                                     </v-list-item-title>
                                   </v-list-item-content>
@@ -258,7 +258,7 @@
                           </v-col>
                         </template>
                       </v-row>
-                      <v-row class="create-row each-step-mail-row" v-for="actor_email in flow_data_custom.actor.permission_email" :key="flow_data_custom.index + actor_email.id"> <!-- each email row in step -->
+                      <v-row class="create-row each-step-mail-row" v-for="(actor_email,index) in flow_data_custom.actor.permission_email" :key="flow_data_custom.index + actor_email.id"> <!-- each email row in step -->
                         <v-col cols="7" md="7" lg="7" class="px-0 pt-1 each-email-step-block">
                           <v-text-field dense outlined hide-details color="#67C25D" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon">
                             <template v-slot:prepend>
@@ -271,12 +271,12 @@
                             <v-col cols="12" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 py-0">
                               <v-checkbox hide-details label="OneChat" v-model="actor_email.checkbox" class="mt-0 pt-0 onechat-check"></v-checkbox>
                             </v-col>
-                            <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 pl-2 pr-0 add-delete-permission-block"> <!-- delete email in each step button -->
-                              <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn" v-if="flow_data_custom.actor.permission_email.length > 1" @click="removeActor(flow_data_custom.index,actor_email)">
+                            <v-col v-if="flow_data_custom.actor.permission_email.length > 1" cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 pl-2 pr-0 add-delete-permission-block"> <!-- delete email in each step button -->
+                              <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn" @click="removeActor(flow_data_custom.index,actor_email)">
                                 <v-icon>mdi-minus</v-icon>
                               </v-btn>
                             </v-col>
-                            <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 px-2 add-delete-permission-block"> <!-- add email in each step button -->
+                            <v-col v-if="index == flow_data_custom.actor.permission_email.length-1" cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 px-2 add-delete-permission-block"> <!-- add email in each step button -->
                               <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn" @click="addActor(flow_data_custom.index)">
                                 <v-icon>mdi-plus</v-icon>
                               </v-btn>
@@ -357,7 +357,10 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       loading_list_text: '',
       loading_template: false,
       loading_type: false,
-      isDirty: false
+      isDirty: false,
+      documentName: '',
+      documentComment: '',
+      attachedFile: []
     }),
     mounted() {
       this.getDocumentType()
@@ -515,6 +518,30 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         }
         this.emitLoading(false)
       },
+      async uploadFiles() {
+      let formData = new FormData()
+      this.attachedFile.forEach(e => {
+        formData.append("file", e)
+      })
+      formData.append("transaction_id", this.transaction_id)
+      try {
+        var { data } = await this.axios.post(this.$api_url + "/file-component/api/saveFile",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
+          }
+        )
+        if(data.status) {
+
+        } else {
+            
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
       async addTransaction(){
         try {
           this.emitLoading(true)
@@ -523,12 +550,20 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             var {data} = await this.axios.post(this.$api_url + url,{
                 flow_id: this.flow_id,
                 file_name: this.uploadedFile.name,
-                pdfbase: this.pdf_src.slice(28)
+                pdfbase: this.pdf_src.slice(28),
+                object_text : {
+                  subject : this.documentName, //ชื่อไฟล์
+                  message : this.documentComment //ข้อความ
+              },
             })
           }else if(this.create_tab == 2){
             var info = this.$store.state.allEmployeeInfo
             var url = '/transaction/api/v1/addtransaction'
             var flow_data = this.flow_datas_custom.map(xyz => ({
+              "object_text" : {
+                  "subject" : this.documentName, //ชื่อไฟล์
+                  "message" : this.documentComment //ข้อความ
+              },
               "status_implement": false,
               "input_status": false,
               "form_input": {
@@ -620,6 +655,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           if(data.status){
             this.transaction_id = data.data.transaction_id
             if(this.isDirty) this.saveNewSignPosition()
+            if(this.attachedFile.length) this.uploadFiles()
             this.emitLoading(false)
             this.$swal({
               backdrop: false,
@@ -647,7 +683,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             position: 'bottom-end',
             width: '330px',
             title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
-            text: 'สร้าง transaction ไม่สำเร็จ',
+            text: 'สร้าง transaction ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง',
             showCloseButton: true,
             showConfirmButton: false,
             timer: 5000,
@@ -663,15 +699,28 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       async saveNewSignPosition(){
         var url = `/transaction/api/v1/saveTransaction?transaction_id=${this.transaction_id}`
         var flow_data = this.signArray.map((e,index) => {
-          return { 
-            sign_position:{
-              sign_llx: e.sign_llx,
-              sign_lly: e.sign_lly,
-              sign_urx: e.sign_urx,
-              sign_ury: e.sign_ury,
-              sign_page: e.sign_page.length == this.pdf_page_list.length? 'all': e.sign_page.join(','),
-            },
-            index: index
+          if(Array.isArray(e.sign_page)){
+            return {
+              sign_position:{
+                sign_llx: e.sign_llx,
+                sign_lly: e.sign_lly,
+                sign_urx: e.sign_urx,
+                sign_ury: e.sign_ury,
+                sign_page: e.sign_page.length == this.pdf_page_list.length? 'all': e.sign_page.join(','),
+              },
+              index: index
+            }
+          }else{
+            return {
+              sign_position:{
+                sign_llx: e.sign_llx,
+                sign_lly: e.sign_lly,
+                sign_urx: e.sign_urx,
+                sign_ury: e.sign_ury,
+                sign_page: e.sign_page
+              },
+              index: index
+            }
           }
         })
         try {
@@ -966,15 +1015,21 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 
   .page-sign-box.v-text-field--outlined.v-input--dense.v-text-field--outlined > .v-input__control > .v-input__slot {
     min-height: 32px !important;
+    padding-right: 0%;
   }
 
   .page-sign-box.v-text-field--outlined.v-input--dense .v-label {
-    top: 6px !important;
+    top: 8px !important;
     font-size: 13px;
   }
 
   .page-sign-dropdown-icon.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__append-inner {
     margin-top: 5px !important;
+  }
+
+  .all-page-select-list {
+    font-family: 'Sarabun', sans-serif;
+    line-height: 21px !important;
   }
 
   .each-step-mail-row {
@@ -1052,6 +1107,14 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 
     .all-step-block {
       height: unset;
+    }
+
+    .page-sign-box.v-text-field--outlined.v-input--dense.v-text-field--outlined > .v-input__control > .v-input__slot {
+      padding-left: 3%;
+    }
+
+    .page-sign-box.v-text-field--outlined.v-input--dense .v-label {
+      left: 9px !important;
     }
 
     .each-step-mail-row {
