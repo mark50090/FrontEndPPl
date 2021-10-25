@@ -650,7 +650,18 @@
         "eform_use": "แบบฟอร์มถูกใช้งานโดย ",
         "upload_fail" : "อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
       }
+
     }
-  }
+  },
+  "ApprovalList":{
+    "Allapprovedforms": "รูปแบบอนุมัติทั้งหมด", 
+        "Createanapprovalform": "สร้างรูปแบบอนุมัติ",
+        "approval_ta":{
+          "number": "ลำดับ",
+          "approvedformatname": "ชื่อรูปแบบอนุมัติ",
+          "details": "รายละเอียด",
+          "lastrevisiondate": "วันที่เเก้ไขล่าสุด"
+        }
+      }
 
 }
