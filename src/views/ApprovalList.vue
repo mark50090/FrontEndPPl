@@ -14,7 +14,7 @@
           </v-row >
           <v-row class="approvallist-row approval-header ">
                   <v-col cols="12" md="auto" lg="auto" class="pl-0" align-self="center" >
-                    {{textlang.Allapprovedforms}} 100
+                    {{textlang.Allapprovedforms}}
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-col align-self="center" cols="auto" md="auto" lg="auto" class="pr-0 position-btn-approval ">
@@ -42,18 +42,18 @@
 export default {
     data: () => ({
         approval_table_header: [
-        {text: this.approval_ta.number, align: 'center', sortable: true, value: 'approval_no'},
-        {text: this.approval_ta.approvedformatname, align: 'start', sortable: true, value: 'approval_name'},
-        {text: this.approvedformatname.details, align: 'start', sortable: false, value: 'details_approval'},
-        {text: this.approvedformatname.lastrevisiondate, align: 'center', sortable: true, value: 'edit_date_approval'},
+        {text: 'ลำดับ', align: 'center', sortable: true, value: 'approval_no'},
+        {text: 'ชื่อรูปแบบอนุมัติ', align: 'start', sortable: true, value: 'approval_name'},
+        {text: 'รายละเอียด', align: 'start', sortable: false, value: 'details_approval'},
+        {text: 'วันที่เเก้ไขล่าสุด', align: 'center', sortable: true, value: 'edit_date_approval'},
         {text: '', align: 'center', sortable: false, value: 'more_approval'}
       ],
       approval_data: [
           {
             approval_no: '1',
-            approval_name: this.apprpval_da.apprpvalname,
+            approval_name: 'TEST-DEV-รายละเอียดงบประมาณแนบท้ายโครงการ',
             details_approval: 'Outsource',
-            edit_date_approval: this.apprpval_da.editdate,
+            edit_date_approval: '19 ม.ค. พ.ศ.2556',
             
           }
           
