@@ -90,7 +90,7 @@ export default {
       texthead_card: 'Export รายงาน Excel',
       select_date: 'เลือกช่วงวันที่ที่ต้องการ Export',
       cancel_export: 'ยกเลิก',
-      range_join: 'จนถึง'
+      range_join: ' จนถึง '
     }
   }),
   mounted() {
