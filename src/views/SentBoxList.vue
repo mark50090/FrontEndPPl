@@ -3,7 +3,7 @@
     <v-card outlined class="mb-1 mx-1 px-4 sentbox-page">
           <v-row class="sentbox-row">
             <v-col cols="12" md="4" lg="4" class="px-0 pb-0">
-              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-sent-box search-sentbox-btn-block" v-model="keyword" @keyup.enter="searchKeyword()">
+              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" :placeholder="textLang.search" class="search-sent-box search-sentbox-btn-block" v-model="keyword" @keyup.enter="searchKeyword()">
                 <template v-slot:append-outer>
                   <v-btn outlined color="#9e9e9e" class="search-sentbox-btn" @click="searchKeyword()">
                     <v-icon >mdi-magnify</v-icon>
@@ -12,42 +12,42 @@
               </v-text-field>
             </v-col>
             <v-spacer></v-spacer>
-            <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 front-sentbox-title">ประเภทเอกสาร</v-col>
+            <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 front-sentbox-title">{{textLang.documenttype}}</v-col>
             <v-col cols="7" md="4" lg="4" class="px-0 pb-0">
               <v-autocomplete outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" class="type-doc-sentbox sent-box-dropdown-icon" v-model="selectedTypeDocs" :items="typeDocument" @change="searchTypeDocs" item-text="name" item-value="_id" return-object></v-autocomplete>
             </v-col>
-            <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 front-sentbox-title display-mobile-only">สถานะเอกสาร</v-col>
+            <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 front-sentbox-title display-mobile-only">{{textLang.documentstatus}}</v-col>
             <v-col cols="7" md="4" lg="4" class="px-0 pb-0 display-mobile-only">
               <v-select outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="sent_box_select" class="status-doc-sentbox sent-box-dropdown-icon"></v-select>
             </v-col>
           </v-row>
           <v-row class="mt-2 sentbox-row alldoc-sent-header">
-            เอกสารทั้งหมด {{count_transaction_total}}  
+            {{textLang.alldocuments}} {{count_transaction_total}}  
           </v-row>
           <v-row class="mt-3 sentbox-row display-pc-only">
             <v-btn-toggle mandatory background-color="white" v-model="document_status" class="status-sent-block">
               <v-btn outlined tile value="all" class="status-sentbox-btn">
-                ทั้งหมด
+                {{textLang.all}}
                 <v-badge inline dark color="black" :content="count_transaction_total"></v-badge>
               </v-btn>
               <v-btn outlined tile value="waiting" class="status-sentbox-btn">
-                รออนุมัติ
+                {{textLang.pendingapproval}}
                 <v-badge inline light color="#F8F27C" :content="count_transaction_waiting" class="status-sentbox-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="approved" class="status-sentbox-btn">
-                อนุมัติแล้ว
+                {{textLang.approved}}
                 <v-badge inline light color="#AFDEA9" :content="count_transaction_approved" class="status-sentbox-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="inprogress" class="status-sentbox-btn">
-                กำลังดำเนินการ 
+                {{textLang.inprogress}} 
                 <v-badge inline light color="#6EC4D6" :content="count_transaction_inprogress" class="status-sentbox-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="rejected" class="status-sentbox-btn">
-                ปฏิเสธอนุมัติ
+                {{textLang.rejectapproval}}
                 <v-badge inline light color="#F49393" :content="count_transaction_rejected" class="status-sentbox-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="incoming" class="status-sentbox-btn">
-                รอดำเนินการ
+                {{textLang.pending}}
                 <v-badge inline light color="#FCCD5A" :content="count_transaction_incoming" class="status-sentbox-num"></v-badge>
               </v-btn>
             </v-btn-toggle>
@@ -63,11 +63,11 @@
                 <span>{{ item.updatedAt | fulldate }}</span>
               </template>
               <template v-slot:[`item.document_status_text`]="{ item }">
-                <v-chip color="#F8F27C" v-if="item.document_status_text == 'waiting'">รออนุมัติ</v-chip> 
-                <v-chip color="#AFDEA9" v-if="item.document_status_text == 'approved'">อนุมัติแล้ว</v-chip> 
-                <v-chip color="#6EC4D6" v-if="item.document_status_text == 'inprogress'">กำลังดำเนินการ</v-chip> 
-                <v-chip color="#F49393" v-if="item.document_status_text == 'rejected'">ปฏิเสธอนุมัติ</v-chip> 
-                <v-chip color="#FCCD5A" v-if="item.document_status_text == 'incoming'">รอดำเนินการ</v-chip> 
+                <v-chip color="#F8F27C" v-if="item.document_status_text == 'waiting'">{{textLang.pendingapproval}}</v-chip> 
+                <v-chip color="#AFDEA9" v-if="item.document_status_text == 'approved'">{{textLang.approved}}</v-chip> 
+                <v-chip color="#6EC4D6" v-if="item.document_status_text == 'inprogress'">{{textLang.inprogress}}</v-chip> 
+                <v-chip color="#F49393" v-if="item.document_status_text == 'rejected'">{{textLang.rejectapproval}}</v-chip> 
+                <v-chip color="#FCCD5A" v-if="item.document_status_text == 'incoming'">{{textLang.pending}}</v-chip> 
               </template>
             </v-data-table>
           </v-row>
@@ -115,10 +115,30 @@ import { EventBus } from '../EventBus'
         itemsPerPage: 10
       },
       totalItemsTransaction: 0,
-      typeDocument:[{name: 'ทั้งหมด', _id: "", detail: ""}],
-      selectedTypeDocs: {name: 'ทั้งหมด', _id: "", detail: ""},
+      typeDocument:[{name: this.textLang.all, _id: "", detail: ""}],
+      selectedTypeDocs: {name: this.textLang.all, _id: "", detail: ""},
       isReady: false,  
     }),
+    textLang:{
+      search:'ค้นหา',
+      documenttype: 'ประเภทเอกสาร',
+      documentstatus:'สถานะเอกสาร',
+      alldocuments:'เอกสารทั้งหมด',
+      all: 'ทั้งหมด',
+      pendingapproval: 'รออนุมัติ',
+      approved: 'อนุมัติแล้ว',
+      inprogress: 'กำลังดำเนินการ',
+      rejectapproval: 'ปฏิเสธอนุมัติ',
+      pending:'รอดำเนินการ',
+      sentboxtable:{
+        sender:'ผู้ส่ง',
+        type:'ประเภท',
+        documentnumber:'เลขที่เอกสาร',
+        details:'รายละเอียด',
+        status:'สถานะ',
+        date:'วันที่',
+      },
+    },
     mounted() {
       this.getdata()
       this.searchTransaction()

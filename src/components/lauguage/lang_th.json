@@ -877,5 +877,26 @@
   "ReportDetail":{
     "summaryreportdocument": "รายงานสรุปรายละเอียดการดำเนินการเอกสาร",
     "no": "ลำดับที่"
+  },
+  "SentBoxList": {
+      "search":"ค้นหา",
+      "documenttype": "ประเภทเอกสาร",
+      "documentstatus":"สถานะเอกสาร",
+      "alldocuments":"เอกสารทั้งหมด",
+      "all": "ทั้งหมด",
+      "pendingapproval": "รออนุมัติ",
+      "approved": "อนุมัติแล้ว",
+      "inprogress": "กำลังดำเนินการ",
+      "rejectapproval": "ปฏิเสธอนุมัติ",
+      "pending":"รอดำเนินการ",
+      "sentboxtable":{
+        "sender":"ผู้ส่ง",
+        "type":"ประเภท",
+        "documentnumber":"เลขที่เอกสา",
+        "details":"รายละเอียด",
+        "status":"สถานะ",
+        "date":"วันที่"
   }
+}
+
 }
