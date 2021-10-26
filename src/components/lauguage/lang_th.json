@@ -873,5 +873,9 @@
   "QuestionForm":{
     "documentreport":"รายงานเอกสาร",
     "senddocuments": "ส่งเอกสาร"
+  },
+  "ReportDetail":{
+    "summaryreportdocument": "รายงานสรุปรายละเอียดการดำเนินการเอกสาร",
+    "no": "ลำดับที่"
   }
 }
