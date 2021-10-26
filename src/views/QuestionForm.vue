@@ -21,7 +21,7 @@
             <v-card class="question-in pt-3 pr-5 pl-5 mt-1" outlined>
                 <v-row class="all-round mb-3"> 
                 <v-card outlined class="box-question " >
-                <v-card-title  class="font-question py-2">{{textLang.name}}</v-card-title> 
+                <v-card-title  class="font-question py-2">สวัสดีครับ ผมจักรกรินทร์ ปงแก้ว 6030202065 ทั้งหมดดูดี</v-card-title> 
                 <v-card-text class="py-3 px-3 ">
                 <v-text-field outlined hide-details dense  class="font-answer" color="#404040"></v-text-field>
                 </v-card-text> 
@@ -46,14 +46,13 @@
 </template>
 <script>
 export default {
-    setup() {
-        
-    },
+    data:() => ({
     textLang:{
       documentreport:'รายงานเอกสาร',
-      name: 'สวัสดีครับ ผมจักรกรินทร์ ปงแก้ว 6030202065 ทั้งหมดดูดี',
       senddocuments: 'ส่งเอกสาร',
     },
+    }),
+    
 }
 </script>
 <style>
