@@ -1,5 +1,4 @@
 <template>
-  <v-form ref="form" v-model="valid">
     <v-dialog persistent max-width="360px" v-model="default_stamp_dialog">
       <v-card>
         <v-card-title>
@@ -11,26 +10,25 @@
         </v-card-title>
         <v-card-text class="pb-0">
             <v-row class="default-stamp-row">
-                <v-text-field dense outlined hide-details color="#67C25D" label="ชื่อลายเซ็น" class="stamp-name-box stamp-name-label" v-model="stamp_name" :rules="stamp_name_Rules" required ></v-text-field>
+              <v-text-field dense outlined hide-details color="#67C25D" label="ชื่อลายเซ็น" class="stamp-name-box stamp-name-label" v-model="stamp_name" @keyup="check_name_stamp()"></v-text-field>
             </v-row>
-
           <v-row class="mt-3 default-stamp-row">
             <v-btn-toggle group dense mandatory v-model="sign_type" class="sign-type-btn-group">
               <v-col cols="6" md="6" lg="6" class="pl-0 pr-1">
                 <v-btn outlined block color="#67C25D" @click="openUploadStamp()" value="sign_image" active-class="sign-type-active" class="upload-stamp-btn">อัพโหลดไฟล์</v-btn>
-                <!-- <v-form ref="form" v-model="valid"> -->
-                <v-file-input v-model="uploadImage" type="file" id="stampFile" accept="image/png" style="display: none" @change="uploadStamp" :rules="image_stamp_Rules" required />
-                <!-- </v-form> -->
+                <v-file-input v-model="uploadImage" type="file" id="stampFile" accept="image/png" style="display: none" @change="uploadStamp" />
               </v-col>
               <v-col cols="6" md="6" lg="6" class="pl-1 pr-0">
-                <v-btn outlined block color="#67C25D" value="sign_pad" active-class="sign-type-active" class="upload-stamp-btn">วาดลายเซ็น</v-btn>
+                <v-btn outlined block color="#67C25D" value="sign_pad" active-class="sign-type-active" class="upload-stamp-btn" @click="draw_signature()">วาดลายเซ็น</v-btn>
               </v-col>
             </v-btn-toggle>
           </v-row>
           <v-row no-gutters justify="center" class="mt-3 default-stamp-row">
             <v-col align-self="center" class="show-stamp-box-modal">
               <!-- signature -->
-                <v-img :src="imageStamp" width="100%" height="100%" contain ></v-img>
+              <v-img v-if="stateDefaultStamp == 'upload'" :src="imageStamp" width="100%" height="100%" contain ></v-img>
+              <v-img v-if="stateDefaultStamp == 'show'" :src="imageStamp"  width="100%" height="100%" contain></v-img>
+              <VueSignaturePad v-if="stateDefaultStamp == 'draw'" id="signature" width="100%" height="100%" ref="signaturePad" :options="{penColor: 'rgb(13, 38, 154)', onBegin: () => {$refs.signaturePad.resizeCanvas()}, onEnd}" />
             </v-col>
           </v-row>
         </v-card-text>
@@ -41,16 +39,15 @@
               <v-btn outlined color="error" class="upload-stamp-btn" @click="deleteStamp()">ลบลายเซ็น</v-btn>
             </v-col>
             <v-col v-if="sign_type == 'sign_pad'" cols="auto" class="pl-0 pr-2"> <!-- show when it is sign pad only -->
-              <v-btn depressed dark color="#757575" class="upload-stamp-btn">ล้างค่า</v-btn>
+              <v-btn depressed dark color="#757575" class="upload-stamp-btn" @click="clearStamp()">ล้างค่า</v-btn>
             </v-col>
             <v-col cols="auto" class="pl-0 pr-2">
-                <v-btn :disabled="!valid" depressed color="#67C25D" class="upload-stamp-btn white--text" @click="saveStamp()">บันทึก</v-btn>
+              <v-btn :disabled="valid" depressed color="#67C25D" class="upload-stamp-btn white--text" @click="saveStamp()">บันทึก</v-btn>
             </v-col>
           </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-form>
 </template>
 
 <script>
@@ -70,7 +67,6 @@ export default {
     uploadImage: undefined,
     imageStamp: '',
     sign_type: 'sign_pad',
-    checkImage: false,
     stamp_name: '',
     default_stamp: [],
     selectedStamp: [],
@@ -78,25 +74,45 @@ export default {
     getStampName: '',
     getSrcBase: '',
     notify_email: '',
+    stateDefaultStamp: '',
+    checkSignature: true,
+    check_default_sign: true
   }),
   mounted() {
     EventBus.$on('DefaultStamp',this.startSettingStamp)
+    if (this.sign_type == 'sign_pad') this.stateDefaultStamp = 'draw'
+    else if (this.sign_type == 'sign_image') this.stateDefaultStamp = 'show'
   },
   methods: {
+    draw_signature() {
+      this.valid = true
+      this.stateDefaultStamp = 'draw'
+    },
+    check_name_stamp() {
+      if ((this.stamp_name != '' && this.checkSignature == false)||(this.stamp_name != '' && this.imageStamp != '')) this.valid = false 
+      else this.valid = true  
+    },
+    onEnd() {
+      this.checkSignature = this.$refs.signaturePad.isEmpty()
+      if (this.stamp_name != '' && this.checkSignature == false) this.valid = false
+    },
     getDataForEditStamp() {
       EventBus.$off('Stamp_Data_Edit')
       this.action_header = 'แก้ไข'
       this.stamp_name = this.selectedStamp.StampName
       this.imageStamp = this.selectedStamp.SrcBase
+      this.stateDefaultStamp = 'show'
       this.default_stamp_dialog = true 
       this.uploadImage = this.selectedStamp
+      this.valid = false
     },
     getDataForAddStamp() {
       EventBus.$off('Stamp_Data_Add')
-      this.$refs.form.resetValidation()
       this.action_header = 'เพิ่ม'
       this.stamp_name = ''
       this.imageStamp = ''
+      this.sign_type = 'sign_pad'
+      this.stateDefaultStamp = 'draw'
       this.default_stamp_dialog = true
     },
     startSettingStamp(action) {
@@ -123,16 +139,31 @@ export default {
         return;
       }
       this.createDefaultStamp(file)
+      this.stateDefaultStamp = 'upload'
     },
     createDefaultStamp(file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         this.imageStamp = e.target.result;
-        this.checkImage = true
+        if (this.stamp_name != '' && this.imageStamp != '') this.valid = false  
+        else this.valid = true
       };
       reader.readAsDataURL(file);
     },
-    saveStamp(){
+    clearStamp() {
+      this.imageStamp = ''
+      this.stateDefaultStamp = 'draw'
+      // if (this.stateDefaultStamp == 'draw') {
+      //   this.$refs.signaturePad.clearSignature()
+      // }
+      this.valid = true
+    },
+    saveStamp() {
+      if (this.stateDefaultStamp == 'draw') {
+        var { isEmpty, data } = this.$refs.signaturePad.saveSignature();
+        this.imageStamp = data
+        this.default_sign = true
+      }
         // var Stampname = []
         // var getStampname = []
         // this.default_stamp.forEach(element => {
@@ -142,13 +173,13 @@ export default {
         //   getStampname.push(Stampname[index].StampName)
         // }
         if (this.action_header == 'เพิ่ม') {
-          this.$refs.form.validate()
           // if ((this.stamp_name != '') & (this.imageStamp != '')) {
           //   const checkDataArray = getStampname.find(element => element == this.stamp_name);
           //   if (checkDataArray == undefined) {
               var stampModal = {StampName: this.stamp_name, SrcBase: this.imageStamp}
               this.default_stamp.push(stampModal);
               this.postStamp()
+              // this.$refs.signaturePad.clearSignature()
             // }
             // else if (checkDataArray != undefined) {
             //   alert("มีชื่อตราประทับซ้ำในระบบ");
@@ -191,23 +222,40 @@ export default {
       }
 		},
     cancelButton() {
+      this.valid = true
+      this.default_stamp_dialog = false
       if (this.action_header == 'เพิ่ม') {
-        this.default_stamp_dialog = false
-        this.uploadImage = undefined
+        this.valid = true
         this.stamp_name = ''
-        this.imageStamp = ''
-        // this.$refs.form.resetValidation()
+        if (this.stateDefaultStamp == 'draw') {
+          this.$refs.signaturePad.clearSignature()
+          this.checkSignature = this.$refs.signaturePad.isEmpty()
+        }
+        else if (this.stateDefaultStamp == 'upload') {
+          this.uploadImage = undefined
+          this.imageStamp = ''
+        }
       }
       else if (this.action_header == 'แก้ไข') {
-        this.default_stamp_dialog = false
-        this.uploadImage = undefined
+        this.valid = false
+        if (this.stateDefaultStamp == 'draw') {
+          this.$refs.signaturePad.clearSignature()
+          this.checkSignature = this.$refs.signaturePad.isEmpty()
+        }
+        else if (this.stateDefaultStamp == 'upload') {
+          this.uploadImage = undefined
+          this.imageStamp = ''
+        }
       }
     },
     async postStamp(){
       try {
         const url = '/user_setting/api/v1/set_usersetting'
-        var { data } = await this.axios.post(this.$api_url + url, 
+        if (this.default_stamp != '') this.check_default_sign = true
+        else if (this.default_stamp == '') this.check_default_sign = false
+        var { data } = await this.axios.post(this.$api_url + url,
         {
+          default_sign : this.check_default_sign,
           default_stamp : this.default_stamp
         })
         this.$swal({
@@ -247,6 +295,10 @@ export default {
       }
       EventBus.$emit('Setting')
       this.default_stamp_dialog = false
+      this.checkSignature = true
+      this.checkNameSignature = true
+      this.valid = true
+      if (this.stateDefaultStamp == 'draw') this.$refs.signaturePad.clearSignature()
 		}
   }
 }
