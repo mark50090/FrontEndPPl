@@ -677,7 +677,7 @@
   "show_template": {
     "textLang": {
       "tabMenubar": {
-        "back": "Back to Get Start",
+        "back": "Leave Form",
         "review_ex": "Preview",
         "save_doc_btn": "Save Document",
         "file": "Assign",
@@ -701,6 +701,7 @@
         "reviews": "Comments Tab",
         "add_variable": "Add variable values in the text",
         "not_show_obj_icon": "Not Show In Document",
+        "image_box": "Click to Insert Image",
         "fill": "",
         "must": " must",
         "greater_than": " greater than ",
@@ -742,12 +743,15 @@
         "import_other": "Import Data From Other Document"
       },
       "alert": {
+        "alert_error": "Error",
+        "alert_warning": "Warning",
+        "alert_success": "Success",
         "fill_data": "Please Fill in Data Completely",
         "assign": "Assign E-Form Complete",
         "fail": "Assign E-Form incompletely. Please try again later.",
         "reverse": "Revert Complete",
         "fail_reverse": "Revert incompletely. Please try again later.",
-        "fail_template": "Template Not Found",
+        "fail_template": "Form Not Found",
         "prefix_maxchar": " is over maximum characters (",
         "subfix_maxChar": " characters)",
         "reject_complete": "Reject Complete",
