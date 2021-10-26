@@ -174,12 +174,12 @@
   },
   "Create_Template": {
     "tabMenubar": {
-      "create_doc": "Create E-Form",
+      "create_doc": "Leave Creating E-Form",
       "set_format": "E-Form Setting",
       "tools": "Object",
       "property": "Property",
       "complete_sequence": "E-Form Step",
-      "set_paperless": "Paperless Setting",
+      "set_paperless": "Digital Workflow Setting",
       "filling_mobile": "Simple View Setting",
       "save": "Save",
       "open_page": "Open Paper Tap",
@@ -196,7 +196,7 @@
       "department": "Department:",
       "group": "E-Form Tag:",
       "id": "ID:",
-      "verdion": "Version:",
+      "version": "Version:",
       "en_data": "Enforcement Date:",
       "locking_pdf": "Lock Document (pdf):",
       "choose": "",
@@ -240,7 +240,7 @@
       "validate_setting_btn": "Validation Setting"
     },
     "set_sharing": {
-      "doc_sharing_set": "E-Form Sharing ",
+      "doc_sharing_set": "E-Form Sharing Setting",
       "doc_sharing": "Sharing:",
       "doc_general": "Public E-Form",
       "doc_usage": "Permission of E-Form Using:",
@@ -382,12 +382,14 @@
       "arrange_back": "Send To Back",
       "assignment": "Permission Setting",
       "reference": "Same Permission With Previous Step",
-      "order_refer": "Same Permission Step",
+      "order_refer": "Workflow Step:",
+      "sender_flow": "Sender",
+      "step_flow": "Step ",
       "by_positio": "By Role",
       "by_email": "By Email",
       "email": "Email",
       "used_importing": "Used for import data from cell's Excel",
-      "start_date_from": "Days from today",
+      "start_date_from": "Days from current",
       "start_date_custom": "Custom Start Date",
       "start_date_day": "days",
       "no_default": "No Default Date",
@@ -404,15 +406,15 @@
       "check_box": "Box for selecting the choice or not. It can group choice together by going to \"Checkbox Group\" in property tab and then input the name of check box which are in the same group (input 1 name per time). After that, click \"+\" button after input fill for adding this check box into the group. After grouping, it will has \"Force to Fill In\" property for forcing to select at least 1 choice from check box group.",
       "pictures": "Image for decorating document.",
       "box_selecting_one": "Box for selecting 1 choice from group of choices. It can change group of choices up to value from input box or other dropdown input by filling object name which want to refer value in \"Reference of Group Choice\" property and then click \"Create / Edit\" button in \"Group Choice\" property. It will has setting modal show up. Then, input name for group choice. The name must has the same value of input box or dropdown input which want to refer value. Finally, input choice in each group choice.",
-      "automatic": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Box display automatic data from selected data.<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If select data \"เงื่อนไข(ระบุ)\", it will display result up to the condition. Format of condition is cond(\"condition\"?show=\"result of true condition\":show=\"result of false condition\") or change show=\"result\" to hide for hiding this input box auto up to its condition. It can has more than 1 condition like following format cond(\"condition1\"?show=\"result of true condition1\":\"condition2\"?show=\"result of true condition2\":show=\"result of false condition\"). For example, cond($dropdownbox0==\"Y\"?show=\"Yes\":$dropdownbox0==\"N\"?show=\"No\":show=\"Else\"). Operators for using in condition have == (equal), != (not equal), >= (greater than or equal), <= (less than or equal), > (greater than) and < (less than). Text which use in condition must put inside (\") or (') and the display result must begin with \"show=\" and put inside (\") or ('). Condition can use with input box, dropdown box, calculate box, input box auto and check box (text condition of check box must be true if check box is selected and must be false if check box isn’t selected. Also, it doesn’t have to put inside (\") or (')). If use these objects in condition, they must be put $ in front of their name. Beside, if each condition want to has many cases, it can use conjunction operators like &&(and), ||(or: in the same button of \"\\\" in keyboard) to connect many cases together. For example, ($inputbox1==\"58\")||($inputbox1==\"73\").",
-      "box_show": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Box for displaying result of input box, calculate box, date picker, time picker or number which is calculated from defined function. It put calculation inside calc(…) and use +, -, *, /, ( ), %. It can set number of decimal point for the result. If use value of input box or other calculate box in calculation, must put $ in front of input box or calculate box name. For example, calc(($calculatebox1*2)+ $inputbox2) <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moreover, it can calculate by using following function<br><ul><li>Modulate(%): The remainder of a division process. For example, calc(15%10), the result is 5. </li><li>Average: avg(inputbox1,inputbox2,...)</li><li>Minimum: min(inputbox1,inputbox2,...)</li><li>Maximum: max(inputbox1,inputbox2,...)</li><li>Difference of months: diffMon(datepickerbox1, datepickerbox2)</li><li>Difference of date: diffDate(datepickerbox1, datepickerbox2)</li><li>Length Between two days(days): lenDate(datepickerbox1, datepickerbox2)</li><li>Difference of time: diffTime(timebox1,timebox2)</li><li>Difference of time(hour only): diffTimeHr(timebox1, timebox2)</li><li>Difference of time(minute only): diffTimeMn(timebox1, timebox2)</li><li>Sum all columns in Data Table: sum(datatable1_RXC1)</li><li>Sum columns in Data Table by condition: sumif(datatable1_RXC1: Condition)</li></ul>",
+      "automatic": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Box display automatic data from selected data.<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If select data \"Condition\", it will display result up to the specified condition. Format of condition is cond(\"condition\"?show=\"result of true condition\":show=\"result of false condition\") or change show=\"result\" to hide for hiding this input box auto up to its condition. It can has more than 1 condition like following format cond(\"condition1\"?show=\"result of true condition1\":\"condition2\"?show=\"result of true condition2\":show=\"result of false condition\"). For example, cond($dropdownbox0==\"Y\"?show=\"Yes\":$dropdownbox0==\"N\"?show=\"No\":show=\"Else\"). Operators for using in condition have == (equal), != (not equal), >= (greater than or equal), <= (less than or equal), > (greater than) and < (less than). Text which use in condition must put inside (\") or (') and the display result must begin with \"show=\" and put inside (\") or ('). Condition can use with input box, dropdown box, calculate box, input box auto and check box (text condition of check box must be true if check box is selected and must be false if check box isn’t selected. Also, it doesn’t have to put inside (\") or (')). If use these objects in condition, they must be put $ in front of their name. Beside, if each condition want to has many cases, it can use conjunction operators like &&(and), ||(or: in the same button of \"\\\" in keyboard) to connect many cases together. For example, ($inputbox1==\"58\")||($inputbox1==\"73\").",
+      "box_show": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Box for displaying result of input box, calculate box, date picker, time picker or number which is calculated from defined function. It put calculation inside calc(…) and use +, -, *, /, ( ), %. It can set number of decimal point for the result. If use value of input box or other calculate box in calculation, must put $ in front of input box or calculate box name. For example, calc(($calculatebox1*2)+ $inputbox2) <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moreover, it can calculate by using following function<br><ul><li>Modulate(%): The remainder of a division process. For example, calc(15%10), the result is 5. </li><li>Average: avg(inputbox1,inputbox2,...)</li><li>Minimum: min(inputbox1,inputbox2,...)</li><li>Maximum: max(inputbox1,inputbox2,...)</li><li>Difference of months: diffMon(datepickerbox1, datepickerbox2)</li><li>Difference of date: diffDate(datepickerbox1, datepickerbox2)</li><li>Length Between two days(days): lenDate(datepickerbox1, datepickerbox2)</li><li>Difference of time: diffTime(timebox1,timebox2)</li><li>Difference of time(hour only): diffTimeHr(timebox1, timebox2)</li><li>Difference of time(minute only): diffTimeMn(timebox1, timebox2)</li><li>Sum all rows in column of Data Table: sum(datatable1_RXC1)</li><li>Sum all rows in column of Data Table by condition: sumif(datatable1_RXC1: Condition)</li></ul>",
       "box_show_thai": "Box for displaying changing of number to text which number is from input box (input box must set to number only) or calculate box.",
       "scope_box": "Scope box for setting permission of inputting data in the document. Every objects in scope will be set permission of inputting up to permission of scope except some object that be set its own permission. If some section boxes are in difference position and require to have same permission (in same inputting step), must set at \"Continuous Section\" property and select section box which is in the same inputting permission.",
       "displaying": "Table for displaying data which can link each other within the same row for getting data when data table’s cell has the same value with defined data. It can set by clicking \"Setting Data Link\" button in data table property. This make every cells in data table has dropdown input inside for selecting defined data.",
       "consists": "Used for displaying table in the document. It can set width of each column and height of each row. Moreover, it can set width of all columns or height of all rows in 1 time.",
       "straight": "Used for displaying line in the document. It can set to be vertical or horizon. It can change line style to be solid line, dash line or dot line.",
-      "area_displaying": "Box for displaying signature from Paperless.",
-      "picture_box": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Image Box which can choose to be normal image in the document or box for inserting image when inputting the document. <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If it is normal image, insert image into this image box. It can insert image from url and image file in pc (click in image box to select image file in pc). Image size will equal to size of image box. <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If it is box for inserting image, don’t have to insert image into image box. Image size will fit to shortest side of image box. It means that if height of image box shorter than width of image box, height of image will equal to height of image box and width of image will set to proper size automatically."
+      "area_displaying": "Box for displaying signature",
+      "picture_box": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Image Box which can choose to be normal image in the document or box for inserting image in the document. <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If it is normal image, insert image into this image box. It can insert image from url or image file in pc (click in image box to select image file in pc). Image size will equal to size of image box. <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If it is box for inserting image, don’t have to insert image into image box. Image size will fit to shortest side of image box. It means that if height of image box shorter than width of image box, height of image will equal to height of image box and width of image will set to proper size automatically."
     },
     "order_fill": {
       "order_of": "Doucment Step And Signing Doucment",
@@ -454,12 +456,17 @@
       "ppl_subject": "Subject",
       "subject_placeholder": "<No Subject>",
       "ppl_message": "Message",
-      "setting": "Paperless Default Setting",
+      "setting": "Default Digital Workflow Setting",
       "doc_paperless": "Paperless Document Type",
-      "foermat_paperless": "Paperless Template",
+      "foermat_paperless": "Workflow",
       "note": "Note",
       "set_auto_flow": "Automation Paperless Flow Setting",
-      "set_auto_flow_btn": "Set Automation Paperless Flow"
+      "set_auto_flow_btn": "Set Automation Paperless Flow",
+      "step_num": "Step",
+      "permission_approve": "Approve",
+      "permission_sign": "Sign",
+      "permission_input_form": "Fill",
+      "permission_sign_input": "Fill and Sign"
     },
     "modal": {
       "insert_picture": "Insert Image",
@@ -477,13 +484,16 @@
       "clear": "Clear"
     },
     "alert": {
+      "alert_error": "Error",
+      "alert_success": "Success",
       "name_object": "Object name \"",
       "change_name": "\" is duplicate. Please change object name",
       "duplicate": "Document step is duplicate",
       "section_boxes": "It has some overlap section boxes. Please set new position for them.",
       "save_complete": "Saving E-Form Complete",
       "fail_save": "Saving E-Form is incomplete. Please try again later.",
-      "create_eform": "Create E-Form"
+      "create_eform": "Create E-Form",
+      "workflow_alert": "Please select workflow."
     },
     "dropdown": {
       "buddhist": "Buddhist Era",
@@ -512,7 +522,25 @@
       "no_set": "No Setting",
       "no_sender": "No Setting",
       "no_define": "No Setting",
-      "email": "Email"
+      "email": "Email",
+      "inputbox_auto": {
+        "no_choose": "No Setting",
+        "doc_no": "Document No.",
+        "condition": "Condition",
+        "fullname_th": "Full Name(TH)",
+        "prefix_name_th": "Prefix Name(TH)",
+        "first_name_th": "First Name(TH)",
+        "last_name_th": "Last Name(TH)",
+        "tel": "Telephone",
+        "ref_doc_no": "Reference Document No.",
+        "customer_name": "Customer Name",
+        "employee_id": "Employee id",
+        "department": "Department",
+        "role": "Role",
+        "leader_name_th": "Leader Name ",
+        "leader_role": "Leader Role",
+        "company_address": "Company Address"
+      }
     }
   },
   "preview_template": {
