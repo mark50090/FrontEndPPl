@@ -3,7 +3,7 @@
     <v-card outlined class="mb-1 mx-1 px-4 formdoc-page">
           <v-row class="formdoc-row">
             <v-col cols="12" md="6" lg="6" class="px-0 pb-0">
-              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-formdoc search-formdoc-btn-block" v-model="keyword" v-on:keyup.enter="searchKeyword()">
+              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" :placeholder="textLang.search" class="search-formdoc search-formdoc-btn-block" v-model="keyword" v-on:keyup.enter="searchKeyword()">
                 <template v-slot:append-outer>
                   <v-btn outlined color="#9e9e9e" class="search-formdoc-btn" @click="searchKeyword()">
                     <v-icon >mdi-magnify</v-icon>
@@ -13,7 +13,7 @@
             </v-col>
           </v-row>
           <v-row class="mt-5 formdoc-row alldoc-formdoc-header">
-            เอกสารทั้งหมด {{totalItemsTemplate}} 
+            {{textLang.alldocuments}} {{totalItemsTemplate}} 
           </v-row>
           <v-row class="mt-3 formdoc-row">
             <v-data-table fixed-header :loading="false" :headers="formdoc_table_header" :items="formdoc_data" class="front-table-center formdoc-table formdoc-table-border formdoc-table-header hide-formdoc-table-progress formdoc-table-data" :footer-props="{'items-per-page-options': [5, 10, 15, 20]}">
@@ -36,7 +36,7 @@
                         </v-list-item-icon>
                         <v-list-item-content>
                           <v-list-item-title class="front-insert-doc">
-                            กรอกเอกสาร
+                            {{textLang.filloutdocument}}
                           </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
@@ -71,6 +71,15 @@ import { EventBus } from '../EventBus'
       totalItemsTemplate: 0,
       keyword: ""
     }),
+    textLang:{
+      search: 'ค้นหา',
+      alldocuments: 'เอกสารทั้งหมด',
+      filloutdocument: 'กรอกเอกสาร',
+      number: 'ลำดับ',
+      documentname: 'ชื่อเอกสาร',
+      department: 'แผนก',
+      documentID: 'รหัสเอกสาร',
+    },
     mounted() {
       this.searchTemplate()
       EventBus.$emit('loadingOverlay', true)
