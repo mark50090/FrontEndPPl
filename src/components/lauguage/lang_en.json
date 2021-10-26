@@ -839,6 +839,15 @@
     "number": "ลำดับ",
     "initials": "ชื่อย่อ",
     "Documenttypename": "ชื่อประเภทเอกสาร"
+  },
+  "FormInputList": {
+    "search": "ค้นหา",
+    "alldocuments": "เอกสารทั้งหมด",
+    "filloutdocument": "กรอกเอกสาร",
+    "number": "ลำดับ",
+    "documentname": "ชื่อเอกสาร",
+    "department": "แผนก",
+    "documentID": "รหัสเอกสาร"
   }
 
 }
