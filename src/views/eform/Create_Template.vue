@@ -1993,25 +1993,31 @@
                 <v-btn depressed block small :color="color_varidate_button" class="validate-doc-btn" @click="openFlowCondition()">{{ textLang.set_doc_paperless.set_auto_flow_btn }}</v-btn>
               </v-col>
             </v-row> -->
-            <v-card v-if="false" outlined class="mr-2 mt-3 pa-2 all-create-workflow-block"> <!-- example workflow -->
-              <template> <!-- each step --> 
-                <v-row class="workflow-step-row title-prop">
-                  {{ textLang.set_doc_paperless.step_num }} 20 : ผู้มีสิทธิ์กรอกและเซ็น <!-- ผู้มีสิทธิ์อนุมัติ(textLang.set_doc_paperless.permission_approve) / ผู้มีสิทธิ์เซ็น(textLang.set_doc_paperless.permission_sign) / ผู้มีสิทธิ์กรอก(textLang.set_doc_paperless.permission_input_form) / ผู้มีสิทธิ์กรอกและเซ็น(textLang.set_doc_paperless.permission_sign_input) -->
+            <v-card outlined class="mr-2 mt-3 pa-2 all-create-workflow-block"> <!-- example workflow -->
+              <div v-for="item in currentSelectedFlow.flow_data" :key="item.index"> <!-- each step --> 
+                <v-row v-if="item.action == 'Fill'" class="workflow-step-row title-prop">
+                  {{ textLang.set_doc_paperless.step_num }} {{item.index + 1}} : {{textLang.set_doc_paperless.permission_input_form}} <!-- ผู้มีสิทธิ์อนุมัติ(textLang.set_doc_paperless.permission_approve) / ผู้มีสิทธิ์เซ็น(textLang.set_doc_paperless.permission_sign) / ผู้มีสิทธิ์กรอก(textLang.set_doc_paperless.permission_input_form) / ผู้มีสิทธิ์กรอกและเซ็น(textLang.set_doc_paperless.permission_sign_input) -->
+                </v-row>
+                <v-row v-if="item.action == 'Sign' || item.action == 'Sign-Ca'" class="workflow-step-row title-prop">
+                  {{ textLang.set_doc_paperless.step_num }} {{item.index + 1}} : {{textLang.set_doc_paperless.permission_sign}} 
+                </v-row>
+                <v-row v-if="item.action == 'Approve'" class="workflow-step-row title-prop">
+                  {{ textLang.set_doc_paperless.step_num }} {{item.index + 1}} : {{textLang.set_doc_paperless.permission_approve}}
                 </v-row>
                 <v-list dense class="pt-1 pb-5">
-                  <v-list-item dense class="pl-2 pr-0 each-step-workflow"> <!-- each mail in step -->
+                  <v-list-item v-for="email in item.actor[0].permission_email" :key="email.account_id" dense class="pl-2 pr-0 each-step-workflow"> <!-- each mail in step -->
                     <v-list-item-icon class="mr-2 my-0 each-step-workflow-icon">
                       <v-icon>mdi-account</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content class="py-0 each-step-workflow-mail">
-                      workflow.di@one.th
+                      {{ email.thai_email }}
                     </v-list-item-content>
                     <v-list-item-icon class="ml-2 my-0 alert-onechat-block"> <!-- show when this mail is set to alert in One Chat -->
                       <img height="21px" src="https://www.img.in.th/images/a368504d4cdb93225bda2f04c665ead7.png" />
                     </v-list-item-icon>
                   </v-list-item>
                 </v-list>
-              </template>
+              </div>
             </v-card>
           </v-tab-item>
           <v-tab-item> <!-- Filling Mobile Tab -->
@@ -3530,6 +3536,8 @@ export default {
       var destObjIndex = this.mobileInputOrder.indexOf(dest)
       this.mobileInputOrder[srcObjIndex].index = destIndex
       this.mobileInputOrder[destObjIndex].index = srcIndex
+      this.objectArray[this.mobileInputOrder[srcObjIndex].objType][this.mobileInputOrder[srcObjIndex].objIndex].style.mobileIndex = destIndex
+      this.objectArray[this.mobileInputOrder[destObjIndex].objType][this.mobileInputOrder[destObjIndex].objIndex].style.mobileIndex = srcIndex
       this.mobileInputOrder.sort((a, b) => (a.index > b.index) ? 1 : -1)
       for(let i = 0; i < this.mobileInputOrder.length; i++) {
         this.mobileInputOrder[i].index = i + 1
@@ -5911,9 +5919,9 @@ export default {
         }
         this.dataTableObjectArray[this.selectedCell].style.mobileIndex = mobileObj.index
         this.mobileInputOrder.push(mobileObj)
-        for(let i = 0; i < this.mobileInputOrder.length; i++) {
-          this.mobileInputOrder[i].index = i + 1
-        }
+        // for(let i = 0; i < this.mobileInputOrder.length; i++) {
+        //   this.mobileInputOrder[i].index = i + 1
+        // }
       }
 
       this.selectedCell = ""
