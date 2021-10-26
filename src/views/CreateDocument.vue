@@ -60,7 +60,7 @@
                     >
                       <v-row no-gutters justify="center" align="center">
                         <span style="color: grey">
-                          ลำดับที่ {{ item.sign_queue_no }}
+                          {{textLang.No}} {{ item.sign_queue_no }}
                         </span>
                       </v-row>
                     </vue-draggable-resizable>
@@ -73,10 +73,10 @@
         <v-col cols="12" md="6" lg="6">
           <v-row class="create-row">
             <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pt-2 select-file-title">
-              เลือกไฟล์ :
+              {{textLang.selectfile}} :
             </v-col>
             <v-col cols="9" md="" lg="" class="px-0 pt-2">
-              <v-file-input dense outlined hide-details color="#67C25D" truncate-length="60" placeholder="เลือกไฟล์" prepend-icon="" :clearable="false" accept="application/pdf" v-model="uploadedFile" @change="inputFile" class="create-file delete-file-btn-block">
+              <v-file-input dense outlined hide-details color="#67C25D" truncate-length="60" :placeholder="textLang.selectfilea" prepend-icon="" :clearable="false" accept="application/pdf" v-model="uploadedFile" @change="inputFile" class="create-file delete-file-btn-block">
                 <template v-slot:append-outer>
                   <v-btn icon :disabled="!uploadedFile" color="#424242" @click="clearUploadedFile"> <!-- delete pdf button -->
                     <v-icon size="28px">mdi-delete</v-icon>
@@ -90,9 +90,9 @@
             <v-overlay absolute opacity="0.5" color="white" :value="!uploadedFile"></v-overlay> <!-- overlay show when it doesn't has document file -->
             <v-card-title class="pa-0">
               <v-tabs grow height="40px" color="#4CAF50" v-model="create_tab">
-                <v-tab class="create-tab-title">ตั้งค่าการส่ง</v-tab>
-                <v-tab class="create-tab-title">รูปแบบอนุมัติ</v-tab>
-                <v-tab class="create-tab-title">กำหนดเอง</v-tab>
+                <v-tab class="create-tab-title">{{textLang.setupsending}}</v-tab>
+                <v-tab class="create-tab-title">{{textLang.approvalform}}</v-tab>
+                <v-tab class="create-tab-title">{{textLang.custom}}</v-tab>
               </v-tabs>
             </v-card-title>
             <v-divider></v-divider>
@@ -102,7 +102,7 @@
                 <v-tab-item>
                   <v-row class="create-row">
                     <v-col cols="4" md="3" lg="3" align-self="center" class="pl-2 pt-4 create-setting-title">
-                      ชื่อเอกสาร :
+                      {{textLang.documentname}} :
                     </v-col>
                     <v-col cols="8" md="9" lg="9" align-self="center" class="px-0 pt-4">
                       <v-text-field dense outlined hide-details color="#4CAF50" class="create-setting create-setting-input" v-model="documentName"></v-text-field>
@@ -110,7 +110,7 @@
                   </v-row>
                   <v-row class="create-row">
                     <v-col cols="4" md="3" lg="3" align-self="center" class="pl-2 pt-0 create-setting-title">
-                      ข้อความ :
+                      {{textLang.message}} :
                     </v-col>
                     <v-col cols="8" md="9" lg="9" align-self="center" class="px-0 pt-0">
                       <v-text-field dense outlined hide-details color="#4CAF50" class="create-setting create-setting-input" v-model="documentComment"></v-text-field>
@@ -118,7 +118,7 @@
                   </v-row>
                   <v-row class="create-row">
                     <v-col cols="12" md="3" lg="3" class="pl-2 pt-2 create-setting-title">
-                      แนบไฟล์ :
+                      {{textLang.message}} :
                     </v-col>
                     <v-col cols="12" md="9" lg="9" class="pr-0 pt-0 create-attach-file-block">
                       <v-file-input dense outlined multiple counter show-size chips small-chips color="#4CAF50" prepend-icon="" append-outer-icon="$file" placeholder="เลือกไฟล์แนบ" class="create-setting" v-model="attachedFile">
@@ -133,34 +133,34 @@
                 <v-tab-item >
                   <v-row class="create-row">
                     <v-col cols="5" md="4" lg="4" align-self="center" class="pl-2 pb-0 create-setting-title">
-                      ประเภทเอกสาร :
+                      {{textLang.documenttype}} :
                     </v-col>
                     <v-col cols="7" md="8" lg="8" class="px-0 pb-0">
-                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type" :items="document_type_list" item-text="document_type_detail.name" item-value="_id" return-object @change="getDocumentTemplate" dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete>
+                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type" :items="document_type_list" item-text="document_type_detail.name" item-value="_id" return-object @change="getDocumentTemplate" dense outlined hide-details auto-select-first color="#4caf50" :placeholder="textLang.choose" append-icon="mdi-chevron-down" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row class="create-row">
                     <v-col cols="5" md="4" lg="4" align-self="center" class="pl-2 pb-0 create-setting-title">
-                      รูปแบบเอกสาร :
+                      {{textLang.documentformat}} :
                     </v-col>
                     <v-col cols="7" md="8" lg="8" class="px-0 pb-0">
-                      <v-autocomplete  :no-data-text="loading_list_text" :loading="loading_template" v-model="selected_document_template" :items="document_template_list" item-text="name" item-value="_id" return-object @change="getFlowData" dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" :disabled="false" :filled="false" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete>
+                      <v-autocomplete  :no-data-text="loading_list_text" :loading="loading_template" v-model="selected_document_template" :items="document_template_list" item-text="name" item-value="_id" return-object @change="getFlowData" dense outlined hide-details auto-select-first color="#4caf50" :placeholder="textLang.choose" append-icon="mdi-chevron-down" :disabled="false" :filled="false" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row class="create-row" v-if="false"> <!-- department row. Show when document type and document style are selected -->
                     <v-col cols="5" md="4" lg="4" align-self="center" class="pl-2 pb-0 create-setting-title">
-                      แผนกสายงาน :
+                      {{textLang.linedepartment}} :
                     </v-col>
                     <v-col cols="7" md="8" lg="8" class="px-0 pb-0">
-                      <v-autocomplete dense outlined hide-details auto-select-first color="#4caf50" placeholder="ระบุแผนก" append-icon="mdi-chevron-down" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete> <!-- when it has many departments -->
-                      <!-- <span class="create-setting-title">การเงินและธุรการ</span> --> <!-- when it has only one department -->
+                      <v-autocomplete dense outlined hide-details auto-select-first color="#4caf50" :placeholder="textLang.specifydepartment" append-icon="mdi-chevron-down" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete> <!-- when it has many departments -->
+                      <!-- <span class="create-setting-title">{{textLang.financeandAdministration}}</span> --> <!-- when it has only one department -->
                     </v-col>
                   </v-row>
                   <v-card outlined class="mt-4 px-2 pb-2 workflow-block">
                     <template  v-for="flow_data in flow_datas" >
                       <v-row class="create-row" :key="flow_data.index">
                         <v-col cols="auto" md="auto" lg="auto" class="pl-1 pb-2 create-setting-title">
-                          ลำดับ {{ flow_data.index+1 }} : {{ flow_data.action | translate }} <!-- or ผู้มีสิทธิ์เซ็น -->
+                          {{textLang.No}} {{ flow_data.index+1 }} : {{ flow_data.action | translate }} <!-- or ผู้มีสิทธิ์เซ็น -->
                         </v-col>
                       </v-row>
                       <v-row class="create-row each-step-mail-row" v-for="actor_email in flow_data.actor[0].permission_email" :key="flow_data.index + actor_email.account_id"> <!-- each email row in step -->
@@ -182,10 +182,10 @@
                 <v-tab-item>
                   <v-row class="create-row">
                     <v-col cols="12" md="4" lg="4" align-self="center" class="pl-2 pt-4 pb-0 create-setting-title">
-                      ประเภทเอกสาร :
+                      {{textLang.documenttype}} :
                     </v-col>
                     <v-col cols="12" md="8" lg="8" align-self="center" class="pr-0 pt-4 pb-0 create-attach-file-block">
-                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type_custom" :items="document_type_list" item-text="document_type_detail.name" item-value="_id" return-object dense outlined hide-details auto-select-first color="#4caf50" placeholder="เลือก" append-icon="mdi-chevron-down" class="create-setting create-setting-input create-setting-dropdown-icon"></v-autocomplete>
+                      <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type_custom" :items="document_type_list" item-text="document_type_detail.name" item-value="_id" return-object dense outlined hide-details auto-select-first color="#4caf50" :placeholder="textLang.choose" append-icon="mdi-chevron-down" class="create-setting create-setting-input create-setting-dropdown-icon"></v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row class="create-row">
@@ -207,12 +207,12 @@
                   <v-row justify="center" class="create-row">
                     <v-col cols="5" md="4" lg="4" class="pl-0 pr-1 pt-1 pb-2">
                       <v-btn small block color="#67C25D" :disabled="!selected_document_type_custom" @click="addPersonApprove" class="add-step-btn">
-                        <v-icon small class="mr-1">mdi-plus</v-icon> เพิ่ม (อนุมัติ)
+                        <v-icon small class="mr-1">mdi-plus</v-icon> {{textLang.addapprove}}
                       </v-btn>
                     </v-col>
                     <v-col cols="5" md="4" lg="4" class="pl-0 pr-1 pt-1 pb-2">
                       <v-btn small block color="#67C25D" :disabled="!selected_document_type_custom" @click="addPersonSign" class="add-step-btn">
-                        <v-icon small class="mr-1">mdi-plus</v-icon> เพิ่ม (เซ็น)
+                        <v-icon small class="mr-1">mdi-plus</v-icon> {{textLang.addsign}}
                       </v-btn>
                     </v-col>
                   </v-row>
@@ -221,7 +221,7 @@
                     <template v-for="(flow_data_custom,index) in flow_datas_custom">
                       <v-row class="create-row" :key="flow_data_custom.index">
                         <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 py-1 create-setting-title">
-                          ลำดับ {{index+1}} : {{ flow_data_custom.action | translate}} <!-- ผู้มีสิทธิ์อนุมัติ or ผู้มีสิทธิ์เซ็น -->
+                          {{textLang.No}} {{index+1}} : {{ flow_data_custom.action | translate}} <!-- ผู้มีสิทธิ์อนุมัติ or ผู้มีสิทธิ์เซ็น -->
                         </v-col>
                         <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-1 py-1">
                           <v-btn outlined fab x-small color="error" class="px-0 delete-step-btn" @click="deleteActionFlow(flow_data_custom,flow_data_custom.action)"> <!-- delete step button -->
@@ -231,12 +231,12 @@
                         <v-spacer></v-spacer>
                         <template v-if="flow_data_custom.action == 'Sign'"> <!-- show when it is sign step -->
                           <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-2 py-1 create-setting-title display-pc-only">
-                            หน้าที่เซ็น
+                            {{textLang.signingpage}}
                           </v-col>
                           <v-col cols="3" md="2" lg="2" class="px-0 py-1">
-                            <v-select multiple outlined dense hide-details label="หน้า" color="#67C25D" item-color="#67C25D" @change="reShowSign" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="pdf_page_list" v-model="flow_data_custom.page" item-value="value" item-text="text" class="create-setting page-sign-box page-sign-dropdown-icon create-setting-dropdown-icon">
+                            <v-select multiple outlined dense hide-details :label="textLang.page" color="#67C25D" item-color="#67C25D" @change="reShowSign" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="pdf_page_list" v-model="flow_data_custom.page" item-value="value" item-text="text" class="create-setting page-sign-box page-sign-dropdown-icon create-setting-dropdown-icon">
                               <template v-slot:selection="{ item, index }">
-                                <span v-if="flow_data_custom.page.length == pdf_page_list.length && index == 0">ทั้งหมด</span>
+                                <span v-if="flow_data_custom.page.length == pdf_page_list.length && index == 0">{{textLang.all}}</span>
                                 <span v-if="flow_data_custom.page.length != pdf_page_list.length">{{item.value}}{{index != flow_data_custom.page.length-1 ? ',':''}}</span>
                               </template>
                               <template v-slot:prepend-item>
@@ -248,7 +248,7 @@
                                   </v-list-item-action>
                                   <v-list-item-content>
                                     <v-list-item-title class="all-page-select-list">
-                                      ทั้งหมด
+                                      {{textLang.all}}
                                     </v-list-item-title>
                                   </v-list-item-content>
                                 </v-list-item>
@@ -294,7 +294,7 @@
           </v-card>
           <v-row v-if="(create_tab == 1) || (create_tab == 2)" justify="end" class="create-row">
             <v-col cols="auto" md="auto" lg="auto" class="pt-1">
-              <v-btn depressed color="#67C25D" :disabled="(!selected_document_template) && (!selected_document_type_custom) || !isFormValid" class="send-doc-btn" @click="addTransaction">ส่งเอกสาร</v-btn>
+              <v-btn depressed color="#67C25D" :disabled="(!selected_document_template) && (!selected_document_type_custom) || !isFormValid" class="send-doc-btn" @click="addTransaction">{{textLang.senddocuments}}</v-btn>
             </v-col>
           </v-row>
         </v-col>
@@ -360,7 +360,35 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       isDirty: false,
       documentName: '',
       documentComment: '',
-      attachedFile: []
+      attachedFile: [],
+      textLang:{
+        No: 'ลำดับที่',
+        selectfile: 'เลือกไฟล์',
+        selectfilea: 'เลือกไฟล์',
+        setupsending: 'ตั้งค่าการส่ง',
+        approvalform: 'รูปแบบอนุมัติ',
+        custom: 'กำหนดเอง',
+        documentname: 'ชื่อเอกสาร',
+        message: 'ข้อความ',
+        attachfile: 'แนบไฟล์',
+        documenttype: 'ประเภทเอกสาร',
+        documentformat: 'รูปแบบเอกสาร',
+        choose: 'เลือก',
+        linedepartment: 'แผนกสายงาน',
+        specifydepartment: 'ระบุแผนก',
+        financeandAdministration: 'การเงินและธุรการ',
+        addapprove: 'เพิ่ม (อนุมัติ)',
+        addsign: 'เพิ่ม (เซ็น)',
+        signingpage: 'หน้าที่เซ็น',
+        page: 'หน้า',
+        all: 'ทั้งหมด',
+        senddocuments: 'ส่งเอกสาร',
+        authorizedsignatory: 'ผู้มีสิทธิ์เซ็น',
+        Authorizedperson: 'ผู้มีสิทธิ์อนุมัติ',
+        Fetching: 'กำลังดึงข้อมูล กรุณารอสักครู่...',
+        noinformationfound: 'ไม่พบข้อมูล',
+      }
+
     }),
     mounted() {
       this.getDocumentType()
@@ -372,8 +400,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
     filters:{
       translate(keyword){
         switch (keyword){
-          case "Sign" : return 'ผู้มีสิทธิ์เซ็น'
-          case "Approve" : return 'ผู้มีสิทธิ์อนุมัติ'
+          case "Sign" : return this.authorizedsignatory
+          case "Approve" : return this.Authorizedperson
           default: return "" 
         }
       }
@@ -443,7 +471,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       },
       async getDocumentType(){
         this.loading_type = true
-        this.loading_list_text = 'กำลังดึงข้อมูล กรุณารอสักครู่...'
+        this.loading_list_text = this.Fetching
         this.document_type_list = []
         try {
           var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
@@ -457,7 +485,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         } catch (error) {
           console.log(error);
         }
-        this.loading_list_text = 'ไม่พบข้อมูล'
+        this.loading_list_text = this.noinformationfound
         this.loading_type = false
       },
       async getDocumentTemplate(){
@@ -465,7 +493,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.selected_document_template = ''
         this.flow_datas = []
         this.isDirty = false
-        this.loading_list_text = 'กำลังดึงข้อมูล กรุณารอสักครู่...'
+        this.loading_list_text = this.Fetching
         this.loading_template = true
         try {
           var url = `/flowdata/api/v1/getbydocID?document_type_id=${this.selected_document_type._id}`
@@ -479,7 +507,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           console.log(error);
         }
         this.loading_template = false
-        this.loading_list_text = 'ไม่พบข้อมูล'
+        this.loading_list_text = this.noinformationfound
       },
       async getFlowData(){
         this.emitLoading(true)

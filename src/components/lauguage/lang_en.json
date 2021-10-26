@@ -653,6 +653,7 @@
     }
   },
   "ApprovalList":{
+    "search": "ค้นหา",
     "Allapprovedforms": "รูปแบบอนุมัติทั้งหมด", 
         "Createanapprovalform": "สร้างรูปแบบอนุมัติ",
         "approval_ta":{
@@ -661,5 +662,32 @@
           "details": "รายละเอียด",
           "lastrevisiondate": "วันที่เเก้ไขล่าสุด"
         }
-      }
+      },
+    "CreateDocument": {
+        "No": "ลำดับที่",
+        "selectfile": "เลือกไฟล์",
+        "selectfilea": "เลือกไฟล์",
+        "setupsending": "ตั้งค่าการส่ง",
+        "approvalform": "รูปแบบอนุมัติ",
+        "custom": "กำหนดเอง",
+        "documentname": "ชื่อเอกสาร",
+        "message": "ข้อความ",
+        "attachfile": "แนบไฟล์",
+        "documenttype": "ประเภทเอกสาร",
+        "documentformat": "รูปแบบเอกสาร",
+        "choose": "เลือก",
+        "linedepartment": "แผนกสายงาน",
+        "specifydepartment": "ระบุแผนก",
+        "financeandAdministration": "การเงินและธุรการ",
+        "addapprove": "เพิ่ม (อนุมัติ)",
+        "addsign": "เพิ่ม (เซ็น)",
+        "signingpage": "หน้าที่เซ็น",
+        "page": "หน้า",
+        "all": "ทั้งหมด",
+        "senddocuments": "ส่งเอกสาร",
+        "authorizedsignatory": "ผู้มีสิทธิ์เซ็น",
+        "Authorizedperson": "ผู้มีสิทธิ์อนุมัติ",
+        "Fetching": "กำลังดึงข้อมูล กรุณารอสักครู่...",
+        "noinformationfound": "ไม่พบข้อมูล"
+  }    
 }
