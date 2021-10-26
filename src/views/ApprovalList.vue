@@ -59,7 +59,7 @@ export default {
           
       ],
       textLang: {
-        search: 'ค้นหา'
+        search: 'ค้นหา',
         Allapprovedforms: 'รูปแบบอนุมัติทั้งหมด', 
         Createanapprovalform: 'สร้างรูปแบบอนุมัติ',
         approval_ta:{
