@@ -691,7 +691,7 @@
           "lastrevisiondate": "วันที่เเก้ไขล่าสุด"
         }
       },
-      "CreateDocument": {
+    "CreateDocument": {
         "No": "ลำดับที่",
         "number": "ลำดับ",
         "selectfile": "เลือกไฟล์",
@@ -723,4 +723,5 @@
         "fail": "ล้มเหลว",
         "transactionfail": "สร้าง transaction ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
   }
+
 }
