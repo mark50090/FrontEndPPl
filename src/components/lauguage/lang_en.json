@@ -848,6 +848,26 @@
     "documentname": "ชื่อเอกสาร",
     "department": "แผนก",
     "documentID": "รหัสเอกสาร"
-  }
+  },
+  "Inbox":{
+    "alldocuments":"เอกสารทั้งหมด",
+    "search": "ค้นหา",
+    "documenttype": "ประเภทเอกสาร",
+    "documentstatus": "สถานะเอกสาร",
+    "all":"ทั้งหมด",
+    "pendingapproval":"รออนุมัติ",
+    "approved":"อนุมัติแล้ว",
+    "inprogress":"กำลังดำเนินการ",
+    "rejectapproval":"ปฏิเสธอนุมัติ",
+    "pending":"รอดำเนินกา",
+    "inboxheader":{
+      "sender":"ผู้ส่ง",
+      "type":"ประเภท",
+      "documentnumber":"เลขที่เอกสาร",
+      "details":"รายละเอียด",
+      "status":"สถานะ",
+      "date":"วันที่"
+    }
+  } 
 
 }
