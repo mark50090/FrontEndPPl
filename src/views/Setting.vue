@@ -2,13 +2,13 @@
   <div class="pt-2 pl-2 pr-2" >
     <v-card outlined class="screen-height screen-height-mobile ">
       <v-card-title class ="h-heading py-3">
-        <b>ตั้งค่าข้อมูลทั่วไป</b>
+        <b>{{textLang.setgeneralinformation}}</b>
       </v-card-title>
       <v-divider></v-divider>
       <v-card-text class ="h-heading pa-0">
         <v-row class="font-all">
           <v-col  cols="5" md="2" lg="2" class=" py-4 pl-4 all-font-color" align-self="center">
-            ชื่อ
+            {{textLang.name}}
           </v-col>
           <v-col class=" py-4 pr-2">
             <span class="all-font-color">{{firstnameTh}} {{lastnameTh}}</span>
@@ -18,7 +18,7 @@
         <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class="py-4 pl-4 all-font-color">
-            ชื่อผู้ใช้
+            {{textLang.Username}}
           </v-col>
           <v-col class="all-font-color py-4 pr-2">
             {{username}}
@@ -36,7 +36,7 @@
         <!-- <v-divider></v-divider>
          <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class="py-4 pl-4 all-font-color" align-self="center">
-            ลายเซ็นเริ่มต้น
+            {{textLang.defaultsignature}}
           </v-col>
           <v-col cols="4" md="5" lg="5" align-self="center" class="py-4  all-font-color">
             <v-icon v-if="state_Signature == 'Not Found'" class="ic-status-point" size="16" color="#9e9e9e" >mdi-circle</v-icon> <!--FOR NOT FOUND default signature
@@ -52,12 +52,12 @@
         <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class="pt-6 pl-4 all-font-color">
-            ลายเซ็นเริ่มต้น 
+            {{textLang.defaultsignature}}
           </v-col>
           <v-col class="pa-0" cols="7" md="10" lg="10">
             <v-row class="font-all">
               <v-col cols="8" md="5" lg="5" class="px-0 pt-4">
-                <v-autocomplete no-data-text="ไม่มีลายเซ็นเริ่มต้น" dense outlined hide-details auto-select-first placeholder="เลือกลายเซ็น" color="#67C25D" append-icon="mdi-chevron-down" class="font-dropdown ic-dropdown select-stamp-box" v-model="selectedStamp" :items="default_stamp" item-text="StampName" return-object></v-autocomplete>
+                <v-autocomplete no-data-text=this.textLang.nodefaultsignature dense outlined hide-details auto-select-first :placeholder="this.textLang.selectsignature" color="#67C25D" append-icon="mdi-chevron-down" class="font-dropdown ic-dropdown select-stamp-box" v-model="selectedStamp" :items="default_stamp" item-text="StampName" return-object></v-autocomplete>
               </v-col>
               <v-col v-if="show_Edit_Stamp == true" cols="auto" md="auto" lg="auto" align-self="center" class="pt-4 pr-0 edit-stamp-btn-block">
                 <v-tooltip top>
@@ -66,7 +66,7 @@
                       <v-icon size="16">mdi-cog</v-icon>
                     </v-btn>
                   </template>
-                  <span>แก้ไขลายเซ็นเริ่มต้น</span>
+                  <span>{{textLang.Editdefaultsignature}}</span>
                 </v-tooltip>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pr-0 pt-4 add-stamp-btn-block">
@@ -76,7 +76,7 @@
                       <v-icon size="16">mdi-plus</v-icon>
                     </v-btn>
                   </template>
-                  <span>เพิ่มลายเซ็นเริ่มต้น</span>
+                  <span>{{textLang.Adddefaultsignature}}</span>
                 </v-tooltip>
               </v-col>
             </v-row>
@@ -112,13 +112,13 @@
           <v-col v-if="statedefault_Business == true" align-self="center" class="pa-0">
                 <v-row class="font-all">
                   <v-col cols="12" md="6" lg="6" class="position-dropdown-mobile">
-                    <v-autocomplete class="font-dropdown ic-dropdown text-dropdown" placeholder="เลือก Business" append-icon="mdi-chevron-down" auto-select-first outlined dense hide-details color="#67C25D" v-model="selectedBiz" :items="noneForChangeBiz"></v-autocomplete>
+                    <v-autocomplete class="font-dropdown ic-dropdown text-dropdown" :placeholder="this.textLang.ChooseBusiness" append-icon="mdi-chevron-down" auto-select-first outlined dense hide-details color="#67C25D" v-model="selectedBiz" :items="noneForChangeBiz"></v-autocomplete>
                   </v-col>
                   <v-col cols="auto" md="auto" lg="auto" class="pr-0 position-btn-mobile-cancel" align-self="center">
-                    <v-btn depressed color="#757575" small dark @click="stateBusinessOff()">ยกเลิก</v-btn>
+                    <v-btn depressed color="#757575" small dark @click="stateBusinessOff()">{{textLang.cancel}}</v-btn>
                   </v-col>
                   <v-col cols="auto" md="auto" lg="auto" align-self="center">
-                    <v-btn depressed color="#67C25D" small dark @click="set_usersetting()"> บันทึก</v-btn>
+                    <v-btn depressed color="#67C25D" small dark @click="set_usersetting()"> {{textLang.record}}</v-btn>
                   </v-col>
                 </v-row>
           </v-col>
@@ -139,7 +139,7 @@
         <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="12" md="2" lg="2" class="pt-4 pl-4 all-font-color position-setup-notifications position-setup-notifications-mobile">
-            ตั้งค่าการแจ้งเตือน 
+            {{textLang.Setupnotifications}} 
           </v-col>
           <v-col class="pa-0 ">
             <v-row class="font-all">
@@ -210,6 +210,24 @@ export default {
     edit_email: false,
     disable_notify_email: true,
     show_Edit_Stamp: Boolean ,
+    textLang:{
+      setgeneralinformation: 'ตั้งค่าข้อมูลทั่วไป',
+      name: 'ชื่อ',
+      Username: 'ชื่อผู้ใช้',
+      defaultsignature: 'ลายเซ็นเริ่มต้น',
+      nodefaultsignature: 'ไม่มีลายเซ็นเริ่มต้น',
+      selectsignature: 'เลือกลายเซ็น',
+      Editdefaultsignature: 'แก้ไขลายเซ็นเริ่มต้น',
+      Adddefaultsignature: 'เพิ่มลายเซ็นเริ่มต้น',
+      cancel: 'ยกเลิก',
+      record: 'บันทึก',
+      Setupnotifications: 'ตั้งค่าการแจ้งเตือน',
+      succeed:'สำเร็จ',
+      Dataupdatesuccessfully: 'อัพเดทข้อมูลสำเร็จ',
+      fail:'ล้มเหลว',
+      Dataupdatefailed:'อัพเดทข้อมูลล้มเหลว',
+      ChooseBusiness:'เลือก Busines',
+    },
   }),
   mounted() {
     this.getUserDetail()
@@ -328,8 +346,8 @@ export default {
             backdrop: false,
             position: 'bottom-end',
             width: '330px',
-            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
-            text: 'อัพเดทข้อมูลสำเร็จ',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">'+this.textLang.succeed+'</strong>',
+            text: this.textLang.Dataupdatesuccessfully,
             showCloseButton: true,
             showConfirmButton: false,
             timer: 5000,
@@ -346,8 +364,8 @@ export default {
             backdrop: false,
             position: 'bottom-end',
             width: '330px',
-            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
-            text: 'อัพเดทข้อมูลล้มเหลว',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">'+this.textLang.fail+'</strong>',
+            text: this.textLang.Dataupdatefailed,
             showCloseButton: true,
             showConfirmButton: false,
             timer: 5000,

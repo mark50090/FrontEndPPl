@@ -896,6 +896,24 @@
         "details":"รายละเอียด",
         "status":"สถานะ",
         "date":"วันที่"
+  },
+  "Setting":{
+      "setgeneralinformation": "ตั้งค่าข้อมูลทั่วไป",
+      "name": "ชื่อ",
+      "Username": "ชื่อผู้ใช้",
+      "defaultsignature": "ลายเซ็นเริ่มต้น",
+      "nodefaultsignature": "ไม่มีลายเซ็นเริ่มต้น",
+      "selectsignature": "เลือกลายเซ็น",
+      "Editdefaultsignature": "แก้ไขลายเซ็นเริ่มต้น",
+      "Adddefaultsignature": "เพิ่มลายเซ็นเริ่มต้น",
+      "cancel": "ยกเลิก",
+      "record": "บันทึก",
+      "Setupnotifications": "ตั้งค่าการแจ้งเตือน",
+      "succeed":"สำเร็จ",
+      "Dataupdatesuccessfully": "อัพเดทข้อมูลสำเร็จ",
+      "fail":"ล้มเหลว",
+      "Dataupdatefailed":"อัพเดทข้อมูลล้มเหลว",
+      "ChooseBusiness":"เลือก Busines"
   }
 }
 
