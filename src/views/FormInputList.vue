@@ -69,17 +69,18 @@ import { EventBus } from '../EventBus'
         itemsPerPage: 10
       },
       totalItemsTemplate: 0,
-      keyword: ""
+      keyword: "",
+      textLang:{
+        search: 'ค้นหา',
+        alldocuments: 'เอกสารทั้งหมด',
+        filloutdocument: 'กรอกเอกสาร',
+        number: 'ลำดับ',
+        documentname: 'ชื่อเอกสาร',
+        department: 'แผนก',
+        documentID: 'รหัสเอกสาร',
+    }
     }),
-    textLang:{
-      search: 'ค้นหา',
-      alldocuments: 'เอกสารทั้งหมด',
-      filloutdocument: 'กรอกเอกสาร',
-      number: 'ลำดับ',
-      documentname: 'ชื่อเอกสาร',
-      department: 'แผนก',
-      documentID: 'รหัสเอกสาร',
-    },
+    
     mounted() {
       this.searchTemplate()
       EventBus.$emit('loadingOverlay', true)
