@@ -54,15 +54,16 @@
         {text: 'View / Export Excel', align: 'start', sortable: false, value: 'action'},
       ],
       report_data: [],
-      keyword: ""
+      keyword: "",
+      textLang:{
+        documentreport: 'รายงานเอกสาร',
+        search: 'ค้นหา', 
+        number: 'ลำดับ',
+        initials: 'ชื่อย่อ',
+        Documenttypename: 'ชื่อประเภทเอกสาร'
+      }
     }),
-    textLang:{
-      documentreport: 'รายงานเอกสาร',
-      search: 'ค้นหา', 
-      number: 'ลำดับ',
-      initials: 'ชื่อย่อ',
-      Documenttypename: 'ชื่อประเภทเอกสาร',
-    },
+    
 
     mounted(){
       this.searchTemplateForm()

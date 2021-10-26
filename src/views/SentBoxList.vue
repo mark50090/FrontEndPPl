@@ -115,30 +115,31 @@ import { EventBus } from '../EventBus'
         itemsPerPage: 10
       },
       totalItemsTransaction: 0,
-      typeDocument:[{name: this.textLang.all, _id: "", detail: ""}],
-      selectedTypeDocs: {name: this.textLang.all, _id: "", detail: ""},
+      typeDocument:[{name: 'ทั้งหมด', _id: "", detail: ""}],
+      selectedTypeDocs: {name: 'ทั้งหมด', _id: "", detail: ""},
       isReady: false,  
-    }),
-    textLang:{
-      search:'ค้นหา',
-      documenttype: 'ประเภทเอกสาร',
-      documentstatus:'สถานะเอกสาร',
-      alldocuments:'เอกสารทั้งหมด',
-      all: 'ทั้งหมด',
-      pendingapproval: 'รออนุมัติ',
-      approved: 'อนุมัติแล้ว',
-      inprogress: 'กำลังดำเนินการ',
-      rejectapproval: 'ปฏิเสธอนุมัติ',
-      pending:'รอดำเนินการ',
-      sentboxtable:{
-        sender:'ผู้ส่ง',
-        type:'ประเภท',
-        documentnumber:'เลขที่เอกสาร',
-        details:'รายละเอียด',
-        status:'สถานะ',
-        date:'วันที่',
+      textLang:{
+        search:'ค้นหา',
+        documenttype: 'ประเภทเอกสาร',
+        documentstatus:'สถานะเอกสาร',
+        alldocuments:'เอกสารทั้งหมด',
+        all: 'ทั้งหมด',
+        pendingapproval: 'รออนุมัติ',
+        approved: 'อนุมัติแล้ว',
+        inprogress: 'กำลังดำเนินการ',
+        rejectapproval: 'ปฏิเสธอนุมัติ',
+        pending:'รอดำเนินการ',
+        sentboxtable:{
+          sender:'ผู้ส่ง',
+          type:'ประเภท',
+          documentnumber:'เลขที่เอกสาร',
+          details:'รายละเอียด',
+          status:'สถานะ',
+          date:'วันที่',
       },
-    },
+    }
+    }),
+    
     mounted() {
       this.getdata()
       this.searchTransaction()

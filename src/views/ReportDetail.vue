@@ -47,6 +47,10 @@ import DocumentReport from '../components/DocumentReportModal'
       url: "",
       doc_type: "",
       workflow_id: '',
+      textLang:{
+        summaryreportdocument: 'รายงานสรุปรายละเอียดการดำเนินการเอกสาร',
+        no: 'ลำดับที่',
+    }
     }),
     textLang:{
       summaryreportdocument: 'รายงานสรุปรายละเอียดการดำเนินการเอกสาร',
