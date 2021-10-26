@@ -19,7 +19,7 @@
                 <v-file-input v-model="uploadImage" type="file" id="stampFile" accept="image/png" style="display: none" @change="uploadStamp" />
               </v-col>
               <v-col cols="6" md="6" lg="6" class="pl-1 pr-0">
-                <v-btn outlined block color="#67C25D" value="sign_pad" active-class="sign-type-active" class="upload-stamp-btn" @click="draw_signature()">วาดลายเซ็น</v-btn>
+                <v-btn outlined block color="#67C25D" value="sign_pad" active-class="sign-type-active" class="upload-stamp-btn" @click="draw_signature()">{{ textLang.stamp_pain }}</v-btn>
               </v-col>
             </v-btn-toggle>
           </v-row>
@@ -39,10 +39,10 @@
               <v-btn outlined color="error" class="upload-stamp-btn" @click="deleteStamp()">{{ textLang.stamp_delete }}</v-btn>
             </v-col>
             <v-col v-if="sign_type == 'sign_pad'" cols="auto" class="pl-0 pr-2"> <!-- show when it is sign pad only -->
-              <v-btn depressed dark color="#757575" class="upload-stamp-btn" @click="clearStamp()">ล้างค่า</v-btn>
+              <v-btn depressed dark color="#757575" class="upload-stamp-btn" @click="clearStamp()">{{ textLang.stamp_clear }}</v-btn>
             </v-col>
             <v-col cols="auto" class="pl-0 pr-2">
-              <v-btn :disabled="valid" depressed color="#67C25D" class="upload-stamp-btn white--text" @click="saveStamp()">{{ textLang.stamp_save}}</v-btn>
+              <v-btn :disabled="valid" depressed color="#67C25D" class="upload-stamp-btn white--text" @click="saveStamp()">{{ textLang.stamp_save }}</v-btn>
             </v-col>
           </v-row>
         </v-card-actions>
@@ -81,7 +81,7 @@ export default {
       stamp_pain: 'วาดลายเซ็น',
       stamp_delete: 'ลบลายเซ็น',
       stamp_clear: 'ล้างค่า',
-      stamp_save: 'บันทึก',
+      stamp_save : 'บันทึก',
       update_stamp_success: 'อัพเดทข้อมูลสำเร็จ',
       update_stamp_fail: 'อัพเดทข้อมูลล้มเหลว',
       stamp_succeed: 'สำเร็จ',
