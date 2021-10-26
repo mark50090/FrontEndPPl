@@ -178,7 +178,9 @@
       "clearsign": "ล้างค่า",
       "savesign": "บันทึก",
       "update_default_success": "อัพเดทข้อมูลสำเร็จ",
-      "update_default_fail": "อัพเดทข้อมูลล้มเหลว"
+      "update_default_fail": "อัพเดทข้อมูลล้มเหลว",
+      "update_succeed": "สำเร็จ",
+      "update_error": "ล้มเหลว"
     },
     "DefaultStampModal": {
       "stamp_head": "ลายเซ็น",
@@ -189,7 +191,9 @@
       "stamp_clear": "ล้างค่า",
       "stamp_save": "บันทึก",
       "update_stamp_success": "อัพเดทข้อมูลสำเร็จ",
-      "update_stamp_fail": "อัพเดทข้อมูลล้มเหลว"
+      "update_stamp_fail": "อัพเดทข้อมูลล้มเหลว",
+      "stamp_succeed": "สำเร็จ",
+      "stamp_error": "ล้มเหลว"
     },
     "DeleteForm": {
       "delete_form1": "ต้องการลบแบบฟอร์ม",
@@ -197,7 +201,9 @@
       "cancel_delete": "ยกเลิก",
       "confirm_delete": "ตกลง",
       "delete_success": "ลบแบบฟอร์มสำเร็จ",
-      "delete_fail": "ลบแบบฟอร์มไม่สำเร็จ"
+      "delete_fail": "ลบแบบฟอร์มไม่สำเร็จ",
+      "delete_form_succeed": "สำเร็จ",
+      "delete_form_error": "ล้มเหลว"
     },
     "DeleteMessage": {
       "texthead_form": "ต้องการยกเลิกข้อความหรือไม่ ?",
@@ -208,7 +214,7 @@
       "texthead_card": "Export รายงาน Excel",
       "select_date": "เลือกช่วงวันที่ที่ต้องการ Export",
       "cancel_export": "ยกเลิก",
-      "confirm_export": "Export"
+      "range_join": "จนถึง"
     },
     "ImportForm": {
       "import_file": "นำเข้าไฟล์แบบฟอร์ม",
@@ -220,13 +226,16 @@
       "num_return": "ลำดับที่ส่งคืน",
       "recorrection": "ส่งคืน",
       "return_file_success": "ส่งคืนแก้ไขเอกสารสำเร็จ",
-      "return_file_fail": "ส่งคืนแก้ไขเอกสารไม่สำเร็จ"
+      "return_file_fail": "ส่งคืนแก้ไขเอกสารไม่สำเร็จ",
+      "return_revertable_no": "ลำดับที่"
     },
     "SendMail": {
       "recipient_email": "อีเมลผู้รับ",
       "send_email": "ส่งอีเมล",
       "send_email_success": "ส่งอีเมลสำเร็",
-      "send_email_fail": "ส่งอีเมลล้มเหลว"
+      "send_email_fail": "ส่งอีเมลล้มเหลว",
+      "send_email_succeed": "สำเร็จ",
+      "send_email_error": "ล้มเหลว"
     },
     "StampModal": {
       "message_stamp": "ข้อความ Stamp",
@@ -236,7 +245,6 @@
     "TransferEdit": {
       "transfer_edit_form": "โอนสิทธิการแก้ไขแบบฟอร์ม",
       "transfer_email": "E-mail ที่จะโอนสิทธิ",
-      "transfer_email_one": "@one.th",
       "cancel_transfer": "ยกเลิก",
       "confirm_transfer": "โอนสิทธิ"
     }

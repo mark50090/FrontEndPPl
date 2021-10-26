@@ -21,7 +21,7 @@
                 <v-text-field color="#4caf50"
                     class="font-box-transfer"
                     :label="textLang.transfer_email"
-                    :placeholder="textLang.transfer_email_one"
+                    placeholder="@one.th"
                     dense
                     outlined
                     hide-details
@@ -58,7 +58,6 @@ import { EventBus } from '../EventBus'
       textLang: {
         transfer_edit_form: 'โอนสิทธิการแก้ไขแบบฟอร์ม',
         transfer_email: 'E-mail ที่จะโอนสิทธิ',
-        transfer_email_one: '@one.th',
         cancel_transfer: 'ยกเลิก',
         confirm_transfer: 'โอนสิทธิ'
       }

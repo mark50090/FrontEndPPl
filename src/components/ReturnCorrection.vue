@@ -63,7 +63,8 @@ import { EventBus } from '../EventBus'
         num_return: 'ลำดับที่ส่งคืน',
         recorrection: 'ส่งคืน',
         return_file_success: 'ส่งคืนแก้ไขเอกสารสำเร็จ',
-        return_file_fail: 'ส่งคืนแก้ไขเอกสารไม่สำเร็จ'
+        return_file_fail: 'ส่งคืนแก้ไขเอกสารไม่สำเร็จ',
+        return_revertable_no: 'ลำดับที่'
       }
     }),
     mounted() {
@@ -80,7 +81,7 @@ import { EventBus } from '../EventBus'
         var detail = data.flow_step?data.flow_step:data.transaction_detail.flow_data
         detail.forEach((element,index) => {
           if(element.status == 'Y')
-          this.revertable_order.push({text: `ลำดับที่ ${index+1}`,value: index, name: element.name})
+          this.revertable_order.push({text: this.textLang.return_revertable_no + (index+1),value: index, name: element.name})
         });
       },
       async revertTransaction(){

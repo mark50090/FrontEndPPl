@@ -65,7 +65,7 @@
                   block
                   depressed
                   @click="exportExcel"
-                  >{{ textLang.confirm_export }}</v-btn
+                  >Export</v-btn
                 >
                 </v-col>
                 <v-spacer></v-spacer>
@@ -90,7 +90,7 @@ export default {
       texthead_card: 'Export รายงาน Excel',
       select_date: 'เลือกช่วงวันที่ที่ต้องการ Export',
       cancel_export: 'ยกเลิก',
-      confirm_export: 'Export'
+      range_join: 'จนถึง'
     }
   }),
   mounted() {
@@ -101,7 +101,7 @@ export default {
   },
   computed: {
     dateRangeText() {
-      return this.dates.map(x => this.setDateFormatBEShort(x)).join(' จนถึง ')
+      return this.dates.map(x => this.setDateFormatBEShort(x)).join(this.textLang.range_join)
     },
   },
   methods: {
