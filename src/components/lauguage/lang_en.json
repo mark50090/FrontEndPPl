@@ -832,6 +832,13 @@
     "oversize": " เนื่องจากมีขนาดเกิน 30 MB",
     "refuse":"ปฏิเสธ",
     "approvee": "อนุมัติ"
+  },
+  "DocumentReport": {
+    "documentreport": "รายงานเอกสาร",
+    "search": "ค้นหา", 
+    "number": "ลำดับ",
+    "initials": "ชื่อย่อ",
+    "Documenttypename": "ชื่อประเภทเอกสาร"
   }
 
 }
