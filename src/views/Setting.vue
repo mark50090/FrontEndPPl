@@ -57,7 +57,7 @@
           <v-col class="pa-0" cols="7" md="10" lg="10">
             <v-row class="font-all">
               <v-col cols="8" md="5" lg="5" class="px-0 pt-4">
-                <v-autocomplete no-data-text=this.textLang.nodefaultsignature dense outlined hide-details auto-select-first :placeholder="this.textLang.selectsignature" color="#67C25D" append-icon="mdi-chevron-down" class="font-dropdown ic-dropdown select-stamp-box" v-model="selectedStamp" :items="default_stamp" item-text="StampName" return-object></v-autocomplete>
+                <v-autocomplete :no-data-text="this.textLang.nodefaultsignature" dense outlined hide-details auto-select-first :placeholder="this.textLang.selectsignature" color="#67C25D" append-icon="mdi-chevron-down" class="font-dropdown ic-dropdown select-stamp-box" v-model="selectedStamp" :items="default_stamp" item-text="StampName" return-object></v-autocomplete>
               </v-col>
               <v-col v-if="show_Edit_Stamp == true" cols="auto" md="auto" lg="auto" align-self="center" class="pt-4 pr-0 edit-stamp-btn-block">
                 <v-tooltip top>
@@ -226,7 +226,7 @@ export default {
       Dataupdatesuccessfully: 'อัพเดทข้อมูลสำเร็จ',
       fail:'ล้มเหลว',
       Dataupdatefailed:'อัพเดทข้อมูลล้มเหลว',
-      ChooseBusiness:'เลือก Busines',
+      ChooseBusiness:'เลือก Business',
     },
   }),
   mounted() {
