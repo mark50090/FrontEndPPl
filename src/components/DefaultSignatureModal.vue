@@ -2,7 +2,7 @@
   <v-dialog persistent max-width="360px" v-model="signature_dialog">
     <v-card>
       <v-card-title>
-        <span class="signature-modal-header">{{ textLangDefaultSignatureModal.signature_header }}</span>
+        <span class="signature-modal-header">{{ textLang.signature_header }}</span>
         <v-spacer></v-spacer>
         <v-btn icon dark small color="black" @click="cancelButton()">
           <v-icon>mdi-close-circle</v-icon>
@@ -12,11 +12,11 @@
         <v-row class="signature-modal-row">
           <v-btn-toggle group dense mandatory v-model="sign_type" class="signature-setting-btn-group">
             <v-col cols="6" md="6" lg="6" class="pl-0 pr-1">
-              <v-btn outlined block color="#67C25D" value="sign_image" @click="openUploadSignatureImage()" active-class="sign-type-btn-active" class="upload-signature-btn">{{ textLangDefaultSignatureModal.upload_file }}</v-btn>
+              <v-btn outlined block color="#67C25D" value="sign_image" @click="openUploadSignatureImage()" active-class="sign-type-btn-active" class="upload-signature-btn">{{ textLang.upload_file }}</v-btn>
               <v-file-input v-model="uploadImage" class="input" label="Upload license" type="file" id="signatureImage" accept="image/png" style="display: none"  @change="uploadSignatureImage" />
             </v-col>
             <v-col cols="6" md="6" lg="6" class="px-0">
-              <v-btn outlined block color="#67C25D" value="sign_pad" active-class="sign-type-btn-active" class="upload-signature-btn" @click="drawSignature()">{{ textLangDefaultSignatureModal.signpad }}</v-btn>
+              <v-btn outlined block color="#67C25D" value="sign_pad" active-class="sign-type-btn-active" class="upload-signature-btn" @click="drawSignature()">{{ textLang.signpad }}</v-btn>
             </v-col>
           </v-btn-toggle>
         </v-row>
@@ -33,10 +33,10 @@
         <v-row class="signature-modal-row">
           <v-spacer></v-spacer>
           <v-col v-if="sign_type == 'sign_pad'" cols="auto" class="pl-0 pr-2"> <!-- show when it is sign pad only -->
-            <v-btn v-if="stateDefaultSignature == 'draw'" depressed dark color="#757575" class="upload-signature-btn" @click="clearSignature()">{{ textLangDefaultSignatureModal.clearsign}}</v-btn>
+            <v-btn v-if="stateDefaultSignature == 'draw'" depressed dark color="#757575" class="upload-signature-btn" @click="clearSignature()">{{ textLang.clearsign}}</v-btn>
           </v-col>
           <v-col cols="auto" class="pl-0 pr-2">
-            <v-btn depressed dark color="#67C25D" class="upload-signature-btn" @click="saveSignature()">{{ textLangDefaultSignatureModal.savesign }}</v-btn>
+            <v-btn depressed dark color="#67C25D" class="upload-signature-btn" @click="saveSignature()">{{ textLang.savesign }}</v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
@@ -67,7 +67,7 @@ export default {
     default_Business: '',
 
     //Language Variable
-    textLangDefaultSignatureModal: {
+    textLang: {
       signature_header: 'กำหนดลายเซ็น',
       upload_file: 'อัพโหลดไฟล์',
       signpad: 'วาดลายเซ็น',
@@ -187,7 +187,7 @@ export default {
             position: 'bottom-end',
             width: '330px',
             title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
-            text: this.textLangDefaultSignatureModal.update_default_success,
+            text: this.textLang.update_default_success,
             showCloseButton: true,
             showConfirmButton: false,
             timer: 5000,
@@ -205,7 +205,7 @@ export default {
             position: 'bottom-end',
             width: '330px',
             title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
-            text: this.textLangDefaultSignatureModal.update_default_fail,
+            text: this.textLang.update_default_fail,
             showCloseButton: true,
             showConfirmButton: false,
             timer: 5000,

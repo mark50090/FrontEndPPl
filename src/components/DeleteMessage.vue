@@ -3,7 +3,7 @@
        <v-card>
         <v-card-text class="pt-7 px-7 pb-2">
           <v-row class="text-hing" justify="center">
-            <span class="front-hing">{{ textLangDeleteMessage.texthead_form }}</span>    
+            <span class="front-hing">{{ textLang.texthead_form }}</span>    
           </v-row>
         </v-card-text>
         <v-card-actions>
@@ -19,7 +19,7 @@
                   block
                   depressed
                   @click="dialog=false"
-                  >{{ textLangDeleteMessage.cancel_form }}</v-btn>
+                  >{{ textLang.cancel_form }}</v-btn>
                   </v-col> 
           <v-col cols="4"
           md="4"
@@ -31,7 +31,7 @@
                   block
                   depressed
                   @click="confirm_delete_fn"
-                  >{{ textLangDeleteMessage.confirm_form }}</v-btn
+                  >{{ textLang.confirm_form }}</v-btn
                 >
                 </v-col>
                 <v-spacer></v-spacer>
@@ -47,7 +47,7 @@ export default {
         dialog: false,
 
         //Language Variable
-        textLangDeleteMessage: {
+        textLang: {
           texthead_form: 'ต้องการยกเลิกข้อความหรือไม่ ?',
           cancel_form: 'ยกเลิก',
           confirm_form: 'ตกลง'

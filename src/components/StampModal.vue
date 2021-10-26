@@ -25,7 +25,7 @@
           class="px-1"
         >
           <v-text-field class="m-stamp l-stamp"
-            :placeholder="textLangStampModal.message_stamp"
+            :placeholder="textLang.message_stamp"
             color="rgb(102, 101, 101)"
             outlined
             hide-details
@@ -46,7 +46,7 @@
                   outlined
                   block
                   @click="dialog=false"
-                  >{{ textLangStampModal.cancel_stamp }}</v-btn>
+                  >{{ textLang.cancel_stamp }}</v-btn>
                   </v-col>
           
           <v-col cols="6"
@@ -60,7 +60,7 @@
                   block
                   @click="dialogConfirm = true"
 
-                  >{{ textLangStampModal.confirm_stamp }}</v-btn
+                  >{{ textLang.confirm_stamp }}</v-btn
                 >
                 </v-col><v-spacer></v-spacer>
                   </v-row>
@@ -75,7 +75,7 @@ export default {
         dialog: false,
 
         //Language Variable
-        textLangStampModal: {
+        textLang: {
           message_stamp: 'ข้อความ Stamp',
           cancel_stamp: 'ยกเลิก',
           confirm_stamp: 'บันทึก'

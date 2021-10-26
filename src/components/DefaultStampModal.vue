@@ -3,7 +3,7 @@
     <v-dialog persistent max-width="360px" v-model="default_stamp_dialog">
       <v-card>
         <v-card-title>
-          <span class="default-stamp-header">{{ action_header }}{{textLangDefaultStampModal.stamp_head}}</span>
+          <span class="default-stamp-header">{{ action_header }}{{textLang.stamp_head}}</span>
           <v-spacer></v-spacer>
           <v-btn icon dark small color="black" @click="cancelButton()">
             <v-icon>mdi-close-circle</v-icon>
@@ -11,19 +11,19 @@
         </v-card-title>
         <v-card-text class="pb-0">
             <v-row class="default-stamp-row">
-                <v-text-field dense outlined hide-details color="#67C25D" :label="textLangDefaultStampModal.stamp_name_show" class="stamp-name-box stamp-name-label" v-model="stamp_name" :rules="stamp_name_Rules" required ></v-text-field>
+                <v-text-field dense outlined hide-details color="#67C25D" :label="textLang.stamp_name_show" class="stamp-name-box stamp-name-label" v-model="stamp_name" :rules="stamp_name_Rules" required ></v-text-field>
             </v-row>
 
           <v-row class="mt-3 default-stamp-row">
             <v-btn-toggle group dense mandatory v-model="sign_type" class="sign-type-btn-group">
               <v-col cols="6" md="6" lg="6" class="pl-0 pr-1">
-                <v-btn outlined block color="#67C25D" @click="openUploadStamp()" value="sign_image" active-class="sign-type-active" class="upload-stamp-btn">{{ textLangDefaultStampModal.stamp_upload }}</v-btn>
+                <v-btn outlined block color="#67C25D" @click="openUploadStamp()" value="sign_image" active-class="sign-type-active" class="upload-stamp-btn">{{ textLang.stamp_upload }}</v-btn>
                 <!-- <v-form ref="form" v-model="valid"> -->
                 <v-file-input v-model="uploadImage" type="file" id="stampFile" accept="image/png" style="display: none" @change="uploadStamp" :rules="image_stamp_Rules" required />
                 <!-- </v-form> -->
               </v-col>
               <v-col cols="6" md="6" lg="6" class="pl-1 pr-0">
-                <v-btn outlined block color="#67C25D" value="sign_pad" active-class="sign-type-active" class="upload-stamp-btn">{{ textLangDefaultStampModal.stamp_pain}}</v-btn>
+                <v-btn outlined block color="#67C25D" value="sign_pad" active-class="sign-type-active" class="upload-stamp-btn">{{ textLang.stamp_pain}}</v-btn>
               </v-col>
             </v-btn-toggle>
           </v-row>
@@ -38,13 +38,13 @@
           <v-row class="default-stamp-row">
             <v-spacer></v-spacer>
             <v-col v-if="action_header == 'แก้ไข'" cols="auto" class="pl-0 pr-2"> <!-- show when edit signature -->
-              <v-btn outlined color="error" class="upload-stamp-btn" @click="deleteStamp()">{{ textLangDefaultStampModal.stamp_delete }}</v-btn>
+              <v-btn outlined color="error" class="upload-stamp-btn" @click="deleteStamp()">{{ textLang.stamp_delete }}</v-btn>
             </v-col>
             <v-col v-if="sign_type == 'sign_pad'" cols="auto" class="pl-0 pr-2"> <!-- show when it is sign pad only -->
-              <v-btn depressed dark color="#757575" class="upload-stamp-btn">{{ textLangDefaultStampModal.stamp_clear }}</v-btn>
+              <v-btn depressed dark color="#757575" class="upload-stamp-btn">{{ textLang.stamp_clear }}</v-btn>
             </v-col>
             <v-col cols="auto" class="pl-0 pr-2">
-                <v-btn :disabled="!valid" depressed color="#67C25D" class="upload-stamp-btn white--text" @click="saveStamp()">{{ textLangDefaultStampModal.stamp_save}}</v-btn>
+                <v-btn :disabled="!valid" depressed color="#67C25D" class="upload-stamp-btn white--text" @click="saveStamp()">{{ textLang.stamp_save}}</v-btn>
             </v-col>
           </v-row>
         </v-card-actions>
@@ -80,7 +80,7 @@ export default {
     notify_email: '',
 
     //Language Variable
-    textLangDefaultStampModal: {
+    textLang: {
       stamp_head: 'ลายเซ็น',
       stamp_name_show: 'ชื่อลายเซ็น',
       stamp_upload: 'อัพโหลดไฟล์',
@@ -228,7 +228,7 @@ export default {
             position: 'bottom-end',
             width: '330px',
             title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
-            text: this.textLangDefaultStampModal.update_stamp_success,
+            text: this.textLang.update_stamp_success,
             showCloseButton: true,
             showConfirmButton: false,
             timer: 5000,
@@ -246,7 +246,7 @@ export default {
             position: 'bottom-end',
             width: '330px',
             title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
-            text: this.textLangDefaultStampModal.update_stamp_fail,
+            text: this.textLang.update_stamp_fail,
             showCloseButton: true,
             showConfirmButton: false,
             timer: 5000,

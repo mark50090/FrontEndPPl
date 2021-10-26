@@ -2,11 +2,11 @@
     <v-dialog v-model="dialog" persistent max-width="500">
        <v-card>
             <v-card-title class="front-t-ex py-2">
-                {{ textLangDocumentReportModal.texthead_card }}
+                {{ textLang.texthead_card }}
             </v-card-title>
         <v-card-text class="pt-5">
           <v-row class="text-form-ex">
-                  <span class="front-hing-ex">{{ textLangDocumentReportModal.select_date }}</span>   
+                  <span class="front-hing-ex">{{ textLang.select_date }}</span>   
           </v-row>
           <v-row class="text-form-ex mt-6">
             <v-menu
@@ -53,7 +53,7 @@
                   block
                   outlined
                   @click="dialog=false"
-                  >{{ textLangDocumentReportModal.cancel_export }}</v-btn>
+                  >{{ textLang.cancel_export }}</v-btn>
                   </v-col> 
           <v-col cols="4"
           md="3"
@@ -65,7 +65,7 @@
                   block
                   depressed
                   @click="exportExcel"
-                  >{{ textLangDocumentReportModal.confirm_export }}</v-btn
+                  >{{ textLang.confirm_export }}</v-btn
                 >
                 </v-col>
                 <v-spacer></v-spacer>
@@ -86,7 +86,7 @@ export default {
     template_id: '',
 
     //Language Variable
-    textLangDocumentReportModal: {
+    textLang: {
       texthead_card: 'Export รายงาน Excel',
       select_date: 'เลือกช่วงวันที่ที่ต้องการ Export',
       cancel_export: 'ยกเลิก',
