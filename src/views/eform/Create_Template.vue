@@ -5,15 +5,15 @@
     </v-overlay>
     <v-toolbar dense flat class="create-menu-bar"> <!--menu bar -->
       <v-btn icon text large color="#4CAF50" @click="openBack()"><v-icon>mdi-chevron-left</v-icon></v-btn>
-      <span class="name-page"><b>ออกจากหน้าสร้าง</b></span>
+      <span class="name-page"><b>{{ textLang.tabMenubar.create_doc }}</b></span>
       <v-spacer></v-spacer>
       <v-tabs centered color="#4CAF50" class="create-menu" v-model="tab">
-        <v-tab class="create-each-menu">กำหนดรูปแบบฟอร์ม</v-tab>
+        <v-tab class="create-each-menu">{{ textLang.tabMenubar.set_format }}</v-tab>
         <v-tab class="create-each-menu">{{ textLang.tabMenubar.tools }}</v-tab>
         <v-tab class="create-each-menu">{{ textLang.tabMenubar.property }}</v-tab>
         <!-- <v-tab class="create-each-menu" @click="getAllPermission">{{ textLang.tabMenubar.complete_sequence }}</v-tab> -->
         <v-tab class="create-each-menu">{{ textLang.tabMenubar.set_paperless }}</v-tab>
-        <v-tab class="create-short-form-menu">ตั้งค่าการกรอกในมุมมองแบบฟอร์มอย่างง่าย</v-tab>
+        <v-tab class="create-short-form-menu">{{ textLang.tabMenubar.filling_mobile }}</v-tab>
       </v-tabs>
       <v-spacer></v-spacer>
       <!-- <v-btn depressed color="grey lighten-2" class="create-preview-btn"><v-icon>mdi-file-document</v-icon><b>ดูเอกสารตัวอย่าง</b></v-btn> -->
@@ -302,12 +302,12 @@
       <v-col v-if="show_property == true" :cols="col_property" class="property-block2"> <!-- Property Plane -->
         <v-tabs-items v-model="tab">
           <v-tab-item> <!-- E-Form Setting Tab -->
-            <span class="header-property"><b>กำหนดรูปแบบฟอร์ม</b></span>
+            <span class="header-property"><b>{{ textLang.set_format_form.set_doc_format }}</b></span>
             <br><br>
-            <span class="sub-title-property"><b>กำหนดรายละเอียดแบบฟอร์ม</b></span>
+            <span class="sub-title-property"><b>{{ textLang.set_format_form.set_doc_detail }}</b></span>
             <v-row class="row-prop">
               <v-col cols="4" class="pt-4 pb-0 mt-3 title-prop-block">
-                <span class="title-prop">ชื่อแบบฟอร์ม:</span>
+                <span class="title-prop">{{ textLang.set_format_form.name_doc }}</span>
               </v-col>
               <v-col cols="8" class="pl-0 pr-2 pb-0 mt-3">
                 <v-text-field outlined dense class="prop-input create-prop-line-height" color="#4caf50" v-model="template_name" :error="name_template_error" :error-messages="error_file_name_msg" @click="copyObject = ''"></v-text-field>
@@ -339,7 +339,7 @@
             </v-row> -->
             <v-row class="mt-0 row-prop">
               <v-col cols="4" align-self="center" class="py-0 title-prop-block">
-                <span class="title-prop">รหัสแบบฟอร์ม:</span>
+                <span class="title-prop">{{ textLang.set_format_form.id }}</span>
               </v-col>
               <v-col cols="8" align-self="center" class="pl-0 pr-2 py-0">
                 <v-text-field outlined dense hide-details color="#4caf50" class="prop-input create-prop-line-height" @click="copyObject = ''" v-model="code_template"></v-text-field>
@@ -347,7 +347,7 @@
             </v-row>
             <v-row class="row-prop">
               <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
-                <span class="title-prop">เวอร์ชันแบบฟอร์ม:</span>
+                <span class="title-prop">{{ textLang.set_format_form.version }}</span>
               </v-col>
               <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
                 <v-text-field outlined dense hide-details color="#4caf50" class="prop-input create-prop-line-height" @click="copyObject = ''" v-model="version_template"></v-text-field>
@@ -492,7 +492,7 @@
             <br>
             <v-divider class="divider-prop"></v-divider>
             <br>
-            <span class="sub-title-property"><b>สถานะของแบบฟอร์ม</b></span>
+            <span class="sub-title-property"><b>{{ textLang.status_doc.status_doc}}</b></span>
             <v-row class="row-prop">
               <v-radio-group row hide-details class="template-type-block" v-model="template_status">
                 <v-radio color="#4caf50" value="ACTIVE">
@@ -519,10 +519,10 @@
             <br>
             <v-divider class="divider-prop"></v-divider>
             <br>
-            <span class="sub-title-property"><b>ตั้งค่าการแชร์แบบฟอร์ม</b></span>
+            <span class="sub-title-property"><b>{{ textLang.set_sharing.doc_sharing_set}}</b></span>
             <v-row class="mt-1 row-prop">
               <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
-                <span class="title-prop">Business ที่แชร์:</span>
+                <span class="title-prop">{{ textLang.set_sharing.doc_sharing}}</span>
               </v-col>
               <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
                 <v-text-field readonly outlined dense hide-details color="#4caf50" class="prop-input create-prop-line-height" v-model="business.first_name_th"></v-text-field>
@@ -537,7 +537,7 @@
             </v-row> -->
             <!-- <v-row class="mt-2 row-prop" v-if="!isPublicForm && business.first_name_th != 'เฉพาะฉัน'">
               <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
-                <span class="title-prop">สิทธิ์การใช้งาน:</span>
+                <span class="title-prop">{{ textLang.set_sharing.doc_usage}}</span>
               </v-col>
               <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
                 <v-autocomplete dense outlined hide-details multiple chips append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" item-color="#4caf50" color="#4caf50" class="prop-input permission-box form-permission-box create-prop-dropdown-icon" :items="roleNameList" v-model="accessRole">
@@ -1786,7 +1786,7 @@
               <span class="sub-title-property"><b>{{ textLang.property_type.assignment }}</b></span>
               <v-row class="mt-1 row-prop">
                 <v-col cols="4" align-self="center" class="pb-0 title-prop-block">
-                  <span class="title-prop">ลำดับ Workflow:</span>
+                  <span class="title-prop">{{ textLang.property_type.order_refer }}</span>
                 </v-col>
                 <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
                   <v-autocomplete outlined dense hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :items="step_choices" v-model="objectArray[selected_array][selected_object].style.permission_step" color="#4caf50" class="prop-input create-prop-line-height create-prop-dropdown-icon"></v-autocomplete>
@@ -1993,25 +1993,31 @@
                 <v-btn depressed block small :color="color_varidate_button" class="validate-doc-btn" @click="openFlowCondition()">{{ textLang.set_doc_paperless.set_auto_flow_btn }}</v-btn>
               </v-col>
             </v-row> -->
-            <v-card v-if="false" outlined class="mr-2 mt-3 pa-2 all-create-workflow-block"> <!-- example workflow -->
-              <template> <!-- each step --> 
-                <v-row class="workflow-step-row title-prop">
-                  ลำดับที่ 20 : ผู้มีสิทธิ์กรอกและเซ็น <!-- ผู้มีสิทธิ์อนุมัติ / ผู้มีสิทธิ์เซ็น / ผู้มีสิทธิ์กรอก / ผู้มีสิทธิ์กรอกและเซ็น -->
+            <v-card outlined class="mr-2 mt-3 pa-2 all-create-workflow-block"> <!-- example workflow -->
+              <div v-for="item in currentSelectedFlow.flow_data" :key="item.index"> <!-- each step --> 
+                <v-row v-if="item.action == 'Fill'" class="workflow-step-row title-prop">
+                  {{ textLang.set_doc_paperless.step_num }} {{item.index + 1}} : {{textLang.set_doc_paperless.permission_input_form}} <!-- ผู้มีสิทธิ์อนุมัติ(textLang.set_doc_paperless.permission_approve) / ผู้มีสิทธิ์เซ็น(textLang.set_doc_paperless.permission_sign) / ผู้มีสิทธิ์กรอก(textLang.set_doc_paperless.permission_input_form) / ผู้มีสิทธิ์กรอกและเซ็น(textLang.set_doc_paperless.permission_sign_input) -->
+                </v-row>
+                <v-row v-if="item.action == 'Sign' || item.action == 'Sign-Ca'" class="workflow-step-row title-prop">
+                  {{ textLang.set_doc_paperless.step_num }} {{item.index + 1}} : {{textLang.set_doc_paperless.permission_sign}} 
+                </v-row>
+                <v-row v-if="item.action == 'Approve'" class="workflow-step-row title-prop">
+                  {{ textLang.set_doc_paperless.step_num }} {{item.index + 1}} : {{textLang.set_doc_paperless.permission_approve}}
                 </v-row>
                 <v-list dense class="pt-1 pb-5">
-                  <v-list-item dense class="pl-2 pr-0 each-step-workflow"> <!-- each mail in step -->
+                  <v-list-item v-for="email in item.actor[0].permission_email" :key="email.account_id" dense class="pl-2 pr-0 each-step-workflow"> <!-- each mail in step -->
                     <v-list-item-icon class="mr-2 my-0 each-step-workflow-icon">
                       <v-icon>mdi-account</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content class="py-0 each-step-workflow-mail">
-                      workflow.di@one.th
+                      {{ email.thai_email }}
                     </v-list-item-content>
                     <v-list-item-icon class="ml-2 my-0 alert-onechat-block"> <!-- show when this mail is set to alert in One Chat -->
                       <img height="21px" src="https://www.img.in.th/images/a368504d4cdb93225bda2f04c665ead7.png" />
                     </v-list-item-icon>
                   </v-list-item>
                 </v-list>
-              </template>
+              </div>
             </v-card>
           </v-tab-item>
           <v-tab-item> <!-- Filling Mobile Tab -->
@@ -2607,15 +2613,16 @@ export default {
     AlphabetType: [{text: 'ไม่กำหนด', value: ""},{text: 'ตัวอักษรพิมพ์ใหญ่', value: "UpperCase"},{text: 'ตัวอักษรพิมพ์เล็ก', value: "LowwerCase"}],
     allEformList: [],
     TextType: [{text: 'ไม่กำหนด', value: ""},{text: 'อีเมล', value: "Email"}],
+    currentSelectedFlow: {},
     textLang:{
       tabMenubar: {
-        create_doc: "สร้างเอกสาร",
-        set_format: "กำหนดรูปแบบเอกสาร",
+        create_doc: "ออกจากหน้าสร้าง",
+        set_format: "กำหนดรูปแบบฟอร์ม",
         tools: "เครื่องมือ",
         property: "คุณสมบัติ",
         complete_sequence: "ลำดับการกรอกและเซ็น",
         set_paperless: "ตั้งค่าเอกสาร Digital Workflow",
-        filling_mobile: "ตั้งค่าการกรอกในมุมมองเอกสารอย่างง่าย",
+        filling_mobile: "ตั้งค่าการกรอกในมุมมองแบบฟอร์มอย่างง่าย",
         save: "บันทึกแบบฟอร์ม",
         open_page: "เปิดเพื่อดูหน้ากระดาษ",
         page: "หน้า",
@@ -2624,14 +2631,14 @@ export default {
         insert_img: "กดเพื่อแทรกรูปภาพ"
       },
       set_format_form: {
-        set_doc_format: "กำหนดรูปแบบเอกสาร",
-        set_doc_detail: "กำหนดรายละเอียดของเอกสาร",
-        name_doc: "ชื่อรูปแบบเอกสาร:",
+        set_doc_format: "กำหนดรูปแบบฟอร์ม",
+        set_doc_detail: "กำหนดรายละเอียดแบบฟอร์ม",
+        name_doc: "ชื่อแบบฟอร์ม:",
         doc_type: "ประเภทเอกสาร:",
         department: "แผนก:",
         group: "กลุ่มของเอกสาร:",
-        id: "รหัสเอกสาร:",
-        verdion: "เวอร์ชันของเอกสาร:",
+        id: "รหัสแบบฟอร์ม:",
+        version: "เวอร์ชันแบบฟอร์ม:",
         en_data: "วันที่บังคับใช้:",
         locking_pdf: "ตั้งค่าการล็อกเอกสาร (pdf):",
         choose: "เลือก",
@@ -2666,7 +2673,7 @@ export default {
         show_grids: "แสดงเส้นตารางหน้ากระดาษ"
       },
       status_doc: {
-        status_doc: "สถานะของเอกสาร",
+        status_doc: "สถานะของแบบฟอร์ม",
         ready: "พร้อมใช้งาน",
         not_available: "ยังไม่พร้อมใช้งาน"
       },
@@ -2675,10 +2682,10 @@ export default {
         validate_setting_btn: "ตั้งค่าการตรวจสอบ"
       },
       set_sharing: {
-        doc_sharing_set: "ตั้งค่าการแชร์เอกสาร",
-        doc_sharing: "การแชร์เอกสาร:",
+        doc_sharing_set: "ตั้งค่าการแชร์แบบฟอร์ม",
+        doc_sharing: "Business ที่แชร์:",
         doc_general: "เอกสารสำหรับบุคคลทั่วไป",
-        doc_usage: "สิทธิ์การใช้งานเอกสาร:",
+        doc_usage: "สิทธิ์การใช้งาน:",
         permission_view_all_title: "สิทธิ์การดูเอกสารเพิ่มเติม"
       },
       set_data_doc: {
@@ -2817,7 +2824,9 @@ export default {
         arrange_back: "ย้ายไปไว้ข้างหลังสุด",
         assignment: "การกำหนดสิทธิ์",
         reference: "อ้างอิงสิทธิ์ตามลำดับก่อนหน้า",
-        order_refer: "ลำดับที่ต้องการอ้างอิง",
+        order_refer: "ลำดับ Workflow:",
+        sender_flow: "ผู้ส่งเอกสาร",
+        step_flow: "ลำดับที่ ",
         by_positio: "โดยตำแหน่ง",
         by_email: "โดยอีเมล",
         email: "อีเมล",
@@ -2884,7 +2893,12 @@ export default {
         foermat_paperless: "รูปแบบ Workflow",
         note: "หมายเหตุ",
         set_auto_flow: "ตั้งค่าประเภทและรูปแบบเอกสาร Paperless อัตโนมัติ",
-        set_auto_flow_btn: "ตั้งค่าประเภทและรูปแบบเอกสาร Paperless"
+        set_auto_flow_btn: "ตั้งค่าประเภทและรูปแบบเอกสาร Paperless",
+        step_num: "ลำดับที่",
+        permission_approve: "ผู้มีสิทธิ์อนุมัติ",
+        permission_sign: "ผู้มีสิทธิ์เซ็น",
+        permission_input_form: "ผู้มีสิทธิ์กรอก",
+        permission_sign_input: "ผู้มีสิทธิ์กรอกและเซ็น"
       },
       filling_mobile: {
         title: "ตั้งค่าการกรอกในมุมมองแบบฟอร์มอย่างง่าย",
@@ -2912,13 +2926,16 @@ export default {
         clear: "ล้างการตั้งค่าทั้งหมด"
       },
       alert:{
+        alert_error: "ล้มเหลว",
+        alert_success: "สำเร็จ",
         name_object: "ชื่อ Object \"",
         change_name: "\" ซ้ำ กรุณาเปลี่ยนชื่อ Object",
         duplicate: "ลำดับการกรอกซ้ำ",
         section_boxes: "Section Box ซ้อนทับกัน กรุณาจัดวาง Section Box ใหม่",
         save_complete: "บันทึกแบบฟอร์มสำเร็จ",
         fail_save: "บันทึกแบบฟอร์มล้มเหลว กรุณาลองใหม่ในภายหลัง",
-        create_eform: "สร้างรูปแบบเอกสาร"
+        create_eform: "สร้างรูปแบบเอกสาร",
+        workflow_alert: "กรุณาเลือก Worflow ของแบบฟอร์ม"
       },
       dropdown:{
         buddhist: "พุทธศักราช",
@@ -2947,7 +2964,25 @@ export default {
         no_set: "ไม่กำหนดสิทธิ์",
         no_sender: "ไม่กำหนดผู้ส่ง",
         no_define: "ไม่กำหนด",
-        email: "อีเมล"
+        email: "อีเมล",
+        inputbox_auto: {
+          no_choose: "ไม่เลือก",
+          doc_no: "หมายเลขเอกสาร",
+          condition: "เงื่อนไข(ระบุ)",
+          fullname_th: "ชื่อเต็ม(ไทย)",
+          prefix_name_th: "คำนำหน้าชื่อ(ไทย)",
+          first_name_th: "ชื่อจริง(ไทย)",
+          last_name_th: "นามสกุล(ไทย)",
+          tel: "เบอร์โทรศัพท์",
+          ref_doc_no: "หมายเลขเอกสารอ้างอิง",
+          customer_name: "ชื่อลูกค้า",
+          employee_id: "รหัสพนักงาน",
+          department: "แผนก/ฝ่าย",
+          role: "ตำแหน่ง",
+          leader_name_th: "ชื่อ-นามสกุลหัวหน้างาน",
+          leader_role: "ตำแหน่งหัวหน้างาน",
+          company_address: "ที่อยู่บริษัท"
+        }
       }
     },
     //Color Variable
@@ -3501,6 +3536,8 @@ export default {
       var destObjIndex = this.mobileInputOrder.indexOf(dest)
       this.mobileInputOrder[srcObjIndex].index = destIndex
       this.mobileInputOrder[destObjIndex].index = srcIndex
+      this.objectArray[this.mobileInputOrder[srcObjIndex].objType][this.mobileInputOrder[srcObjIndex].objIndex].style.mobileIndex = destIndex
+      this.objectArray[this.mobileInputOrder[destObjIndex].objType][this.mobileInputOrder[destObjIndex].objIndex].style.mobileIndex = srcIndex
       this.mobileInputOrder.sort((a, b) => (a.index > b.index) ? 1 : -1)
       for(let i = 0; i < this.mobileInputOrder.length; i++) {
         this.mobileInputOrder[i].index = i + 1
@@ -5882,9 +5919,9 @@ export default {
         }
         this.dataTableObjectArray[this.selectedCell].style.mobileIndex = mobileObj.index
         this.mobileInputOrder.push(mobileObj)
-        for(let i = 0; i < this.mobileInputOrder.length; i++) {
-          this.mobileInputOrder[i].index = i + 1
-        }
+        // for(let i = 0; i < this.mobileInputOrder.length; i++) {
+        //   this.mobileInputOrder[i].index = i + 1
+        // }
       }
 
       this.selectedCell = ""
@@ -5893,32 +5930,32 @@ export default {
     initailDatabind() {
       if(this.selected_array == 'autofillbox') {
         this.databind_choice = [
-          {text: 'ไม่เลือก', value: null},
-          {text: 'หมายเลขเอกสาร', value: 'doc_no'},
-          {text: 'เงื่อนไข(ระบุ)', value: 'function'},
-          {text: 'ชื่อเต็ม(ไทย)', value: 'fullname_th'},
-          {text: 'คำนำหน้าชื่อ(ไทย)', value: 'account_title_th'},
-          {text: 'ชื่อจริง(ไทย)', value: 'firstname_th'},
-          {text: 'นามสกุล(ไทย)', value: 'lastname_th'},
+          {text: this.textLang.dropdown.inputbox_auto.no_choose, value: null},
+          {text: this.textLang.dropdown.inputbox_auto.doc_no, value: 'doc_no'},
+          {text: this.textLang.dropdown.inputbox_auto.condition, value: 'function'},
+          {text: this.textLang.dropdown.inputbox_auto.fullname_th, value: 'fullname_th'},
+          {text: this.textLang.dropdown.inputbox_auto.prefix_name_th, value: 'account_title_th'},
+          {text: this.textLang.dropdown.inputbox_auto.first_name_th, value: 'firstname_th'},
+          {text: this.textLang.dropdown.inputbox_auto.last_name_th, value: 'lastname_th'},
           {text: 'Fullname(EN)', value: 'fullname_en'},
           {text: 'Name title(EN)', value: 'account_title_eng'},
           {text: 'Firstname(EN)', value: 'firstname_en'},
           {text: 'Lastname(EN)', value: 'lastname_en'},
-          {text: 'เบอร์โทรศัพท์', value: 'tel_no'},
+          {text: this.textLang.dropdown.inputbox_auto.tel, value: 'tel_no'},
           {text: 'One E-mail', value: 'one_email'},
-          {text: 'หมายเลขเอกสารอ้างอิง', value: 'ref_no'},
-          {text: 'ชื่อลูกค้า', value: 'sys_cus_name'},
+          {text: this.textLang.dropdown.inputbox_auto.ref_doc_no, value: 'ref_no'},
+          {text:  this.textLang.dropdown.inputbox_auto.customer_name, value: 'sys_cus_name'},
           // {text: 'อ้างอิงข้อมูลเอกสารอื่น', value: 'ref_data'},
         ]
         if(JSON.parse(sessionStorage.getItem('selected_business')).id) {
           this.databind_choice.push({text: 'E-mail', value: 'email'})
-          this.databind_choice.push({text: 'รหัสพนักงาน', value: 'employee_id'})
-          this.databind_choice.push({text: 'แผนก/ฝ่าย', value: 'one_department'})
-          this.databind_choice.push({text: 'ตำแหน่ง', value: 'role_name'})
-          this.databind_choice.push({text: 'ชื่อ-นามสกุลหัวหน้างาน', value: 'leader_name_th'})
-          this.databind_choice.push({text: 'ตำแหน่งหัวหน้างาน', value: 'leader_role_th'})
-          this.databind_choice.push({text: 'Leader Name', value: 'leader_name_eng'})
-          this.databind_choice.push({text: 'ที่อยู่บริษัท', value: 'bussiness_address'})
+          this.databind_choice.push({text: this.textLang.dropdown.inputbox_auto.employee_id, value: 'employee_id'})
+          this.databind_choice.push({text: this.textLang.dropdown.inputbox_auto.department, value: 'one_department'})
+          this.databind_choice.push({text: this.textLang.dropdown.inputbox_auto.role, value: 'role_name'})
+          this.databind_choice.push({text: this.textLang.dropdown.inputbox_auto.leader_name_th, value: 'leader_name_th'})
+          this.databind_choice.push({text: this.textLang.dropdown.inputbox_auto.leader_role, value: 'leader_role_th'})
+          this.databind_choice.push({text: 'Leader Name(EN)', value: 'leader_name_eng'})
+          this.databind_choice.push({text: this.textLang.dropdown.inputbox_auto.company_address, value: 'bussiness_address'})
         }
         for(var i=0; i<this.objectArray['inputbox'].length-1; i++) {
           if(typeof this.objectArray['inputbox'][i] !== 'undefined' && !this.objectArray['inputbox'][i].deleted) {
@@ -7152,7 +7189,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
                 text: this.textLang.alert.name_object + this.res_saveArray[j].object_name + this.textLang.alert.change_name,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -7204,7 +7241,7 @@ export default {
             backdrop: false,
             position: 'bottom-end',
             width: '330px',
-            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
             text: this.textLang.alert.duplicate,
             showCloseButton: true,
             showConfirmButton: false,
@@ -7222,7 +7259,7 @@ export default {
           backdrop: false,
           position: 'bottom-end',
           width: '330px',
-          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
           text: this.textLang.alert.section_boxes,
           showCloseButton: true,
           showConfirmButton: false,
@@ -7424,8 +7461,8 @@ export default {
             backdrop: false,
             position: 'bottom-end',
             width: '330px',
-            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
-            text: 'กรุณาเลือก Worflow ของแบบฟอร์ม',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
+            text: this.textLang.alert.workflow_alert,
             showCloseButton: true,
             showConfirmButton: false,
             timer: 5000,
@@ -7439,12 +7476,12 @@ export default {
         }
       } else {
         this.name_template_error = true
-        this.error_file_name_msg = 'กรุณากรอกชื่อแบบฟอร์ม'
+        this.error_file_name_msg = this.textLang.set_format_form.please_fill_in
         this.$swal({
           backdrop: false,
           position: 'bottom-end',
           width: '330px',
-          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
           text: this.textLang.set_format_form.please_fill_in,
           showCloseButton: true,
           showConfirmButton: false,
@@ -7542,6 +7579,8 @@ export default {
                   temp_ppl_code: [{name:'default', code:this.selected_ppltemplate, document_type:this.selectedDocumentType}],
                   structure_template_type: this.template_type,
                   flow_id: this.selected_ppltemplate,
+                  is_permission: this.currentSelectedFlow.is_permission,
+                  set_role: this.currentSelectedFlow.set_role,
                   template_status: this.template_status,
                   template_name: temp_name,
                   code_template: this.code_template,
@@ -7577,7 +7616,7 @@ export default {
                   backdrop: false,
                   position: 'bottom-end',
                   width: '330px',
-                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_success + '</strong>',
                   text: this.textLang.alert.save_complete,
                   showCloseButton: true,
                   showConfirmButton: false,
@@ -7595,7 +7634,7 @@ export default {
                   backdrop: false,
                   position: 'bottom-end',
                   width: '330px',
-                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                  title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
                   text: this.textLang.alert.fail_save,
                   showCloseButton: true,
                   showConfirmButton: false,
@@ -7630,6 +7669,8 @@ export default {
                   tax_id: business,
                   temp_ppl_code: [{name:'default', code:this.selected_ppltemplate, document_type:this.selectedDocumentType}],
                   flow_id:this.selected_ppltemplate,
+                  is_permission: this.currentSelectedFlow.is_permission,
+                  set_role: this.currentSelectedFlow.set_role,
                   structure_template_type: this.template_type,
                   template_status: this.template_status,
                   template_id: temp_code,
@@ -7669,7 +7710,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_success + '</strong>',
                 text: this.textLang.alert.save_complete,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -7687,7 +7728,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
                 text: this.textLang.alert.fail_save,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -8318,16 +8359,17 @@ export default {
     },
     async getFlowData(){
         try {
-          this.step_choices = [{text: "ผู้ส่งเอกสาร", value: ""}]
+          this.step_choices = [{text: this.textLang.property_type.sender_flow, value: ""}]
           if(this.selected_ppltemplate){
             var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
             var url = `/flowdata/api/v1/get1/?_id=${this.selected_ppltemplate}&tax_id=${tax_id}`
             var {data} = await this.axios.get(this.$api_url + url)
+            this.currentSelectedFlow = data.data
             if(data.status){
               data.data.flow_data.forEach(e => {
                 if(e.action == "Fill") {
                   this.step_choices.push({
-                    text: `ลำดับที่ ${e.index + 1}`,
+                    text: this.textLang.property_type.step_flow + (e.index + 1),
                     value: e.index + 1
                   })
                 }

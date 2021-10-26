@@ -154,12 +154,12 @@
                   <v-icon small  >mdi-lead-pencil</v-icon>
                 </v-btn> 
                 <template v-if="edit_email == true" > <!-- button of cancel and confirm editing noti email  -->
-                      <v-btn outlined tile class="close-btn-write px-0" color="rgb(158,158,158)" @click="close_notifyemail()"> <!-- cancel editing noti email button -->
-                        <v-icon small >mdi-close</v-icon>
-                      </v-btn>
-                      <v-btn outlined class="check-btn-write px-0" color="rgb(158,158,158)" @click="confirm_notifyemail()"> <!-- confirm editing noti email button -->
-                        <v-icon small >mdi-check</v-icon>
-                      </v-btn> 
+                  <v-btn outlined tile class="close-btn-write px-0" color="rgb(158,158,158)" @click="close_notifyemail()"> <!-- cancel editing noti email button -->
+                    <v-icon small >mdi-close</v-icon>
+                  </v-btn>
+                  <v-btn outlined class="check-btn-write px-0" color="rgb(158,158,158)" @click="confirm_notifyemail()" @keyup.enter="confirm_notifyemail()"> <!-- confirm editing noti email button -->
+                    <v-icon small >mdi-check</v-icon>
+                  </v-btn> 
                 </template>  
               </v-col>
             </v-row>
@@ -198,7 +198,6 @@ export default {
     getWork: [],
     noneForChangeBiz:[],
     noneInSelectedbiz: "ไม่มี",
-    default_Signature: '',
     default_Business: '',
     state_Signature: 'Not Found',
     default_sign: false,
@@ -219,10 +218,10 @@ export default {
     EventBus.$on('Setting',this.get_usersetting)
   },
   methods: {
-    openSetDefaultSignature() {
-      EventBus.$emit('DefaultSignature')
-      EventBus.$emit('Signature_Data',this.default_Business,this.default_Signature,this.switch_notify_email,this.notify_email)
-    },
+    // openSetDefaultSignature() {
+    //   EventBus.$emit('DefaultSignature')
+    //   EventBus.$emit('Signature_Data',this.default_Business,this.default_Signature,this.switch_notify_email,this.notify_email)
+    // },
     openAddStamp() {
       EventBus.$emit('DefaultStamp','add')
       EventBus.$emit('Stamp_Data_Add',this.default_stamp)
@@ -249,9 +248,7 @@ export default {
       }
       this.getBusiness = [...new Set(this.getBusiness)]
       this.getWork = [...new Set(this.getWork)]
-      if (((this.firstnameEng != '') & (this.lastnameEng != '')) || ((this.firstnameEng != undefined) & (this.lastnameEng != undefined))) {
-        this.nameEng = true
-      }
+      if (((this.firstnameEng != '') & (this.lastnameEng != '')) || ((this.firstnameEng != undefined) & (this.lastnameEng != undefined))) this.nameEng = true
     },
     async get_usersetting(){
       try {
@@ -259,7 +256,6 @@ export default {
         var { data } = await this.axios.get(this.$api_url + url)
         if(data) {
           this.confirmBusiness = data.result.other_setting.Default_Business
-          this.default_Signature = data.result.other_setting.Default_Signature
           this.switch_notify_email = data.result.other_setting.Default_NotifyEmail
           this.notify_email = data.result.other_setting.Notify_Email
           this.set_notify_email = data.result.other_setting.Notify_Email
@@ -271,45 +267,34 @@ export default {
               this.show_Edit_Stamp = true
             }
           }
-          if (this.default_stamp == '') {
-            this.selectedStamp = ''
-          }
-          if (this.selectedStamp == undefined) {
-            this.selectedStamp = ''
-            this.show_Edit_Stamp = false
-          }
-          if ((this.confirmBusiness == '') || (this.confirmBusiness == undefined)) {
-            this.confirmBusiness = 'Not Found'
-          }
-          if (this.default_sign == false) {
-            this.state_Signature = 'Not Found'
-          }
-          if (this.default_sign == true) {
-            this.state_Signature = 'Ready'
-          }
+          if (this.default_stamp == '') this.selectedStamp = '' ,this.show_Edit_Stamp = false
+          if (this.selectedStamp == undefined) this.selectedStamp = ''
+          if ((this.confirmBusiness == '') || (this.confirmBusiness == undefined)) this.confirmBusiness = 'Not Found'
+          if (this.default_sign == false) this.state_Signature = 'Not Found'
+          else if (this.default_sign == true) this.state_Signature = 'Ready'
         }
       } catch (error) {
         console.log(error);
       }
     },
-    async get_defaultSignature(){
-      try {
-        const url = '/user_setting/api/v1/get_usersetting'
-        var { data } = await this.axios.get(this.$api_url + url)
-        if(data) {
-          this.default_Signature = data.result.other_setting.Default_Signature
-          this.default_sign = data.result.default_sign
-          if (this.default_sign == false) {
-            this.state_Signature = 'Not Found'
-          }
-          if (this.default_sign == true) {
-            this.state_Signature = 'Ready'
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // async get_defaultSignature(){
+    //   try {
+    //     const url = '/user_setting/api/v1/get_usersetting'
+    //     var { data } = await this.axios.get(this.$api_url + url)
+    //     if(data) {
+    //       this.default_Signature = data.result.other_setting.Default_Signature
+    //       this.default_sign = data.result.default_sign
+    //       if (this.default_sign == false) {
+    //         this.state_Signature = 'Not Found'
+    //       }
+    //       if (this.default_sign == true) {
+    //         this.state_Signature = 'Ready'
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
     set_usersetting(){
       if ((this.selectedBiz == '') || (this.selectedBiz == 'ไม่มี') || (this.selectedBiz == undefined)) {
         this.confirmBusiness = 'Not Found'
@@ -327,24 +312,14 @@ export default {
     },
     async postData() {
       try {
-        if (this.default_Business == undefined) {
-          this.default_Business = ''
-        }
-        if (this.default_Signature == undefined) {
-          this.default_Signature = ''
-        }
-        if (this.switch_notify_email == undefined) {
-          this.switch_notify_email = false
-        }
-        if (this.notify_email == undefined) {
-          this.notify_email = ''
-        }
+        if (this.default_Business == undefined) this.default_Business = ''
+        if (this.switch_notify_email == undefined) this.switch_notify_email = false
+        if (this.notify_email == undefined) this.notify_email = ''
         const url = '/user_setting/api/v1/set_usersetting'
         var { data } = await this.axios.post(this.$api_url + url, 
           {
             other_setting : {
               Default_Business : this.default_Business,
-              Default_Signature : this.default_Signature,
               Default_NotifyEmail : this.switch_notify_email,
               Notify_Email : this.notify_email
             }
@@ -396,9 +371,7 @@ export default {
     },
     check_edit_email() {
       this.postData()
-      if (this.edit_email == true) {
-        this.edit_email = false
-      }
+      if (this.edit_email == true) this.edit_email = false
     },
     editEmail() {
       this.edit_email = true

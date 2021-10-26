@@ -649,6 +649,9 @@ export default {
                 this.isShowRevertButton = element.actor.map(item => item.name).includes(sessionStorage.getItem('name'))
               }
             })
+            if(data.data.flow_step[0].status == "W" || data.data.document_status == "Y" || data.data.document_status == "R") {
+              this.isShowRevertButton = false
+            }
             doc_data.flow_step.forEach((flowData, index) => {
               flowData.active_count = flowData.actor.filter(item => (item.approved === 'Y' || item.approved === 'R')).length
               this.$set(this.sign_position, index, flowData.sign_position)
