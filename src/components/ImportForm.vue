@@ -3,7 +3,7 @@
        <v-card>
         <v-card-title>
           <v-row class="text-form">
-            <span class="front-section">นำเข้าไฟล์แบบฟอร์ม</span>
+            <span class="front-section">{{ textLangImportForm.import_file }}</span>
             <v-spacer></v-spacer>
             <v-btn icon @click="dialog = false" color="#000000">
               <v-icon>
@@ -17,7 +17,7 @@
               <v-col cols="12" lg="12" md="12" class="pb-0 px-0">
                   <v-file-input
                     class="im-form"
-                    placeholder="เลือกไฟล์แบบฟอร์ม"
+                    :placeholder="textLangImportForm.select_file"
                     accept="application/JSON"
                     outlined
                     dense
@@ -33,7 +33,7 @@
             <v-spacer></v-spacer>
             <v-col  cols="auto" lg="auto" md="auto">
           <v-btn color="#67C25D" dark depressed class="front-form" @click="importJson()">
-            นำเข้า
+            {{ textLangImportForm.import_form }}
           </v-btn>
           </v-col>
           <v-spacer></v-spacer>
@@ -47,7 +47,14 @@ import { EventBus } from '../EventBus'
 export default {
     data: () => ({
         dialog: false,
-        file: []
+        file: [],
+
+        //Language Variable
+        textLangImportForm: {
+          import_file: 'นำเข้าไฟล์แบบฟอร์ม',
+          select_file: 'เลือกไฟล์แบบฟอร์ม',
+          import_form: 'นำเข้า'
+        }
     }),
     mounted() {
         EventBus.$on('importform',this.importforms)

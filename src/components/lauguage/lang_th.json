@@ -170,6 +170,75 @@
         "or_sign": "หรือ (ใช้เชื่อมเงื่อนไขย่อยหลายๆเงื่อนไข โดยใส่วงเล็บครอบแต่ละเงื่อนไขก่อนที่จะใส่เครื่องหมายเชื่อม)",
         "condition_example": "ตัวอย่างเงื่อนไข"
       }
+    },
+    "textLangDefaultSignatureModal": {
+      "signature_header": "กำหนดลายเซ็น",
+      "upload_file": "อัพโหลดไฟล์",
+      "signpad": "วาดลายเซ็น",
+      "clearsign": "ล้างค่า",
+      "savesign": "บันทึก",
+      "update_default_success": "อัพเดทข้อมูลสำเร็จ",
+      "update_default_fail": "อัพเดทข้อมูลล้มเหลว"
+    },
+    "textLangDefaultStampModal": {
+      "stamp_head": "ลายเซ็น",
+      "stamp_name_show": "ชื่อลายเซ็น",
+      "stamp_upload": "อัพโหลดไฟล์",
+      "stamp_pain": "วาดลายเซ็น",
+      "stamp_delete": "ลบลายเซ็น",
+      "stamp_clear": "ล้างค่า",
+      "stamp_save": "บันทึก",
+      "update_stamp_success": "อัพเดทข้อมูลสำเร็จ",
+      "update_stamp_fail": "อัพเดทข้อมูลล้มเหลว"
+    },
+    "textLangDeleteForm": {
+      "delete_form1": "ต้องการลบแบบฟอร์ม",
+      "delete_form2": "หรือไม่ ?",
+      "cancel_delete": "ยกเลิก",
+      "confirm_delete": "ตกลง",
+      "delete_success": "ลบแบบฟอร์มสำเร็จ",
+      "delete_fail": "ลบแบบฟอร์มไม่สำเร็จ"
+    },
+    "textLangDeleteMessage": {
+      "texthead_form": "ต้องการยกเลิกข้อความหรือไม่ ?",
+      "cancel_form": "ยกเลิก",
+      "confirm_form": "ตกลง"
+    },
+    "textLangDocumentReportModal": {
+      "texthead_card": "Export รายงาน Excel",
+      "select_date": "เลือกช่วงวันที่ที่ต้องการ Export",
+      "cancel_export": "ยกเลิก",
+      "confirm_export": "Export"
+    },
+    "textLangImportForm": {
+      "import_file": "นำเข้าไฟล์แบบฟอร์ม",
+      "select_file": "เลือกไฟล์แบบฟอร์ม",
+      "import_form": "นำเข้า"
+    },
+    "textLangReturnCorrection": {
+      "text_head_return": "ส่งคืนแก้ไข",
+      "num_return": "ลำดับที่ส่งคืน",
+      "recorrection": "ส่งคืน",
+      "return_file_success": "ส่งคืนแก้ไขเอกสารสำเร็จ",
+      "return_file_fail": "ส่งคืนแก้ไขเอกสารไม่สำเร็จ"
+    },
+    "textLangSendMail": {
+      "recipient_email": "อีเมลผู้รับ",
+      "send_email": "ส่งอีเมล",
+      "send_email_success": "ส่งอีเมลสำเร็",
+      "send_email_fail": "ส่งอีเมลล้มเหลว"
+    },
+    "textLangStampModal": {
+      "message_stamp": "ข้อความ Stamp",
+      "cancel_stamp": "ยกเลิก",
+      "confirm_stamp": "บันทึก"
+    },
+    "textLangTransferEdit": {
+      "transfer_edit_form": "โอนสิทธิการแก้ไขแบบฟอร์ม",
+      "transfer_email": "E-mail ที่จะโอนสิทธิ",
+      "transfer_email_one": "@one.th",
+      "cancel_transfer": "ยกเลิก",
+      "confirm_transfer": "โอนสิทธิ"
     }
   },
   "Create_Template": {

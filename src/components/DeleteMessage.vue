@@ -3,7 +3,7 @@
        <v-card>
         <v-card-text class="pt-7 px-7 pb-2">
           <v-row class="text-hing" justify="center">
-            <span class="front-hing">ต้องการยกเลิกข้อความหรือไม่ ?</span>    
+            <span class="front-hing">{{ textLangDeleteMessage.texthead_form }}</span>    
           </v-row>
         </v-card-text>
         <v-card-actions>
@@ -19,7 +19,7 @@
                   block
                   depressed
                   @click="dialog=false"
-                  >ยกเลิก</v-btn>
+                  >{{ textLangDeleteMessage.cancel_form }}</v-btn>
                   </v-col> 
           <v-col cols="4"
           md="4"
@@ -31,7 +31,7 @@
                   block
                   depressed
                   @click="confirm_delete_fn"
-                  >ตกลง</v-btn
+                  >{{ textLangDeleteMessage.confirm_form }}</v-btn
                 >
                 </v-col>
                 <v-spacer></v-spacer>
@@ -44,7 +44,14 @@
 import { EventBus } from '../EventBus'
 export default {
     data: () => ({
-        dialog: false
+        dialog: false,
+
+        //Language Variable
+        textLangDeleteMessage: {
+          texthead_form: 'ต้องการยกเลิกข้อความหรือไม่ ?',
+          cancel_form: 'ยกเลิก',
+          confirm_form: 'ตกลง'
+        }
     }),
     mounted() {
         EventBus.$on('deletemessage',this.deletemessages)

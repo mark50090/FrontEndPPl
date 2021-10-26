@@ -7,7 +7,7 @@
       <v-card>
         <v-card-title class="">
           <v-row align="center" class="text-box-transfer">
-            <span class="font-head-transfer">โอนสิทธิการแก้ไขแบบฟอร์ม</span>
+            <span class="font-head-transfer">{{ textLangTransferEdit.transfer_edit_form }}</span>
             <v-spacer></v-spacer>
             <v-btn icon @click="dialog = false" color="black">
               <v-icon>
@@ -20,8 +20,8 @@
           <v-row align="center" class="text-box-transfer">
                 <v-text-field color="#4caf50"
                     class="font-box-transfer"
-                    label="E-mail ที่จะโอนสิทธิ"
-                    placeholder="@one.th"
+                    :label="textLangTransferEdit.transfer_email"
+                    :placeholder="textLangTransferEdit.transfer_email_one"
                     dense
                     outlined
                     hide-details
@@ -33,12 +33,12 @@
               <v-spacer></v-spacer>
            <v-col align-self="center" class=" pr-3 pl-0" cols="4" lg="4" md="4">
                 <v-btn block color="#757575" dark depressed @click="dialog = false" class="font-send-transfer">
-                    ยกเลิก
+                    {{ textLangTransferEdit.cancel_transfer }}
                 </v-btn>
            </v-col>
            <v-col align-self="center" class="pr-0 pl-3" cols="4" lg="4" md="4">
                 <v-btn block color="#67C25D" dark depressed class="font-send-transfer">
-                    โอนสิทธิ
+                    {{ textLangTransferEdit.confirm_transfer }}
                 </v-btn>
             </v-col>
             <v-spacer></v-spacer>
@@ -53,6 +53,15 @@ import { EventBus } from '../EventBus'
   export default {
     data: () => ({
       dialog: false,
+
+      //Language Variable
+      textLangTransferEdit: {
+        transfer_edit_form: 'โอนสิทธิการแก้ไขแบบฟอร์ม',
+        transfer_email: 'E-mail ที่จะโอนสิทธิ',
+        transfer_email_one: '@one.th',
+        cancel_transfer: 'ยกเลิก',
+        confirm_transfer: 'โอนสิทธิ'
+      }
     }),
     mounted() {
       EventBus.$on('FormTransfer',this.getFormTransfer)
