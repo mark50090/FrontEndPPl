@@ -15,13 +15,13 @@
         </v-col>
         <v-col
           class="pl-0 question-header pr-0" >
-        <b>รายงานเอกสาร </b>
+        <b>{{textLang.documentreport}} </b>
         </v-col>
         </v-row>
             <v-card class="question-in pt-3 pr-5 pl-5 mt-1" outlined>
                 <v-row class="all-round mb-3"> 
                 <v-card outlined class="box-question " >
-                <v-card-title  class="font-question py-2">สวัสดีครับ ผมจักรกรินทร์ ปงแก้ว 6030202065 ทั้งหมดดูดี</v-card-title> 
+                <v-card-title  class="font-question py-2">{{textLang.name}}</v-card-title> 
                 <v-card-text class="py-3 px-3 ">
                 <v-text-field outlined hide-details dense  class="font-answer" color="#404040"></v-text-field>
                 </v-card-text> 
@@ -37,7 +37,7 @@
           align-self="center">
           <v-btn class="font-send-btn"
           depressed dark  color="#67C25D"
-          >ส่งเอกสาร</v-btn>
+          >{{textLang.senddocuments}}</v-btn>
           </v-col>
         </v-row>
         </v-card>    
@@ -48,6 +48,11 @@
 export default {
     setup() {
         
+    },
+    textLang:{
+      documentreport:'รายงานเอกสาร',
+      name: 'สวัสดีครับ ผมจักรกรินทร์ ปงแก้ว 6030202065 ทั้งหมดดูดี',
+      senddocuments: 'ส่งเอกสาร',
     },
 }
 </script>
