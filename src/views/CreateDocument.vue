@@ -404,7 +404,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
     },
     watch:{
       "create_tab"(newValue,oldValue){
-        if ((newValue == 1 || oldValue == 2) || (newValue == 2 || oldValue == 1)) 
+        if ((newValue == 1 && oldValue == 2) || (newValue == 2 && oldValue == 1)) 
             this.clearTabData()
         },
     },
@@ -599,10 +599,6 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             var info = this.$store.state.allEmployeeInfo
             var url = '/transaction/api/v1/addtransaction'
             var flow_data = this.flow_datas_custom.map(xyz => ({
-              "object_text" : {
-                  "subject" : this.documentName, //ชื่อไฟล์
-                  "message" : this.documentComment //ข้อความ
-              },
               "status_implement": false,
               "input_status": false,
               "form_input": {
@@ -687,6 +683,10 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                 doc_id: this.selected_document_type_custom._id,
                 set_flow: "true",
                 flow_data: flow_data,
+                object_text : {
+                  subject : this.documentName, //ชื่อไฟล์
+                  message : this.documentComment //ข้อความ
+                },
                 pdfbase: this.pdf_src.slice(28),
                 business: JSON.parse(sessionStorage.getItem('selected_business'))
             })
@@ -736,39 +736,58 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           })
         }
       },
-      async saveNewSignPosition(){
+      async saveNewSignPosition(){//ถ้ามี sign/ca => ยิงทุกลำดับรวมทั้ง approve ด้วย, ถ้ามีแต่ approve => ไม่ต้องยิง api นี้
         var url = `/transaction/api/v1/saveTransaction?transaction_id=${this.transaction_id}`
-        var flow_data = this.signArray.map((e,index) => {
-          if(Array.isArray(e.sign_page)){
+        var tab_flow_data = this.flow_datas_custom.length?this.flow_datas_custom:this.flow_datas
+        this.statusAction = tab_flow_data.map(ele => {
+          return ele.action
+        })
+        var flow_data = tab_flow_data.map((element,index) => {
+          if(element.action == 'Approve'){
             return {
               sign_position:{
-                sign_llx: e.sign_llx,
-                sign_lly: e.sign_lly,
-                sign_urx: e.sign_urx,
-                sign_ury: e.sign_ury,
-                sign_page: e.sign_page.length == this.pdf_page_list.length? 'all': e.sign_page.join(','),
+                sign_llx: 0,
+                sign_lly: 0,
+                sign_urx: 0,
+                sign_ury: 0,
+                sign_page: 'all'
               },
               index: index
-            }
-          }else{
-            return {
-              sign_position:{
-                sign_llx: e.sign_llx,
-                sign_lly: e.sign_lly,
-                sign_urx: e.sign_urx,
-                sign_ury: e.sign_ury,
-                sign_page: e.sign_page
-              },
-              index: index
+            } 
+          }else if(element.action == 'Sign'){
+            if(Array.isArray(element.sign.sign_page)){
+              return {
+                sign_position:{
+                  sign_llx: element.sign.sign_llx,
+                  sign_lly: element.sign.sign_lly,
+                  sign_urx: element.sign.sign_urx,
+                  sign_ury: element.sign.sign_ury,
+                  sign_page: element.sign.sign_page.length == this.pdf_page_list.length? 'all': element.sign.sign_page.join(','),
+                },
+                index: index
+              }
+            }else{
+              return {
+                sign_position:{
+                  sign_llx: element.sign.sign_llx,
+                  sign_lly: element.sign.sign_lly,
+                  sign_urx: element.sign.sign_urx,
+                  sign_ury: element.sign.sign_ury,
+                  sign_page: element.sign.sign_page
+                },
+                index: index
+              }
             }
           }
         })
         try {
-          var {data} = await this.axios.put(this.$api_url + url,{
-            flow_data: flow_data
-          })
-          if(data){
+          if(this.statusAction.includes('Sign')){
+            var {data} = await this.axios.put(this.$api_url + url,{
+              flow_data: flow_data
+            })
+            if(data){
 
+            }
           }
         } catch (error) {
           console.log(error);
