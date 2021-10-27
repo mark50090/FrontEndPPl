@@ -50,7 +50,7 @@
               </v-toolbar>
               <v-card flat height="73">
                 <v-layout wrap fill-height justify-center="" align-baseline>
-                  <span style="font-size: 34px">{{textLang.information}}</span>
+                  <span style="font-size: 34px">ข้อมูล1</span>
                 </v-layout>
               </v-card>
             </v-card>
@@ -127,7 +127,7 @@ export default {
     textLang:{
       alldocuments: 'เอกสารทั้งหมด',
       allstatus: 'สถานะทั้งหมด',
-      information: 'ข้อมูล1',
+      
     }
   }),
   mounted () {
