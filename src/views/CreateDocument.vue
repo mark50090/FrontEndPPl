@@ -160,7 +160,7 @@
                     <template  v-for="flow_data in flow_datas" >
                       <v-row class="create-row" :key="flow_data.index">
                         <v-col cols="auto" md="auto" lg="auto" class="pl-1 pb-2 create-setting-title">
-                          {{textLang.number}} {{ flow_data.index+1 }} : {{ flow_data.action | translate }} <!-- or ผู้มีสิทธิ์เซ็น -->
+                          {{textLang.number}} {{ flow_data.index+1 }} : {{ translate(flow_data.action) }} <!-- or ผู้มีสิทธิ์เซ็น -->
                         </v-col>
                       </v-row>
                       <v-row class="create-row each-step-mail-row" v-for="actor_email in flow_data.actor[0].permission_email" :key="flow_data.index + actor_email.account_id"> <!-- each email row in step -->
@@ -221,7 +221,7 @@
                     <template v-for="(flow_data_custom,index) in flow_datas_custom">
                       <v-row class="create-row" :key="flow_data_custom.index">
                         <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 py-1 create-setting-title">
-                          {{textLang.number}} {{index+1}} : {{ flow_data_custom.action | translate}} <!-- ผู้มีสิทธิ์อนุมัติ or ผู้มีสิทธิ์เซ็น -->
+                          {{textLang.number}} {{index+1}} : {{ translate(flow_data_custom.action) }} <!-- ผู้มีสิทธิ์อนุมัติ or ผู้มีสิทธิ์เซ็น -->
                         </v-col>
                         <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-1 py-1">
                           <v-btn outlined fab x-small color="error" class="px-0 delete-step-btn" @click="deleteActionFlow(flow_data_custom,flow_data_custom.action)"> <!-- delete step button -->
@@ -402,16 +402,21 @@ import VueDraggableResizable from 'vue-draggable-resizable'
     beforeDestroy () {
       EventBus.$off('changeBiz')
     },
-    filters:{
+    watch:{
+      "create_tab"(newValue,oldValue){
+        if ((newValue == 1 || oldValue == 2) || (newValue == 2 || oldValue == 1)) 
+            this.clearTabData()
+        },
+    },
+    methods: {
       translate(keyword){
         switch (keyword){
           case "Sign" : return this.textLang.authorizedsignatory
+          case "Sign-Ca" : return this.textLang.authorizedsignatory
           case "Approve" : return this.textLang.Authorizedperson
           default: return "" 
         }
-      }
-    },
-    methods: {
+      },
       changeBiz(){
         this.getDocumentType()
         this.selected_document_template = ''
@@ -496,6 +501,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       async getDocumentTemplate(){
         this.document_template_list = []
         this.selected_document_template = ''
+        this.signArray = []
         this.flow_datas = []
         this.isDirty = false
         this.loading_list_text = this.textLang.Fetching
