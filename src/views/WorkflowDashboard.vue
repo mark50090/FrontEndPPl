@@ -8,7 +8,7 @@
               <v-col cols="12">
                 <v-card outlined>
                   <v-toolbar color="white" dense flat>
-                    <span>เอกสารทั้งหมด</span>
+                    <span>{{textLang.alldocuments}}</span>
                   </v-toolbar>
                   <v-card height="73" flat>
                     <v-layout wrap fill-height justify-center="" align-baseline>
@@ -20,7 +20,7 @@
               <v-col cols="12" class="pt-4">
                 <v-card outlined>
                   <v-toolbar color="white" dense flat>
-                    <span style="font-size: 16px">สถานะทั้งหมด</span>
+                    <span style="font-size: 16px">{{textLang.alldocuments}}</span>
                     <!-- <v-chip
                   label
                   small
@@ -50,7 +50,7 @@
               </v-toolbar>
               <v-card flat height="73">
                 <v-layout wrap fill-height justify-center="" align-baseline>
-                  <span style="font-size: 34px">ข้อมูล1</span>
+                  <span style="font-size: 34px">{{textLang.information}}</span>
                 </v-layout>
               </v-card>
             </v-card>
@@ -123,7 +123,12 @@ export default {
     },
     workflow_name: '',
     workflow_id: '',
-    token: ''
+    token: '',
+    textLang:{
+      alldocuments: 'เอกสารทั้งหมด',
+      allstatus: 'สถานะทั้งหมด',
+      information: 'ข้อมูล1',
+    }
   }),
   mounted () {
     EventBus.$emit('loadingOverlay', false)

@@ -951,6 +951,11 @@
         "managedocumentformats": "จัดการรูปแบบเอกสาร",
         "Createapprovalform": "สร้างรูปแบบอนุมัติ",
         "createform": "สร้างแบบฟอร์ม"
+  },
+  "WorkflowDashboard": {
+      "alldocuments": "เอกสารทั้งหมด",
+      "allstatus": "สถานะทั้งหมด",
+      "information": "ข้อมูล1"
   }
 }}
 
