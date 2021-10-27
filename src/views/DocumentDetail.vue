@@ -417,8 +417,9 @@ export default {
       Successfullyapproved: 'อนุมัติเอกสารสำเร็จ',
       Successfullyrejected: 'ปฏิเสธเอกสารสำเร็จ',
       cantread: 'ไม่สามารถอ่าน PDF ได้',
+      approve_fail: "อนุมัติไม่สำเร็จ",
       erroroccurred: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
-      fail: 'ล้มเหลว',
+      fail: 'ไม่สำเร็จ',
       clear: 'ล้างค่า',
       warn: 'แจ้งเตือน',
       notuploadingfiles: 'ไม่อนุญาตให้อัปโหลดไฟล์ ',
@@ -644,6 +645,9 @@ export default {
                 }
               })
             }
+            this.$router.replace({ name: 'inbox' })
+          } else {
+            this.error_swal_fn(this.textLang.approve_fail)
             this.$router.replace({ name: 'inbox' })
           }
         })
