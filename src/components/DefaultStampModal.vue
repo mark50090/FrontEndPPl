@@ -109,8 +109,6 @@ export default {
     check_name_stamp() {
       let stamp_name = this.stamp_name
       stamp_name = stamp_name.trim()
-      // this.stamp_name.toLowerCase().split(" ").join("")
-      // this.stamp_name = this.stamp_name.replace(/[\s\/]/g, '')
       if (stamp_name != '' && this.imageStamp != '') this.valid = false
       else if ((stamp_name == '' && this.imageStamp == '')||(stamp_name != '' && this.imageStamp == '')||(stamp_name == '' && this.imageStamp != '')) this.valid = true
       if ( this.action_header == 'แก้ไข') {
@@ -136,11 +134,13 @@ export default {
       if (this.action_header == 'แก้ไข') this.check_state_sign = true
     },
     getDataForEditStamp() {
+      // this.default_stamp_dialog = true
       EventBus.$off('Stamp_Data_Edit')
       this.sign_type = 'sign_pad'
       this.action_header = 'แก้ไข'
+      setTimeout(() => this.imageStamp = this.selectedStamp.SrcBase, 450);
       this.stamp_name = this.selectedStamp.StampName
-      this.imageStamp = this.selectedStamp.SrcBase
+      // this.imageStamp = this.selectedStamp.SrcBase
       this.stateDefaultStamp = 'show'
       this.default_stamp_dialog = true 
       this.uploadImage = this.selectedStamp
@@ -175,7 +175,8 @@ export default {
     openUploadStamp() {
       if (this.action_header == 'เพิ่ม') {
         if (this.imageStamp == '') this.imageStamp = '',this.valid = true
-        else this.valid = false
+        // else this.valid = false
+        // this.valid = false
       }
       document.getElementById('stampFile').click()
       if (this.stateDefaultStamp == 'draw') {
@@ -185,8 +186,14 @@ export default {
         // this.valid = true
       }
       this.stateDefaultStamp = 'upload'
+      if (this.stateDefaultStamp == 'upload') {
+        let stamp_name = this.stamp_name
+        stamp_name = stamp_name.trim()
+        if (stamp_name != '' && this.imageStamp != '') this.valid = false
+        else this.valid = true
+      }
     },
-    uploadStamp(file) {
+    uploadStamp(file) { 
       if (!file) {
         return;
       }
@@ -196,7 +203,9 @@ export default {
       const reader = new FileReader();
       reader.onload = (e) => {
         this.imageStamp = e.target.result;
-        if (this.stamp_name != '' && this.imageStamp != '') this.valid = false  
+        let stamp_name = this.stamp_name
+        stamp_name = stamp_name.trim()
+        if (stamp_name != '' && this.imageStamp != '') this.valid = false  
         else this.valid = true
       };
       reader.readAsDataURL(file);
@@ -214,14 +223,16 @@ export default {
         this.imageStamp = data
         this.default_sign = true
       }
+      let stamp_name = this.stamp_name
+      stamp_name = stamp_name.trim()
       if (this.action_header == 'เพิ่ม') {
-        var stampModal = {StampName: this.stamp_name, SrcBase: this.imageStamp}
+        var stampModal = {StampName: stamp_name, SrcBase: this.imageStamp}
         this.default_stamp.push(stampModal);
         this.postStamp()     
       }
       else if (this.action_header == 'แก้ไข') {
-        if (this.stamp_name != '') {
-          this.default_stamp[this.findStamp] = {StampName: this.stamp_name, SrcBase: this.imageStamp}
+        if (stamp_name != '' && this.imageStamp != '') {
+          this.default_stamp[this.findStamp] = {StampName: stamp_name, SrcBase: this.imageStamp}
           this.postStamp()
         }
       }
@@ -254,6 +265,9 @@ export default {
         }
         else if (this.stateDefaultStamp == 'upload') {
           this.uploadImage = undefined
+          this.imageStamp = ''
+        }
+        else if (this.stateDefaultStamp == 'show') {
           this.imageStamp = ''
         }
       }
@@ -308,6 +322,7 @@ export default {
       this.checkSignature = true
       this.checkNameSignature = true
       this.valid = true
+      this.imageStamp = ''
       if (this.action_header == 'แก้ไข') this.check_state_sign = false
       if (this.stateDefaultStamp == 'draw') this.$refs.signaturePad.clearSignature()
 		}
