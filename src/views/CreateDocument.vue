@@ -390,7 +390,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         noinformationfound: 'ไม่พบข้อมูล',
         succeed: 'สำเร็จ',
         transactionsucceed: 'สร้าง transaction สำเร็จ',
-        fail: 'ล้มเหลว',
+        fail: 'ไม่สำเร็จ',
         transactionfail: 'สร้าง transaction ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง'
       }
 

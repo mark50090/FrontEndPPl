@@ -79,9 +79,9 @@ import { EventBus } from '../EventBus'
         recipient_email: 'อีเมลผู้รับ',
         send_email: 'ส่งอีเมล',
         send_email_success: 'ส่งอีเมลสำเร็จ',
-        send_email_fail: 'ส่งอีเมลล้มเหลว',
+        send_email_fail: 'ส่งอีเมลไม่สำเร็จ',
         send_email_succeed: 'สำเร็จ',
-        send_email_error: 'ล้มเหลว'
+        send_email_error: 'ไม่สำเร็จ'
       }
     }),
     mounted() {

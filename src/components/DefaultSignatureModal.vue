@@ -74,9 +74,9 @@ export default {
       clearsign: 'ล้างค่า',
       savesign: 'บันทึก',
       update_default_success: 'อัพเดทข้อมูลสำเร็จ',
-      update_default_fail: 'อัพเดทข้อมูลล้มเหลว',
+      update_default_fail: 'อัพเดทข้อมูลไม่สำเร็จ',
       update_succeed: 'สำเร็จ',
-      update_error: 'ล้มเหลว'
+      update_error: 'ไม่สำเร็จ'
     }
   }),
   mounted() {
