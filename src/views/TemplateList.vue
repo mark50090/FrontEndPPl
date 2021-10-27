@@ -129,7 +129,7 @@ import showFormTransfer from '../components/TransferEdit.vue'
         itemsPerPage: 10
       },
       totalItemsTemplate: 0,
-      keyword: ""
+      keyword: "",
       textLang:{
         search:'ค้นหา',
         allforms: 'แบบฟอร์มทั้งหมด',
