@@ -10,7 +10,7 @@
         </v-card-title>
         <v-card-text class="pb-0">
             <v-row class="default-stamp-row">
-              <v-text-field dense outlined hide-details color="#67C25D" :label="textLang.stamp_name_show" class="stamp-name-box stamp-name-label" v-model="stamp_name" @keyup="check_name_stamp()"></v-text-field>
+              <v-text-field dense outlined hide-details color="#67C25D" :label="textLang.stamp_name_show" class="stamp-name-box stamp-name-label" v-model="stamp_name" @keyup.space.prevent="check_name_stamp()"></v-text-field>
             </v-row>
           <v-row class="mt-3 default-stamp-row">
             <v-btn-toggle group dense mandatory v-model="sign_type" class="sign-type-btn-group">
@@ -178,7 +178,6 @@ export default {
         // this.valid = true
       }
       this.stateDefaultStamp = 'upload'
-      console.log("imageStamp",this.imageStamp)
     },
     uploadStamp(file) {
       if (!file) {
