@@ -623,7 +623,7 @@
   "preview_template": {
     "tabMenubar": {
       "back_page": "Back to Fill Data",
-      "back_to": "Back to My Form",
+      "back_to": "Leave Form",
       "save_doc": "Save Document",
       "save_draft": "Save Draft",
       "page": "Page",
@@ -642,7 +642,7 @@
     },
     "offer_dialog": {
       "offer": "Send for Signing",
-      "offer_paperless_new": "Save And Send for Signing in Paperless", 
+      "offer_paperless_new": "Save Document", 
       "offer_paperless_old": "Send for Signing in Paperless",
       "subject_new": "Document Name(subject):",
       "subject_old": "subject:",
@@ -651,10 +651,10 @@
       "message": "Message:",
       "doc_type": "Paperless Document Type:",
       "doc_format": "Paperless Template:",
-      "seq_approval": "Approved Step",
       "add_attachments": "Attached File:",
+      "attached_file_placeholder": "Choose file",
       "please_choose": "Please select attached files",
-      "doc_system": "Attached File To Paperless",
+      "doc_system": "Attached File",
       "choose": "",
       "note": "Note",
       "re_number": "Reference Step No.",
@@ -666,12 +666,17 @@
       "name_ppl_error": "Please fill in document name (subject)",
       "pdf_setting_error":"Please set document(pdf)'s password.",
       "wait_upload": "Wait For Uploading",
-      "already_save": "This Document Step Already Saved."
+      "already_save": "This Document Step Is Already Saved."
     },
     "alert": {
-      "send_complete": "Send for Signing Complete!",
+      "alert_warning": "Warning",
+      "alert_success": "Success",
+      "alert_error": "Error",
+      "send_complete": "Send for Signing Complete",
       "send_fail": "Sending for signing is incomplete. Please try again later.",
-      "upload_fail" : "Uplaoding file is incomplete. Please try again later."
+      "upload_fail" : "Uplaoding file is incomplete. Please try again later.",
+      "duplicate_user_form": "This form is used by other user.",
+      "duplicate_save": "Saving Document is incomplete. This document step is already saved."
     }
   },
   "show_template": {
