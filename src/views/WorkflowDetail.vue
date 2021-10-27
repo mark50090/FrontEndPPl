@@ -8,7 +8,7 @@
           </v-btn>
         </v-col>
         <v-col cols="9" md="8" lg="8" class="px-0 report-detail-header">
-          <b>รายงานสรุปการใช้งานเอกสาร {{ workflow_name }}</b>
+          <b>{{textLang.documentsummaryreport}} {{ workflow_name }}</b>
         </v-col>
         <v-spacer></v-spacer>
         <v-col
@@ -144,7 +144,20 @@ export default {
     workflow_name: '',
     workflow_id: '',
     token: '',
-    axios_pending: 0
+    axios_pending: 0,
+    textLang:{
+      documentsummaryreport: 'รายงานสรุปการใช้งานเอกสาร',
+      no: 'ลำดับที่',
+      documenttype: 'ประเภทเอกสาร',
+      documentnumber: 'เลขที่เอกสาร',
+      details: 'รายละเอียด',
+      documentstatus: 'สถานะเอกสาร',
+      sender: 'ผู้ส่งเอกสาร',
+      datesent: 'วันที่ส่ง',
+      processingtime: 'ระยะเวลาดำเนินการ',
+      documentprocessed: 'ระยะเวลาทั้งหมดที่เอกสารถูกดำเนินการ',
+      documentlastorder: 'ระยะเวลาตั้งแต่เอกสารถูกนำเข้าถึงลำดับล่าสุด',
+    }
   }),
   watch: {
     "optionsTransaction.page" () {

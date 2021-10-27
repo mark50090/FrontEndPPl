@@ -830,7 +830,8 @@
     "Successfullyrejected": "ปฏิเสธเอกสารสำเร็จ",
     "cantread": "ไม่สามารถอ่าน PDF ได้",
     "erroroccurred": "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง",
-    "fail": "ล้มเหลว",
+    "approve_fail": "อนุมัติไม่สำเร็จ",
+    "fail": "ไม่สำเร็จ",
     "clear": "ล้างค่า",
     "warn":"แจ้งเตือน",
     "notuploadingfiles": "ไม่อนุญาตให้อัปโหลดไฟล์ ",
@@ -918,7 +919,55 @@
       "fail":"ล้มเหลว",
       "Dataupdatefailed":"อัพเดทข้อมูลล้มเหลว",
       "ChooseBusiness":"เลือก Business"
+  },
+  "TemplateList":{
+        "search":"ค้นหา",
+        "allforms": "แบบฟอร์มทั้งหมด",
+        "createform": "สร้างแบบฟอร์ม",
+        "importform": "นำเข้าแบบฟอร์ม",
+        "readytouse": "พร้อมใช้งาน",
+        "notavailable": "ไม่พร้อมใช้งาน",
+        "correct": "แก้ไข",
+        "transfercorrection": "โอนสิทธิการแก้ไข",
+        "delete": "ลบ",
+        "number": "ลำดับ",
+        "formname": "ชื่อแบบฟอร์ม",
+        "documentID": "รหัสเอกสาร",
+        "department": "แผนก",
+        "createdby": "สร้างโดย",
+        "lastmodifieddate": "วันที่แก้ไขล่าสุด",
+        "status": "สถานะ"
+  },
+  "Toolbar":{
+        "setup": "ตั้งค่า",
+        "logout": "ออกจากระบบ",
+        "documentbox": "กล่องเอกสาร",
+        "createdocument": "สร้างเอกสาร",
+        "uploadapprovaldocuments": "อัพโหลดเอกสารอนุมัติ",
+        "filloutdocument": "กรอกเอกสาร",
+        "sentitems": "รายการที่ส่ง",
+        "documentreport": "รายงานเอกสาร",
+        "documentusagereport": "รายงานการใช้งานเอกสาร",
+        "managedocumentformats": "จัดการรูปแบบเอกสาร",
+        "Createapprovalform": "สร้างรูปแบบอนุมัติ",
+        "createform": "สร้างแบบฟอร์ม"
+  },
+  "WorkflowDashboard": {
+      "alldocuments": "เอกสารทั้งหมด",
+      "allstatus": "สถานะทั้งหมด"
+  },
+  "WorkflowDetail": {
+      "documentsummaryreport": "รายงานสรุปการใช้งานเอกสาร",
+      "no": "ลำดับที่",
+      "documenttype": "ประเภทเอกสาร",
+      "documentnumber": "เลขที่เอกสาร",
+      "details": "รายละเอียด",
+      "documentstatus": "สถานะเอกสาร",
+      "sender": "ผู้ส่งเอกสาร",
+      "datesent": "วันที่ส่ง",
+      "processingtime": "ระยะเวลาดำเนินการ",
+      "documentprocessed": "ระยะเวลาทั้งหมดที่เอกสารถูกดำเนินการ",
+      "documentlastorder": "ระยะเวลาตั้งแต่เอกสารถูกนำเข้าถึงลำดับล่าสุด"
   }
-}
+}}
 
-}

@@ -32,10 +32,10 @@
             </template>
             <v-list dense nav>
               <v-list-item to="/setting">
-                <v-list-item-title class="toolbar-menu-title">ตั้งค่า</v-list-item-title>
+                <v-list-item-title class="toolbar-menu-title">{{textLang.setup}}</v-list-item-title>
               </v-list-item>
               <v-list-item>
-                <v-list-item-title class="toolbar-menu-title">ออกจากระบบ</v-list-item-title>
+                <v-list-item-title class="toolbar-menu-title">{{textLang.logout}}</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
@@ -50,7 +50,7 @@
             <v-icon>mdi-inbox-arrow-down-outline</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title class="menu-title">กล่องเอกสาร</v-list-item-title>
+            <v-list-item-title class="menu-title">{{textLang.documentbox}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-group no-action color="#53ba47" :value="open_create_menu" active-class="menu-create-doc" :class="create_menu_active_class">
@@ -59,7 +59,7 @@
               <v-icon>mdi-file-edit-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title class="menu-title">สร้างเอกสาร</v-list-item-title>
+              <v-list-item-title class="menu-title">{{textLang.createdocument}}</v-list-item-title>
             </v-list-item-content>
           </template>
           <v-list-item to="/create" class="mb-1">
@@ -67,7 +67,7 @@
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title class="menu-title">อัพโหลดเอกสารอนุมัติ</v-list-item-title>
+              <v-list-item-title class="menu-title">{{textLang.uploadapprovaldocuments}}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item to="/form" class="mb-1">
@@ -75,7 +75,7 @@
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title class="menu-title">กรอกเอกสาร</v-list-item-title>
+              <v-list-item-title class="menu-title">{{textLang.filloutdocument}}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
@@ -84,7 +84,7 @@
             <v-icon>mdi-send-outline</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title class="menu-title">รายการที่ส่ง</v-list-item-title>
+            <v-list-item-title class="menu-title">{{textLang.sentitems}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item to="/report" active-class="menu-active menu-icon-svg-active">
@@ -94,7 +94,7 @@
             </svg>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title class="menu-title">รายงานเอกสาร</v-list-item-title>
+            <v-list-item-title class="menu-title">{{textLang.documentreport}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item to="/summary_workflow" active-class="menu-active">
@@ -102,7 +102,7 @@
             <v-icon>mdi-file-document</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title class="menu-title">รายงานการใช้งานเอกสาร</v-list-item-title>
+            <v-list-item-title class="menu-title">{{textLang.documentusagereport}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-group no-action color="#53ba47" :value="open_doc_style_menu" active-class="menu-create-doc" :class="'doc-style-dropdown-icon ' +  doc_style_active_class">
@@ -111,7 +111,7 @@
               <v-icon>mdi-file-cog</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title class="menu-title">จัดการรูปแบบเอกสาร</v-list-item-title>
+              <v-list-item-title class="menu-title">{{textLang.managedocumentformats}}</v-list-item-title>
             </v-list-item-content>
           </template>
           <!-- <v-list-item to="/flow" class="mb-1">
@@ -119,7 +119,7 @@
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title class="menu-title">สร้างรูปแบบอนุมัติ</v-list-item-title>
+              <v-list-item-title class="menu-title">{{textLang.Createapprovalform}}</v-list-item-title>
             </v-list-item-content>
           </v-list-item> -->
           <v-list-item to="/template" class="mb-1">
@@ -127,7 +127,7 @@
               <v-icon>mdi-circle-medium</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title class="menu-title">สร้างแบบฟอร์ม</v-list-item-title>
+              <v-list-item-title class="menu-title">{{textLang.createform}}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
@@ -156,7 +156,21 @@
       create_menu_active_class: '',
       open_doc_style_menu: false,
       doc_style_active_class: '',
-      allInfo: []
+      allInfo: [],
+      textLang:{
+        setup: 'ตั้งค่า',
+        logout: 'ออกจากระบบ',
+        documentbox: 'กล่องเอกสาร',
+        createdocument: 'สร้างเอกสาร',
+        uploadapprovaldocuments: 'อัพโหลดเอกสารอนุมัติ',
+        filloutdocument: 'กรอกเอกสาร',
+        sentitems: 'รายการที่ส่ง',
+        documentreport: 'รายงานเอกสาร',
+        documentusagereport: 'รายงานการใช้งานเอกสาร',
+        managedocumentformats: 'จัดการรูปแบบเอกสาร',
+        Createapprovalform: 'สร้างรูปแบบอนุมัติ',
+        createform: 'สร้างแบบฟอร์ม',
+      },
     }),
     watch: {
       $route(to, from) {
