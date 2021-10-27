@@ -134,7 +134,7 @@ export default {
       documentusagereport: 'รายงานการใช้งานเอกสาร',
       search: 'ค้นหา',
       number: 'ลำดับ',
-      name: 'ชื่อ',
+      name: 'ชื่อ Workflow',
       details: 'รายละเอียด',
     }
   }),
