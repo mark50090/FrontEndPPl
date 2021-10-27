@@ -118,7 +118,7 @@
                   </v-row>
                   <v-row class="create-row">
                     <v-col cols="12" md="3" lg="3" class="pl-2 pt-2 create-setting-title">
-                      {{textLang.message}} :
+                      {{textLang.attachfile}} :
                     </v-col>
                     <v-col cols="12" md="9" lg="9" class="pr-0 pt-0 create-attach-file-block">
                       <v-file-input dense outlined multiple counter show-size chips small-chips color="#4CAF50" prepend-icon="" append-outer-icon="$file" :placeholder="textLang.selectattachment" class="create-setting" v-model="attachedFile">
