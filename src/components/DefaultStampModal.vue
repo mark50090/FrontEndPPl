@@ -168,7 +168,7 @@ export default {
     },
     openUploadStamp() {
       if (this.action_header == 'เพิ่ม') {
-        if (this.imageStamp == '') this.imageStamp = ''
+        if (this.imageStamp == '') this.imageStamp = '',this.valid = true
       }
       document.getElementById('stampFile').click()
       if (this.stateDefaultStamp == 'draw') {
