@@ -179,7 +179,7 @@
       }
     },
     mounted(){
-      this.getUserDetail()
+      this.getUserSetting()
       EventBus.$on('loadingOverlay', this.changeLoading)
       this.checkCreateDocMenu()
       this.checkDocStyleMenu()
@@ -191,6 +191,18 @@
       changeLoading(isLoad) {
         this.loading_overlay = isLoad
       },
+      async getUserSetting(){
+        try {
+          const url = '/user_setting/api/v1/get_usersetting'
+          var { data } = await this.axios.get(this.$api_url + url)
+          if(data) {
+            this.defaultBiz = data.result.other_setting.Default_Business
+          }
+        } catch (error) {
+          console.log(error);
+        }
+        this.getUserDetail()
+      },
       getUserDetail(){ // get user detail to show name, email and business list
         var userDetail = this.$store.state.userProfile
         var sessionDetail = JSON.parse(sessionStorage.getItem('userProfile'))
@@ -201,9 +213,12 @@
         this.business = sessionDetail.biz_detail.map(detail => {
           return detail.getbiz[0]
         })
-        if(!(sessionStorage.getItem('selected_business'))) this.selectedBiz = this.business[0]
-        // this.changeBiz()
-        else this.selectedBiz = JSON.parse(sessionStorage.getItem('selected_business'))
+        if(this.defaultBiz != '') this.selectedBiz = this.defaultBiz
+        else{
+          if(!(sessionStorage.getItem('selected_business'))) this.selectedBiz = this.business[0]
+          // this.changeBiz()
+          else this.selectedBiz = JSON.parse(sessionStorage.getItem('selected_business'))
+        }
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
         this.isReady = true
         this.getEmployeeInfo()

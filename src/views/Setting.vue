@@ -112,7 +112,7 @@
           <v-col v-if="statedefault_Business == true" align-self="center" class="pa-0">
                 <v-row class="font-all">
                   <v-col cols="12" md="6" lg="6" class="position-dropdown-mobile">
-                    <v-autocomplete class="font-dropdown ic-dropdown text-dropdown" :placeholder="this.textLang.ChooseBusiness" append-icon="mdi-chevron-down" auto-select-first outlined dense hide-details color="#67C25D" v-model="selectedBiz" :items="noneForChangeBiz"></v-autocomplete>
+                    <v-autocomplete class="font-dropdown ic-dropdown text-dropdown" :placeholder="this.textLang.ChooseBusiness" append-icon="mdi-chevron-down" auto-select-first outlined dense hide-details color="#67C25D" v-model="selectedBiz" :items="noneForChangeBiz" item-text="first_name_th" item-value="id_card_num" return-object></v-autocomplete>
                   </v-col>
                   <v-col cols="auto" md="auto" lg="auto" class="pr-0 position-btn-mobile-cancel" align-self="center">
                     <v-btn depressed color="#757575" small dark @click="stateBusinessOff()">{{textLang.cancel}}</v-btn>
@@ -261,7 +261,7 @@ export default {
         this.get_biz_detail.push(element)
       })
       for (let index = 0; index < this.get_biz_detail.length; index++) {
-        this.getBusiness.push(this.get_biz_detail[index].getbiz[0].first_name_th)
+        this.getBusiness.push(this.get_biz_detail[index].getbiz[0])
         this.getWork.push(this.get_biz_detail[index].getbiz[0].first_name_th)
       }
       this.getBusiness = [...new Set(this.getBusiness)]
@@ -274,7 +274,7 @@ export default {
         const url = '/user_setting/api/v1/get_usersetting'
         var { data } = await this.axios.get(this.$api_url + url)
         if(data) {
-          this.confirmBusiness = data.result.other_setting.Default_Business
+          this.confirmBusiness = data.result.other_setting.Default_Business.first_name_th
           this.switch_notify_email = data.result.other_setting.Default_NotifyEmail
           this.notify_email = data.result.other_setting.Notify_Email
           this.set_notify_email = data.result.other_setting.Notify_Email
@@ -303,8 +303,8 @@ export default {
         this.statedefault_Business = false
       }
       else {
-        this.confirmBusiness = this.selectedBiz
-        this.default_Business = this.confirmBusiness
+        this.confirmBusiness = this.selectedBiz.first_name_th
+        this.default_Business = this.selectedBiz
         this.noneForChangeBiz.shift()
         this.statedefault_Business = false
       }
