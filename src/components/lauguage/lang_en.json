@@ -918,7 +918,25 @@
     "Dataupdatefailed":"อัพเดทข้อมูลล้มเหลว",
     "ChooseBusiness":"เลือก Business"
 
-  }
+  },
+  "TemplateList":{
+    "search":"ค้นหา",
+    "allforms": "แบบฟอร์มทั้งหมด",
+    "createform": "สร้างแบบฟอร์ม",
+    "importform": "นำเข้าแบบฟอร์ม",
+    "readytouse": "พร้อมใช้งาน",
+    "notavailable": "ไม่พร้อมใช้งาน",
+    "correct": "แก้ไข",
+    "transfercorrection": "โอนสิทธิการแก้ไข",
+    "delete": "ลบ",
+    "number": "ลำดับ",
+    "formname": "ชื่อแบบฟอร์ม",
+    "documentID": "รหัสเอกสาร",
+    "department": "แผนก",
+    "createdby": "สร้างโดย",
+    "lastmodifieddate": "วันที่แก้ไขล่าสุด",
+    "status": "สถานะ"
+}
 }
 
 }
