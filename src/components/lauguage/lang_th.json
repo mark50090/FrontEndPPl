@@ -878,7 +878,8 @@
         "details":"รายละเอียด",
         "status":"สถานะ",
         "date":"วันที่"
-      }
+      },
+      "customdoc":"กำหนดเอง"
   },
   "QuestionForm":{
     "documentreport":"รายงานเอกสาร",
