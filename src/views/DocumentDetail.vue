@@ -159,7 +159,7 @@
                         <v-icon v-if="item.status == 'W' && !is_reject" size="30" color="rgb(251, 192, 45)">mdi-clock-outline</v-icon> <!-- waiting for approve (current step) -->
                         <v-icon v-else-if="item.status == 'Y'" size="30" color="#4caf50">mdi-check-circle-outline</v-icon> <!-- approved -->
                         <v-icon v-else-if="item.status == 'R'" size="30" color="#f44336">mdi-close-circle-outline</v-icon> <!-- deny -->
-                        <v-icon v-else-if="item.status == 'N'" size="30" color="#9e9e9e">mdi-clock-outline</v-icon> <!-- step not arrive yet -->
+                        <v-icon v-else-if="item.status == 'N'  && !is_reject" size="30" color="#9e9e9e">mdi-clock-outline</v-icon> <!-- step not arrive yet -->
                         <v-icon v-else-if="is_reject" size="30" color="#9e9e9e">mdi-circle-slice-8</v-icon> <!-- step other if reject transaction -->
                       </template>
                       <v-row class="detail-row">

@@ -2926,14 +2926,14 @@ export default {
         clear: "ล้างการตั้งค่าทั้งหมด"
       },
       alert:{
-        alert_error: "ล้มเหลว",
+        alert_error: "ไม่สำเร็จ",
         alert_success: "สำเร็จ",
         name_object: "ชื่อ Object \"",
         change_name: "\" ซ้ำ กรุณาเปลี่ยนชื่อ Object",
         duplicate: "ลำดับการกรอกซ้ำ",
         section_boxes: "Section Box ซ้อนทับกัน กรุณาจัดวาง Section Box ใหม่",
         save_complete: "บันทึกแบบฟอร์มสำเร็จ",
-        fail_save: "บันทึกแบบฟอร์มล้มเหลว กรุณาลองใหม่ในภายหลัง",
+        fail_save: "บันทึกแบบฟอร์มไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
         create_eform: "สร้างรูปแบบเอกสาร",
         workflow_alert: "กรุณาเลือก Worflow ของแบบฟอร์ม"
       },
