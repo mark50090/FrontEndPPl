@@ -11,7 +11,7 @@
       </v-btn>
       <v-btn v-if="!(!isPreview && ready)" text class="px-0 mr-1 back-show-btn" @click="backToMyForm()">
         <v-icon large color="#4CAF50">mdi-chevron-left</v-icon>
-        <b>ออกจากแบบฟอร์มนี้</b>
+        <b>{{ textLang.tabMenubar.back_to }}</b>
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn v-if="isOwner" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
@@ -364,7 +364,7 @@
           <br>
           <v-row class="save-doc-row">
             <v-btn depressed large dark color="#4CAF50" class="step-btn" @click="step_show = !step_show">
-              {{ textLang.offer_dialog.seq_approval }}
+              Workflow
               <v-icon v-if="step_show == true" large class="ml-12">mdi-chevron-up</v-icon>
               <v-icon v-else-if="step_show == false" large class="ml-12">mdi-chevron-down</v-icon>
             </v-btn>
@@ -393,7 +393,7 @@
           <v-row class="mt-0 save-doc-row">
             <v-col cols="12" md="auto" lg="auto" class="pl-0 pb-0 attach-title-save-modal paperless-file-title">{{ textLang.offer_dialog.add_attachments }}:</v-col>
             <v-col cols="12" md="" lg="" class="px-0 pb-0">
-              <v-file-input show-size dense outlined counter multiple color="#4CAF50" truncate-length="600" placeholder="เลือกเอกสารแนบ" class="attach-file-preview-box" id="file" v-model="files">
+              <v-file-input show-size dense outlined counter multiple color="#4CAF50" truncate-length="600" :placeholder="textLang.offer_dialog.attached_file_placeholder" class="attach-file-preview-box" id="file" v-model="files">
                 <template v-slot:selection="{ text }">
                   <v-chip small dark color="#4CAF50" class="py-1 attach-file-preview-chip">{{ text }}</v-chip>
                 </template>
@@ -426,7 +426,7 @@
     <v-dialog v-model="dialogFiles" scrollable persistent max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="attach-preview-modal-header">แนบเอกสารเพิ่มเติม</span>
+          <span class="attach-preview-modal-header">{{ textLang.offer_dialog.doc_system }}</span>
           <v-spacer></v-spacer>
           <v-btn icon dark small color="black" @click="dialogFiles = false">
             <v-icon>mdi-close-circle</v-icon>
@@ -593,7 +593,7 @@ export default {
     textLang:{
       tabMenubar: {
         back_page: "ย้อนกลับไปหน้ากรอกข้อมูล",
-        back_to: "กลับสู่หน้าหลัก",
+        back_to: "ออกจากแบบฟอร์มนี้",
         save_doc: "บันทึกเอกสาร",
         save_draft: "บันทึกเอกสารแบบร่าง",
         page: "หน้า",
@@ -621,10 +621,10 @@ export default {
         message: "ข้อความ:",
         doc_type: "ประเภทเอกสาร paperless:",
         doc_format: "รูปแบบเอกสาร paperless:",
-        seq_approval: "Workflow",
         add_attachments: "เอกสารแนบเพิ่มเติม",
+        attached_file_placeholder: "เลือกเอกสารแนบ",
         please_choose: "กรุณาเลือกเอกสารแนบ",
-        doc_system: "แนบเอกสารเข้าระบบ Paperless",
+        doc_system: "แนบเอกสารเพิ่มเติม",
         choose: "เลือก",
         note: "หมายเหตุ",
         re_number: "อ้างอิงลำดับที่",
@@ -638,11 +638,16 @@ export default {
         wait_upload: "รอการอัพโหลด",
         already_save: "เอกสารในลำดับนี้ ถูกบันทึกแล้ว"
       },
-     alert:{
-        send_complete: "เสนอเซ็นสำเร็จ!",
+      alert:{
+        alert_warning: "แจ้งเตือน",
+        alert_success: "สำเร็จ",
+        alert_error: "ไม่สำเร็จ",
+        send_complete: "เสนอเซ็นสำเร็จ",
         send_fail: "เสนอเซ็นไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
-        upload_fail : "อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
-     }
+        upload_fail : "อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
+        duplicate_user_form: "แบบฟอร์มถูกใช้งานโดยผู้ใช้อื่น",
+        duplicate_save: "บันทึกเอกสารไม่สำเร็จ เนื่องจากเอกสารในลำดับนี้ถูกบันทึกแล้ว"
+      }
    },
 
     //Color Variable
@@ -1150,8 +1155,8 @@ export default {
               backdrop: false,
               position: 'bottom-end',
               width: '330px',
-              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
-              text: 'แบบฟอร์มถูกใช้งานโดยผู้ใช้อื่น',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_warning + '</strong>',
+              text: this.textLang.alert.duplicate_user_form,
               showCloseButton: true,
               showConfirmButton: false,
               timer: 5000,
@@ -1930,7 +1935,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_success + '</strong>',
                 text: data.response_bi.Warning_Detail,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -1947,7 +1952,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_warning + '</strong>',
                 text: data.response_bi.Warning_Detail,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -1964,7 +1969,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
                 text: data.response_bi.Warning_Detail,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -2033,7 +2038,7 @@ export default {
               backdrop: false,
               position: 'bottom-end',
               width: '330px',
-              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
               text: data.response_bi.Warning_Detail,
               showCloseButton: true,
               showConfirmButton: false,
@@ -2050,8 +2055,8 @@ export default {
               backdrop: false,
               position: 'bottom-end',
               width: '330px',
-              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
-              text: 'บันทึกเอกสารล้มเหลว เนื่องจากเอกสารในลำดับนี้ถูกบันทึกแล้ว',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
+              text: this.textLang.alert.duplicate_save,
               showCloseButton: true,
               showConfirmButton: false,
               timer: 15000,
@@ -2226,7 +2231,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_success + '</strong>',
                 text: data.response_bi.Warning_Detail,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -2243,7 +2248,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_warning + '</strong>',
                 text: data.response_bi.Warning_Detail,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -2260,7 +2265,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
                 text: data.response_bi.Warning_Detail,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -2280,7 +2285,7 @@ export default {
               backdrop: false,
               position: 'bottom-end',
               width: '330px',
-              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
               text: data.response_bi.Warning_Detail,
               showCloseButton: true,
               showConfirmButton: false,
@@ -2391,7 +2396,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_success + '</strong>',
                 text: data.response_bi.Warning_Detail,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -2408,7 +2413,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_warning + '</strong>',
                 text: data.response_bi.Warning_Detail,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -2425,7 +2430,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
                 text: data.response_bi.Warning_Detail,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -2446,7 +2451,7 @@ export default {
               backdrop: false,
               position: 'bottom-end',
               width: '330px',
-              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
               text: data.response_bi.Warning_Detail,
               showCloseButton: true,
               showConfirmButton: false,
@@ -2515,7 +2520,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_success + '</strong>',
                 text: data.response_bi.Warning_Detail,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -2532,7 +2537,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_warning + '</strong>',
                 text: data.response_bi.Warning_Detail,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -2549,7 +2554,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
                 text: data.response_bi.Warning_Detail,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -2570,7 +2575,7 @@ export default {
               backdrop: false,
               position: 'bottom-end',
               width: '330px',
-              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
               text: data.response_bi.Warning_Detail,
               showCloseButton: true,
               showConfirmButton: false,
@@ -2615,8 +2620,8 @@ export default {
               backdrop: false,
               position: 'bottom-end',
               width: '330px',
-              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
-              text: 'อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_warning + '</strong>',
+              text: this.textLang.alert.upload_fail,
               showCloseButton: true,
               showConfirmButton: false,
               timer: 5000,
@@ -2634,8 +2639,8 @@ export default {
           backdrop: false,
           position: 'bottom-end',
           width: '330px',
-          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
-          text: 'อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง',
+          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_warning + '</strong>',
+          text: this.textLang.alert.upload_fail,
           showCloseButton: true,
           showConfirmButton: false,
           timer: 5000,
@@ -3492,8 +3497,8 @@ export default {
               backdrop: false,
               position: 'bottom-end',
               width: '330px',
-              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
-              text: 'อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_warning + '</strong>',
+              text: this.textLang.alert.upload_fail,
               showCloseButton: true,
               showConfirmButton: false,
               timer: 5000,
@@ -3513,8 +3518,8 @@ export default {
           backdrop: false,
           position: 'bottom-end',
           width: '330px',
-          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">แจ้งเตือน</strong>',
-          text: 'อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง',
+          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_warning + '</strong>',
+          text: this.textLang.alert.upload_fail,
           showCloseButton: true,
           showConfirmButton: false,
           timer: 5000,
@@ -3728,8 +3733,8 @@ export default {
             backdrop: false,
             position: 'bottom-end',
             width: '330px',
-            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
-            text: 'เสนอเซ็นสำเร็จ',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_success + '</strong>',
+            text: this.textLang.alert.send_complete,
             showCloseButton: true,
             showConfirmButton: false,
             timer: 5000,
@@ -3746,8 +3751,8 @@ export default {
             backdrop: false,
             position: 'bottom-end',
             width: '330px',
-            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
-            text: 'เสนอเซ็นล้มเหลว กรุณาลองใหม่ในภายหลัง',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert.alert_error + '</strong>',
+            text: this.textLang.alert.send_fail,
             showCloseButton: true,
             showConfirmButton: false,
             timer: 5000,
