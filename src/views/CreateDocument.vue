@@ -693,7 +693,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           }
           if(data.status){
             this.transaction_id = data.data.transaction_id
-            if(this.isDirty) this.saveNewSignPosition()
+            // if(this.isDirty) 
+            this.saveNewSignPosition()
             if(this.attachedFile.length) this.uploadFiles()
             this.emitLoading(false)
             this.$swal({
