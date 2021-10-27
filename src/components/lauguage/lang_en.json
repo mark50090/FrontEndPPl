@@ -829,6 +829,7 @@
     "Successfullyrejected": "ปฏิเสธเอกสารสำเร็จ",
     "cantread": "ไม่สามารถอ่าน PDF ได้",
     "erroroccurred": "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง",
+    "approve_fail": "Approve Failed",
     "fail": "ล้มเหลว",
     "clear": "ล้างค่า",
     "warn":"แจ้งเตือน",
