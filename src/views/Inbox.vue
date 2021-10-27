@@ -143,7 +143,8 @@ import { EventBus } from '../EventBus'
           details:'รายละเอียด',
           status:'สถานะ',
           date:'วันที่'
-      },
+        },
+        customdoc:'กำหนดเอง'
     }
     }),
     
@@ -237,7 +238,11 @@ import { EventBus } from '../EventBus'
           })
           if(data.status){ //ถ้า response status == true
             data.result.forEach(element => { //วนลูปข้อมูลที่ได้จาก api
-                this.inbox_data.push(element) // ใส่ค่าที่ได้จาก api ลงในตาราง
+            if(!element.flow_detail.name) {
+              element.flow_detail.name = this.textLang.customdoc
+            }
+              element.detail = `${element.object_text.message} ${element.object_text.subject}`
+              this.inbox_data.push(element) // ใส่ค่าที่ได้จาก api ลงในตาราง
             });
           }
           // this.countTransaction()
