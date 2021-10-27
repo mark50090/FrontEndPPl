@@ -126,7 +126,7 @@
         <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class="py-4 pl-4 all-font-color">
-            Works
+            Works 
           </v-col>
           <v-col  class="font-all pl-4 pr-2 pt-4 all-font-color">
             <ul >
@@ -147,17 +147,19 @@
                 <v-switch class="mt-0 pt-0 " inset label="Email" hide-details v-model="switch_notify_email" v-on:change="check_edit_email()"></v-switch> <!-- noti email switch -->
               </v-col>
               <v-col class="pt-3 px-0" cols="4" md="5" lg="5">
-                <v-text-field outlined hide-details dense :filled="disable_notify_email" :disabled="disable_notify_email" class="search-box-write" color="#67C25D" v-model="notify_email"></v-text-field>
+                <v-form ref="form" v-model="valid">
+                  <v-text-field outlined hide-details dense :filled="disable_notify_email" :disabled="disable_notify_email" class="search-box-write" color="#67C25D" v-model="notify_email" :rules="emailRules" required></v-text-field>
+                </v-form>
               </v-col> 
               <v-col cols="auto" md="auto" lg="auto" class="px-0 pt-3">
                 <v-btn v-if="edit_email == false" outlined  color="rgb(158,158,158)" class="search-btn-write px-0 bg-btn-pencil" @click="editEmail()"> <!-- button of editing noti email -->
-                  <v-icon small  >mdi-lead-pencil</v-icon>
+                  <v-icon small>mdi-lead-pencil</v-icon>
                 </v-btn> 
                 <template v-if="edit_email == true" > <!-- button of cancel and confirm editing noti email  -->
                   <v-btn outlined tile class="close-btn-write px-0" color="rgb(158,158,158)" @click="close_notifyemail()"> <!-- cancel editing noti email button -->
                     <v-icon small >mdi-close</v-icon>
                   </v-btn>
-                  <v-btn outlined class="check-btn-write px-0" color="rgb(158,158,158)" @click="confirm_notifyemail()" @keyup.enter="confirm_notifyemail()"> <!-- confirm editing noti email button -->
+                  <v-btn :disabled="!valid" outlined class="check-btn-write px-0" color="rgb(158,158,158)" @click="confirm_notifyemail()"> <!-- confirm editing noti email button -->
                     <v-icon small >mdi-check</v-icon>
                   </v-btn> 
                 </template>  
@@ -182,6 +184,8 @@ export default {
     DefaultStampModal
   },
   data: () => ({
+    valid: true,
+    emailRules: [v => /.+@.+\..+/.test(v)],
     firstnameTh: '',
     lastnameTh: '',
     firstnameEng: '',
@@ -197,7 +201,6 @@ export default {
     getBusiness: [],
     getWork: [],
     noneForChangeBiz:[],
-    noneInSelectedbiz: "ไม่มี",
     default_Business: '',
     state_Signature: 'Not Found',
     default_sign: false,
@@ -209,7 +212,8 @@ export default {
     switch_notify_email: false,
     edit_email: false,
     disable_notify_email: true,
-    show_Edit_Stamp: Boolean ,
+    show_Edit_Stamp: Boolean,
+    findStamp: '0',
     textLang:{
       setgeneralinformation: 'ตั้งค่าข้อมูลทั่วไป',
       name: 'ชื่อ',
@@ -236,18 +240,14 @@ export default {
     EventBus.$on('Setting',this.get_usersetting)
   },
   methods: {
-    // openSetDefaultSignature() {
-    //   EventBus.$emit('DefaultSignature')
-    //   EventBus.$emit('Signature_Data',this.default_Business,this.default_Signature,this.switch_notify_email,this.notify_email)
-    // },
     openAddStamp() {
       EventBus.$emit('DefaultStamp','add')
       EventBus.$emit('Stamp_Data_Add',this.default_stamp)
     },
     openEditStamp() {
       EventBus.$emit('DefaultStamp','edit')
-      let findStamp = this.default_stamp.findIndex(item => item.StampName == this.selectedStamp.StampName & item.SrcBase == this.selectedStamp.SrcBase)
-      EventBus.$emit('Stamp_Data_Edit',this.default_stamp,findStamp,this.selectedStamp)
+      this.findStamp = this.default_stamp.findIndex(item => item.StampName == this.selectedStamp.StampName & item.SrcBase == this.selectedStamp.SrcBase)
+      EventBus.$emit('Stamp_Data_Edit',this.default_stamp,this.findStamp,this.selectedStamp)
     },
     getUserDetail(){ // get user detail
       var userDetail = JSON.parse(sessionStorage.getItem('userProfile'))
@@ -266,7 +266,8 @@ export default {
       }
       this.getBusiness = [...new Set(this.getBusiness)]
       this.getWork = [...new Set(this.getWork)]
-      if (((this.firstnameEng != '') & (this.lastnameEng != '')) || ((this.firstnameEng != undefined) & (this.lastnameEng != undefined))) this.nameEng = true
+      if ((this.firstnameEng != '' && this.lastnameEng != '') || (this.firstnameEng != undefined && this.lastnameEng != undefined)) this.nameEng = true
+      else this.nameEng = false
     },
     async get_usersetting(){
       try {
@@ -280,14 +281,13 @@ export default {
           this.default_sign = data.result.default_sign
           this.default_stamp = data.result.default_stamp
           if (this.default_stamp != '') {
-            if (this.selectedStamp != this.default_stamp[0]) {
-              this.selectedStamp = this.default_stamp[0]
-              this.show_Edit_Stamp = true
-            }
+            this.selectedStamp = this.default_stamp[this.findStamp]
+            if (this.default_stamp[this.findStamp] == undefined) this.selectedStamp = this.default_stamp[0]
+            this.show_Edit_Stamp = true
           }
-          if (this.default_stamp == '') this.selectedStamp = '' ,this.show_Edit_Stamp = false
+          else if (this.default_stamp == '') this.selectedStamp = '' ,this.show_Edit_Stamp = false
           if (this.selectedStamp == undefined) this.selectedStamp = ''
-          if ((this.confirmBusiness == '') || (this.confirmBusiness == undefined)) this.confirmBusiness = 'Not Found'
+          if (this.confirmBusiness == '' || this.confirmBusiness == undefined) this.confirmBusiness = 'Not Found'
           if (this.default_sign == false) this.state_Signature = 'Not Found'
           else if (this.default_sign == true) this.state_Signature = 'Ready'
         }
@@ -295,26 +295,8 @@ export default {
         console.log(error);
       }
     },
-    // async get_defaultSignature(){
-    //   try {
-    //     const url = '/user_setting/api/v1/get_usersetting'
-    //     var { data } = await this.axios.get(this.$api_url + url)
-    //     if(data) {
-    //       this.default_Signature = data.result.other_setting.Default_Signature
-    //       this.default_sign = data.result.default_sign
-    //       if (this.default_sign == false) {
-    //         this.state_Signature = 'Not Found'
-    //       }
-    //       if (this.default_sign == true) {
-    //         this.state_Signature = 'Ready'
-    //       }
-    //     }
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
     set_usersetting(){
-      if ((this.selectedBiz == '') || (this.selectedBiz == 'ไม่มี') || (this.selectedBiz == undefined)) {
+      if (this.selectedBiz == '' || this.selectedBiz == 'ไม่มี' || this.selectedBiz == undefined) {
         this.confirmBusiness = 'Not Found'
         this.default_Business = ''
         this.noneForChangeBiz.shift()
@@ -381,7 +363,7 @@ export default {
     stateBusinessOn() {
       this.statedefault_Business = true
       this.noneForChangeBiz = this.getBusiness 
-      this.noneForChangeBiz.unshift(this.noneInSelectedbiz)
+      this.noneForChangeBiz.unshift("ไม่มี")
     },
     stateBusinessOff() {
       this.noneForChangeBiz.shift()
@@ -399,6 +381,7 @@ export default {
       this.postData()
       this.edit_email = false
       this.disable_notify_email = true
+      this.set_notify_email = this.notify_email
     },
     close_notifyemail() {
       this.notify_email = this.set_notify_email
