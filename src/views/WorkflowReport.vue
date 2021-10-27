@@ -2,7 +2,7 @@
   <div class="pt-1">
     <v-card outlined class="mb-1 mx-1 px-4 pt-3 report-page">
       <v-row class="pl-3 report-row report-header">
-        <b>รายงานการใช้งานเอกสาร</b>
+        <b>{{textLang.documentusagereport}}</b>
       </v-row>
       <v-row class="mt-1 report-row">
         <v-col cols="12" md="6" lg="6" class="px-0 pb-1">
@@ -13,7 +13,7 @@
             clearable
             clear-icon="mdi-close-circle-outline"
             color="#4caf50"
-            placeholder="ค้นหา"
+            :placeholder="textLang.search"
             class="search-report search-report-btn-block"
           >
             <template v-slot:append-outer>
@@ -129,7 +129,14 @@ export default {
     ],
     workflow_data: [],
     keyword: '',
-    axios_pending: 0
+    axios_pending: 0,
+    textLang:{
+      documentusagereport: 'รายงานการใช้งานเอกสาร',
+      search: 'ค้นหา',
+      number: 'ลำดับ',
+      name: 'ชื่อ',
+      details: 'รายละเอียด',
+    }
   }),
   mounted () {
     this.getAllFlow()

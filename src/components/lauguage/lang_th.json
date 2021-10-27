@@ -968,6 +968,13 @@
       "processingtime": "ระยะเวลาดำเนินการ",
       "documentprocessed": "ระยะเวลาทั้งหมดที่เอกสารถูกดำเนินการ",
       "documentlastorder": "ระยะเวลาตั้งแต่เอกสารถูกนำเข้าถึงลำดับล่าสุด"
+  },
+  "WorkflowReport": {
+      "documentusagereport": "รายงานการใช้งานเอกสาร",
+      "search": "ค้นหา",
+      "number": "ลำดับ",
+      "name": "ชื่อ",
+      "details": "รายละเอียด"
   }
 }}
 
