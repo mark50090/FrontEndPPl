@@ -955,6 +955,19 @@
   "WorkflowDashboard": {
       "alldocuments": "เอกสารทั้งหมด",
       "allstatus": "สถานะทั้งหมด"
+  },
+  "WorkflowDetail": {
+      "documentsummaryreport": "รายงานสรุปการใช้งานเอกสาร",
+      "no": "ลำดับที่",
+      "documenttype": "ประเภทเอกสาร",
+      "documentnumber": "เลขที่เอกสาร",
+      "details": "รายละเอียด",
+      "documentstatus": "สถานะเอกสาร",
+      "sender": "ผู้ส่งเอกสาร",
+      "datesent": "วันที่ส่ง",
+      "processingtime": "ระยะเวลาดำเนินการ",
+      "documentprocessed": "ระยะเวลาทั้งหมดที่เอกสารถูกดำเนินการ",
+      "documentlastorder": "ระยะเวลาตั้งแต่เอกสารถูกนำเข้าถึงลำดับล่าสุด"
   }
 }}
 
