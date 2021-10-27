@@ -241,6 +241,12 @@ import { EventBus } from '../EventBus'
             if(!element.flow_detail.name) {
               element.flow_detail.name = this.textLang.customdoc
             }
+            if(!element.object_text.message) {
+              element.object_text.message = ""
+            }
+            if(!element.object_text.subject) {
+              element.object_text.subject = ""
+            }
               element.detail = `${element.object_text.message} ${element.object_text.subject}`
               this.inbox_data.push(element) // ใส่ค่าที่ได้จาก api ลงในตาราง
             });
