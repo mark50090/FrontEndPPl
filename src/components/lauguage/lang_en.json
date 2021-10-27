@@ -956,7 +956,7 @@
     "alldocuments": "เอกสารทั้งหมด",
     "allstatus": "สถานะทั้งหมด"
   },
-  "documentsummaryreport": {
+  "WorkflowDetail": {
     "documentsummaryreport": "รายงานสรุปการใช้งานเอกสาร",
     "no": "ลำดับที่",
     "documenttype": "ประเภทเอกสาร",
