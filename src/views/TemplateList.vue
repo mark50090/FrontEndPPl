@@ -3,7 +3,7 @@
     <v-card outlined class="mx-1 px-4 pt-2 templateform-page">
       <v-row class="templateform-row">
             <v-col cols="12" md="6" lg="6" class="px-0 pb-0">
-              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-templateform search-templateform-btn-block" v-model="keyword" v-on:keyup.enter="searchKeyword()">
+              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" :placeholder="textLang.search" class="search-templateform search-templateform-btn-block" v-model="keyword" v-on:keyup.enter="searchKeyword()">
                 <template v-slot:append-outer>
                   <v-btn outlined color="#9e9e9e" class="search-templateform-btn" @click="searchKeyword()">
                     <v-icon >mdi-magnify</v-icon>
@@ -14,14 +14,14 @@
           </v-row>
           <v-row class="templateform-row">
             <v-col cols="12" md="auto" lg="auto" align-self="center" class="pb-0 pl-0 templateform-header">
-              แบบฟอร์มทั้งหมด {{totalItemsTemplate}}
+              {{textLang.allforms}} {{totalItemsTemplate}}
             </v-col>
             <v-spacer></v-spacer>
             <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pb-0 px-0">
-                  <v-btn color="#67C25D" dark depressed class="front-btn-templateform" @click="createTemplate()"><v-icon left>mdi-plus</v-icon>สร้างแบบฟอร์ม</v-btn>
+                  <v-btn color="#67C25D" dark depressed class="front-btn-templateform" @click="createTemplate()"><v-icon left>mdi-plus</v-icon>{{textLang.createform}}</v-btn>
             </v-col>
             <v-col cols="6" md="auto" lg="auto" class="pb-0 pl-2 pr-0">
-                  <v-btn color="#67C25D" dark outlined class="front-btn-templateform" @click="ImportForm() "><v-icon left>mdi-inbox-arrow-down-outline</v-icon>นำเข้าแบบฟอร์ม</v-btn>
+                  <v-btn color="#67C25D" dark outlined class="front-btn-templateform" @click="ImportForm() "><v-icon left>mdi-inbox-arrow-down-outline</v-icon>{{textLang.importform}}</v-btn>
             </v-col>
           </v-row>
           <v-row class="table-top-spacer templateform-row">
@@ -37,11 +37,11 @@
                 <v-row no-gutters class="templateform-row">
                   <v-col v-if="item.templateform_status" cols="auto" md="auto" lg="auto" align-self="center"> <!-- form status for ready form -->
                     <v-icon size="16" color="#8BC34A" class="mr-1 mb-1">mdi-circle</v-icon>
-                      พร้อมใช้งาน
+                      {{textLang.readytouse}}
                   </v-col>
                   <v-col v-else cols="auto" md="auto" lg="auto" align-self="center"> <!-- form status for not ready form -->
                     <v-icon size="16" color="error" class="mr-1 mb-1">mdi-circle</v-icon>
-                      ไม่พร้อมใช้งาน
+                      {{textLang.notavailable}}
                   </v-col>
                 </v-row>
               </template>
@@ -59,7 +59,7 @@
                         </v-list-item-icon>
                         <v-list-item-content>
                           <v-list-item-title class="front-templateform-down">
-                            แก้ไข
+                            {{textLang.correct}}
                           </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item> 
@@ -79,7 +79,7 @@
                         </v-list-item-icon>
                         <v-list-item-content>
                           <v-list-item-title class="front-templateform-down">
-                            โอนสิทธิการแก้ไข
+                            {{textLang.transfercorrection}}
                           </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item> -->
@@ -89,7 +89,7 @@
                         </v-list-item-icon>
                         <v-list-item-content>
                           <v-list-item-title class="front-templateform-down">
-                            ลบ
+                            {{textLang.delete}}
                           </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item> 
@@ -130,6 +130,24 @@ import showFormTransfer from '../components/TransferEdit.vue'
       },
       totalItemsTemplate: 0,
       keyword: ""
+      textLang:{
+        search:'ค้นหา',
+        allforms: 'แบบฟอร์มทั้งหมด',
+        createform: 'สร้างแบบฟอร์ม',
+        importform: 'นำเข้าแบบฟอร์ม',
+        readytouse: 'พร้อมใช้งาน',
+        notavailable: 'ไม่พร้อมใช้งาน',
+        correct: 'แก้ไข',
+        transfercorrection: 'โอนสิทธิการแก้ไข',
+        delete: 'ลบ',
+        number: 'ลำดับ',
+        formname: 'ชื่อแบบฟอร์ม',
+        documentID: 'รหัสเอกสาร',
+        department: 'แผนก',
+        createdby: 'สร้างโดย',
+        lastmodifieddate: 'วันที่แก้ไขล่าสุด',
+        status: 'สถานะ',
+      },
     }),
     components: {
       ImportForm,
