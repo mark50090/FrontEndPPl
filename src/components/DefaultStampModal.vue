@@ -10,7 +10,7 @@
         </v-card-title>
         <v-card-text class="pb-0">
             <v-row class="default-stamp-row">
-              <v-text-field dense outlined hide-details color="#67C25D" :label="textLang.stamp_name_show" class="stamp-name-box stamp-name-label" v-model="stamp_name" @keyup.space.prevent="check_name_stamp()"></v-text-field>
+              <v-text-field dense outlined hide-details color="#67C25D" :label="textLang.stamp_name_show" class="stamp-name-box stamp-name-label" v-model="stamp_name" @keyup="check_name_stamp()"></v-text-field>
             </v-row>
           <v-row class="mt-3 default-stamp-row">
             <v-btn-toggle group dense mandatory v-model="sign_type" class="sign-type-btn-group">
@@ -107,26 +107,32 @@ export default {
       // }
     },
     check_name_stamp() {
-      if (this.stamp_name != '' && this.imageStamp != '') this.valid = false
-      else if ((this.stamp_name == '' && this.imageStamp == '')||(this.stamp_name != '' && this.imageStamp == '')||(this.stamp_name == '' && this.imageStamp != '')) this.valid = true
+      let stamp_name = this.stamp_name
+      stamp_name = stamp_name.trim()
+      // this.stamp_name.toLowerCase().split(" ").join("")
+      // this.stamp_name = this.stamp_name.replace(/[\s\/]/g, '')
+      if (stamp_name != '' && this.imageStamp != '') this.valid = false
+      else if ((stamp_name == '' && this.imageStamp == '')||(stamp_name != '' && this.imageStamp == '')||(stamp_name == '' && this.imageStamp != '')) this.valid = true
       if ( this.action_header == 'แก้ไข') {
         if (this.stateDefaultStamp == 'draw') {
           this.checkSignature = this.$refs.signaturePad.isEmpty()
-          if (this.stamp_name != '' && this.checkSignature == false) this.valid = false
+          if (stamp_name != '' && this.checkSignature == false) this.valid = false
           else this.valid = true
         }
       }
       else if ( this.action_header == 'เพิ่ม') {
         if (this.stateDefaultStamp == 'draw') {
           this.checkSignature = this.$refs.signaturePad.isEmpty()
-          if (this.stamp_name != '' && this.checkSignature == false) this.valid = false
+          if (stamp_name != '' && this.checkSignature == false) this.valid = false
           else this.valid = true
         }
       }
     },
     onEnd() {
+      let stamp_name = this.stamp_name
+      stamp_name = stamp_name.trim()
       this.checkSignature = this.$refs.signaturePad.isEmpty()
-      if (this.stamp_name != '' && this.checkSignature == false) this.valid = false
+      if (stamp_name != '' && this.checkSignature == false) this.valid = false
       if (this.action_header == 'แก้ไข') this.check_state_sign = true
     },
     getDataForEditStamp() {
@@ -169,6 +175,7 @@ export default {
     openUploadStamp() {
       if (this.action_header == 'เพิ่ม') {
         if (this.imageStamp == '') this.imageStamp = '',this.valid = true
+        else this.valid = false
       }
       document.getElementById('stampFile').click()
       if (this.stateDefaultStamp == 'draw') {
