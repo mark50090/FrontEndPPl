@@ -623,7 +623,7 @@
    "preview_template": {
      "tabMenubar": {
        "back_page": "ย้อนกลับไปหน้ากรอกข้อมูล",
-       "back_to": "กลับสู่หน้าหลัก",
+       "back_to": "ออกจากแบบฟอร์มนี้",
        "save_doc": "บันทึกเอกสาร",
        "save_draft": "บันทึกเอกสารแบบร่าง",
        "page": "หน้า",
@@ -651,10 +651,10 @@
        "message": "ข้อความ:",
        "doc_type": "ประเภทเอกสาร paperless:",
        "doc_format": "รูปแบบเอกสาร paperless:",
-       "seq_approval": "Workflow",
        "add_attachments": "เอกสารแนบเพิ่มเติม",
+       "attached_file_placeholder": "เลือกเอกสารแนบ",
        "please_choose": "กรุณาเลือกเอกสารแนบ",
-       "doc_system": "แนบเอกสารเข้าระบบ Paperless",
+       "doc_system": "แนบเอกสารเพิ่มเติม",
        "choose": "เลือก",
        "note": "หมายเหตุ",
        "re_number": "อ้างอิงลำดับที่",
@@ -669,9 +669,14 @@
         "already_save": "เอกสารในลำดับนี้ ถูกบันทึกแล้ว"
      },
      "alert":{
-        "send_complete": "เสนอเซ็นสำเร็จ!",
+        "alert_warning": "แจ้งเตือน",
+        "alert_success": "สำเร็จ",
+        "alert_error": "ไม่สำเร็จ",
+        "send_complete": "เสนอเซ็นสำเร็จ",
         "send_fail": "เสนอเซ็นไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
-        "upload_fail" : "อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
+        "upload_fail" : "อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
+        "duplicate_user_form": "แบบฟอร์มถูกใช้งานโดยผู้ใช้อื่น",
+        "duplicate_save": "บันทึกเอกสารไม่สำเร็จ เนื่องจากเอกสารในลำดับนี้ถูกบันทึกแล้ว"
      }
    },
   "show_template": {
