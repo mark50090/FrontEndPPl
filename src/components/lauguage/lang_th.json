@@ -1,7 +1,7 @@
 {
   "components": {
     "AddAttachFileModal": {
-      "attach_header_dialog": "แนบเอกสารเข้าระบบ Paperless",
+      "attach_header_dialog": "แนบเอกสารเพิ่มเติม",
       "input_attach_title": "เอกสารแนบเพิ่มเติม",
       "placeholder_file": "กรุณาเลือกเอกสารแนบ",
       "cancel_attach_btn": "ยกเลิก",
@@ -19,6 +19,7 @@
        "back_document": "ออกจากหน้า",
        "sure_leave": "คุณต้องการออกจากหน้า",
        "no_save": "โดยไม่บันทึกหรือไม่",
+       "text_confirm_exit": "ต้องการออกจากหน้าสร้างแบบฟอร์มโดยไม่บันทึกหรือไม่ ?",
        "cancel": "ยกเลิก",
        "back": "ออก" 
     },
@@ -28,6 +29,7 @@
       "or_no": "\" หรือไม่\"?",
       "cancel": "ปิด",
       "yes_canel": "ตกลง",
+      "alert_error": "ไม่สำเร็จ",
       "cancel_success": "ยกเลิกเอกสารสำเร็จ",
       "cancel_fail": "ยกเลิกเอกสารไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
     },
@@ -122,6 +124,7 @@
     "SignaturePadModal":{
       "sign_approve": "ลงนามอนุมัติ",
       "reject_approval": "ปฏิเสธอนุมัติ",
+      "clear_button": "ล้างค่า",
       "approve": "อนุมัติ",
       "cancel": "ยกเลิก"
     },
