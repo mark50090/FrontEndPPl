@@ -100,17 +100,10 @@ export default {
       this.valid = true
       this.stateDefaultStamp = 'draw'
       this.check_state_sign = true
-      // if (this.stateDefaultStamp == 'draw' && this.check_state_sign == true) {
-      //   this.$refs.signaturePad.clearSignature()
-      //   this.checkSignature = this.$refs.signaturePad.isEmpty()
-      //   if (this.checkSignature == true) this.valid = true
-      // }
     },
     check_name_stamp() {
       let stamp_name = this.stamp_name
       stamp_name = stamp_name.trim()
-      // this.stamp_name.toLowerCase().split(" ").join("")
-      // this.stamp_name = this.stamp_name.replace(/[\s\/]/g, '')
       if (stamp_name != '' && this.imageStamp != '') this.valid = false
       else if ((stamp_name == '' && this.imageStamp == '')||(stamp_name != '' && this.imageStamp == '')||(stamp_name == '' && this.imageStamp != '')) this.valid = true
       if ( this.action_header == 'แก้ไข') {
@@ -136,17 +129,18 @@ export default {
       if (this.action_header == 'แก้ไข') this.check_state_sign = true
     },
     getDataForEditStamp() {
+      this.default_stamp_dialog = true 
       EventBus.$off('Stamp_Data_Edit')
       this.sign_type = 'sign_pad'
       this.action_header = 'แก้ไข'
+      setTimeout(() => this.imageStamp = this.selectedStamp.SrcBase, 450);
       this.stamp_name = this.selectedStamp.StampName
-      this.imageStamp = this.selectedStamp.SrcBase
       this.stateDefaultStamp = 'show'
-      this.default_stamp_dialog = true 
       this.uploadImage = this.selectedStamp
       this.valid = false
     },
     getDataForAddStamp() {
+      this.default_stamp_dialog = true
       EventBus.$off('Stamp_Data_Add')
       this.action_header = 'เพิ่ม'
       this.stamp_name = ''
@@ -154,7 +148,6 @@ export default {
       this.sign_type = 'sign_pad'
       this.stateDefaultStamp = 'draw'
       this.valid = true
-      this.default_stamp_dialog = true
     },
     startSettingStamp(action) {
       if (action == 'add') {
@@ -179,12 +172,16 @@ export default {
       }
       document.getElementById('stampFile').click()
       if (this.stateDefaultStamp == 'draw') {
-        // this.$refs.signaturePad.clearSignature()
         this.checkSignature = this.$refs.signaturePad.isEmpty()
-        // if (this.checkSignature == true) this.valid = true
-        // this.valid = true
       }
       this.stateDefaultStamp = 'upload'
+      if (this.stateDefaultStamp == 'upload') {
+        let stamp_name = this.stamp_name
+        stamp_name = stamp_name.trim()
+        if (stamp_name != '' && this.imageStamp != '') this.valid = false
+        else this.valid = true
+      }
+
     },
     uploadStamp(file) {
       if (!file) {
@@ -214,14 +211,16 @@ export default {
         this.imageStamp = data
         this.default_sign = true
       }
+      let stamp_name = this.stamp_name
+      stamp_name = stamp_name.trim()
       if (this.action_header == 'เพิ่ม') {
-        var stampModal = {StampName: this.stamp_name, SrcBase: this.imageStamp}
+        var stampModal = {StampName: stamp_name, SrcBase: this.imageStamp}
         this.default_stamp.push(stampModal);
         this.postStamp()     
       }
       else if (this.action_header == 'แก้ไข') {
-        if (this.stamp_name != '') {
-          this.default_stamp[this.findStamp] = {StampName: this.stamp_name, SrcBase: this.imageStamp}
+        if (stamp_name != '' && this.imageStamp != '') {
+          this.default_stamp[this.findStamp] = {StampName: stamp_name, SrcBase: this.imageStamp}
           this.postStamp()
         }
       }
@@ -240,7 +239,6 @@ export default {
         this.stamp_name = ''
         if (this.stateDefaultStamp == 'draw') {
           this.$refs.signaturePad.clearSignature()
-          // this.checkSignature = this.$refs.signaturePad.isEmpty()
         }
         else if (this.stateDefaultStamp == 'upload') {
           this.uploadImage = undefined
@@ -250,12 +248,15 @@ export default {
       else if (this.action_header == 'แก้ไข') {
         if (this.stateDefaultStamp == 'draw') {
           this.$refs.signaturePad.clearSignature()
-          // this.checkSignature = this.$refs.signaturePad.isEmpty()
         }
         else if (this.stateDefaultStamp == 'upload') {
           this.uploadImage = undefined
           this.imageStamp = ''
         }
+        else if (this.stateDefaultStamp == 'show') {
+          this.imageStamp = ''
+        }
+
       }
     },
     async postStamp(){
@@ -308,6 +309,7 @@ export default {
       this.checkSignature = true
       this.checkNameSignature = true
       this.valid = true
+      this.imageStamp = ''
       if (this.action_header == 'แก้ไข') this.check_state_sign = false
       if (this.stateDefaultStamp == 'draw') this.$refs.signaturePad.clearSignature()
 		}
