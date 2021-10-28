@@ -159,9 +159,16 @@
                   <v-card outlined class="mt-4 px-2 pb-2 workflow-block">
                     <template  v-for="flow_data in flow_datas" >
                       <v-row class="create-row" :key="flow_data.index">
-                        <v-col cols="auto" md="auto" lg="auto" class="pl-1 pb-2 create-setting-title">
+                        <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pb-2 create-setting-title">
                           {{textLang.number}} {{ flow_data.index+1 }} : {{ translate(flow_data.action) }} <!-- or ผู้มีสิทธิ์เซ็น -->
                         </v-col>
+                        <!--<v-col cols="auto" md="auto" lg="auto" align-self="center" class="pr-0 pb-2"> <!-- show when it is sign step 
+                          <v-switch dense inset hide-details disabled class="mt-0 pt-0 create-switch-ca">
+                            <template v-slot:label>
+                              <span class="create-switch-ca-label">Certificate (CA)</span>
+                            </template>
+                          </v-switch>
+                        </v-col>-->
                       </v-row>
                       <v-row class="create-row each-step-mail-row" v-for="actor_email in flow_data.actor[0].permission_email" :key="flow_data.index + actor_email.account_id"> <!-- each email row in step -->
                         <v-col cols="8" md="9" lg="9" class="px-0 pt-1 pb-0">
@@ -188,14 +195,14 @@
                       <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type_custom" :items="document_type_list" item-text="document_type_detail.name" item-value="_id" return-object dense outlined hide-details auto-select-first color="#4caf50" :placeholder="textLang.choose" append-icon="mdi-chevron-down" class="create-setting create-setting-input create-setting-dropdown-icon"></v-autocomplete>
                     </v-col>
                   </v-row>
-                  <v-row class="create-row">
+                  <!-- <v-row class="create-row">
                     <v-col cols="7" md="4" lg="4" align-self="center" class="pl-2 pr-1 pt-1 pb-0 create-setting-title">
                       Require Certificate (CA) :
                     </v-col>
                     <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
                       <v-switch inset v-model="switchCA" hide-details class="mt-0 create-setting-switch"></v-switch>
                     </v-col>
-                  </v-row>
+                  </v-row> -->
                   <v-row class="create-row">
                     <v-col cols="7" md="4" lg="4" align-self="center" class="pl-2 pr-1 pt-1 pb-0 create-setting-title">
                       Stamp All Page :
@@ -219,7 +226,7 @@
                   <v-card outlined class="pa-2 all-step-block">
                     <div class="mb-3"> <!-- each step -->
                     <template v-for="(flow_data_custom,index) in flow_datas_custom">
-                      <v-row class="create-row" :key="flow_data_custom.index">
+                      <v-row align="center" class="create-row" :key="flow_data_custom.index">
                         <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 py-1 create-setting-title">
                           {{textLang.number}} {{index+1}} : {{ translate(flow_data_custom.action) }} <!-- ผู้มีสิทธิ์อนุมัติ or ผู้มีสิทธิ์เซ็น -->
                         </v-col>
@@ -229,6 +236,21 @@
                           </v-btn>
                         </v-col>
                         <v-spacer></v-spacer>
+                        <!--<v-col v-if="flow_data_custom.action == 'Sign'" cols="auto" md="auto" lg="auto" align-self="center" class="py-1 pl-0 pr-2 display-pc-only"> <!-- select CA for PC screen and show when it is sign step
+                          <v-switch dense inset hide-details disabled class="mt-0 pt-0 create-switch-ca">
+                            <template v-slot:label>
+                              <span class="create-switch-ca-label">Certificate (CA)</span>
+                            </template>
+                          </v-switch>
+                        </v-col>
+                        <v-col v-if="flow_data_custom.action == 'Sign'" cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 pb-1 pl-0 pr-2 display-mobile-only"> <!-- select CA for mobile screen and show when it is sign step
+                          <v-row class="create-row create-ca-title">
+                            Certificate
+                          </v-row>
+                          <v-row class="pl-1 create-row">
+                            <v-switch dense inset hide-details class="mt-0 pt-0 create-switch-ca"></v-switch>
+                          </v-row>
+                        </v-col>-->
                         <template v-if="flow_data_custom.action == 'Sign'"> <!-- show when it is sign step -->
                           <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-2 py-1 create-setting-title display-pc-only">
                             {{textLang.signingpage}}
@@ -1045,6 +1067,16 @@ import VueDraggableResizable from 'vue-draggable-resizable'
     overflow: auto;
   }
 
+  .create-switch-ca-label {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    color: #00000099;
+  }
+
+  .v-application--is-ltr .create-switch-ca .v-input--selection-controls__input {
+    margin-right: 0px !important;
+  }
+
   .create-setting-dropdown-icon .theme--light.v-icon {
     color: rgba(0, 0, 0, 0.54) !important;
   }
@@ -1059,13 +1091,20 @@ import VueDraggableResizable from 'vue-draggable-resizable'
   }
 
   .all-step-block {
-    height: calc(100vh - 452px);
+    height: calc(100vh - 405px);
     overflow: auto;
   }
 
   .delete-step-btn {
     width: 18px !important;
     height: 18px !important;
+  }
+
+  .create-ca-title {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 11px;
+    color: #00000099;
+    line-height: 10px;
   }
 
   .page-sign-box .v-select__slot {
