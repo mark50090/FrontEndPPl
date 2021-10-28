@@ -178,9 +178,9 @@
       "clearsign": "ล้างค่า",
       "savesign": "บันทึก",
       "update_default_success": "อัพเดทข้อมูลสำเร็จ",
-      "update_default_fail": "อัพเดทข้อมูลล้มเหลว",
+      "update_default_fail": "อัพเดทข้อมูลไม่สำเร็จ",
       "update_succeed": "สำเร็จ",
-      "update_error": "ล้มเหลว"
+      "update_error": "ไม่สำเร็จ"
     },
     "DefaultStampModal": {
       "stamp_head": "ลายเซ็น",
@@ -191,9 +191,9 @@
       "stamp_clear": "ล้างค่า",
       "stamp_save": "บันทึก",
       "update_stamp_success": "อัพเดทข้อมูลสำเร็จ",
-      "update_stamp_fail": "อัพเดทข้อมูลล้มเหลว",
+      "update_stamp_fail": "อัพเดทข้อมูลไม่สำเร็จ",
       "stamp_succeed": "สำเร็จ",
-      "stamp_error": "ล้มเหลว"
+      "stamp_error": "ไม่สำเร็จ"
     },
     "DeleteForm": {
       "delete_form1": "ต้องการลบแบบฟอร์ม",
@@ -203,7 +203,7 @@
       "delete_success": "ลบแบบฟอร์มสำเร็จ",
       "delete_fail": "ลบแบบฟอร์มไม่สำเร็จ",
       "delete_form_succeed": "สำเร็จ",
-      "delete_form_error": "ล้มเหลว"
+      "delete_form_error": "ไม่สำเร็จ"
     },
     "DeleteMessage": {
       "texthead_form": "ต้องการยกเลิกข้อความหรือไม่ ?",
@@ -227,15 +227,17 @@
       "recorrection": "ส่งคืน",
       "return_file_success": "ส่งคืนแก้ไขเอกสารสำเร็จ",
       "return_file_fail": "ส่งคืนแก้ไขเอกสารไม่สำเร็จ",
-      "return_revertable_no": "ลำดับที่"
+      "return_revertable_no": "ลำดับที่",
+      "return_succeed": "สำเร็จ",
+      "return_error": "ไม่สำเร็จ"
     },
     "SendMail": {
       "recipient_email": "อีเมลผู้รับ",
       "send_email": "ส่งอีเมล",
       "send_email_success": "ส่งอีเมลสำเร็",
-      "send_email_fail": "ส่งอีเมลล้มเหลว",
+      "send_email_fail": "ส่งอีเมลไม่สำเร็จ",
       "send_email_succeed": "สำเร็จ",
-      "send_email_error": "ล้มเหลว"
+      "send_email_error": "ไม่สำเร็จ"
     },
     "StampModal": {
       "message_stamp": "ข้อความ Stamp",
@@ -807,7 +809,7 @@
         "noinformationfound": "ไม่พบข้อมูล",
         "succeed": "สำเร็จ",
         "transactionsucceed": "สร้าง transaction สำเร็จ",
-        "fail": "ล้มเหลว",
+        "fail": "ไม่สำเร็จ",
         "transactionfail": "สร้าง transaction ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
   },
   "DocumentDetail": {
@@ -922,8 +924,8 @@
       "Setupnotifications": "ตั้งค่าการแจ้งเตือน",
       "succeed":"สำเร็จ",
       "Dataupdatesuccessfully": "อัพเดทข้อมูลสำเร็จ",
-      "fail":"ล้มเหลว",
-      "Dataupdatefailed":"อัพเดทข้อมูลล้มเหลว",
+      "fail":"ไม่สำเร็จ",
+      "Dataupdatefailed":"อัพเดทข้อมูลไม่สำเร็จ",
       "ChooseBusiness":"เลือก Business"
   },
   "TemplateList":{
