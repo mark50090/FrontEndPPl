@@ -81,9 +81,9 @@ export default {
       stamp_clear: 'ล้างค่า',
       stamp_save: 'บันทึก',
       update_stamp_success: 'อัพเดทข้อมูลสำเร็จ',
-      update_stamp_fail: 'อัพเดทข้อมูลล้มเหลว',
+      update_stamp_fail: 'อัพเดทข้อมูลไม่สำเร็จ',
       stamp_succeed: 'สำเร็จ',
-      stamp_error: 'ล้มเหลว'
+      stamp_error: 'ไม่สำเร็จ'
     },
     stateDefaultStamp: '',
     checkSignature: true,
