@@ -44,17 +44,29 @@
                     :page="page"
                     ref="pdfComponent"
                   />
-                  <div
-                    :id="item.name"
-                    v-for="(item, index) in signArray"
-                    :key="index"
-                  >
-                    <v-row no-gutters justify="center" align="center">
-                      <span v-if="item.show == true" style="color: grey">
-                        ลำดับที่ {{ item.index }}
-                      </span>
-                    </v-row>
-                  </div>
+                  <template v-for="(signature, index_sign) in signArray">
+                      <vue-draggable-resizable
+                      :id="item.name"
+                      :draggable="false"
+                      :resizable="false"
+                      v-for="(item, index) in signature"
+                      :key="`${index_sign}_${index}`"
+                      :x="item.sign_position_x"
+                      :y="item.sign_position_y"
+                      :w="item.sign_box_width"
+                      :h="item.sign_box_heigth"
+                      :style="{
+                        'background-color': 'rgba(83, 186, 71, 0.2)',
+                        'display': item.show ? 'block' : 'none',
+                        }"
+                    >
+                      <v-row no-gutters justify="center" align="center">
+                        <span style="color: grey">
+                          {{textLang.no}} {{ index_sign + 1 }} {{`(${index + 1}/${signature.length})`}}
+                        </span>
+                      </v-row>
+                    </vue-draggable-resizable>
+                    </template>
                 </div>
               </v-row>
             </v-card-text>
@@ -74,7 +86,7 @@
             </v-row>
             <v-row class="detail-row">
               <v-col cols="3" md="2" lg="2" class="pl-0 pt-1 pb-0 doc-detail-title">
-                <b>ชื่อไฟล์</b>
+                <b>{{textLang.filename}}</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
                 {{ doc_details.file_name }}
@@ -82,7 +94,7 @@
             </v-row>
             <v-row class="detail-row">
               <v-col cols="3" md="2" lg="2" class="pl-0 pt-1 pb-0 doc-detail-title">
-                <b>ชื่อผู้ส่ง</b>
+                <b>{{textLang.sendername}}</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
                 {{ doc_details.sender }}
@@ -90,7 +102,7 @@
             </v-row>
             <v-row class="detail-row">
               <v-col cols="3" md="2" lg="2" class="pl-0 pt-1 pb-0 doc-detail-title">
-                <b>ส่งเมื่อ</b>
+                <b>{{textLang.senton}}</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
                 {{ doc_details.create_at | fulldate}}
@@ -98,7 +110,7 @@
             </v-row>
             <v-row class="detail-row">
               <v-col cols="3" md="2" lg="2" class="pl-0 pt-1 pb-0 doc-detail-title">
-                <b>รายละเอียด</b>
+                <b>{{textLang.details}}</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
                 {{ doc_details.detail }}
@@ -106,7 +118,10 @@
             </v-row>
             <v-row class="detail-row">
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
-                <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn">ดาวน์โหลด PDF</v-btn>
+                <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="download_pdf_fn">{{textLang.downloadPDF}}</v-btn>
+              </v-col>
+              <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
+                <v-btn v-if="template_id" depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="copyDocument()">{{textLang.copydocuments}}</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from inbox page -->
                 <v-btn @click="optionFormMail()" depressed x-small dark color="#4CAF50" class="download-pdf-btn">
@@ -114,8 +129,13 @@
                   <span class="ml-2">SEND EMAIL</span>
                 </v-btn>
               </v-col>
-              <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
-                <v-btn depressed x-small dark color="error" class="download-pdf-btn">ยกเลิกเอกสาร</v-btn>
+              <v-col v-if="isShowRevertButton" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
+                <v-btn @click="optionFormReturn()" depressed x-small dark color="#FBC02D" class="return-correction-btn">
+                  {{textLang.returnedit}}
+                </v-btn>
+              </v-col>
+              <v-col v-if="false" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
+                <v-btn depressed x-small dark color="error" class="download-pdf-btn">{{textLang.canceldocument}}</v-btn>
               </v-col>
             </v-row>
           </v-card>
@@ -123,9 +143,9 @@
           <v-card outlined class="mt-1">
             <v-card-title class="pa-0">
               <v-tabs color="#4caf50" v-model="document_detail_tab" class="doc-detail-tab">
-                <v-tab class="doc-detail-tab-title">ลำดับการทำงาน</v-tab>
-                <v-tab class="doc-detail-tab-title">บันทึกข้อความ</v-tab>
-                <v-tab class="doc-detail-tab-title">ไฟล์แนบ</v-tab>
+                <v-tab class="doc-detail-tab-title">{{textLang.workorder}}</v-tab>
+                <v-tab class="doc-detail-tab-title">{{textLang.messagememo}}</v-tab>
+                <v-tab class="doc-detail-tab-title">{{textLang.attachment}}</v-tab>
               </v-tabs>
             </v-card-title>
             <v-divider></v-divider>
@@ -136,39 +156,40 @@
                   <v-timeline align-top dense>
                     <v-timeline-item fill-dot icon small color="white" v-for="(item, index) in step_flow" :key="`flow_${index}`"> <!-- each step -->
                       <template v-slot:icon> <!-- icon for each step -->
-                        <v-icon v-if="item.status == 'W'" size="30" color="rgb(251, 192, 45)">mdi-clock-outline</v-icon> <!-- waiting for approve (current step) -->
-                        <v-icon v-if="item.status == 'Y'" size="30" color="#4caf50">mdi-check-circle-outline</v-icon> <!-- approved -->
-                        <v-icon v-if="item.status == 'R'" size="30" color="#f44336">mdi-close-circle-outline</v-icon> <!-- deny -->
-                        <v-icon v-if="item.status == 'N'" size="30" color="#9e9e9e">mdi-clock-outline</v-icon> <!-- step not arrive yet -->
+                        <v-icon v-if="item.status == 'W' && !is_reject" size="30" color="rgb(251, 192, 45)">mdi-clock-outline</v-icon> <!-- waiting for approve (current step) -->
+                        <v-icon v-else-if="item.status == 'Y'" size="30" color="#4caf50">mdi-check-circle-outline</v-icon> <!-- approved -->
+                        <v-icon v-else-if="item.status == 'R'" size="30" color="#f44336">mdi-close-circle-outline</v-icon> <!-- deny -->
+                        <v-icon v-else-if="item.status == 'N'  && !is_reject" size="30" color="#9e9e9e">mdi-clock-outline</v-icon> <!-- step not arrive yet -->
+                        <v-icon v-else-if="is_reject" size="30" color="#9e9e9e">mdi-circle-slice-8</v-icon> <!-- step other if reject transaction -->
                       </template>
                       <v-row class="detail-row">
                         <v-col cols="3" md="2" lg="2" align-self="start" class="px-0 py-0 step-doc-title">
-                          ลำดับ {{ index + 1 }}
+                          {{textLang.number}} {{ index + 1 }} {{ item.sign_count > 1 ? `(${item.active_count}/${item.sign_count})` : null }}
                         </v-col>
                         <v-col cols="7" md="7" lg="7" align-self="start" class="pl-1 pr-0 py-0">
                           <v-icon small color="#0000008A" class="mr-2">mdi-timer-sand-full</v-icon>
-                          <span class="step-period" v-if="item.approver">{{ item.approver.diff || '' }}</span>
+                          <span class="step-period">{{ item.diff || '' }}</span>
                         </v-col>
                         <v-spacer></v-spacer>
-                        <!--<v-col cols="auto" md="auto" lg="auto" class="pl-0 py-0 transfer-permission-btn-block"> <!-- show when it is current step and the owner of step is that user
+                        <!-- <v-col cols="auto" md="auto" lg="auto" class="pl-0 py-0 transfer-permission-btn-block"> <!-- show when it is current step and the owner of step is that user
                           <v-btn depressed fab x-small dark color="#074E80">
                             <v-icon>mdi-account-switch</v-icon>
                           </v-btn>
-                        </v-col>-->
+                        </v-col> -->
                       </v-row>
-                      <v-row class="detail-row" v-for="(item_name, index_name) in item.name" :key="`flow_name_${index}${index_name}`"> <!-- each person data -->
+                      <v-row class="detail-row" v-for="(item_name, index_name) in item.actor" :key="`flow_name_${index}${index_name}`"> <!-- each person data -->
                         <v-col cols="8" md="5" lg="5" align-self="start" class="px-0 pt-0 pb-1 step-doc-title">
-                          {{ item_name }}
-                          <span v-if="my_name === item_name"> (คุณ)</span> <!-- when this name is user's name -->
+                          {{ item_name.name }}
+                          <span v-if="my_name === item_name.name"> {{textLang.you}}</span> <!-- when this name is user's name -->
                         </v-col>
                         <v-col cols="auto" md="auto" lg="auto" align-self="start" class="pl-0 pr-1 pt-0 pb-1 step-status-block">
-                          <span v-if="item.status == 'W'" class="wait-user-approve-status">รออนุมัติ</span> <!-- wait for approve status -->
-                          <span v-if="item.status == 'Y' && item.approver.name_approver == item_name" class="approved-status">อนุมัติแล้ว</span> <!-- approved status -->
-                          <span v-if="item.status == 'R' && item.approver.name_approver == item_name" class="deny-status">ปฏิเสธอนุมัติ</span> <!-- deny status -->
+                          <span v-if="!item_name.approved && item.status == 'W' && !is_reject" class="wait-user-approve-status">{{textLang.pendingapproval}}</span> <!-- wait for approve status -->
+                          <span v-if="item_name.approved == 'Y'" class="approved-status">{{textLang.approved}}</span> <!-- approved status -->
+                          <span v-if="item_name.approved == 'R'" class="deny-status">{{textLang.rejectapproval}}</span> <!-- deny status -->
                         </v-col>
-                        <v-col v-if="item.status == 'Y' || item.status == 'R'" cols="12" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-0 pb-1 time-approve-block"> <!-- show when status is approved or deny -->
+                        <v-col v-if="item_name.approved && (item_name.approved == 'Y' || item_name.approved == 'R')" cols="12" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-0 pb-1 time-approve-block"> <!-- show when status is approved or deny -->
                           <v-icon small color="black" class="pr-1">mdi-timer-outline</v-icon>
-                          <span class="time-approved">2020-02-04 06:44:03</span>
+                          <span class="time-approved">{{ item_name.time_approver }}</span>
                         </v-col>
                       </v-row>
                     </v-timeline-item>
@@ -194,19 +215,22 @@
                         </v-col>
                       </v-row>
                       <v-row align="center" justify="end" class="pr-2 detail-row" :key="`comment_time_${index_comment}`">
-                        <v-btn icon color="#525659" v-if="item_comment.name == my_name"> <!-- show when it is user's comment -->
+                        <v-btn icon color="#525659" v-if="item_comment.restore" @click="edit_comment_fn"> <!-- show when it is user's comment -->
+                          <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
+                        <v-btn icon color="#525659" v-if="item_comment.comment_by == my_name" @click="deletemessage()"> <!-- show when it is user's comment -->
                           <v-icon>mdi-delete</v-icon>
                         </v-btn>
                         <span class="comment-time">{{ item_comment.comment_at }}</span>
                       </v-row>
                     </template>
                   </div>
-                  <v-row class="detail-row">
+                  <v-row class="detail-row" v-if="check_sign && comment_status">
                     <v-col cols="10" md="11" lg="11" class="pl-2 pr-0 py-1">
-                      <v-textarea dense outlined hide-details no-resize rows="2" row-height="16" placeholder="ระบุข้อความ" color="#4CAF50" class="write-comment-box"></v-textarea>
+                      <v-textarea dense outlined hide-details no-resize rows="2" row-height="16" :placeholder="textLang.specifymessage" color="#4CAF50" class="write-comment-box" v-model="comment"></v-textarea>
                     </v-col>
                     <v-col cols="2" md="1" lg="1" class="px-0 py-1">
-                      <v-btn depressed dark block color="#4CAF50" class="px-1 send-comment-btn">
+                      <v-btn depressed dark block color="#4CAF50" class="px-1 send-comment-btn" @click="add_comment_fn">
                         <v-icon>mdi-send</v-icon>
                       </v-btn>
                     </v-col>
@@ -214,16 +238,16 @@
                 </v-tab-item>
                 <!-- attach file tab -->
                 <v-tab-item>
-                  <v-row class="detail-row"> <!-- show when it is current step and the owner of step is that user -->
-                    <v-col cols="10" md="10" lg="10" align-self="start" class="pl-0 pr-0 py-1 ">
-                      <v-file-input dense outlined counter multiple show-size small-chips placeholder="เลือกไฟล์" color="#4CAF50" class="attach-file-box">
-                        <template v-slot:selection="{ text }">
-                          <v-chip small dark close color="#4CAF50">{{ text }}</v-chip>
+                  <v-row class="detail-row" v-if="check_sign"> <!-- show when it is current step and the owner of step is that user -->
+                    <v-col cols="12" md="12" lg="12" align-self="start" class="pl-0 pr-0 py-1 ">
+                      <v-file-input dense outlined counter multiple show-size small-chips placeholder="เลือกไฟล์" color="#4CAF50" class="attach-file-box" v-model="new_attachment_file">
+                        <template v-slot:selection="{ text, index }">
+                          <v-chip small dark close color="#4CAF50" @click:close="removeFileInput(index)">{{ text }}</v-chip>
                         </template>
                       </v-file-input>
                     </v-col>
-                    <v-col cols="2" md="2" lg="2" align-self="start" class="px-1 pt-1 pb-0">
-                      <v-btn depressed dark block color="#4CAF50" class="attach-file-btn">แนบไฟล์</v-btn>
+                    <v-col cols="2" md="2" lg="2" align-self="start" class="px-1 pt-1 pb-0" v-if="false">
+                      <v-btn depressed dark block color="#4CAF50" class="attach-file-btn">{{textLang.attachfile}}</v-btn>
                     </v-col>
                   </v-row>
                   <template v-for="(item,index) in attachment_file"> <!-- each attach file -->
@@ -233,12 +257,12 @@
                       </v-col>
                       <v-spacer></v-spacer>
                       <v-col cols="2" md="1" lg="1" align-self="start" class="px-0 pt-1 pb-0 text-center">
-                        <v-btn @click="optionFormFile(item)" icon small color="#4CAF50" :disabled="false">
+                        <v-btn @click="optionFormFile(item)" icon small color="#4CAF50" :disabled="chack_disable_preview_attachment_fn(item.type)">
                           <v-icon>mdi-eye</v-icon>
                         </v-btn>
                       </v-col>
                       <v-col cols="2" md="2" lg="2" align-self="start" class="px-0 pt-1 pb-0 text-center">
-                        <v-btn icon small color="#4CAF50">
+                        <v-btn icon small color="#4CAF50" @click="download_attachment_fn(item.file_id)">
                           <v-icon>mdi-download</v-icon>
                         </v-btn>
                       </v-col>
@@ -250,54 +274,56 @@
             </v-card-text>
           </v-card>
           <!-- sign card -->
-          <v-card outlined class="mt-1 pb-5"> <!-- show when user have to approve in current step -->
+          <v-card outlined class="mt-1" :class="{'pb-5': !is_approve}" v-if="check_sign && !is_reject"> <!-- show when user have to approve in current step -->
             <v-row class="mt-4 mb-2 px-2 detail-row">
               <v-textarea dense outlined hide-details no-resize readonly label="คำอธิบาย" rows="2" color="rgb(158,158,158)" :value="doc_details.detail" class="doc-description"></v-textarea>
             </v-row>
             <v-divider></v-divider>
             <v-row class="detail-row">
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 py-2">
-                <v-switch inset disabled hide-details label="Certificate (CA)" v-model="ca_switch" class="mt-0 ca-switch"></v-switch>
+                <v-switch inset disabled hide-details label="Certificate (CA)"  v-if="!is_approve" v-model="ca_switch" class="mt-0 ca-switch"></v-switch>
               </v-col>
               <v-spacer></v-spacer>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-1 py-2">
-                <v-btn depressed color="#1CC6A9" :disabled="false" class="approve-btn">อนุมัติ</v-btn>
+                <v-btn depressed color="#1CC6A9" :disabled="false" class="approve-btn" @click="set_approve_fn('approve')">{{textLang.approvee}}</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-2 py-2">
-                <v-btn depressed dark color="error" class="approve-btn">ปฏิเสธ</v-btn>
+                <v-btn depressed dark color="error" class="approve-btn" @click="set_approve_fn('reject')">{{textLang.refuse}}</v-btn>
               </v-col>
             </v-row>
-            <v-divider></v-divider>
-            <v-row class="detail-row">
-              <!-- <v-col cols="auto" md="auto" lg="auto" class="pa-2">
-                <v-btn outlined @click="gostamp()" color="#757575">
-                  <v-icon>mdi-stamper</v-icon>
-                </v-btn>
-              </v-col> -->
-              <v-spacer></v-spacer>
-              <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-2 py-2">
-                <v-icon>mdi-draw</v-icon>
-              </v-col>
-              <v-col cols="4" md="3" lg="3" class="px-0 py-2">
-                <v-select dense outlined hide-details color="#4CAF50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="all_sign_type" v-model="sign_type" class="sign-type sign-type-box sign-type-dropdown-icon"></v-select>
-              </v-col>
-              <v-col cols="auto" md="auto" lg="auto" class="pr-0 py-2">
-                <v-btn depressed small color="#1D9BDE" :disabled="false" class="clear-sign-btn" @click="clearSignature()">ล้างค่า</v-btn>
-              </v-col>
-              <v-spacer></v-spacer>
-            </v-row>
-            <v-row justify="center" align="center" class="detail-row">
-              <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pa-0 sign-block">
-                <!-- sign pad -->
-                <v-img
-                  v-if="sign_type == 'Default'"
-                  :src="default_sign"
-                  contain
-                  height="150px"
-                />
-                <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }"></vueSignature>
-              </v-col>
-            </v-row>
+            <template v-if="!is_approve">
+              <v-divider></v-divider>
+              <v-row class="detail-row">
+                <!-- <v-col cols="auto" md="auto" lg="auto" class="pa-2">
+                  <v-btn outlined @click="gostamp()" color="#757575">
+                    <v-icon>mdi-stamper</v-icon>
+                  </v-btn>
+                </v-col> -->
+                <v-spacer></v-spacer>
+                <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-2 py-2">
+                  <v-icon>mdi-draw</v-icon>
+                </v-col>
+                <v-col cols="4" md="3" lg="3" class="px-0 py-2">
+                  <v-select dense outlined hide-details color="#4CAF50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="all_sign_type" v-model="sign_type" class="sign-type sign-type-box sign-type-dropdown-icon"></v-select>
+                </v-col>
+                <v-col cols="auto" md="auto" lg="auto" class="pr-0 py-2">
+                  <v-btn depressed small color="#1D9BDE" :disabled="sign_type == 'Default'" class="clear-sign-btn" @click="clearSignature()">{{textLang.clear}}</v-btn>
+                </v-col>
+                <v-spacer></v-spacer>
+              </v-row>
+              <v-row justify="center" align="center" class="detail-row">
+                <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pa-0 sign-block">
+                  <!-- sign pad -->
+                  <v-img
+                    v-if="sign_type == 'Default'"
+                    :src="default_sign"
+                    contain
+                    height="248px"
+                  />
+                  <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }" w="490" h="250" class="sign-pad-box"></vueSignature>
+                </v-col>
+              </v-row>
+            </template>
           </v-card>
         </v-col>
       </v-row>
@@ -306,6 +332,8 @@
     <showFormMail/>
     <showFromFile/>
     <Showpdf/>
+    <showFormReturn/>
+    <DeleteMessage/>
   </div>
 </template>
 
@@ -317,6 +345,8 @@ import showFromFile from '../components/Attachments'
 import Showpdf from '../components/ShowPdf'
 import pdf from 'vue-pdf'
 import vueSignature from 'vue-signature'
+import showFormReturn from '../components/ReturnCorrection'
+import DeleteMessage from '../components/DeleteMessage'
 export default {
   components: {
     StampModal,
@@ -324,17 +354,21 @@ export default {
     showFromFile,
     Showpdf,
     pdf,
-    vueSignature
+    vueSignature,
+    showFormReturn,
+    DeleteMessage
   },
   data: () => ({
     document_detail_tab: null,
-    document_description: 'อธิบายอะไรก็ไม่รู้',
     ca_switch: true,
     all_sign_type: ['Default', 'Sign Pad'],
     sign_type: 'Default',
     page_count: 0,
     page: 1,
-    doc_details: {},
+    doc_details: {
+      document_status: null
+    },
+    new_attachment_file: [],
     attachment_file: [],
     pdf_src: '',
     token: '',
@@ -342,36 +376,113 @@ export default {
     default_sign: '',
     signature_option: {
       penColor: 'rgb(13, 38, 154)',
-      backgroundColor: 'rgb(255,255,255)'
+      backgroundColor: 'rgba(255,255,255,0)'
     },
     padStatus: false,
-    allStatus: [true, true, true],
+    allStatus: [],
     sign_position: [],
     signArray: [],
     step_flow: [],
     my_name: '',
-    axios_pending: 0
+    axios_pending: 0,
+    check_sign: false,
+    comment: '',
+    comment_status: true,
+    last_step: 0,
+    template_id: "",
+    is_approve: false,
+    is_reject: false,
+    isShowRevertButton: true,
+    textLang:{
+      no:'ลำดับที่',
+      filename: 'ชื่อไฟล์',
+      sendername: 'ชื่อผู้ส่ง',
+      senton: 'ส่งเมื่อ',
+      details: 'รายละเอียด',
+      downloadPDF: 'ดาวน์โหลด PDF',
+      copydocuments: 'คัดลอกเอกสาร',
+      returnedit: 'ส่งคืนแก้ไข',
+      canceldocument: 'ยกเลิกเอกสาร',
+      workorder: 'ลำดับการทำงาน',
+      messagememo: 'บันทึกข้อความ',
+      attachment: 'ไฟล์แนบ',
+      number: 'ลำดับ',
+      you: '(คุณ)',
+      pendingapproval: 'รออนุมัติ',
+      approved: 'อนุมัติแล้ว',
+      rejectapproval: 'ปฏิเสธอนุมัติ',
+      specifymessage: 'ระบุข้อความ',
+      attachfile: 'แนบไฟล์',
+      succeed: 'สำเร็จ',
+      Successfullyapproved: 'อนุมัติเอกสารสำเร็จ',
+      Successfullyrejected: 'ปฏิเสธเอกสารสำเร็จ',
+      cantread: 'ไม่สามารถอ่าน PDF ได้',
+      approve_fail: "อนุมัติไม่สำเร็จ",
+      erroroccurred: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
+      fail: 'ไม่สำเร็จ',
+      clear: 'ล้างค่า',
+      warn: 'แจ้งเตือน',
+      notuploadingfiles: 'ไม่อนุญาตให้อัปโหลดไฟล์ ',
+      oversize: ' เนื่องจากมีขนาดเกิน 30 MB',
+      refuse:'ปฏิเสธ',
+      approvee: 'อนุมัติ',
+      }
   }),
+  
+  computed: {
+  },
   mounted () {
     this.token = sessionStorage.getItem('access_token')
-    this.transaction_id = sessionStorage.getItem('transaction_id')
     this.my_name = sessionStorage.getItem('name')
+    this.transaction_id = sessionStorage.getItem('transaction_id')
+    this.getTemplateId(this.transaction_id )
+    if (!this.transaction_id) {
+      this.$router.replace({ name: 'inbox' })
+      return
+    }
     this.get_detail_fn()
     this.get_attachment_file_fn()
-    this.get_signature_default()
+    this.get_signature_default_fn()
+    EventBus.$on('confirm_deletemessage', this.delete_comment_fn)
   },
   watch: {
     axios_pending (val) {
       if (val > 0) EventBus.$emit('loadingOverlay', true)
       else EventBus.$emit('loadingOverlay', false)
+    },
+    new_attachment_file (val) {
+      for (let index = 0; index < val.length; index++) {
+        const element = val[index]
+        if (element.size > 31457280) {
+          this.removeFileInput(index)
+          this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">'+this.textLang.warn+'</strong>',
+                text: this.textLang.notuploadingfiles +element.name+this.textLang.oversize ,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })        
+              }
+      }
     }
   },
   methods: {
-    optionFormMail() {
+    optionFormReturn () {
+      EventBus.$emit('FormReturn', this.transaction_detail)
+    },
+    optionFormMail () {
       EventBus.$emit('FormMail')
     },
-    optionFormFile(file) {
-      console.log(file)
+    optionFormFile (file) {
       const url = `${this.$api_url}/file-component/api/getComponentFile`
       const config = {
         Authorization: `Bearer ${this.token}`,
@@ -383,69 +494,292 @@ export default {
       this.axios_pending++
       this.axios.get(url, config)
         .then((response) => {
-          console.log(response.data)
           EventBus.$emit('FormFile', response.data, file.type, file.filename)
         })
         .catch((error) => {
-          console.log(error)
+          // console.log(error)
         })
         .then(() => {
           this.axios_pending--
         })
     },
-    gostamp() {
+    gostamp () {
       EventBus.$emit('stamp')
     },
-    gopdf() {
+    gopdf () {
       EventBus.$emit('showpdf', this.pdf_src)
-    },  
-    back() {
-      this.$router.push('/inbox')
     },
-    change_page_fn(type) {
+    back () {
+      this.$router.back()
+    },
+    deletemessage () {
+      EventBus.$emit('deletemessage')
+    },
+    change_page_fn (type) {
       switch (type) {
         case 'next':
-          if(this.page < this.page_count)
-            this.page++
+          if (this.page < this.page_count) { this.page++ }
           break
         case 'prev':
-          if(this.page > 1)
-            this.page--
+          if (this.page > 1) { this.page-- }
           break
       }
     },
-    async get_detail_fn() {
-        const url = `/transaction/api/v1/detailTransaction?transaction_id=${this.transaction_id}`
-        const config = {
-          Authorization: `Bearer ${this.token}`
-        }
-        this.axios_pending++
-        this.axios.get(`${this.$api_url}${url}`, config)
+    chack_disable_preview_attachment_fn (type) {
+      const allow = 'jpg,jpeg,gif,png,pdf'
+      if (allow.indexOf(type.toLowerCase()) >= 0) return false
+      else return true
+    },
+    download_pdf_fn () {
+      const a = document.createElement('a') // Create <a>
+      a.href = this.pdf_src // Image Base64 Goes here
+      a.download = this.doc_details.file_name // File name Here
+      a.click() // Downloaded file
+    },
+    download_attachment_fn (file_id) {
+      window.open(`${this.$api_url}/file-component/api/downloadFile?file_id=${file_id}`)
+    },
+    convertDateTime () {
+      const datenow = new Date()
+      var todate = new Date(datenow).getDate()
+      var tomonth = new Date(datenow).getMonth() + 1
+      var toyear = new Date(datenow).getFullYear()
+      var toHours = new Date(datenow).getHours()
+      var toMinutes = new Date(datenow).getMinutes()
+      var toSecond = new Date(datenow).getSeconds()
+
+      var date = todate.toString().length == 1 ? '0' + todate.toString() : todate
+      var month = tomonth.toString().length == 1 ? '0' + tomonth.toString() : tomonth
+      var Hours = toHours.toString().length == 1 ? '0' + toHours.toString() : toHours
+      var Minutes = toMinutes.toString().length == 1 ? '0' + toMinutes.toString() : toMinutes
+      var Second = toSecond.toString().length == 1 ? '0' + toSecond.toString() : toSecond
+
+      var setDateTime = toyear + '-' + month + '-' + date + ' ' + Hours + ':' + Minutes + ':' + Second
+
+      return setDateTime
+    },
+    removeFileInput (index) {
+      if (index > -1) {
+        this.new_attachment_file.splice(index, 1)
+      }
+    },
+    add_comment_fn () {
+      const data_comment = {
+        comment_by: this.my_name,
+        comment_at: this.convertDateTime(),
+        message_comment: this.comment,
+        restore: true
+      }
+      this.doc_details.comment.push(data_comment)
+      this.comment_status = false
+    },
+    edit_comment_fn () {
+      this.doc_details.comment.pop()
+      this.comment_status = true
+    },
+    delete_comment_fn () {
+      this.doc_details.comment.pop()
+      this.comment_status = true
+      this.comment = ''
+    },
+    async set_approve_fn (type) {
+      var string_sign, data
+      if (this.sign_type === 'Sign Pad') {
+        string_sign = this.$refs.signaturePad.save().split(',')[1]
+      } else {
+        string_sign = this.default_sign.split(',')[1]
+      }
+      data = {
+        type: type,
+        transaction_id: this.doc_details.transaction_id,
+        document_id: this.doc_details.doc_id,
+        tracking: this.doc_details.tracking,
+        step_index: this.doc_details.step_index,
+        action: this.doc_details.action,
+        string_sign: string_sign,
+        comment: !this.comment_status ? this.comment : null,
+        typesign: 'web'
+      }
+      if (this.new_attachment_file.length > 0) this.upload_attachment()
+      const url = '/transaction/api/v1/updatetransaction'
+      const config = {
+        Authorization: `Bearer ${this.token}`
+      }
+      this.axios_pending++
+      this.axios.put(`${this.$api_url}${url}`, data, config)
+        .then((response) => {
+          // console.log(response.data)
+          if (response.data.status) {
+            if (type === 'approve') {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">'+ this.textLang.succeed+'</strong>',
+                text: this.textLang.Successfullyapproved,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            } else if (type === 'reject') {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">'+ this.textLang.succeed+'</strong>',
+                text: this.textLang.Successfullyrejected,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            }
+            this.$router.replace({ name: 'inbox' })
+          } else {
+            this.error_swal_fn(this.textLang.approve_fail)
+            this.$router.replace({ name: 'inbox' })
+          }
+        })
+        .catch((error) => {
+          // console.log(error)
+        })
+        .then(() => {
+          this.axios_pending--
+        })
+    },
+    async upload_attachment () {
+      const url = '/file-component/api/saveFile'
+      const config = {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${this.token}`
+      }
+      var formData = new FormData()
+      formData.append('transaction_id', this.transaction_id)
+      for (let index = 0; index < this.new_attachment_file.length; index++) {
+        const element = this.new_attachment_file[index]
+        formData.append('file', element)
+      }
+      this.axios.post(`${this.$api_url}${url}`, formData, config)
+        .then(response => {
+          // console.log('input', response)
+        })
+        .catch(error => {
+          // console.log(error)
+        })
+    },
+    async getTemplateId(transaction_id) {
+      var {data} = await this.axios.get(`${this.$api_url}/template_form/api/v1/is_eform_by_id?transaction_id=${transaction_id}`)
+      if(data.status) {
+        this.template_id = data.result.template_id
+      }
+    },
+    async get_detail_fn () {
+      const url = `/transaction/api/v1/detailTransaction?transaction_id=${this.transaction_id}`
+      const config = {
+        Authorization: `Bearer ${this.token}`
+      }
+      this.axios_pending++
+      this.axios.get(`${this.$api_url}${url}`, config)
         .then((response) => {
           const data = response.data
           if (data.status) {
             const doc_data = data.data
+            this.transaction_detail = doc_data
+            doc_data.flow_step.forEach(element => {
+              if (element.status == 'W') {
+                this.isShowRevertButton = element.actor.map(item => item.name).includes(sessionStorage.getItem('name'))
+              }
+            })
+            if(data.data.flow_step[0].status == "W" || data.data.document_status == "Y" || data.data.document_status == "R") {
+              this.isShowRevertButton = false
+            }
+            doc_data.flow_step.forEach((flowData, index) => {
+              flowData.active_count = flowData.actor.filter(item => (item.approved === 'Y' || item.approved === 'R')).length
+              this.$set(this.sign_position, index, flowData.sign_position)
+              this.$set(this.step_flow, index, flowData)
+
+              // chack status waiting and account approve
+              if (flowData.status.toLowerCase() === 'w') {
+                this.last_step = index
+                const find_name_in_w = flowData.actor.findIndex((element) => element.name === this.my_name)
+                if (find_name_in_w > -1 && this.$route.name === 'document_detail') {
+                  if (flowData.actor[find_name_in_w].approved !== undefined) {
+                    const statusMyApprove = flowData.actor[find_name_in_w].approved
+                    if (statusMyApprove === 'Y' || statusMyApprove === 'R') this.check_sign = false
+                    else this.check_sign = true
+                  } else this.check_sign = true
+                  this.ca_switch = flowData.send_update.action.toLowerCase() === 'sign-ca'
+                  this.is_approve = flowData.send_update.action.toLowerCase() === 'approve'
+                }
+              } else if (flowData.status.toLowerCase() === 'r') {
+                this.is_reject = true
+              }
+
+              // allow sign position
+              let arrAllowPosition = []
+              if (flowData.send_update.action.toLowerCase() === 'sign' || flowData.send_update.action.toLowerCase() === 'sign-ca') {
+                arrAllowPosition = flowData.sign_position.map(item => item.status === 'Incomplete')
+              } else {
+                arrAllowPosition = new Array(flowData.sign_position.length).fill(false)
+              }
+              this.$set(this.allStatus, index, arrAllowPosition)
+            })
+            this.doc_details.transaction_id = doc_data.transaction_id
             this.doc_details.doc_id = doc_data.doc_id
             this.doc_details.sender = doc_data.sender
             this.doc_details.detail = doc_data.detail
+            this.doc_details.tracking = doc_data.tracking
             this.doc_details.create_at = doc_data.create_at
             this.doc_details.file_name = doc_data.file_name
             this.doc_details.comment = doc_data.comment
-            for (let index = 0; index < doc_data.flow_step.length; index++) {
-              const element = doc_data.flow_step[index]
-              console.log(element)
-              this.sign_position.push(element.sign_position)
-              this.step_flow.push(element)
-            }
+            this.doc_details.step_index = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.step_index : null
+            this.doc_details.action = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.action : null
             this.pdf_src = `data:application/pdf;base64,${data.data.pdfbase}`
           }
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response) {
+            const errResponse = error.response.data
+            if (errResponse.message === 'error read pdf') {
+              this.error_swal_fn(this.textLang.cantread)
+            } else {
+              this.error_swal_fn(errResponse.message || this.textLang.erroroccurred)
+            }
+            this.$router.replace({ name: 'inbox' })
+          }
         })
         .then(() => {
           this.axios_pending--
         })
+    },
+    error_swal_fn (msg = this.textLang.erroroccurred) {
+      this.$swal({
+        backdrop: false,
+        position: 'bottom-end',
+        width: '330px',
+        title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">'+this.textLang.fail+'</strong>',
+        text: msg,
+        showCloseButton: true,
+        showConfirmButton: false,
+        timer: 5000,
+        customClass: {
+          popup: 'alert-card',
+          title: 'alert-title-block',
+          closeButton: 'close-alert-btn',
+          htmlContainer: 'alert-text-block'
+        }
+      })
     },
     async get_attachment_file_fn () {
       const url = `/file-component/api/getListFile?transaction_id=${this.transaction_id}`
@@ -461,13 +795,13 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error)
+          // console.log(error)
         })
         .then(() => {
           this.axios_pending--
         })
     },
-    async get_signature_default () {
+    async get_signature_default_fn () {
       const url = '/signature/api/v1/image?credentialId=DEFAULT'
       const config = {
         Authorization: `Bearer ${this.token}`
@@ -485,7 +819,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error)
+          // console.log(error)
         })
         .then(() => {
           this.axios_pending--
@@ -501,401 +835,90 @@ export default {
       this.padStatus = false
     },
     loadedPDF () {
-      this.sign_position = this.sign_position.map((element) => {
-        if (element.sign_page !== 'all') {
-          element.sign_page = (typeof element.sign_page === 'string' ? element.sign_page : element.sign_page.toString()).split(',')
-          for (var i = 0; i < element.sign_page.length; i++) { element.sign_page[i] = +element.sign_page[i] }
-        } else element.sign_page = Array.from({ length: this.page_count }, (_, i) => i + 1)
-        return element
+      this.sign_position.forEach((stepItem, index) => {
+        const arr = stepItem.map((element) => {
+          if (element.sign_page !== 'all') {
+            element.sign_page = (typeof element.sign_page === 'string' ? element.sign_page : element.sign_page.toString()).split(',')
+            for (var i = 0; i < element.sign_page.length; i++) { element.sign_page[i] = +element.sign_page[i] }
+          } else element.sign_page = Array.from({ length: this.page_count }, (_, i) => i + 1)
+          return element
+        })
+        this.$set(this.sign_position, index, arr)
       })
-      console.log('loaded', this.sign_position)
-      // this.setPreViewImg()
     },
     loaded: function (e) {
       this.reShowSign(this.sign_position)
     },
-    reShowSign(data) {
-      this.signArray = [];
-      for (let index = 0; index < data.length; index++) {
-        if (index == this.focusNoArr) this.signPage = data[index].sign_page;
-        let step_array = this.signArray.length;
-        this.signArray.push({
-          index: step_array + 1,
-          name: 'draggableDiv' + String(step_array + 1),
-          show: false,
-          sign_page: data[index].sign_page,
-        });
-        setTimeout(() => {
-          if (
-            this.signArray[step_array].sign_page.findIndex(
-              (item) => item == this.page
-            ) >= 0 &&
-            this.allStatus[step_array]
-          ) {
-            this.multiShow(step_array + 1, this.allStatus[index]);
-            this.setPositionSign(
-              this.signArray[index].index,
-              data[index].sign_llx,
-              data[index].sign_lly,
-              data[index].sign_urx,
-              data[index].sign_ury
-            )
-            // this.addEventResize(step_array + 1, this.allStatus[index]);
-          } else {
-            //console.log("sign_page != page", JSON.stringify(data[index]));
-            this.multiShow(step_array + 1, false);
-            this.setPositionSign(
-              this.signArray[index].index,
-              data[index].sign_llx,
-              data[index].sign_lly,
-              data[index].sign_urx,
-              data[index].sign_ury
-            )
-            // this.addEventResize(step_array + 1, false);
-          }
-        }, 100)
-      }
-    },
-    setPreViewImg () {
-      // console.log("setPreViewImg start");
+    reShowSign (data) {
       this.signArray = []
-      for (let index = 0; index < this.sign_position.length; index++) {
-        this.createSign()
-      }
-      this.$nextTick(function () {
-        this.changePageSign(this.sign_position)
-      })
-    },
-    changePageSign (data) {
-      for (let index = 0; index < this.sign_position.length; index++) {
-        setTimeout(() => {
-          if (
-            this.signArray[index].sign_page.findIndex(
-              (item) => item == this.page
-            ) >= 0 &&
-            this.allStatus[index]
-          ) {
-            //console.log(this.page, data);
-            this.multiShow(index + 1, this.allStatus[index])
-            this.setPositionSign(
-              this.signArray[index].index,
-              data[index].sign_llx,
-              data[index].sign_lly,
-              data[index].sign_urx,
-              data[index].sign_ury
-            );
-            // this.addEventResize(index + 1, this.allStatus[index])
-          } else {
-            this.multiShow(index + 1, false);
-            this.setPositionSign(
-              this.signArray[index].index,
-              data[index].sign_llx,
-              data[index].sign_lly,
-              data[index].sign_urx,
-              data[index].sign_ury
-            );
-            // this.addEventResize(index + 1, false)
-          }
-        }, 400)
-      }
-    },
-    createSign () {
-      const step_array = this.signArray.length
-      this.signArray.push({
-        index: step_array + 1,
-        name: 'draggableDiv' + String(step_array + 1),
-        show: false,
-        sign_page: this.sign_position[step_array].sign_page
-      })
-      setTimeout(() => {
-        if (
-          this.signArray[step_array].sign_page.findIndex(
-            (item) => item == this.page
-          ) >= 0 &&
-            this.allStatus[step_array]
-        ) {
-          this.multiShow(step_array + 1, this.allStatus[step_array])
-          // this.addEventResize(step_array + 1, this.allStatus[step_array])
-        } else {
-          this.multiShow(step_array + 1, false)
-          // this.addEventResize(step_array + 1, false)
+      for (let index = 0; index < data.length; index++) {
+        const step = data[index]
+        this.signArray.push([])
+        for (let index2 = 0; index2 < step.length; index2++) {
+          const position = step[index2]
+          this.signArray[index].push({
+            index: index + 1,
+            index2: index2 + 1,
+            name: `draggableDiv${index}_${index2}`,
+            show: false,
+            sign_page: position.sign_page
+          })
+          var shownonPage = this.signArray[index][index2].sign_page
+          var isShow = shownonPage.includes(this.page)
+          this.signArray[index][index2].show = isShow && this.allStatus[index][index2]
+          this.setPositionSign(
+            this.signArray[index][index2].index,
+            this.signArray[index][index2].index2,
+            data[index][index2].sign_llx,
+            data[index][index2].sign_lly,
+            data[index][index2].sign_urx,
+            data[index][index2].sign_ury
+          )
         }
-      }, 400)
-    },
-    multiShow (index, status) {
-      this.signArray[index - 1].show = status
-      $('#draggableDiv' + index).css('cursor', 'context-menu')
-      $('#draggableDiv' + index).css('position', 'absolute')
-      $('#draggableDiv' + index).css('height', '33px')
-      $('#draggableDiv' + index).css('width', '50px')
-      $('#draggableDiv' + index).css(
-        'background-color',
-        'rgba(83, 186, 71, 0.2)'
-      )
-      $('#draggableDiv' + index).css('border', '1.2px dashed grey')
-      $('#draggableDiv' + index).css('color', 'white')
-      $('#draggableDiv' + index).css('text-align', 'center')
-      $('#draggableDiv' + index).css('margin', '1px')
-      if (status) {
-        $('#draggableDiv' + index).css('display', 'block')
-        $('#draggableDiv' + index).css('z-index', 5)
-        $('#draggableDiv' + index).css('opacity', 1)
-        // this.setSigntemplate(index)
-      } else $('#draggableDiv' + index).css('display', 'none')
-    },
-    setSigntemplate (index) {
-      console.log('setSigntemplate index:', index)
-      this.setPdfAreaMulti(index)
-    },
-    setPdfAreaMulti (index) {
-      // console.log("setPdfAreaMulti index:", index);
-      try {
-        var clientHeight = document.getElementById('pdfDiv').clientHeight
-        var clientWidth = document.getElementById('pdfDiv').clientWidth
-        console.log('width' + clientWidth, 'height' + clientHeight);
-        var element = document.getElementById('pdfDiv')
-        var rect = element.getBoundingClientRect()
-        // element.addEventListener("click", this.mouseIsMoving);
-
-        var elementLeft, elementTop, elementRight, elementBot // x and y
-
-        var scrollTop = document.documentElement.scrollTop
-          ? document.documentElement.scrollTop
-          : document.body.scrollTop
-        var scrollLeft = document.documentElement.scrollLeft
-          ? document.documentElement.scrollLeft
-          : document.body.scrollLeft
-
-        elementTop = rect.top
-        elementLeft = rect.left
-        elementRight = rect.right
-        elementBot = rect.bottom
-
-        var xMin = elementLeft
-        var xMax = elementRight
-        var yMin = elementTop
-        var yMax = elementBot
-        this.getSignAreaMulti(xMin, xMax, yMin, yMax, index)
-      } catch (error) {
-        // console.error("ล้มเหลว", error);
       }
     },
-    getSignAreaMulti (xMin, xMax, yMin, yMax, index) {
-      // console.log("getSignAreaMulti index:", index);
-      var element = document.getElementById('draggableDiv' + index)
-      var rect = element.getBoundingClientRect()
+    setPositionSign (index, index2, llx, lly, urx, ury) {
+      var arr_index = index - 1
+      var arr_index2 = index2 - 1
 
-      var elementLeft, elementTop, elementRight, elementBot // x and y
+      var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
+      var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
 
-      var scrollTop = document.documentElement.scrollTop
-        ? document.documentElement.scrollTop
-        : document.body.scrollTop
-      var scrollLeft = document.documentElement.scrollLeft
-        ? document.documentElement.scrollLeft
-        : document.body.scrollLeft
-      elementTop = rect.top
-      elementLeft = rect.left
-      elementRight = rect.right
-      elementBot = rect.bottom
+      var setHeight = parseFloat(clientHeight) * lly
 
-      // console.log("getSignAreaMulti left " + elementLeft);
-      // console.log("getSignAreaMulti top " + elementTop);
-      // console.log("getSignAreaMulti right " + elementRight);
-      // console.log("getSignAreaMulti bot " + elementBot);
+      var sign = this.signArray[arr_index][arr_index2]
 
-      var xMinSign = elementLeft
-      var xMaxSign = this.stringBefore(elementRight.toString(), '.')
-      var yMinSign = this.stringBefore(elementTop.toString(), '.')
-      var yMaxSign = elementBot
-      this.getSignResultMulti(
-        xMinSign,
-        xMaxSign,
-        xMin,
-        xMax,
-        yMaxSign,
-        yMinSign,
-        yMin,
-        yMax,
-        index
-      )
+      sign.sign_llx = llx
+      sign.sign_lly = lly
+      sign.sign_urx = urx
+      sign.sign_ury = ury
+
+      sign.sign_position_x = clientWidth * (+llx)
+      sign.sign_position_y = ((-setHeight) + (Math.abs(ury - lly))) + (-clientHeight) * (+lly + (ury - lly))
+      sign.sign_box_heigth = (clientHeight * (ury))
+      sign.sign_box_width = (clientWidth * urx)
+
+      this.$set(this.signArray[arr_index], arr_index2, sign)
     },
-    getSignResultMulti (
-      xMinSign,
-      xMaxSign,
-      xMin,
-      xMax,
-      yMaxSign,
-      yMinSign,
-      yMin,
-      yMax,
-      index
-    ) {
-      // console.log("getSignResultMulti index:", index);
-      // console.log("xMinSign", xMinSign);
-      // console.log("xMin", xMin);
-      // console.log("xMax", xMax);
-      var lly = this.getPercent(yMaxSign, yMin, yMax)
-      var sign_llx = this.getPercent(xMinSign, xMin, xMax)
-      var sign_lly = parseFloat(100 - lly)
-      // console.log("sign_llx", sign_llx);
-      // console.log("sign_lly", sign_lly);
-
-      var sign_urx = this.getPercentAll(xMinSign, xMaxSign, xMin, xMax)
-      var sign_ury = this.getPercentAll(yMinSign, yMaxSign, yMin, yMax)
-      // console.log("sign_urx", sign_urx);
-      // console.log("sign_ury", sign_ury);
-
-      sign_llx = (sign_llx * 0.01).toFixed(3)
-      sign_lly = (sign_lly * 0.01).toFixed(3)
-      sign_urx = (sign_urx * 0.01).toFixed(3)
-      sign_ury = (sign_ury * 0.01).toFixed(3)
-
-      var index_array = parseInt(index) - 1
-      //   this.tempSign[index_array] = {
-      //     sign_llx: sign_llx,
-      //     sign_lly: sign_lly,
-      //     sign_urx: sign_urx,
-      //     sign_ury: sign_ury,
-      //     sign_page: this.signArray[index_array].sign_page,
-      //     status: "incomplete",
-      //   };
-      this.sign_position[index_array] = {
-        sign_llx: sign_llx,
-        sign_lly: sign_lly,
-        sign_urx: sign_urx,
-        sign_ury: sign_ury,
-        sign_page: this.signArray[index_array].sign_page
+    copyDocument() {
+      let tempOption = {
+        template_id: this.template_id,
+        isCopy: true,
+        isImport: false,
+        transaction_id: this.transaction_id
       }
-
-      // console.log(this.preData);
-      // console.log(this.signArray);
-    },
-    setPositionSign(index, llx, lly, urx, ury) {
-      console.log('position' + index);
-      //console.log(`llx: ${llx}\nlly: ${lly}\nurx: ${urx}\nury: ${ury}`)
-      var arr_index = index - 1;
-
-      // MainFunction.ShowLog("sign "+index+" row(llx) "+llx)
-      // MainFunction.ShowLog("sign "+index+" column(lly) "+lly)
-      // MainFunction.ShowLog("sign "+index+" row(llx) "+urx)
-      // MainFunction.ShowLog("sign "+index+" column(lly) "+ury)
-
-      var cardWidth = $('#pdfBg_create')[0].getBoundingClientRect().width;
-      var cardHeight = $('#pdfBg_create')[0].getBoundingClientRect().height;
-
-      var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width;
-      var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height;
-
-      // //console.log(cardWidth)
-      // //console.log(cardHeight)
-
-      // //console.log(clientWidth)
-      // //console.log(clientHeight)
-
-      // var clientHeight = clientWidth * 141.5805606367726
-      // clientHeight = parseFloat(clientHeight) / 100
-      // clientHeight = parseFloat(clientHeight.toFixed(2))
-
-      // MainFunction.ShowLog("cardWidth "+cardWidth)
-      // MainFunction.ShowLog("cardHeight "+cardHeight)
-      // MainFunction.ShowLog("clientWidth "+clientWidth)
-      // MainFunction.ShowLog("clientHeight "+clientHeight)
-
-      var _pxdraggableDivHeight = clientHeight * parseFloat(ury);
-      var _pxdraggableDivWidth = clientWidth * parseFloat(urx);
-
-      // var setWidth  =  (parseFloat(cardWidth)  - parseFloat(clientWidth)) / 2
-      // var setHeight =  (parseFloat(cardHeight) - parseFloat(clientHeight)) / 2
-
-      // setWidth  = setWidth  + (clientWidth * llx)
-      // setHeight = setHeight + (clientHeight * lly)
-
-      var setWidth = parseFloat(clientWidth) * llx;
-      var setHeight = parseFloat(clientHeight) * lly;
-
-      // MainFunction.ShowLog("setWidth "+setWidth)
-      // MainFunction.ShowLog("setHeight "+setHeight)
-      document.getElementById('draggableDiv' + index).style.height =
-        _pxdraggableDivHeight.toFixed(2) + 'px';
-      document.getElementById('draggableDiv' + index).style.width =
-        _pxdraggableDivWidth.toFixed(2) + 'px';
-
-      document
-        .getElementById('draggableDiv' + index)
-        .style.removeProperty('top');
-      document.getElementById('draggableDiv' + index).style.left =
-        setWidth + 'px';
-      document.getElementById('draggableDiv' + index).style.bottom =
-        setHeight + 'px';
-      //  document.getElementById("draggableDiv"+index).style.left   =  0 +"px"
-      //  document.getElementById("draggableDiv"+index).style.bottom =  0 +"px"
-
-      //   var cardWidth = $("#pdfBg_create")[0].clientWidth;
-      //   var cardHeight = $("#pdfBg_create")[0].clientHeight;
-
-      //   var clientWidth = $("#pdfDiv")[0].getBoundingClientRect().width;
-      //   var clientHeight = $("#pdfDiv")[0].getBoundingClientRect().height;
-
-      //   //   clientWidth = parseFloat(clientWidth.toFixed(2));
-      //   //   clientHeight = parseFloat(clientHeight.toFixed(2));
-
-      //   var _pxdraggableDivHeight = clientHeight * parseFloat(ury);
-      //   var _pxdraggableDivWidth = clientWidth * parseFloat(urx);
-
-      //   var setWidth = parseFloat(clientWidth) * llx;
-      //   var setHeight = parseFloat(clientHeight) * lly;
-
-      //   //console.log("setWidth", setWidth);
-      //   //console.log("setHeight", setHeight);
-
-      //   var dragWidth = clientWidth * urx;
-      //   var dragHeight = clientHeight * ury;
-
-      //   document.getElementById("draggableDiv" + index).style.height =
-      //     _pxdraggableDivHeight.toFixed(2) + "px";
-      //   document.getElementById("draggableDiv" + index).style.width =
-      //     _pxdraggableDivWidth.toFixed(2) + "px";
-
-      //   document.getElementById("draggableDiv" + index).style.left =
-      //     setWidth.toFixed(2) + "px";
-      //   document.getElementById("draggableDiv" + index).style.bottom =
-      //     setHeight.toFixed(2) + "px";
-
-      //   this.tempSign[arr_index].sign_llx = llx;
-      //   this.tempSign[arr_index].sign_lly = lly;
-      //   this.tempSign[arr_index].sign_urx = urx;
-      //   this.tempSign[arr_index].sign_ury = ury;
-
-      this.sign_position[arr_index].sign_llx = llx;
-      this.sign_position[arr_index].sign_lly = lly;
-      this.sign_position[arr_index].sign_urx = urx;
-      this.sign_position[arr_index].sign_ury = ury;
-      //   //console.log("cardWidth", cardWidth);
-      //   //console.log("cardHeight", cardHeight);
-      //   //console.log("clientWidth", clientWidth);
-      //   //console.log("clientHeight", clientHeight);
-      //   //console.log("dragWidth", dragWidth);
-      //   //console.log("dragHeight", dragHeight);
-    },
-    getPercent (data, min, max) {
-      var itemlength = parseFloat(max) - parseFloat(min)
-      var itemdata = parseFloat(data) - parseFloat(min)
-      var itemresult = (itemdata * 100) / itemlength
-      return parseFloat(itemresult).toFixed(3)
-    },
-    getPercentAll (mindata, maxdata, min, max) {
-      var itemlength = parseInt(max) - parseInt(min)
-      var itemdata = parseInt(maxdata) - parseInt(mindata)
-      var itemresult = (itemdata * 100) / itemlength
-      return parseFloat(itemresult).toFixed(3)
-    },
-    stringBefore (string, item) {
-      var strbefore = string.split(item)[0]
-      return strbefore
+      sessionStorage.setItem('option',JSON.stringify(tempOption))
+      sessionStorage.setItem('isDocEdit',false)
+      sessionStorage.setItem('isDocStep',true)
+      sessionStorage.setItem('isBack',false)
+      sessionStorage.setItem('isStep',false)
+      sessionStorage.setItem('isOnlyForm',true)
+      this.$router.push({ 'path': '/form/input'})
     }
   },
   beforeDestroy () {
     sessionStorage.removeItem('transaction_id')
+    EventBus.$off('confirm_deletemessage')
   }
 }
 </script>
@@ -960,6 +983,10 @@ export default {
   }
 
   .download-pdf-btn {
+    font-family: 'Sarabun', sans-serif;
+  }
+
+  .return-correction-btn {
     font-family: 'Sarabun', sans-serif;
   }
 
@@ -1116,12 +1143,17 @@ export default {
   .sign-block {
     border: 1px solid lightgray;
     border-radius: 4px;
-    height: 150px;
-    width: 300px;
+    height: 250px;
+    width: 490px;
     text-align: center;
     align-items: center;
     justify-content: center;
     display: flex;
+  }
+
+  .sign-pad-box {
+    width: 100%;
+    height: 100%;
   }
 
   /*========================================*/

@@ -8,11 +8,11 @@
           </v-btn>
         </v-col>
         <v-col cols="9" md="8" lg="8" class="px-0 report-detail-header">
-          <b>รายงานสรุปรายละเอียดการดำเนินการเอกสาร {{doc_type}}</b>
+          <b>{{textLang.summaryreportdocument}} {{doc_type}}</b>
         </v-col>
         <v-spacer></v-spacer>
         <v-col cols="12" md="auto" lg="auto" class="pr-0 export-report-btn-block">
-          <v-btn depressed dark color="#4CAF50" class="export-report-detail-btn" :href="url" target="_blank">
+          <v-btn depressed dark color="#4CAF50" class="export-report-detail-btn" @click="exportExcel">
             <svg style="width:24px;height:24px" viewBox="0 0 24 24" class="mr-2">
               <path fill="currentColor" d="M2 12H4V17H20V12H22V17C22 18.11 21.11 19 20 19H4C2.9 19 2 18.11 2 17V12M12 15L17.55 9.54L16.13 8.13L13 11.25V2H11V11.25L7.88 8.13L6.46 9.55L12 15Z" />
             </svg>
@@ -30,28 +30,48 @@
         </v-data-table>
       </v-row>
     </v-card>
+    <DocumentReport/>
   </div>
 </template>
 
 <script>
+import { EventBus } from '../EventBus'
+import DocumentReport from '../components/DocumentReportModal'
   export default {
+    components:{
+      DocumentReport
+    },
     data: () => ({
       report_header: [],
       report_data: [],
       url: "",
-      doc_type: ""
+      doc_type: "",
+      workflow_id: '',
+      textLang:{
+        summaryreportdocument: 'รายงานสรุปรายละเอียดการดำเนินการเอกสาร',
+        no: 'ลำดับที่',
+    }
     }),
+    textLang:{
+      summaryreportdocument: 'รายงานสรุปรายละเอียดการดำเนินการเอกสาร',
+      no: 'ลำดับที่',
+    },
     mounted(){
       this.getTemplateFormReport()
       this.url = JSON.parse(sessionStorage.getItem('selected_template_report')).url
       this.doc_type = JSON.parse(sessionStorage.getItem('selected_template_report')).doc_type
+      this.workflow_id = JSON.parse(sessionStorage.getItem('selected_template_report')).flow_id
+      this.template_id = JSON.parse(sessionStorage.getItem('selected_template_report')).template_id
+    },
+    beforeDestroy(){
+      sessionStorage.removeItem('selected_template_report')
     },
     methods: {
        async getTemplateFormReport(){ // get user detail to show name, email and business list
         try {
           var url = '/template_form/api/v1/getTemplateFormReport'
           this.report_header = [{
-            text: 'ลำดับที่',
+            text: this.textLang.no,
             sortable: false,
             value: 'index',
             width: '100px'
@@ -87,6 +107,9 @@
       },
       back() {
         this.$router.push('/report')
+      },
+      exportExcel () {
+        EventBus.$emit('documentreport')
       }
     }
   }

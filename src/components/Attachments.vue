@@ -11,7 +11,7 @@
                   <span>{{ name }}</span>
                 </v-col>
                 
-                <v-col v-if="type == 'pdf'" cols="5" md="4" lg="4" align-self="center" class="px-0 py-1 text-center">
+                <v-col v-if="type == 'PDF'" cols="5" md="4" lg="4" align-self="center" class="px-0 py-1 text-center">
                   <v-btn icon color="white" @click="change_page_fn('prev')">
                     <v-icon>mdi-arrow-left</v-icon>
                   </v-btn>
@@ -41,13 +41,13 @@
               <v-row align="center" justify="center" class="pt-2 prescribe-row">
                 <!-- pdf -->
                   <v-img
-                    v-if="type == 'jpg'"
+                    v-if="type == 'IMAGE'"
                     :src="file"
                     height="100%"
                     :style="{ transform : `rotate(${rotate}deg)` ,transition: '0.5s' }"
                   />
                   <pdf
-                    v-if="type == 'pdf'"
+                    v-if="type == 'PDF'"
                     id="pdfDiv"
                     :style="{ transform : `rotate(${rotate}deg)` ,transition: '0.5s', width: '50%'}"
                     :src="file"
@@ -84,7 +84,6 @@ import pdf from 'vue-pdf'
       getFormFile(file, type, name) {
         var self = this
         this.dialog = true
-        this.type = type
         var reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onloadend = function () {
@@ -93,6 +92,11 @@ import pdf from 'vue-pdf'
         this.name = name
         this.rotate = 0
         this.page = 1
+
+        let pdf = "pdf"
+        let image = "jpg,jpeg,gif,png";
+        if (pdf.indexOf(type.toLowerCase()) >= 0) this.type = 'PDF'
+        if (image.indexOf(type.toLowerCase()) >= 0) this.type = 'IMAGE'
       },
       rotate_fn() {
         this.rotate += 90

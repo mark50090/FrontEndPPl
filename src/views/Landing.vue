@@ -12,7 +12,8 @@
 <script>
 export default {
   props: [
-    "shared_token"
+    "shared_token",
+    "transaction_id"
   ],
   mounted(){
     if(this.shared_token) this.getToken()
@@ -28,11 +29,40 @@ export default {
         })
         this.$apiConfig.setToken(data.data.access_token)
         this.$apiConfig.setRefreshToken(data.data.refresh_token)
-        this.$router.push({ path: '/' })
+        this.getUserDetail()
       } catch (error) {
         console.log(error);
       }
     },
+    async getUserDetail(){ // get user detail to show name, email and business list
+        try {
+          var url = '/citizen/api/v1/detail'
+          var { data } = await this.axios.get(this.$api_url + url)
+          if(data) {
+            sessionStorage.setItem('name', `${data.data.first_name_th} ${data.data.last_name_th}`)
+            sessionStorage.setItem('userProfile', JSON.stringify(data.data))
+            if(this.transaction_id) this.goToFillPage()
+            else this.$router.push({ path: '/inbox' })
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    goToFillPage() {
+      let tempOption = {
+        template_id: "",
+        isCopy: false,
+        isImport: false,
+        transaction_id: this.transaction_id
+      }
+      sessionStorage.setItem('option',JSON.stringify(tempOption))
+      sessionStorage.setItem('isDocEdit',true)
+      sessionStorage.setItem('isDocStep',true)
+      sessionStorage.setItem('isBack',false)
+      sessionStorage.setItem('isStep',false)
+      sessionStorage.setItem('isOnlyForm',true)
+      this.$router.push({ 'path': '/form/input'})
+    }, 
   }
 }
 </script>
