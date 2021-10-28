@@ -62,7 +62,7 @@
                     >
                       <v-row no-gutters justify="center" align="center">
                         <span style="color: grey">
-                          ลำดับที่ {{ index_sign + 1 }} {{`(${index + 1}/${signature.length})`}}
+                          {{textLang.no}} {{ index_sign + 1 }} {{`(${index + 1}/${signature.length})`}}
                         </span>
                       </v-row>
                     </vue-draggable-resizable>
@@ -86,7 +86,7 @@
             </v-row>
             <v-row class="detail-row">
               <v-col cols="3" md="2" lg="2" class="pl-0 pt-1 pb-0 doc-detail-title">
-                <b>ชื่อไฟล์</b>
+                <b>{{textLang.filename}}</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
                 {{ doc_details.file_name }}
@@ -94,7 +94,7 @@
             </v-row>
             <v-row class="detail-row">
               <v-col cols="3" md="2" lg="2" class="pl-0 pt-1 pb-0 doc-detail-title">
-                <b>ชื่อผู้ส่ง</b>
+                <b>{{textLang.sendername}}</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
                 {{ doc_details.sender }}
@@ -102,7 +102,7 @@
             </v-row>
             <v-row class="detail-row">
               <v-col cols="3" md="2" lg="2" class="pl-0 pt-1 pb-0 doc-detail-title">
-                <b>ส่งเมื่อ</b>
+                <b>{{textLang.senton}}</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
                 {{ doc_details.create_at | fulldate}}
@@ -110,7 +110,7 @@
             </v-row>
             <v-row class="detail-row">
               <v-col cols="3" md="2" lg="2" class="pl-0 pt-1 pb-0 doc-detail-title">
-                <b>รายละเอียด</b>
+                <b>{{textLang.details}}</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
                 {{ doc_details.detail }}
@@ -118,10 +118,10 @@
             </v-row>
             <v-row class="detail-row">
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
-                <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="download_pdf_fn">ดาวน์โหลด PDF</v-btn>
+                <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="download_pdf_fn">{{textLang.downloadPDF}}</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
-                <v-btn v-if="template_id" depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="copyDocument()">คัดลอกเอกสาร</v-btn>
+                <v-btn v-if="template_id" depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="copyDocument()">{{textLang.copydocuments}}</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from inbox page -->
                 <v-btn @click="optionFormMail()" depressed x-small dark color="#4CAF50" class="download-pdf-btn">
@@ -131,11 +131,11 @@
               </v-col>
               <v-col v-if="isShowRevertButton" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
                 <v-btn @click="optionFormReturn()" depressed x-small dark color="#FBC02D" class="return-correction-btn">
-                  ส่งคืนแก้ไข
+                  {{textLang.returnedit}}
                 </v-btn>
               </v-col>
               <v-col v-if="false" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
-                <v-btn depressed x-small dark color="error" class="download-pdf-btn">ยกเลิกเอกสาร</v-btn>
+                <v-btn depressed x-small dark color="error" class="download-pdf-btn">{{textLang.canceldocument}}</v-btn>
               </v-col>
             </v-row>
           </v-card>
@@ -143,9 +143,9 @@
           <v-card outlined class="mt-1">
             <v-card-title class="pa-0">
               <v-tabs color="#4caf50" v-model="document_detail_tab" class="doc-detail-tab">
-                <v-tab class="doc-detail-tab-title">ลำดับการทำงาน</v-tab>
-                <v-tab class="doc-detail-tab-title">บันทึกข้อความ</v-tab>
-                <v-tab class="doc-detail-tab-title">ไฟล์แนบ</v-tab>
+                <v-tab class="doc-detail-tab-title">{{textLang.workorder}}</v-tab>
+                <v-tab class="doc-detail-tab-title">{{textLang.messagememo}}</v-tab>
+                <v-tab class="doc-detail-tab-title">{{textLang.attachment}}</v-tab>
               </v-tabs>
             </v-card-title>
             <v-divider></v-divider>
@@ -159,12 +159,12 @@
                         <v-icon v-if="item.status == 'W' && !is_reject" size="30" color="rgb(251, 192, 45)">mdi-clock-outline</v-icon> <!-- waiting for approve (current step) -->
                         <v-icon v-else-if="item.status == 'Y'" size="30" color="#4caf50">mdi-check-circle-outline</v-icon> <!-- approved -->
                         <v-icon v-else-if="item.status == 'R'" size="30" color="#f44336">mdi-close-circle-outline</v-icon> <!-- deny -->
-                        <v-icon v-else-if="item.status == 'N'" size="30" color="#9e9e9e">mdi-clock-outline</v-icon> <!-- step not arrive yet -->
+                        <v-icon v-else-if="item.status == 'N'  && !is_reject" size="30" color="#9e9e9e">mdi-clock-outline</v-icon> <!-- step not arrive yet -->
                         <v-icon v-else-if="is_reject" size="30" color="#9e9e9e">mdi-circle-slice-8</v-icon> <!-- step other if reject transaction -->
                       </template>
                       <v-row class="detail-row">
                         <v-col cols="3" md="2" lg="2" align-self="start" class="px-0 py-0 step-doc-title">
-                          ลำดับ {{ index + 1 }} {{ item.sign_count > 1 ? `(${item.active_count}/${item.sign_count})` : null }}
+                          {{textLang.number}} {{ index + 1 }} {{ item.sign_count > 1 ? `(${item.active_count}/${item.sign_count})` : null }}
                         </v-col>
                         <v-col cols="7" md="7" lg="7" align-self="start" class="pl-1 pr-0 py-0">
                           <v-icon small color="#0000008A" class="mr-2">mdi-timer-sand-full</v-icon>
@@ -180,12 +180,12 @@
                       <v-row class="detail-row" v-for="(item_name, index_name) in item.actor" :key="`flow_name_${index}${index_name}`"> <!-- each person data -->
                         <v-col cols="8" md="5" lg="5" align-self="start" class="px-0 pt-0 pb-1 step-doc-title">
                           {{ item_name.name }}
-                          <span v-if="my_name === item_name.name"> (คุณ)</span> <!-- when this name is user's name -->
+                          <span v-if="my_name === item_name.name"> {{textLang.you}}</span> <!-- when this name is user's name -->
                         </v-col>
                         <v-col cols="auto" md="auto" lg="auto" align-self="start" class="pl-0 pr-1 pt-0 pb-1 step-status-block">
-                          <span v-if="!item_name.approved && item.status == 'W' && !is_reject" class="wait-user-approve-status">รออนุมัติ</span> <!-- wait for approve status -->
-                          <span v-if="item_name.approved == 'Y'" class="approved-status">อนุมัติแล้ว</span> <!-- approved status -->
-                          <span v-if="item_name.approved == 'R'" class="deny-status">ปฏิเสธอนุมัติ</span> <!-- deny status -->
+                          <span v-if="!item_name.approved && item.status == 'W' && !is_reject" class="wait-user-approve-status">{{textLang.pendingapproval}}</span> <!-- wait for approve status -->
+                          <span v-if="item_name.approved == 'Y'" class="approved-status">{{textLang.approved}}</span> <!-- approved status -->
+                          <span v-if="item_name.approved == 'R'" class="deny-status">{{textLang.rejectapproval}}</span> <!-- deny status -->
                         </v-col>
                         <v-col v-if="item_name.approved && (item_name.approved == 'Y' || item_name.approved == 'R')" cols="12" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-0 pb-1 time-approve-block"> <!-- show when status is approved or deny -->
                           <v-icon small color="black" class="pr-1">mdi-timer-outline</v-icon>
@@ -227,7 +227,7 @@
                   </div>
                   <v-row class="detail-row" v-if="check_sign && comment_status">
                     <v-col cols="10" md="11" lg="11" class="pl-2 pr-0 py-1">
-                      <v-textarea dense outlined hide-details no-resize rows="2" row-height="16" placeholder="ระบุข้อความ" color="#4CAF50" class="write-comment-box" v-model="comment"></v-textarea>
+                      <v-textarea dense outlined hide-details no-resize rows="2" row-height="16" :placeholder="textLang.specifymessage" color="#4CAF50" class="write-comment-box" v-model="comment"></v-textarea>
                     </v-col>
                     <v-col cols="2" md="1" lg="1" class="px-0 py-1">
                       <v-btn depressed dark block color="#4CAF50" class="px-1 send-comment-btn" @click="add_comment_fn">
@@ -247,7 +247,7 @@
                       </v-file-input>
                     </v-col>
                     <v-col cols="2" md="2" lg="2" align-self="start" class="px-1 pt-1 pb-0" v-if="false">
-                      <v-btn depressed dark block color="#4CAF50" class="attach-file-btn">แนบไฟล์</v-btn>
+                      <v-btn depressed dark block color="#4CAF50" class="attach-file-btn">{{textLang.attachfile}}</v-btn>
                     </v-col>
                   </v-row>
                   <template v-for="(item,index) in attachment_file"> <!-- each attach file -->
@@ -285,10 +285,10 @@
               </v-col>
               <v-spacer></v-spacer>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-1 py-2">
-                <v-btn depressed color="#1CC6A9" :disabled="false" class="approve-btn" @click="set_approve_fn('approve')">อนุมัติ</v-btn>
+                <v-btn depressed color="#1CC6A9" :disabled="false" class="approve-btn" @click="set_approve_fn('approve')">{{textLang.approvee}}</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-2 py-2">
-                <v-btn depressed dark color="error" class="approve-btn" @click="set_approve_fn('reject')">ปฏิเสธ</v-btn>
+                <v-btn depressed dark color="error" class="approve-btn" @click="set_approve_fn('reject')">{{textLang.refuse}}</v-btn>
               </v-col>
             </v-row>
             <template v-if="!is_approve">
@@ -307,7 +307,7 @@
                   <v-select dense outlined hide-details color="#4CAF50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="all_sign_type" v-model="sign_type" class="sign-type sign-type-box sign-type-dropdown-icon"></v-select>
                 </v-col>
                 <v-col cols="auto" md="auto" lg="auto" class="pr-0 py-2">
-                  <v-btn depressed small color="#1D9BDE" :disabled="sign_type == 'Default'" class="clear-sign-btn" @click="clearSignature()">ล้างค่า</v-btn>
+                  <v-btn depressed small color="#1D9BDE" :disabled="sign_type == 'Default'" class="clear-sign-btn" @click="clearSignature()">{{textLang.clear}}</v-btn>
                 </v-col>
                 <v-spacer></v-spacer>
               </v-row>
@@ -360,7 +360,6 @@ export default {
   },
   data: () => ({
     document_detail_tab: null,
-    document_description: 'อธิบายอะไรก็ไม่รู้',
     ca_switch: true,
     all_sign_type: ['Default', 'Sign Pad'],
     sign_type: 'Default',
@@ -393,8 +392,43 @@ export default {
     template_id: "",
     is_approve: false,
     is_reject: false,
-    isShowRevertButton: true
+    isShowRevertButton: true,
+    textLang:{
+      no:'ลำดับที่',
+      filename: 'ชื่อไฟล์',
+      sendername: 'ชื่อผู้ส่ง',
+      senton: 'ส่งเมื่อ',
+      details: 'รายละเอียด',
+      downloadPDF: 'ดาวน์โหลด PDF',
+      copydocuments: 'คัดลอกเอกสาร',
+      returnedit: 'ส่งคืนแก้ไข',
+      canceldocument: 'ยกเลิกเอกสาร',
+      workorder: 'ลำดับการทำงาน',
+      messagememo: 'บันทึกข้อความ',
+      attachment: 'ไฟล์แนบ',
+      number: 'ลำดับ',
+      you: '(คุณ)',
+      pendingapproval: 'รออนุมัติ',
+      approved: 'อนุมัติแล้ว',
+      rejectapproval: 'ปฏิเสธอนุมัติ',
+      specifymessage: 'ระบุข้อความ',
+      attachfile: 'แนบไฟล์',
+      succeed: 'สำเร็จ',
+      Successfullyapproved: 'อนุมัติเอกสารสำเร็จ',
+      Successfullyrejected: 'ปฏิเสธเอกสารสำเร็จ',
+      cantread: 'ไม่สามารถอ่าน PDF ได้',
+      approve_fail: "อนุมัติไม่สำเร็จ",
+      erroroccurred: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
+      fail: 'ไม่สำเร็จ',
+      clear: 'ล้างค่า',
+      warn: 'แจ้งเตือน',
+      notuploadingfiles: 'ไม่อนุญาตให้อัปโหลดไฟล์ ',
+      oversize: ' เนื่องจากมีขนาดเกิน 30 MB',
+      refuse:'ปฏิเสธ',
+      approvee: 'อนุมัติ',
+      }
   }),
+  
   computed: {
   },
   mounted () {
@@ -421,8 +455,23 @@ export default {
         const element = val[index]
         if (element.size > 31457280) {
           this.removeFileInput(index)
-          alert(`ไม่อนุญาตให้อัปโหลดไฟล์ "${element.name}" เนื่องจากมีขนาดเกิน 30 MB`)
-        }
+          this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">'+this.textLang.warn+'</strong>',
+                text: this.textLang.notuploadingfiles +element.name+this.textLang.oversize ,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })        
+              }
       }
     }
   },
@@ -566,8 +615,8 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
-                text: 'อนุมัติเอกสารสำเร็จ',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">'+ this.textLang.succeed+'</strong>',
+                text: this.textLang.Successfullyapproved,
                 showCloseButton: true,
                 showConfirmButton: false,
                 timer: 5000,
@@ -583,8 +632,8 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">สำเร็จ</strong>',
-                text: 'ปฏิเสธเอกสารสำเร็จ',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">'+ this.textLang.succeed+'</strong>',
+                text: this.textLang.Successfullyrejected,
                 showCloseButton: true,
                 showConfirmButton: false,
                 timer: 5000,
@@ -596,6 +645,9 @@ export default {
                 }
               })
             }
+            this.$router.replace({ name: 'inbox' })
+          } else {
+            this.error_swal_fn(this.textLang.approve_fail)
             this.$router.replace({ name: 'inbox' })
           }
         })
@@ -649,6 +701,9 @@ export default {
                 this.isShowRevertButton = element.actor.map(item => item.name).includes(sessionStorage.getItem('name'))
               }
             })
+            if(data.data.flow_step[0].status == "W" || data.data.document_status == "Y" || data.data.document_status == "R") {
+              this.isShowRevertButton = false
+            }
             doc_data.flow_step.forEach((flowData, index) => {
               flowData.active_count = flowData.actor.filter(item => (item.approved === 'Y' || item.approved === 'R')).length
               this.$set(this.sign_position, index, flowData.sign_position)
@@ -697,9 +752,9 @@ export default {
           if (error.response) {
             const errResponse = error.response.data
             if (errResponse.message === 'error read pdf') {
-              this.error_swal_fn('ไม่สามารถอ่าน PDF ได้')
+              this.error_swal_fn(this.textLang.cantread)
             } else {
-              this.error_swal_fn(errResponse.message || 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง')
+              this.error_swal_fn(errResponse.message || this.textLang.erroroccurred)
             }
             this.$router.replace({ name: 'inbox' })
           }
@@ -708,12 +763,12 @@ export default {
           this.axios_pending--
         })
     },
-    error_swal_fn (msg = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง') {
+    error_swal_fn (msg = this.textLang.erroroccurred) {
       this.$swal({
         backdrop: false,
         position: 'bottom-end',
         width: '330px',
-        title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+        title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">'+this.textLang.fail+'</strong>',
         text: msg,
         showCloseButton: true,
         showConfirmButton: false,

@@ -15,7 +15,7 @@
         </v-col>
         <v-col
           class="pl-0 question-header pr-0" >
-        <b>รายงานเอกสาร </b>
+        <b>{{textLang.documentreport}} </b>
         </v-col>
         </v-row>
             <v-card class="question-in pt-3 pr-5 pl-5 mt-1" outlined>
@@ -37,7 +37,7 @@
           align-self="center">
           <v-btn class="font-send-btn"
           depressed dark  color="#67C25D"
-          >ส่งเอกสาร</v-btn>
+          >{{textLang.senddocuments}}</v-btn>
           </v-col>
         </v-row>
         </v-card>    
@@ -46,9 +46,13 @@
 </template>
 <script>
 export default {
-    setup() {
-        
+    data:() => ({
+    textLang:{
+      documentreport:'รายงานเอกสาร',
+      senddocuments: 'ส่งเอกสาร',
     },
+    }),
+    
 }
 </script>
 <style>

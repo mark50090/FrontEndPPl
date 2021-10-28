@@ -1,7 +1,7 @@
 {
   "components": {
     "AddAttachFileModal": {
-      "attach_header_dialog": "Attached File To Paperless",
+      "attach_header_dialog": "Attached File",
       "input_attach_title": "Attached File",
       "placeholder_file": "Please select attached files",
       "cancel_attach_btn": "Cancel",
@@ -19,6 +19,7 @@
        "back_document": "Exit from",
        "sure_leave": "Do you want to exit from",
        "no_save": "without saving ?",
+       "text_confirm_exit": "Do you want to exit from creating this form without saving ?",
        "cancel": "Cancel",
        "back": "Exit" 
     },
@@ -28,6 +29,7 @@
       "or_no": "\" ? ",
       "cancel": "Close",
       "yes_canel": "Cancel Document",
+      "alert_error": "Error",
       "cancel_success": "Cancel Document Success",
       "cancel_fail": "Cancel document is incomplate. Please try again later."
     },
@@ -115,13 +117,14 @@
        "row": "Row",
        "import_data": "Import Selector from Excel",
        "group_option": "Selector",
-       "select": "First, select row of table which you want to link data together (it can link within same row only). After that, click + button to add selector as much as you want or click – button to delete selector which you don’t want. Moreover, each input box represents each cell in table row. When you finished setting and then, input same value which you setting in input box when you use E-Form, the values from other input boxes that you setting will appear automatically. For example, define value in cell  datatable1_R1C1 = \"Hello\", datatable1_R1C2 = \"99\", datatable1_R1C3 = \"World\", when you input \"99\" in datatable1_R1C2, value in datatable1_R1C1 and datatable1_R1C3 will become \"Hello\" and \"World\" subsequently or input \"Hello\" in datatable1_R1C1, value in datatable1_R1C2 and datatable1_R1C3 will become \"99\" and \"Word\" subsequently. If you want to import selector from Excel, you have to input value in Excel start from A1. The value which you input in 1 row in Excel is data of 1 selector. If you want more selector, you have to input value in new row in Excel.",
+       "select": "First, select row of table which you want to link data together (it can link within same row only). After that, click + button to add selector as much as you want or click – button to delete selector which you don’t want. Moreover, each input box represents each cell in table row. If you input same value which you setting in input box when you use E-Form, the values from other input boxes that you setting will appear automatically. For example, define value in cell  datatable1_R1C1 = \"Hello\", datatable1_R1C2 = \"99\", datatable1_R1C3 = \"World\", when you input \"99\" in datatable1_R1C2, value in datatable1_R1C1 and datatable1_R1C3 will become \"Hello\" and \"World\" subsequently or input \"Hello\" in datatable1_R1C1, value in datatable1_R1C2 and datatable1_R1C3 will become \"99\" and \"Word\" subsequently. If you want to import selector from Excel, you have to input value in Excel start from A1. The value which you input in 1 row in Excel is data of 1 selector. If you want more selector, you have to input value in new row in Excel.",
        "cancel": "Cancel",
        "save": "Save"
     },
     "SignaturePadModal": {
         "sign_approve": "Sign to Approve",
         "reject_approval": "Reject",
+        "clear_button": "Clear",
         "approve": "Approve",
         "cancel": "Cancel"
     },
@@ -170,16 +173,95 @@
         "or_sign": "Or (Use to connect many sub-conditions together and put parentheses cover each sub-condition before connection)",
         "condition_example": "Condition Example"
       }
+    },
+    "DefaultSignatureModal": {
+      "signature_header": "กำหนดลายเซ็น",
+      "upload_file": "อัพโหลดไฟล์",
+      "signpad": "วาดลายเซ็น",
+      "clearsign": "ล้างค่า",
+      "savesign": "บันทึก",
+      "update_default_success": "อัพเดทข้อมูลสำเร็จ",
+      "update_default_fail": "อัพเดทข้อมูลไม่สำเร็จ",
+      "update_succeed": "สำเร็จ",
+      "update_error": "ไม่สำเร็จ"
+    },
+    "DefaultStampModal": {
+      "stamp_head": "ลายเซ็น",
+      "stamp_name_show": "ชื่อลายเซ็น",
+      "stamp_upload": "อัพโหลดไฟล์",
+      "stamp_pain": "วาดลายเซ็น",
+      "stamp_delete": "ลบลายเซ็น",
+      "stamp_clear": "ล้างค่า",
+      "stamp_save": "บันทึก",
+      "update_stamp_success": "อัพเดทข้อมูลสำเร็จ",
+      "update_stamp_fail": "อัพเดทข้อมูลไม่สำเร็จ",
+      "stamp_succeed": "สำเร็จ",
+      "stamp_error": "ไม่สำเร็จ"
+    },
+    "DeleteForm": {
+      "delete_form1": "ต้องการลบแบบฟอร์ม",
+      "delete_form2": "หรือไม่ ?",
+      "cancel_delete": "ยกเลิก",
+      "confirm_delete": "ตกลง",
+      "delete_success": "ลบแบบฟอร์มสำเร็จ",
+      "delete_fail": "ลบแบบฟอร์มไม่สำเร็จ",
+      "delete_form_succeed": "สำเร็จ",
+      "delete_form_error": "ไม่สำเร็จ"
+    },
+    "DeleteMessage": {
+      "texthead_form": "ต้องการยกเลิกข้อความหรือไม่ ?",
+      "cancel_form": "ยกเลิก",
+      "confirm_form": "ตกลง"
+    },
+    "DocumentReportModal": {
+      "texthead_card": "Export รายงาน Excel",
+      "select_date": "เลือกช่วงวันที่ที่ต้องการ Export",
+      "cancel_export": "ยกเลิก",
+      "range_join": " จนถึง "
+    },
+    "ImportForm": {
+      "import_file": "นำเข้าไฟล์แบบฟอร์ม",
+      "select_file": "เลือกไฟล์แบบฟอร์ม",
+      "import_form": "นำเข้า"
+    },
+    "ReturnCorrection": {
+      "text_head_return": "ส่งคืนแก้ไข",
+      "num_return": "ลำดับที่ส่งคืน",
+      "recorrection": "ส่งคืน",
+      "return_file_success": "ส่งคืนแก้ไขเอกสารสำเร็จ",
+      "return_file_fail": "ส่งคืนแก้ไขเอกสารไม่สำเร็จ",
+      "return_revertable_no": "ลำดับที่",
+      "return_succeed": "สำเร็จ",
+      "return_error": "ไม่สำเร็จ"
+    },
+    "SendMail": {
+      "recipient_email": "อีเมลผู้รับ",
+      "send_email": "ส่งอีเมล",
+      "send_email_success": "ส่งอีเมลสำเร็",
+      "send_email_fail": "ส่งอีเมลไม่สำเร็จ",
+      "send_email_succeed": "สำเร็จ",
+      "send_email_error": "ไม่สำเร็จ"
+    },
+    "StampModal": {
+      "message_stamp": "ข้อความ Stamp",
+      "cancel_stamp": "ยกเลิก",
+      "confirm_stamp": "บันทึก"
+    },
+    "TransferEdit": {
+      "transfer_edit_form": "โอนสิทธิการแก้ไขแบบฟอร์ม",
+      "transfer_email": "E-mail ที่จะโอนสิทธิ",
+      "cancel_transfer": "ยกเลิก",
+      "confirm_transfer": "โอนสิทธิ"
     }
   },
   "Create_Template": {
     "tabMenubar": {
-      "create_doc": "Create E-Form",
+      "create_doc": "Leave Creating E-Form",
       "set_format": "E-Form Setting",
       "tools": "Object",
       "property": "Property",
       "complete_sequence": "E-Form Step",
-      "set_paperless": "Paperless Setting",
+      "set_paperless": "Digital Workflow Setting",
       "filling_mobile": "Simple View Setting",
       "save": "Save",
       "open_page": "Open Paper Tap",
@@ -196,7 +278,7 @@
       "department": "Department:",
       "group": "E-Form Tag:",
       "id": "ID:",
-      "verdion": "Version:",
+      "version": "Version:",
       "en_data": "Enforcement Date:",
       "locking_pdf": "Lock Document (pdf):",
       "choose": "",
@@ -240,7 +322,7 @@
       "validate_setting_btn": "Validation Setting"
     },
     "set_sharing": {
-      "doc_sharing_set": "E-Form Sharing ",
+      "doc_sharing_set": "E-Form Sharing Setting",
       "doc_sharing": "Sharing:",
       "doc_general": "Public E-Form",
       "doc_usage": "Permission of E-Form Using:",
@@ -382,12 +464,14 @@
       "arrange_back": "Send To Back",
       "assignment": "Permission Setting",
       "reference": "Same Permission With Previous Step",
-      "order_refer": "Same Permission Step",
+      "order_refer": "Workflow Step:",
+      "sender_flow": "Sender",
+      "step_flow": "Step ",
       "by_positio": "By Role",
       "by_email": "By Email",
       "email": "Email",
       "used_importing": "Used for import data from cell's Excel",
-      "start_date_from": "Days from today",
+      "start_date_from": "Days from current",
       "start_date_custom": "Custom Start Date",
       "start_date_day": "days",
       "no_default": "No Default Date",
@@ -404,15 +488,15 @@
       "check_box": "Box for selecting the choice or not. It can group choice together by going to \"Checkbox Group\" in property tab and then input the name of check box which are in the same group (input 1 name per time). After that, click \"+\" button after input fill for adding this check box into the group. After grouping, it will has \"Force to Fill In\" property for forcing to select at least 1 choice from check box group.",
       "pictures": "Image for decorating document.",
       "box_selecting_one": "Box for selecting 1 choice from group of choices. It can change group of choices up to value from input box or other dropdown input by filling object name which want to refer value in \"Reference of Group Choice\" property and then click \"Create / Edit\" button in \"Group Choice\" property. It will has setting modal show up. Then, input name for group choice. The name must has the same value of input box or dropdown input which want to refer value. Finally, input choice in each group choice.",
-      "automatic": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Box display automatic data from selected data.<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If select data \"เงื่อนไข(ระบุ)\", it will display result up to the condition. Format of condition is cond(\"condition\"?show=\"result of true condition\":show=\"result of false condition\") or change show=\"result\" to hide for hiding this input box auto up to its condition. It can has more than 1 condition like following format cond(\"condition1\"?show=\"result of true condition1\":\"condition2\"?show=\"result of true condition2\":show=\"result of false condition\"). For example, cond($dropdownbox0==\"Y\"?show=\"Yes\":$dropdownbox0==\"N\"?show=\"No\":show=\"Else\"). Operators for using in condition have == (equal), != (not equal), >= (greater than or equal), <= (less than or equal), > (greater than) and < (less than). Text which use in condition must put inside (\") or (') and the display result must begin with \"show=\" and put inside (\") or ('). Condition can use with input box, dropdown box, calculate box, input box auto and check box (text condition of check box must be true if check box is selected and must be false if check box isn’t selected. Also, it doesn’t have to put inside (\") or (')). If use these objects in condition, they must be put $ in front of their name. Beside, if each condition want to has many cases, it can use conjunction operators like &&(and), ||(or: in the same button of \"\\\" in keyboard) to connect many cases together. For example, ($inputbox1==\"58\")||($inputbox1==\"73\").",
-      "box_show": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Box for displaying result of input box, calculate box, date picker, time picker or number which is calculated from defined function. It put calculation inside calc(…) and use +, -, *, /, ( ), %. It can set number of decimal point for the result. If use value of input box or other calculate box in calculation, must put $ in front of input box or calculate box name. For example, calc(($calculatebox1*2)+ $inputbox2) <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moreover, it can calculate by using following function<br><ul><li>Modulate(%): The remainder of a division process. For example, calc(15%10), the result is 5. </li><li>Average: avg(inputbox1,inputbox2,...)</li><li>Minimum: min(inputbox1,inputbox2,...)</li><li>Maximum: max(inputbox1,inputbox2,...)</li><li>Difference of months: diffMon(datepickerbox1, datepickerbox2)</li><li>Difference of date: diffDate(datepickerbox1, datepickerbox2)</li><li>Length Between two days(days): lenDate(datepickerbox1, datepickerbox2)</li><li>Difference of time: diffTime(timebox1,timebox2)</li><li>Difference of time(hour only): diffTimeHr(timebox1, timebox2)</li><li>Difference of time(minute only): diffTimeMn(timebox1, timebox2)</li><li>Sum all columns in Data Table: sum(datatable1_RXC1)</li><li>Sum columns in Data Table by condition: sumif(datatable1_RXC1: Condition)</li></ul>",
+      "automatic": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Box display automatic data from selected data.<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If select data \"Condition\", it will display result up to the specified condition. Format of condition is cond(\"condition\"?show=\"result of true condition\":show=\"result of false condition\") or change show=\"result\" to hide for hiding this input box auto up to its condition. It can has more than 1 condition like following format cond(\"condition1\"?show=\"result of true condition1\":\"condition2\"?show=\"result of true condition2\":show=\"result of false condition\"). For example, cond($dropdownbox0==\"Y\"?show=\"Yes\":$dropdownbox0==\"N\"?show=\"No\":show=\"Else\"). Operators for using in condition have == (equal), != (not equal), >= (greater than or equal), <= (less than or equal), > (greater than) and < (less than). Text which use in condition must put inside (\") or (') and the display result must begin with \"show=\" and put inside (\") or ('). Condition can use with input box, dropdown box, calculate box, input box auto and check box (text condition of check box must be true if check box is selected and must be false if check box isn’t selected. Also, it doesn’t have to put inside (\") or (')). If use these objects in condition, they must be put $ in front of their name. Beside, if each condition want to has many cases, it can use conjunction operators like &&(and), ||(or: in the same button of \"\\\" in keyboard) to connect many cases together. For example, ($inputbox1==\"58\")||($inputbox1==\"73\").",
+      "box_show": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Box for displaying result of input box, calculate box, date picker, time picker or number which is calculated from defined function. It put calculation inside calc(…) and use +, -, *, /, ( ), %. It can set number of decimal point for the result. If use value of input box or other calculate box in calculation, must put $ in front of input box or calculate box name. For example, calc(($calculatebox1*2)+ $inputbox2) <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moreover, it can calculate by using following function<br><ul><li>Modulate(%): The remainder of a division process. For example, calc(15%10), the result is 5. </li><li>Average: avg(inputbox1,inputbox2,...)</li><li>Minimum: min(inputbox1,inputbox2,...)</li><li>Maximum: max(inputbox1,inputbox2,...)</li><li>Difference of months: diffMon(datepickerbox1, datepickerbox2)</li><li>Difference of date: diffDate(datepickerbox1, datepickerbox2)</li><li>Length Between two days(days): lenDate(datepickerbox1, datepickerbox2)</li><li>Difference of time: diffTime(timebox1,timebox2)</li><li>Difference of time(hour only): diffTimeHr(timebox1, timebox2)</li><li>Difference of time(minute only): diffTimeMn(timebox1, timebox2)</li><li>Sum all rows in column of Data Table: sum(datatable1_RXC1)</li><li>Sum all rows in column of Data Table by condition: sumif(datatable1_RXC1: Condition)</li></ul>",
       "box_show_thai": "Box for displaying changing of number to text which number is from input box (input box must set to number only) or calculate box.",
       "scope_box": "Scope box for setting permission of inputting data in the document. Every objects in scope will be set permission of inputting up to permission of scope except some object that be set its own permission. If some section boxes are in difference position and require to have same permission (in same inputting step), must set at \"Continuous Section\" property and select section box which is in the same inputting permission.",
       "displaying": "Table for displaying data which can link each other within the same row for getting data when data table’s cell has the same value with defined data. It can set by clicking \"Setting Data Link\" button in data table property. This make every cells in data table has dropdown input inside for selecting defined data.",
       "consists": "Used for displaying table in the document. It can set width of each column and height of each row. Moreover, it can set width of all columns or height of all rows in 1 time.",
       "straight": "Used for displaying line in the document. It can set to be vertical or horizon. It can change line style to be solid line, dash line or dot line.",
-      "area_displaying": "Box for displaying signature from Paperless.",
-      "picture_box": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Image Box which can choose to be normal image in the document or box for inserting image when inputting the document. <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If it is normal image, insert image into this image box. It can insert image from url and image file in pc (click in image box to select image file in pc). Image size will equal to size of image box. <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If it is box for inserting image, don’t have to insert image into image box. Image size will fit to shortest side of image box. It means that if height of image box shorter than width of image box, height of image will equal to height of image box and width of image will set to proper size automatically."
+      "area_displaying": "Box for displaying signature",
+      "picture_box": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Image Box which can choose to be normal image in the document or box for inserting image in the document. <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If it is normal image, insert image into this image box. It can insert image from url or image file in pc (click in image box to select image file in pc). Image size will equal to size of image box. <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If it is box for inserting image, don’t have to insert image into image box. Image size will fit to shortest side of image box. It means that if height of image box shorter than width of image box, height of image will equal to height of image box and width of image will set to proper size automatically."
     },
     "order_fill": {
       "order_of": "Doucment Step And Signing Doucment",
@@ -454,12 +538,17 @@
       "ppl_subject": "Subject",
       "subject_placeholder": "<No Subject>",
       "ppl_message": "Message",
-      "setting": "Paperless Default Setting",
+      "setting": "Default Digital Workflow Setting",
       "doc_paperless": "Paperless Document Type",
-      "foermat_paperless": "Paperless Template",
+      "foermat_paperless": "Workflow",
       "note": "Note",
       "set_auto_flow": "Automation Paperless Flow Setting",
-      "set_auto_flow_btn": "Set Automation Paperless Flow"
+      "set_auto_flow_btn": "Set Automation Paperless Flow",
+      "step_num": "Step",
+      "permission_approve": "Approve",
+      "permission_sign": "Sign",
+      "permission_input_form": "Fill",
+      "permission_sign_input": "Fill and Sign"
     },
     "modal": {
       "insert_picture": "Insert Image",
@@ -477,13 +566,16 @@
       "clear": "Clear"
     },
     "alert": {
+      "alert_error": "Error",
+      "alert_success": "Success",
       "name_object": "Object name \"",
       "change_name": "\" is duplicate. Please change object name",
       "duplicate": "Document step is duplicate",
       "section_boxes": "It has some overlap section boxes. Please set new position for them.",
       "save_complete": "Saving E-Form Complete",
       "fail_save": "Saving E-Form is incomplete. Please try again later.",
-      "create_eform": "Create E-Form"
+      "create_eform": "Create E-Form",
+      "workflow_alert": "Please select workflow."
     },
     "dropdown": {
       "buddhist": "Buddhist Era",
@@ -512,13 +604,31 @@
       "no_set": "No Setting",
       "no_sender": "No Setting",
       "no_define": "No Setting",
-      "email": "Email"
+      "email": "Email",
+      "inputbox_auto": {
+        "no_choose": "No Setting",
+        "doc_no": "Document No.",
+        "condition": "Condition",
+        "fullname_th": "Full Name(TH)",
+        "prefix_name_th": "Prefix Name(TH)",
+        "first_name_th": "First Name(TH)",
+        "last_name_th": "Last Name(TH)",
+        "tel": "Telephone",
+        "ref_doc_no": "Reference Document No.",
+        "customer_name": "Customer Name",
+        "employee_id": "Employee id",
+        "department": "Department",
+        "role": "Role",
+        "leader_name_th": "Leader Name ",
+        "leader_role": "Leader Role",
+        "company_address": "Company Address"
+      }
     }
   },
   "preview_template": {
     "tabMenubar": {
       "back_page": "Back to Fill Data",
-      "back_to": "Back to My Form",
+      "back_to": "Leave Form",
       "save_doc": "Save Document",
       "save_draft": "Save Draft",
       "page": "Page",
@@ -537,7 +647,7 @@
     },
     "offer_dialog": {
       "offer": "Send for Signing",
-      "offer_paperless_new": "Save And Send for Signing in Paperless", 
+      "offer_paperless_new": "Save Document", 
       "offer_paperless_old": "Send for Signing in Paperless",
       "subject_new": "Document Name(subject):",
       "subject_old": "subject:",
@@ -546,10 +656,10 @@
       "message": "Message:",
       "doc_type": "Paperless Document Type:",
       "doc_format": "Paperless Template:",
-      "seq_approval": "Approved Step",
       "add_attachments": "Attached File:",
+      "attached_file_placeholder": "Choose file",
       "please_choose": "Please select attached files",
-      "doc_system": "Attached File To Paperless",
+      "doc_system": "Attached File",
       "choose": "",
       "note": "Note",
       "re_number": "Reference Step No.",
@@ -561,18 +671,23 @@
       "name_ppl_error": "Please fill in document name (subject)",
       "pdf_setting_error":"Please set document(pdf)'s password.",
       "wait_upload": "Wait For Uploading",
-      "already_save": "This Document Step Already Saved."
+      "already_save": "This Document Step Is Already Saved."
     },
     "alert": {
-      "send_complete": "Send for Signing Complete!",
+      "alert_warning": "Warning",
+      "alert_success": "Success",
+      "alert_error": "Error",
+      "send_complete": "Send for Signing Complete",
       "send_fail": "Sending for signing is incomplete. Please try again later.",
-      "upload_fail" : "Uplaoding file is incomplete. Please try again later."
+      "upload_fail" : "Uplaoding file is incomplete. Please try again later.",
+      "duplicate_user_form": "This form is used by other user.",
+      "duplicate_save": "Saving Document is incomplete. This document step is already saved."
     }
   },
   "show_template": {
     "textLang": {
       "tabMenubar": {
-        "back": "Back to Get Start",
+        "back": "Leave Form",
         "review_ex": "Preview",
         "save_doc_btn": "Save Document",
         "file": "Assign",
@@ -596,6 +711,7 @@
         "reviews": "Comments Tab",
         "add_variable": "Add variable values in the text",
         "not_show_obj_icon": "Not Show In Document",
+        "image_box": "Click to Insert Image",
         "fill": "",
         "must": " must",
         "greater_than": " greater than ",
@@ -637,12 +753,15 @@
         "import_other": "Import Data From Other Document"
       },
       "alert": {
+        "alert_error": "Error",
+        "alert_warning": "Warning",
+        "alert_success": "Success",
         "fill_data": "Please Fill in Data Completely",
         "assign": "Assign E-Form Complete",
         "fail": "Assign E-Form incompletely. Please try again later.",
         "reverse": "Revert Complete",
         "fail_reverse": "Revert incompletely. Please try again later.",
-        "fail_template": "Template Not Found",
+        "fail_template": "Form Not Found",
         "prefix_maxchar": " is over maximum characters (",
         "subfix_maxChar": " characters)",
         "reject_complete": "Reject Complete",
@@ -651,5 +770,223 @@
         "upload_fail" : "Uplaoding file is incomplete. Please try again later."
       }
     }
-  }
+  },
+  "ApprovalList":{
+    "search": "ค้นหา",
+    "Allapprovedforms": "รูปแบบอนุมัติทั้งหมด", 
+        "Createanapprovalform": "สร้างรูปแบบอนุมัติ",
+        "approval_ta":{
+          "number": "ลำดับ",
+          "approvedformatname": "ชื่อรูปแบบอนุมัติ",
+          "details": "รายละเอียด",
+          "lastrevisiondate": "วันที่เเก้ไขล่าสุด"
+        }
+      },
+    "CreateDocument": {
+        "No": "ลำดับที่",
+        "number": "ลำดับ",
+        "selectfile": "เลือกไฟล์",
+        "selectfilea": "เลือกไฟล์",
+        "setupsending": "ตั้งค่าการส่ง",
+        "approvalform": "รูปแบบอนุมัติ",
+        "custom": "กำหนดเอง",
+        "documentname": "ชื่อเอกสาร",
+        "message": "ข้อความ",
+        "attachfile": "แนบไฟล์",
+        "documenttype": "ประเภทเอกสาร",
+        "documentformat": "รูปแบบเอกสาร",
+        "choose": "เลือก",
+        "linedepartment": "แผนกสายงาน",
+        "specifydepartment": "ระบุแผนก",
+        "financeandAdministration": "การเงินและธุรการ",
+        "addapprove": "เพิ่ม (อนุมัติ)",
+        "addsign": "เพิ่ม (เซ็น)",
+        "signingpage": "หน้าที่เซ็น",
+        "page": "หน้า",
+        "all": "ทั้งหมด",
+        "senddocuments": "ส่งเอกสาร",
+        "authorizedsignatory": "ผู้มีสิทธิ์เซ็น",
+        "Authorizedperson": "ผู้มีสิทธิ์อนุมัติ",
+        "Fetching": "กำลังดึงข้อมูล กรุณารอสักครู่...",
+        "noinformationfound": "ไม่พบข้อมูล",
+        "succeed": "สำเร็จ",
+        "transactionsucceed": "สร้าง transaction สำเร็จ",
+        "fail": "ไม่สำเร็จ",
+        "transactionfail": "สร้าง transaction ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
+  },
+  "DocumentDetail": {
+    "no":"ลำดับที่",
+    "filename": "ชื่อไฟล์",
+    "sendername": "ชื่อผู้ส่ง",
+    "senton": "ส่งเมื่อ",
+    "details": "รายละเอียด",
+    "downloadPDF": "ดาวน์โหลด PDF",
+    "copydocuments": "คัดลอกเอกสาร",
+    "returnedit": "ส่งคืนแก้ไข",
+    "canceldocument": "ยกเลิกเอกสาร",
+    "workorder": "ลำดับการทำงาน",
+    "messagememo": "บันทึกข้อความ",
+    "attachment": "ไฟล์แนบ",
+    "number": "ลำดับ",
+    "you": "(คุณ)",
+    "pendingapproval": "รออนุมัติ",
+    "approved": "อนุมัติแล้ว",
+    "rejectapproval": "ปฏิเสธอนุมัติ",
+    "specifymessage": "ระบุข้อความ",
+    "attachfile":"แนบไฟล์",
+    "succeed": "สำเร็จ",
+    "Successfullyapproved": "อนุมัติเอกสารสำเร็จ",
+    "Successfullyrejected": "ปฏิเสธเอกสารสำเร็จ",
+    "cantread": "ไม่สามารถอ่าน PDF ได้",
+    "erroroccurred": "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง",
+    "approve_fail": "Approve Failed",
+    "fail": "ไม่สำเร็จ",
+    "clear": "ล้างค่า",
+    "warn":"แจ้งเตือน",
+    "notuploadingfiles": "ไม่อนุญาตให้อัปโหลดไฟล์ ",
+    "oversize": " เนื่องจากมีขนาดเกิน 30 MB",
+    "refuse":"ปฏิเสธ",
+    "approvee": "อนุมัติ"
+  },
+  "DocumentReport": {
+    "documentreport": "รายงานเอกสาร",
+    "search": "ค้นหา", 
+    "number": "ลำดับ",
+    "initials": "ชื่อย่อ",
+    "Documenttypename": "ชื่อประเภทเอกสาร"
+  },
+  "FormInputList": {
+    "search": "ค้นหา",
+    "alldocuments": "เอกสารทั้งหมด",
+    "filloutdocument": "กรอกเอกสาร",
+    "number": "ลำดับ",
+    "documentname": "ชื่อเอกสาร",
+    "department": "แผนก",
+    "documentID": "รหัสเอกสาร"
+  },
+  "Inbox":{
+    "alldocuments":"เอกสารทั้งหมด",
+    "search": "ค้นหา",
+    "documenttype": "ประเภทเอกสาร",
+    "documentstatus": "สถานะเอกสาร",
+    "all":"ทั้งหมด",
+    "pendingapproval":"รออนุมัติ",
+    "approved":"อนุมัติแล้ว",
+    "inprogress":"กำลังดำเนินการ",
+    "rejectapproval":"ปฏิเสธอนุมัติ",
+    "pending":"รอดำเนินกา",
+    "inboxheader":{
+      "sender":"ผู้ส่ง",
+      "type":"ประเภท",
+      "documentnumber":"เลขที่เอกสาร",
+      "details":"รายละเอียด",
+      "status":"สถานะ",
+      "date":"วันที่"
+    },
+    "customdoc":"กำหนดเอง"
+  },
+  "QuestionForm":{
+    "documentreport":"รายงานเอกสาร",
+    "senddocuments": "ส่งเอกสาร"
+  },
+  "ReportDetail":{
+    "summaryreportdocument": "รายงานสรุปรายละเอียดการดำเนินการเอกสาร",
+    "no": "ลำดับที่"
+  },
+  "SentBoxList": {
+    "search":"ค้นหา",
+    "documenttype": "ประเภทเอกสาร",
+    "documentstatus":"สถานะเอกสาร",
+    "alldocuments":"เอกสารทั้งหมด",
+    "all": "ทั้งหมด",
+    "pendingapproval": "รออนุมัติ",
+    "approved": "อนุมัติแล้ว",
+    "inprogress": "กำลังดำเนินการ",
+    "rejectapproval": "ปฏิเสธอนุมัติ",
+    "pending":"รอดำเนินการ",
+    "sentboxtable":{
+      "sender":"ผู้ส่ง",
+      "type":"ประเภท",
+      "documentnumber":"เลขที่เอกสา",
+      "details":"รายละเอียด",
+      "status":"สถานะ",
+      "date":"วันที่"
+},
+  "Setting":{
+    "setgeneralinformation": "ตั้งค่าข้อมูลทั่วไป",
+    "name": "ชื่อ",
+    "Username": "ชื่อผู้ใช้",
+    "defaultsignature": "ลายเซ็นเริ่มต้น",
+    "nodefaultsignature": "ไม่มีลายเซ็นเริ่มต้น",
+    "selectsignature": "เลือกลายเซ็น",
+    "Editdefaultsignature": "แก้ไขลายเซ็นเริ่มต้น",
+    "Adddefaultsignature": "เพิ่มลายเซ็นเริ่มต้น",
+    "cancel": "ยกเลิก",
+    "record": "บันทึก",
+    "Setupnotifications": "ตั้งค่าการแจ้งเตือน",
+    "succeed":"สำเร็จ",
+    "Dataupdatesuccessfully": "อัพเดทข้อมูลสำเร็จ",
+    "fail":"ไม่สำเร็จ",
+    "Dataupdatefailed":"อัพเดทข้อมูลไม่สำเร็จ",
+    "ChooseBusiness":"เลือก Business"
+
+  },
+  "TemplateList":{
+    "search":"ค้นหา",
+    "allforms": "แบบฟอร์มทั้งหมด",
+    "createform": "สร้างแบบฟอร์ม",
+    "importform": "นำเข้าแบบฟอร์ม",
+    "readytouse": "พร้อมใช้งาน",
+    "notavailable": "ไม่พร้อมใช้งาน",
+    "correct": "แก้ไข",
+    "transfercorrection": "โอนสิทธิการแก้ไข",
+    "delete": "ลบ",
+    "number": "ลำดับ",
+    "formname": "ชื่อแบบฟอร์ม",
+    "documentID": "รหัสเอกสาร",
+    "department": "แผนก",
+    "createdby": "สร้างโดย",
+    "lastmodifieddate": "วันที่แก้ไขล่าสุด",
+    "status": "สถานะ"
+  },
+  "Toolbar":{
+    "setup": "ตั้งค่า",
+    "logout": "ออกจากระบบ",
+    "documentbox": "กล่องเอกสาร",
+    "createdocument": "สร้างเอกสาร",
+    "uploadapprovaldocuments": "อัพโหลดเอกสารอนุมัติ",
+    "filloutdocument": "กรอกเอกสาร",
+    "sentitems": "รายการที่ส่ง",
+    "documentreport": "รายงานเอกสาร",
+    "documentusagereport": "รายงานการใช้งานเอกสาร",
+    "managedocumentformats": "จัดการรูปแบบเอกสาร",
+    "Createapprovalform": "สร้างรูปแบบอนุมัติ",
+    "createform": "สร้างแบบฟอร์ม"
+  },
+  "WorkflowDashboard": {
+    "alldocuments": "เอกสารทั้งหมด",
+    "allstatus": "สถานะทั้งหมด"
+  },
+  "WorkflowDetail": {
+    "documentsummaryreport": "รายงานสรุปการใช้งานเอกสาร",
+    "no": "ลำดับที่",
+    "documenttype": "ประเภทเอกสาร",
+    "documentnumber": "เลขที่เอกสาร",
+    "details": "รายละเอียด",
+    "documentstatus": "สถานะเอกสาร",
+    "sender": "ผู้ส่งเอกสาร",
+    "datesent": "วันที่ส่ง",
+    "processingtime": "ระยะเวลาดำเนินการ",
+    "documentprocessed": "ระยะเวลาทั้งหมดที่เอกสารถูกดำเนินการ",
+    "documentlastorder": "ระยะเวลาตั้งแต่เอกสารถูกนำเข้าถึงลำดับล่าสุด"
+  },
+  "WorkflowReport": {
+    "documentusagereport": "รายงานการใช้งานเอกสาร",
+    "search": "ค้นหา",
+    "number": "ลำดับ",
+    "name": "ชื่อ Workflow",
+    "details": "รายละเอียด"
+}
+}
+
 }

@@ -32,8 +32,9 @@ export default {
       or_no: " หรือไม่ ?",
       cancel: "ปิด",
       yes_canel: "ตกลง",
+      alert_error: "ไม่สำเร็จ",
       cancel_success: "ยกเลิกเอกสารสำเร็จ",
-      cancel_fail: "ยกเลิกเอกสารล้มเหลว กรุณาลองใหม่ในภายหลัง",
+      cancel_fail: "ยกเลิกเอกสารไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
     }
   }),
   mounted() {
@@ -113,7 +114,7 @@ export default {
           backdrop: false,
           position: 'bottom-end',
           width: '330px',
-          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">ล้มเหลว</strong>',
+          title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.alert_error + '</strong>',
           text: this.textLang.cancel_fail,
           showCloseButton: true,
           showConfirmButton: false,

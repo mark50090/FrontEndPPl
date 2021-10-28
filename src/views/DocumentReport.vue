@@ -2,11 +2,11 @@
   <div class="pt-1">
     <v-card outlined class="mb-1 mx-1 px-4 pt-3 report-page">
       <v-row class="pl-3 report-row report-header">
-        <b>รายงานเอกสาร</b>
+        <b>{{textLang.documentreport}}</b>
       </v-row>
       <v-row class="mt-1 report-row">
         <v-col cols="12" md="6" lg="6" class="px-0 pb-1">
-          <v-text-field dense outlined hide-details clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-report search-report-btn-block">
+          <v-text-field dense outlined hide-details clearable clear-icon="mdi-close-circle-outline" color="#4caf50" :placeholder="textLang.search" class="search-report search-report-btn-block">
             <template v-slot:append-outer>
               <v-btn outlined color="#9e9e9e" class="search-report-btn">
                 <v-icon>mdi-magnify</v-icon>
@@ -54,8 +54,17 @@
         {text: 'View / Export Excel', align: 'start', sortable: false, value: 'action'},
       ],
       report_data: [],
-      keyword: ""
+      keyword: "",
+      textLang:{
+        documentreport: 'รายงานเอกสาร',
+        search: 'ค้นหา', 
+        number: 'ลำดับ',
+        initials: 'ชื่อย่อ',
+        Documenttypename: 'ชื่อประเภทเอกสาร'
+      }
     }),
+    
+
     mounted(){
       this.searchTemplateForm()
       EventBus.$on('changeBiz', this.changeBiz)

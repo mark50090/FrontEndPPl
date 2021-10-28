@@ -3,14 +3,14 @@
     <v-card outlined class="mb-1 mx-1 px-4 pt-2 inbox-page">
       <v-row class="inbox-row">
         <v-tabs color="#4caf50" v-model="tab">
-          <v-tab class="inbox-tab-title">เอกสารทั้งหมด</v-tab>
+          <v-tab class="inbox-tab-title">{{textLang.alldocuments}}</v-tab>
         </v-tabs>
       </v-row>
       <v-tabs-items v-model="tab">
         <v-tab-item>
           <v-row class="mt-1 inbox-row">
             <v-col cols="12" md="4" lg="4" class="px-0 pb-0">
-              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" placeholder="ค้นหา" class="search-box search-btn-block" v-model="keyword" @keyup.enter="searchKeyword()">
+              <v-text-field outlined hide-details dense clearable clear-icon="mdi-close-circle-outline" color="#4caf50" :placeholder="textLang.search" class="search-box search-btn-block" v-model="keyword" @keyup.enter="searchKeyword()">
                 <template v-slot:append-outer>
                   <v-btn outlined color="#9e9e9e" class="search-btn" @click="searchKeyword()">
                     <v-icon >mdi-magnify</v-icon>
@@ -19,44 +19,44 @@
               </v-text-field>
             </v-col>
             <v-spacer></v-spacer>
-            <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 doc-type-title">ประเภทเอกสาร</v-col>
+            <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 doc-type-title">{{textLang.documenttype}}</v-col>
             <v-col cols="7" md="4" lg="4" class="px-0 pb-0">
               <v-autocomplete outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" class="type-doc-box type-doc-dropdown-icon" v-model="selectedTypeDocs" :items="typeDocument" @change="searchTypeDocs" item-text="name" item-value="_id" return-object></v-autocomplete>
             </v-col>
             <!-- filter document status for mobile only -->
-            <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 doc-type-title display-mobile-only">สถานะเอกสาร</v-col>
+            <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 doc-type-title display-mobile-only">{{textLang.documentstatus}}</v-col>
             <v-col cols="7" md="4" lg="4" class="px-0 pb-0 display-mobile-only">
               <v-select outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="doc_status_list" class="status-doc-box type-doc-dropdown-icon"></v-select>
             </v-col>
           </v-row>
           <v-row class="mt-5 inbox-row all-doc-header">
-            เอกสารทั้งหมด {{count_transaction_total}} 
+            {{textLang.alldocuments}} {{count_transaction_total}} 
           </v-row>
           <!-- filter document status for pc only -->
           <v-row class="mt-5 inbox-row display-pc-only">
             <v-btn-toggle mandatory background-color="white" v-model="document_status" class="status-doc-block">
               <v-btn outlined tile value="all" class="status-doc-btn">
-                ทั้งหมด
+                {{textLang.all}}
                 <v-badge inline dark color="black" :content="count_transaction_total"></v-badge>
               </v-btn>
               <v-btn outlined tile value="waiting" class="status-doc-btn">
-                รออนุมัติ
+                {{textLang.pendingapproval}}
                 <v-badge inline light color="#F8F27C" :content="count_transaction_waiting" class="status-doc-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="approved" class="status-doc-btn">
-                อนุมัติแล้ว
+                {{textLang.approved}}
                 <v-badge inline light color="#AFDEA9" :content="count_transaction_approved" class="status-doc-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="inprogress" class="status-doc-btn">
-                กำลังดำเนินการ 
+                {{textLang.inprogress}} 
                 <v-badge inline light color="#6EC4D6" :content="count_transaction_inprogress" class="status-doc-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="rejected" class="status-doc-btn">
-                ปฏิเสธอนุมัติ
+                {{textLang.rejectapproval}}
                 <v-badge inline light color="#F49393" :content="count_transaction_rejected" class="status-doc-num"></v-badge>
               </v-btn>
               <v-btn outlined tile value="incoming" class="status-doc-btn">
-                รอดำเนินการ
+                {{textLang.pending}}
                 <v-badge inline light color="#FCCD5A" :content="count_transaction_incoming" class="status-doc-num"></v-badge>
               </v-btn>
             </v-btn-toggle>
@@ -72,11 +72,11 @@
                 <span>{{ item.updatedAt | fulldate }}</span>
               </template>
               <template v-slot:[`item.document_status_text`]="{ item }"> <!-- document status column -->
-                <v-chip color="#F8F27C" v-if="item.document_status_text == 'waiting'">รออนุมัติ</v-chip> <!--สถานะ รออนุมัติ -->
-                <v-chip color="#AFDEA9" v-if="item.document_status_text == 'approved'">อนุมัติแล้ว</v-chip> <!--สถานะ อนุมัติแล้ว -->
-                <v-chip color="#6EC4D6" v-if="item.document_status_text == 'inprogress'">กำลังดำเนินการ</v-chip> <!--สถานะ กำลังดำเนินการ -->
-                <v-chip color="#F49393" v-if="item.document_status_text == 'rejected'">ปฏิเสธอนุมัติ</v-chip> <!--สถานะ ปฏิเสธอนุมัติ -->
-                <v-chip color="#FCCD5A" v-if="item.document_status_text == 'incoming'">รอดำเนินการ</v-chip> <!--สถานะ รอดำเนินการ -->
+                <v-chip color="#F8F27C" v-if="item.document_status_text == 'waiting'">{{textLang.pendingapproval}}</v-chip> <!--สถานะ รออนุมัติ -->
+                <v-chip color="#AFDEA9" v-if="item.document_status_text == 'approved'">{{textLang.approved}}</v-chip> <!--สถานะ อนุมัติแล้ว -->
+                <v-chip color="#6EC4D6" v-if="item.document_status_text == 'inprogress'">{{textLang.inprogress}}</v-chip> <!--สถานะ กำลังดำเนินการ -->
+                <v-chip color="#F49393" v-if="item.document_status_text == 'rejected'">{{textLang.rejectapproval}}</v-chip> <!--สถานะ ปฏิเสธอนุมัติ -->
+                <v-chip color="#FCCD5A" v-if="item.document_status_text == 'incoming'">{{textLang.pending}}</v-chip> <!--สถานะ รอดำเนินการ -->
               </template>
             </v-data-table>
           </v-row>
@@ -124,8 +124,31 @@ import { EventBus } from '../EventBus'
       typeDocument:[{name: 'ทั้งหมด', _id: "", detail: ""}],
       selectedTypeDocs: {name: 'ทั้งหมด', _id: "", detail: ""},
       isReady: false,
-      isChangeTab: false
+      isChangeTab: false,
+      textLang:{
+        alldocuments:'เอกสารทั้งหมด',
+        search: 'ค้นหา',
+        documenttype: 'ประเภทเอกสาร',
+        documentstatus: 'สถานะเอกสาร',
+        all:'ทั้งหมด',
+        pendingapproval:'รออนุมัติ',
+        approved:'อนุมัติแล้ว',
+        inprogress:'กำลังดำเนินการ',
+        rejectapproval:'ปฏิเสธอนุมัติ',
+        pending:'รอดำเนินการ',
+        inboxheader:{
+          sender:'ผู้ส่ง',
+          type:'ประเภท',
+          documentnumber:'เลขที่เอกสาร',
+          details:'รายละเอียด',
+          status:'สถานะ',
+          date:'วันที่'
+        },
+        customdoc:'กำหนดเอง'
+    }
     }),
+    
+
     mounted() {
       this.getdata()
       this.searchTransaction()
@@ -215,7 +238,17 @@ import { EventBus } from '../EventBus'
           })
           if(data.status){ //ถ้า response status == true
             data.result.forEach(element => { //วนลูปข้อมูลที่ได้จาก api
-                this.inbox_data.push(element) // ใส่ค่าที่ได้จาก api ลงในตาราง
+            if(!element.flow_detail.name) {
+              element.flow_detail.name = this.textLang.customdoc
+            }
+            if(!element.object_text.message) {
+              element.object_text.message = ""
+            }
+            if(!element.object_text.subject) {
+              element.object_text.subject = ""
+            }
+              element.detail = `${element.object_text.message} ${element.object_text.subject}`
+              this.inbox_data.push(element) // ใส่ค่าที่ได้จาก api ลงในตาราง
             });
           }
           // this.countTransaction()

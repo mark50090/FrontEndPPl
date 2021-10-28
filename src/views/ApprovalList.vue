@@ -3,7 +3,7 @@
         <v-card outlined class="px-4 page-list">
             <v-row class="approvallist-row ">
             <v-col cols="12" md="6" lg="6" class="px-0 pb-0 ">
-              <v-text-field outlined hide-details dense clearable color="#4caf50" placeholder="ค้นหา" class="search-approvallist-box search-approvallist-btn " clear-icon="mdi-close-circle-outline" >
+              <v-text-field outlined hide-details dense clearable color="#4caf50" :placeholder="textLang.search" class="search-approvallist-box search-approvallist-btn " clear-icon="mdi-close-circle-outline" >
                 <template v-slot:append-outer>
                   <v-btn outlined color="#9e9e9e" class="btn-approval-search">
                     <v-icon >mdi-magnify</v-icon>
@@ -14,12 +14,12 @@
           </v-row >
           <v-row class="approvallist-row approval-header ">
                   <v-col cols="12" md="auto" lg="auto" class="pl-0" align-self="center" >
-                    รูปแบบอนุมัติทั้งหมด 100
+                    {{textlang.Allapprovedforms}}
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-col align-self="center" cols="auto" md="auto" lg="auto" class="pr-0 position-btn-approval ">
                     <v-btn depressed dark color="#67C25D" class="create-approval-btn">
-                      <v-icon class="mr-2">mdi-plus</v-icon>สร้างรูปแบบอนุมัติ</v-btn>
+                      <v-icon class="mr-2">mdi-plus</v-icon>{{textlang.Createanapprovalform}}</v-btn>
                 </v-col>
                 </v-row>
         <v-row class="approvallist-row mt-1">
@@ -58,6 +58,18 @@ export default {
           }
           
       ],
+      textLang: {
+        search: 'ค้นหา',
+        Allapprovedforms: 'รูปแบบอนุมัติทั้งหมด', 
+        Createanapprovalform: 'สร้างรูปแบบอนุมัติ',
+        approval_ta:{
+          number: 'ลำดับ',
+          approvedformatname: 'ชื่อรูปแบบอนุมัติ',
+          details: 'รายละเอียด',
+          lastrevisiondate: 'วันที่เเก้ไขล่าสุด'
+        },
+      }
+
     
 }),}
 </script>

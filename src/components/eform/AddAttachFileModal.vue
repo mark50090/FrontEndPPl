@@ -2,7 +2,7 @@
     <v-dialog v-model="add_attach_dialog" scrollable persistent max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="add-file-header-modal">แนบเอกสารเพิ่มเติม</span>
+          <span class="add-file-header-modal">{{ textLang.attach_header_dialog }}</span>
           <v-spacer></v-spacer>
           <v-btn icon dark small color="black" @click="add_attach_dialog = false">
             <v-icon>mdi-close-circle</v-icon>
@@ -45,7 +45,7 @@
       attachedFiles: [],
       //Language Variable
       textLang: {
-        attach_header_dialog: "แนบเอกสารเข้าระบบ Paperless",
+        attach_header_dialog: "แนบเอกสารเพิ่มเติม",
         input_attach_title: "เอกสารแนบเพิ่มเติม",
         placeholder_file: "กรุณาเลือกเอกสารแนบ",
         cancel_attach_btn: "ยกเลิก",

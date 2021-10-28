@@ -2,11 +2,11 @@
     <v-dialog v-model="dialog" persistent max-width="500">
        <v-card>
             <v-card-title class="front-t-ex py-2">
-                Export รายงาน Excel
+                {{ textLang.texthead_card }}
             </v-card-title>
         <v-card-text class="pt-5">
           <v-row class="text-form-ex">
-                  <span class="front-hing-ex">เลือกช่วงวันที่ที่ต้องการ Export</span>   
+                  <span class="front-hing-ex">{{ textLang.select_date }}</span>   
           </v-row>
           <v-row class="text-form-ex mt-6">
             <v-menu
@@ -53,7 +53,7 @@
                   block
                   outlined
                   @click="dialog=false"
-                  >ยกเลิก</v-btn>
+                  >{{ textLang.cancel_export }}</v-btn>
                   </v-col> 
           <v-col cols="4"
           md="3"
@@ -83,7 +83,15 @@ export default {
     dialog: false,
     menu2: false,
     workflow_id: '',
-    template_id: ''
+    template_id: '',
+
+    //Language Variable
+    textLang: {
+      texthead_card: 'Export รายงาน Excel',
+      select_date: 'เลือกช่วงวันที่ที่ต้องการ Export',
+      cancel_export: 'ยกเลิก',
+      range_join: ' จนถึง '
+    }
   }),
   mounted() {
     EventBus.$on('documentreport',this.documentreports)
@@ -93,7 +101,7 @@ export default {
   },
   computed: {
     dateRangeText() {
-      return this.dates.map(x => this.setDateFormatBEShort(x)).join(' จนถึง ')
+      return this.dates.map(x => this.setDateFormatBEShort(x)).join(this.textLang.range_join)
     },
   },
   methods: {

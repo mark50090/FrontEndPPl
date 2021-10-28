@@ -4,7 +4,7 @@
         <!-- <v-card-title elevation="4" class="dialog_title">
           <b>{{ textLang.back_document }} "{{ page_name }}"</b>
         </v-card-title> -->
-        <v-card-text class="pt-6 pb-1 confirm-exit-create-form">ต้องการออกจากหน้าสร้างแบบฟอร์มโดยไม่บันทึกหรือไม่ ?</v-card-text>
+        <v-card-text class="pt-6 pb-1 confirm-exit-create-form">{{ textLang.text_confirm_exit }}</v-card-text>
         <v-card-actions>
           <v-row class="exit-create-form-row">
             <v-spacer></v-spacer>
@@ -32,6 +32,7 @@ export default {
       back_document: "ออกจากหน้า" ,
       sure_leave: "คุณต้องการออกจากหน้า" ,
       no_save: "โดยไม่บันทึกหรือไม่" ,
+      text_confirm_exit: "ต้องการออกจากหน้าสร้างแบบฟอร์มโดยไม่บันทึกหรือไม่ ?",
       cancel: "ยกเลิก" ,
       back: "ออก" 
     },
