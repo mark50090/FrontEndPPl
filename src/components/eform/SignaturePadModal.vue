@@ -33,7 +33,7 @@
             <v-row class="sign-opt-row">
               <v-spacer></v-spacer>
               <v-col cols="auto" class="pl-0 pr-2">
-                <v-btn depressed color="#757575" :disabled="selectedSignStyle != 'Sign Pad'" @click="clearSign()" class="approve-button">ล้างค่า</v-btn>
+                <v-btn depressed color="#757575" :disabled="selectedSignStyle != 'Sign Pad'" @click="clearSign()" class="approve-button">{{ textLang.clear_button }}</v-btn>
               </v-col>
               <v-col cols="auto" class="pl-0 pr-3">
                 <v-btn depressed dark color="#67C25D" @click="summitSign()" class="approve-button">{{ textLang.approve }}</v-btn>
@@ -59,6 +59,7 @@ export default {
     textLang: {
       sign_approve: "ลงนามอนุมัติ",
       reject_approval: "ปฏิเสธอนุมัติ",
+      clear_button: "ล้างค่า",
       approve: "อนุมัติ",
       cancel: "ยกเลิก"
     },

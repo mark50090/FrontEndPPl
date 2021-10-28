@@ -1,7 +1,7 @@
 {
   "components": {
     "AddAttachFileModal": {
-      "attach_header_dialog": "Attached File To Paperless",
+      "attach_header_dialog": "Attached File",
       "input_attach_title": "Attached File",
       "placeholder_file": "Please select attached files",
       "cancel_attach_btn": "Cancel",
@@ -19,6 +19,7 @@
        "back_document": "Exit from",
        "sure_leave": "Do you want to exit from",
        "no_save": "without saving ?",
+       "text_confirm_exit": "Do you want to exit from creating this form without saving ?",
        "cancel": "Cancel",
        "back": "Exit" 
     },
@@ -28,6 +29,7 @@
       "or_no": "\" ? ",
       "cancel": "Close",
       "yes_canel": "Cancel Document",
+      "alert_error": "Error",
       "cancel_success": "Cancel Document Success",
       "cancel_fail": "Cancel document is incomplate. Please try again later."
     },
@@ -115,13 +117,14 @@
        "row": "Row",
        "import_data": "Import Selector from Excel",
        "group_option": "Selector",
-       "select": "First, select row of table which you want to link data together (it can link within same row only). After that, click + button to add selector as much as you want or click – button to delete selector which you don’t want. Moreover, each input box represents each cell in table row. When you finished setting and then, input same value which you setting in input box when you use E-Form, the values from other input boxes that you setting will appear automatically. For example, define value in cell  datatable1_R1C1 = \"Hello\", datatable1_R1C2 = \"99\", datatable1_R1C3 = \"World\", when you input \"99\" in datatable1_R1C2, value in datatable1_R1C1 and datatable1_R1C3 will become \"Hello\" and \"World\" subsequently or input \"Hello\" in datatable1_R1C1, value in datatable1_R1C2 and datatable1_R1C3 will become \"99\" and \"Word\" subsequently. If you want to import selector from Excel, you have to input value in Excel start from A1. The value which you input in 1 row in Excel is data of 1 selector. If you want more selector, you have to input value in new row in Excel.",
+       "select": "First, select row of table which you want to link data together (it can link within same row only). After that, click + button to add selector as much as you want or click – button to delete selector which you don’t want. Moreover, each input box represents each cell in table row. If you input same value which you setting in input box when you use E-Form, the values from other input boxes that you setting will appear automatically. For example, define value in cell  datatable1_R1C1 = \"Hello\", datatable1_R1C2 = \"99\", datatable1_R1C3 = \"World\", when you input \"99\" in datatable1_R1C2, value in datatable1_R1C1 and datatable1_R1C3 will become \"Hello\" and \"World\" subsequently or input \"Hello\" in datatable1_R1C1, value in datatable1_R1C2 and datatable1_R1C3 will become \"99\" and \"Word\" subsequently. If you want to import selector from Excel, you have to input value in Excel start from A1. The value which you input in 1 row in Excel is data of 1 selector. If you want more selector, you have to input value in new row in Excel.",
        "cancel": "Cancel",
        "save": "Save"
     },
     "SignaturePadModal": {
         "sign_approve": "Sign to Approve",
         "reject_approval": "Reject",
+        "clear_button": "Clear",
         "approve": "Approve",
         "cancel": "Cancel"
     },
