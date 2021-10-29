@@ -304,10 +304,10 @@
                   <v-icon>mdi-draw</v-icon>
                 </v-col>
                 <v-col cols="4" md="3" lg="3" class="px-0 py-2">
-                  <v-select dense outlined hide-details color="#4CAF50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="all_sign_type" v-model="sign_type" class="sign-type sign-type-box sign-type-dropdown-icon"></v-select>
+                  <v-select dense outlined hide-details color="#4CAF50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="all_sign" item-text="name" item-value="index" v-model="sign_type" @change="get_signature_default_fn" class="sign-type sign-type-box sign-type-dropdown-icon"></v-select>
                 </v-col>
                 <v-col cols="auto" md="auto" lg="auto" class="pr-0 py-2">
-                  <v-btn depressed small color="#1D9BDE" :disabled="sign_type == 'Default'" class="clear-sign-btn" @click="clearSignature()">{{textLang.clear}}</v-btn>
+                  <v-btn depressed small color="#1D9BDE" :disabled="all_sign[sign_type].default" class="clear-sign-btn" @click="clearSignature()">{{textLang.clear}}</v-btn>
                 </v-col>
                 <v-spacer></v-spacer>
               </v-row>
@@ -315,12 +315,12 @@
                 <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pa-0 sign-block">
                   <!-- sign pad -->
                   <v-img
-                    v-if="sign_type == 'Default'"
+                    v-if="all_sign[sign_type].default"
                     :src="default_sign"
                     contain
                     height="248px"
                   />
-                  <vueSignature v-if="sign_type == 'Sign Pad'" ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }" w="490" h="250" class="sign-pad-box"></vueSignature>
+                  <vueSignature v-else ref="signaturePad" :sigOption="{ ...signature_option,onBegin,onEnd }" w="490" h="250" class="sign-pad-box"></vueSignature>
                 </v-col>
               </v-row>
             </template>
@@ -361,8 +361,15 @@ export default {
   data: () => ({
     document_detail_tab: null,
     ca_switch: true,
-    all_sign_type: ['Default', 'Sign Pad'],
-    sign_type: 'Default',
+    all_sign: [
+      {
+        name: 'Sign Pad',
+        default: false,
+        signImage: null,
+        index: 0
+      }
+    ],
+    sign_type: 0,
     page_count: 0,
     page: 1,
     doc_details: {
@@ -373,7 +380,7 @@ export default {
     pdf_src: '',
     token: '',
     transaction_id: '',
-    default_sign: '',
+    default_sign: null,
     signature_option: {
       penColor: 'rgb(13, 38, 154)',
       backgroundColor: 'rgba(255,255,255,0)'
@@ -389,12 +396,12 @@ export default {
     comment: '',
     comment_status: true,
     last_step: 0,
-    template_id: "",
+    template_id: '',
     is_approve: false,
     is_reject: false,
     isShowRevertButton: true,
-    textLang:{
-      no:'ลำดับที่',
+    textLang: {
+      no: 'ลำดับที่',
       filename: 'ชื่อไฟล์',
       sendername: 'ชื่อผู้ส่ง',
       senton: 'ส่งเมื่อ',
@@ -417,32 +424,32 @@ export default {
       Successfullyapproved: 'อนุมัติเอกสารสำเร็จ',
       Successfullyrejected: 'ปฏิเสธเอกสารสำเร็จ',
       cantread: 'ไม่สามารถอ่าน PDF ได้',
-      approve_fail: "อนุมัติไม่สำเร็จ",
+      approve_fail: 'อนุมัติไม่สำเร็จ',
       erroroccurred: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
       fail: 'ไม่สำเร็จ',
       clear: 'ล้างค่า',
       warn: 'แจ้งเตือน',
       notuploadingfiles: 'ไม่อนุญาตให้อัปโหลดไฟล์ ',
       oversize: ' เนื่องจากมีขนาดเกิน 30 MB',
-      refuse:'ปฏิเสธ',
-      approvee: 'อนุมัติ',
-      }
+      refuse: 'ปฏิเสธ',
+      approvee: 'อนุมัติ'
+    }
   }),
-  
+
   computed: {
   },
   mounted () {
     this.token = sessionStorage.getItem('access_token')
     this.my_name = sessionStorage.getItem('name')
     this.transaction_id = sessionStorage.getItem('transaction_id')
-    this.getTemplateId(this.transaction_id )
+    this.getTemplateId(this.transaction_id)
     if (!this.transaction_id) {
       this.$router.replace({ name: 'inbox' })
       return
     }
     this.get_detail_fn()
     this.get_attachment_file_fn()
-    this.get_signature_default_fn()
+    this.get_signature_name_default_fn()
     EventBus.$on('confirm_deletemessage', this.delete_comment_fn)
   },
   watch: {
@@ -456,22 +463,22 @@ export default {
         if (element.size > 31457280) {
           this.removeFileInput(index)
           this.$swal({
-                backdrop: false,
-                position: 'bottom-end',
-                width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">'+this.textLang.warn+'</strong>',
-                text: this.textLang.notuploadingfiles +element.name+this.textLang.oversize ,
-                showCloseButton: true,
-                showConfirmButton: false,
-                timer: 5000,
-                customClass: {
-                  popup: 'alert-card',
-                  title: 'alert-title-block',
-                  closeButton: 'close-alert-btn',
-                  htmlContainer: 'alert-text-block'
-                }
-              })        
-              }
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#FF8F00" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="alert-title">' + this.textLang.warn + '</strong>',
+            text: this.textLang.notuploadingfiles + element.name + this.textLang.oversize,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
+          })
+        }
       }
     }
   },
@@ -584,7 +591,7 @@ export default {
     },
     async set_approve_fn (type) {
       var string_sign, data
-      if (this.sign_type === 'Sign Pad') {
+      if (!this.all_sign[this.sign_type].default) {
         string_sign = this.$refs.signaturePad.save().split(',')[1]
       } else {
         string_sign = this.default_sign.split(',')[1]
@@ -615,7 +622,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">'+ this.textLang.succeed+'</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.succeed + '</strong>',
                 text: this.textLang.Successfullyapproved,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -632,7 +639,7 @@ export default {
                 backdrop: false,
                 position: 'bottom-end',
                 width: '330px',
-                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">'+ this.textLang.succeed+'</strong>',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.succeed + '</strong>',
                 text: this.textLang.Successfullyrejected,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -678,9 +685,9 @@ export default {
           // console.log(error)
         })
     },
-    async getTemplateId(transaction_id) {
-      var {data} = await this.axios.get(`${this.$api_url}/template_form/api/v1/is_eform_by_id?transaction_id=${transaction_id}`)
-      if(data.status) {
+    async getTemplateId (transaction_id) {
+      var { data } = await this.axios.get(`${this.$api_url}/template_form/api/v1/is_eform_by_id?transaction_id=${transaction_id}`)
+      if (data.status) {
         this.template_id = data.result.template_id
       }
     },
@@ -701,7 +708,7 @@ export default {
                 this.isShowRevertButton = element.actor.map(item => item.name).includes(sessionStorage.getItem('name'))
               }
             })
-            if(data.data.flow_step[0].status == "W" || data.data.document_status == "Y" || data.data.document_status == "R") {
+            if (data.data.flow_step[0].status == 'W' || data.data.document_status == 'Y' || data.data.document_status == 'R') {
               this.isShowRevertButton = false
             }
             doc_data.flow_step.forEach((flowData, index) => {
@@ -768,7 +775,7 @@ export default {
         backdrop: false,
         position: 'bottom-end',
         width: '330px',
-        title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">'+this.textLang.fail+'</strong>',
+        title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">' + this.textLang.fail + '</strong>',
         text: msg,
         showCloseButton: true,
         showConfirmButton: false,
@@ -801,8 +808,8 @@ export default {
           this.axios_pending--
         })
     },
-    async get_signature_default_fn () {
-      const url = '/signature/api/v1/image?credentialId=DEFAULT'
+    async get_signature_name_default_fn () {
+      const url = '/user_setting/api/v1/get_stamp_name_list'
       const config = {
         Authorization: `Bearer ${this.token}`
       }
@@ -811,19 +818,81 @@ export default {
         .then((response) => {
           const data = response.data
           if (data.status) {
-            if (data.data[0]) this.default_sign = `data:image/png;base64,${data.data[0]}`
-            else {
-              this.sign_type = 'Sign Pad'
-              this.all_sign_type = ['Sign Pad']
-            }
+            // if (data.data[0]) this.default_sign = `data:image/png;base64,${data.data[0]}`
+            console.log(data)
+            // this.sign_type = data.data[0]
+            this.all_sign = [
+              ...Array.from(
+                { length: data.data.length },
+                (_, i) => { return { name: data.data[i], default: true, index: i, signImage: null } }
+              ),
+              {
+                name: 'Sign Pad',
+                default: false,
+                signImage: null,
+                index: data.data.length
+              }]
+            this.sign_type = 0
+          } else {
+            this.sign_type = 0
+            this.all_sign = [{
+              name: 'Sign Pad',
+              default: false,
+              signImage: null,
+              index: 0
+            }]
+          }
+        }
+        )
+        .catch((error) => {
+          if (error.response) {
+            this.sign_type = 0
+            this.all_sign = [{
+              name: 'Sign Pad',
+              default: false,
+              signImage: null,
+              index: 0
+            }]
           }
         })
-        .catch((error) => {
-          // console.log(error)
-        })
         .then(() => {
+          this.get_signature_default_fn()
           this.axios_pending--
         })
+    },
+    async get_signature_default_fn () {
+      if (!this.all_sign[this.sign_type].default) return
+      if (this.all_sign[this.sign_type].signImage !== null) {
+        this.default_sign = this.all_sign[this.sign_type].signImage
+      } else {
+        const url = '/user_setting/api/v1/get_stamp_base64'
+        const config = {
+          Authorization: `Bearer ${this.token}`,
+          params: {
+            StampName: this.all_sign[this.sign_type].name
+          }
+        }
+        this.axios_pending++
+        this.axios.get(`${this.$api_url}${url}`, config)
+          .then((response) => {
+            const data = response.data
+            if (data.status) {
+              // if (data.data[0]) this.default_sign = `data:image/png;base64,${data.data[0]}`
+              // console.log(data)
+              this.all_sign[this.sign_type].signImage = data.data
+              this.default_sign = data.data
+              // this.all_sign_type = [...data.data, 'Sign Pad']
+            }
+          })
+          .catch((error) => {
+            if (error.response) {
+              this.sign_type = 'Sign Pad'
+            }
+          })
+          .then(() => {
+            this.axios_pending--
+          })
+      }
     },
     onBegin () {
       this.padStatus = true
@@ -831,7 +900,7 @@ export default {
     onEnd () {
     },
     clearSignature () {
-      if (this.sign_type === 'Sign Pad') { this.$refs.signaturePad.clear() }
+      if (!this.all_sign[this.sign_type].default) { this.$refs.signaturePad.clear() }
       this.padStatus = false
     },
     loadedPDF () {
@@ -900,20 +969,20 @@ export default {
 
       this.$set(this.signArray[arr_index], arr_index2, sign)
     },
-    copyDocument() {
-      let tempOption = {
+    copyDocument () {
+      const tempOption = {
         template_id: this.template_id,
         isCopy: true,
         isImport: false,
         transaction_id: this.transaction_id
       }
-      sessionStorage.setItem('option',JSON.stringify(tempOption))
-      sessionStorage.setItem('isDocEdit',false)
-      sessionStorage.setItem('isDocStep',true)
-      sessionStorage.setItem('isBack',false)
-      sessionStorage.setItem('isStep',false)
-      sessionStorage.setItem('isOnlyForm',true)
-      this.$router.push({ 'path': '/form/input'})
+      sessionStorage.setItem('option', JSON.stringify(tempOption))
+      sessionStorage.setItem('isDocEdit', false)
+      sessionStorage.setItem('isDocStep', true)
+      sessionStorage.setItem('isBack', false)
+      sessionStorage.setItem('isStep', false)
+      sessionStorage.setItem('isOnlyForm', true)
+      this.$router.push({ path: '/form/input' })
     }
   },
   beforeDestroy () {
