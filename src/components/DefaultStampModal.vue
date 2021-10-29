@@ -2,7 +2,7 @@
     <v-dialog persistent max-width="360px" v-model="default_stamp_dialog">
       <v-card>
         <v-card-title>
-          <span class="default-stamp-header">{{ action_header }}{{textLang.stamp_head}}</span>
+          <span class="default-stamp-header">{{ header_title }}</span>
           <v-spacer></v-spacer>
           <v-btn icon dark small color="black" @click="cancelButton()">
             <v-icon>mdi-close-circle</v-icon>
@@ -61,6 +61,7 @@ export default {
     valid: true,
     default_stamp_dialog: false,
     action_header: '',
+    header_title: '',
     stamp_file: null,
     uploadImage: undefined,
     imageStamp: '',
@@ -73,7 +74,8 @@ export default {
     getSrcBase: '',
     notify_email: '',
     textLang: {
-      stamp_head: 'ลายเซ็น',
+      stamp_head_add: 'เพิ่มลายเซ็น',
+      stamp_head_edit: 'แก้ไขลายเซ็น',
       stamp_name_show: 'ชื่อลายเซ็น',
       stamp_upload: 'อัพโหลดไฟล์',
       stamp_pain: 'วาดลายเซ็น',
@@ -133,6 +135,7 @@ export default {
       EventBus.$off('Stamp_Data_Edit')
       this.sign_type = 'sign_pad'
       this.action_header = 'แก้ไข'
+      this.header_title = this.textLang.stamp_head_edit
       setTimeout(() => this.imageStamp = this.selectedStamp.SrcBase, 450);
       this.stamp_name = this.selectedStamp.StampName
       this.stateDefaultStamp = 'show'
@@ -143,6 +146,7 @@ export default {
       this.default_stamp_dialog = true
       EventBus.$off('Stamp_Data_Add')
       this.action_header = 'เพิ่ม'
+      this.header_title = this.textLang.stamp_head_add
       this.stamp_name = ''
       this.imageStamp = ''
       this.sign_type = 'sign_pad'
