@@ -64,7 +64,7 @@ import { EventBus } from '../EventBus'
         recorrection: 'ส่งคืน',
         return_file_success: 'ส่งคืนแก้ไขเอกสารสำเร็จ',
         return_file_fail: 'ส่งคืนแก้ไขเอกสารไม่สำเร็จ',
-        return_revertable_no: 'ลำดับที่',
+        return_revertable_no: 'ลำดับที่ ',
         return_succeed: 'สำเร็จ',
         return_error: 'ไม่สำเร็จ'
       }
