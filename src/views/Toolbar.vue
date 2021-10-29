@@ -170,6 +170,7 @@
         managedocumentformats: 'จัดการรูปแบบเอกสาร',
         Createapprovalform: 'สร้างรูปแบบอนุมัติ',
         createform: 'สร้างแบบฟอร์ม',
+        defaultBiz: ''
       },
     }),
     watch: {
@@ -196,7 +197,8 @@
           const url = '/user_setting/api/v1/get_usersetting'
           var { data } = await this.axios.get(this.$api_url + url)
           if(data) {
-            this.defaultBiz = data.result.other_setting.Default_Business
+            if(data.result.other_setting) this.defaultBiz = data.result.other_setting.Default_Business? data.result.other_setting.Default_Business : ''
+            else this.defaultBiz = ''
           }
         } catch (error) {
           console.log(error);
@@ -221,21 +223,21 @@
         }
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
         this.isReady = true
-        this.getEmployeeInfo()
+        // this.getEmployeeInfo()
         this.loading_overlay = false
       },
-      async getEmployeeInfo(){
-        try {
-          var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
-          var url = `/business/api/v1/showaccount?tax_id=${tax_id}`
-          var { data } = await this.axios.get(this.$api_url + url)
-          if(data.status){
-            this.$store.commit('setAllEmployeeInfo',data.data)
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      },
+      // async getEmployeeInfo(){
+      //   try {
+      //     var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
+      //     var url = `/business/api/v1/showaccount?tax_id=${tax_id}`
+      //     var { data } = await this.axios.get(this.$api_url + url)
+      //     if(data.status){
+      //       this.$store.commit('setAllEmployeeInfo',data.data)
+      //     }
+      //   } catch (error) {
+      //     console.log(error);
+      //   }
+      // },
       changeBiz(){
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
         EventBus.$emit('changeBiz')
