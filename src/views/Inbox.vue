@@ -247,7 +247,7 @@ import { EventBus } from '../EventBus'
             if(!element.object_text.subject) {
               element.object_text.subject = ""
             }
-              element.detail = `${element.object_text.message} ${element.object_text.subject}`
+              element.detail = `${element.object_text.subject} ${element.object_text.message}`
               this.inbox_data.push(element) // ใส่ค่าที่ได้จาก api ลงในตาราง
             });
           }
