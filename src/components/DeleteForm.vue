@@ -8,7 +8,7 @@
         <v-card-text class="pb-0 pt-2">
           <v-row align="center" class=" text-box-deleteform">
               <v-col class="pt-5" cols="12" lg="12" md="12">
-                <span class="font-head-deleteform">{{textLang.delete_form1}} {{templateform_name}} {{textLang.delete_form2}} </span>
+                <span class="font-head-deleteform">{{textLang.delete_form1}}{{templateform_name}}{{textLang.delete_form2}}</span>
               </v-col>
           </v-row>
         </v-card-text>
@@ -41,8 +41,8 @@ import { EventBus } from '../EventBus'
       
       //Language Variable
       textLang: {
-        delete_form1: 'ต้องการลบแบบฟอร์ม',
-        delete_form2: 'หรือไม่ ?',
+        delete_form1: 'ต้องการลบแบบฟอร์ม \"',
+        delete_form2: '\" หรือไม่ ?',
         cancel_delete: 'ยกเลิก',
         confirm_delete: 'ตกลง',
         delete_success: 'ลบแบบฟอร์มสำเร็จ',

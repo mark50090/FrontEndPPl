@@ -159,13 +159,21 @@
                   <v-card outlined class="mt-4 px-2 pb-2 workflow-block">
                     <template  v-for="flow_data in flow_datas" >
                       <v-row class="create-row" :key="flow_data.index">
-                        <v-col cols="auto" md="auto" lg="auto" class="pl-1 pb-2 create-setting-title">
+                        <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pb-2 create-setting-title">
                           {{textLang.number}} {{ flow_data.index+1 }} : {{ translate(flow_data.action) }} <!-- or ผู้มีสิทธิ์เซ็น -->
                         </v-col>
+                        <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pr-0 pb-2"> <!-- show when it is sign step -->
+                          <v-switch dense inset disabled hide-details class="mt-0 pt-0 create-switch-ca" v-model="flow_data.switch_ca">
+                            <template v-slot:label>
+                              <span class="create-switch-ca-label">Certificate (CA)</span>
+                            </template>
+                          </v-switch>
+                        </v-col>
                       </v-row>
+                      <template v-if="flow_data.actor[0].permission_email[0].thai_email">
                       <v-row class="create-row each-step-mail-row" v-for="actor_email in flow_data.actor[0].permission_email" :key="flow_data.index + actor_email.account_id"> <!-- each email row in step -->
                         <v-col cols="8" md="9" lg="9" class="px-0 pt-1 pb-0">
-                          <v-text-field dense outlined hide-details color="#67C25D" v-model="actor_email.thai_email" placeholder="@one.th" class="create-setting email-step-box each-email-icon">
+                          <v-text-field disabled filled dense outlined hide-details color="#67C25D" v-model="actor_email.thai_email" placeholder="@one.th" class="create-setting email-step-box each-email-icon">
                             <template v-slot:prepend>
                               <v-icon large>mdi-account</v-icon>
                             </template>
@@ -175,6 +183,21 @@
                           <v-checkbox hide-details label="OneChat" v-model="actor_email.checkbox" checked class="mt-0 pt-0 onechat-check"></v-checkbox>
                         </v-col>
                       </v-row>
+                    </template>
+                    <template v-else-if="flow_data.actor[0].permission[0]">
+                      <v-row class="create-row each-step-mail-row" v-for="actor_role in flow_data.actor[0].permission" :key="flow_data.index + actor_role.role_id"> <!-- each email row in step -->
+                        <v-col cols="8" md="9" lg="9" class="px-0 pt-1 pb-0">
+                          <v-text-field disabled filled dense outlined hide-details color="#67C25D" v-model="actor_role.role_name" placeholder="@one.th" class="create-setting email-step-box each-email-icon">
+                            <template v-slot:prepend>
+                              <v-icon large>mdi-account</v-icon>
+                            </template>
+                          </v-text-field>
+                        </v-col>
+                        <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
+                          <v-checkbox hide-details label="OneChat" v-model="actor_role.checkbox" class="mt-0 pt-0 onechat-check"></v-checkbox>
+                        </v-col>
+                      </v-row>
+                    </template>
                     </template>
                   </v-card>
                 </v-tab-item>
@@ -188,14 +211,14 @@
                       <v-autocomplete :no-data-text="loading_list_text" :loading="loading_type" v-model="selected_document_type_custom" :items="document_type_list" item-text="document_type_detail.name" item-value="_id" return-object dense outlined hide-details auto-select-first color="#4caf50" :placeholder="textLang.choose" append-icon="mdi-chevron-down" class="create-setting create-setting-input create-setting-dropdown-icon"></v-autocomplete>
                     </v-col>
                   </v-row>
-                  <v-row class="create-row">
+                  <!-- <v-row class="create-row">
                     <v-col cols="7" md="4" lg="4" align-self="center" class="pl-2 pr-1 pt-1 pb-0 create-setting-title">
                       Require Certificate (CA) :
                     </v-col>
                     <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
                       <v-switch inset v-model="switchCA" hide-details class="mt-0 create-setting-switch"></v-switch>
                     </v-col>
-                  </v-row>
+                  </v-row> -->
                   <v-row class="create-row">
                     <v-col cols="7" md="4" lg="4" align-self="center" class="pl-2 pr-1 pt-1 pb-0 create-setting-title">
                       Stamp All Page :
@@ -219,7 +242,7 @@
                   <v-card outlined class="pa-2 all-step-block">
                     <div class="mb-3"> <!-- each step -->
                     <template v-for="(flow_data_custom,index) in flow_datas_custom">
-                      <v-row class="create-row" :key="flow_data_custom.index">
+                      <v-row align="center" class="create-row" :key="flow_data_custom.index">
                         <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 py-1 create-setting-title">
                           {{textLang.number}} {{index+1}} : {{ translate(flow_data_custom.action) }} <!-- ผู้มีสิทธิ์อนุมัติ or ผู้มีสิทธิ์เซ็น -->
                         </v-col>
@@ -229,6 +252,21 @@
                           </v-btn>
                         </v-col>
                         <v-spacer></v-spacer>
+                        <v-col v-if="flow_data_custom.action == 'Sign'" cols="auto" md="auto" lg="auto" align-self="center" class="py-1 pl-0 pr-2 display-pc-only"> <!-- select CA for PC screen and show when it is sign step-->
+                          <v-switch dense inset hide-details class="mt-0 pt-0 create-switch-ca" v-model="flow_data_custom.switch_ca">
+                            <template v-slot:label>
+                              <span class="create-switch-ca-label">Certificate (CA)</span>
+                            </template>
+                          </v-switch>
+                        </v-col>
+                        <v-col v-if="flow_data_custom.action == 'Sign'" cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 pb-1 pl-0 pr-2 display-mobile-only"> <!-- select CA for mobile screen and show when it is sign step-->
+                          <v-row class="create-row create-ca-title">
+                            Certificate
+                          </v-row>
+                          <v-row class="pl-1 create-row">
+                            <v-switch dense inset hide-details class="mt-0 pt-0 create-switch-ca" v-model="flow_data_custom.switch_ca"></v-switch>
+                          </v-row>
+                        </v-col>
                         <template v-if="flow_data_custom.action == 'Sign'"> <!-- show when it is sign step -->
                           <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-2 py-1 create-setting-title display-pc-only">
                             {{textLang.signingpage}}
@@ -294,7 +332,7 @@
           </v-card>
           <v-row v-if="(create_tab == 1) || (create_tab == 2)" justify="end" class="create-row">
             <v-col cols="auto" md="auto" lg="auto" class="pt-1">
-              <v-btn depressed color="#67C25D" :disabled="(!selected_document_template) && (!selected_document_type_custom) || !isFormValid" class="send-doc-btn" @click="addTransaction">{{textLang.senddocuments}}</v-btn>
+              <v-btn depressed color="#67C25D" :disabled="(!selected_document_template) && (!selected_document_type_custom) || !isFormValid" class="send-doc-btn" @click="getDetailbyEmail">{{textLang.senddocuments}}</v-btn>
             </v-col>
           </v-row>
         </v-col>
@@ -392,8 +430,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         transactionsucceed: 'สร้าง transaction สำเร็จ',
         fail: 'ไม่สำเร็จ',
         transactionfail: 'สร้าง transaction ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง'
-      }
-
+      },
+      actor_email: []
     }),
     mounted() {
       this.getDocumentType()
@@ -536,10 +574,14 @@ import VueDraggableResizable from 'vue-draggable-resizable'
               this.flow_datas = [...data.data.flow_data]
               this.flow_datas.forEach(flow_data => {
                 if(!flow_data.actor[0].permission_email.length){
-                  flow_data.actor[0].permission_email = [{account_id : new Date()}]
+                  flow_data.actor[0].permission_email = [{account_id : new Date().getTime()}]
                 }
+                flow_data.switch_ca = false
                 flow_data.actor[0].permission_email.forEach(email => {
                   email.checkbox = true
+                })
+                flow_data.actor[0].permission.forEach(role => {
+                  role.checkbox = true
                 })
                 this.signArray.push(flow_data.approver.sign_position)
               })
@@ -581,6 +623,66 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         console.log(error);
       }
     },
+      async getDetailbyEmail(){
+        this.actor_email = []
+        this.flow_datas_custom.forEach((ele) => {
+          ele.actor.permission_email.forEach(el => {
+            this.actor_email.push(el.thai_email)
+          })
+        })
+        try {
+          this.emitLoading(true)
+          var url = '/citizen/api/v1/check_citizen_email'
+          var {data} = await this.axios.post(this.$api_url + url,{
+            email: this.actor_email
+          })
+          if(data.status){
+            this.emitLoading(false)
+            this.user_detail = data.result.map(el => {
+              if(el.valid) return el
+              else return undefined 
+            })
+            if(this.user_detail.includes(undefined)) {
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">'+ this.textLang.fail+'</strong>',
+                text: 'ไม่มีข้อมูลของอีเมลล์ที่เลือก',
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            }
+            else this.addTransaction()
+          }
+        } catch (error) {
+          console.log(error);
+          this.emitLoading(false)
+          this.$swal({
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">'+ this.textLang.fail+'</strong>',
+            text: 'ไม่มีข้อมูลของอีเมลล์ที่เลือก',
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
+          })
+        }
+      },
       async addTransaction(){
         try {
           this.emitLoading(true)
@@ -590,13 +692,14 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                 flow_id: this.flow_id,
                 file_name: this.uploadedFile.name,
                 pdfbase: this.pdf_src.slice(28),
+                //TODO
                 object_text : {
                   subject : this.documentName, //ชื่อไฟล์
                   message : this.documentComment //ข้อความ
               },
             })
           }else if(this.create_tab == 2){
-            var info = this.$store.state.allEmployeeInfo
+            // var info = this.$store.state.allEmployeeInfo
             var url = '/transaction/api/v1/addtransaction'
             var flow_data = this.flow_datas_custom.map(xyz => ({
               "status_implement": false,
@@ -622,19 +725,20 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                       //ถ้ารายคนใส่ตรงนี้
                       "permission_email_status": true,
                       "permission_email": 
-                        xyz.actor.permission_email.map(yz => {
-                          var result = info.find(element => element.account_detail[0].thai_email == yz.thai_email);
-                          return {
-                            account_id : result.account_id,
-                            first_name_th: result.account_detail[0].first_name_th,
-                            last_name_th: result.account_detail[0].last_name_th,
-                            first_name_eng: result.account_detail[0].first_name_eng,
-                            last_name_eng: result.account_detail[0].last_name_eng,
-                            account_title_th: result.account_detail[0].account_title_th,
-                            account_title_eng: result.account_detail[0].account_title_eng,
-                            thai_email: result.account_detail[0].thai_email
-                          }
-                        })
+                      xyz.actor.permission_email.map(yz => {
+                        var result = this.user_detail.find(ele => ele.data.thai_email == yz.thai_email)
+                        var res_data = result.data
+                        return {
+                          account_id : res_data.id,
+                          first_name_th: res_data.first_name_th,
+                          last_name_th: res_data.last_name_th,
+                          first_name_eng: res_data.first_name_eng,
+                          last_name_eng: res_data.last_name_eng,
+                          account_title_th: res_data.account_title_th,
+                          account_title_eng: res_data.account_title_eng,
+                          thai_email: res_data.thai_email
+                        }
+                      })
                   }
               ],
               "approver": {
@@ -674,7 +778,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
               },
               "actor_type": "personal",
               //อันนี้ประเภทการเซ็นมี Sign, Sign-Ca, Approve
-              "action": this.switchCA == true && xyz.action == 'Sign'? 'Sign-Ca' : xyz.action,
+              "action": xyz.switch_ca == true && xyz.action == 'Sign'? 'Sign-Ca' : xyz.action,
               "status": "W",
               //ลำดับการเซ็น
               "index": xyz.index
@@ -815,6 +919,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           actor: {
             permission_email: []
           },
+          switch_ca: false,
           page: [...this.pdf_page_list].map(x => x.value),
         }
         this.flow_datas_custom.push(newItem)
@@ -1045,6 +1150,16 @@ import VueDraggableResizable from 'vue-draggable-resizable'
     overflow: auto;
   }
 
+  .create-switch-ca-label {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    color: #00000099;
+  }
+
+  .v-application--is-ltr .create-switch-ca .v-input--selection-controls__input {
+    margin-right: 0px !important;
+  }
+
   .create-setting-dropdown-icon .theme--light.v-icon {
     color: rgba(0, 0, 0, 0.54) !important;
   }
@@ -1059,13 +1174,20 @@ import VueDraggableResizable from 'vue-draggable-resizable'
   }
 
   .all-step-block {
-    height: calc(100vh - 452px);
+    height: calc(100vh - 405px);
     overflow: auto;
   }
 
   .delete-step-btn {
     width: 18px !important;
     height: 18px !important;
+  }
+
+  .create-ca-title {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 11px;
+    color: #00000099;
+    line-height: 10px;
   }
 
   .page-sign-box .v-select__slot {

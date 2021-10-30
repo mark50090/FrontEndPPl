@@ -19,7 +19,7 @@
        "back_document": "Exit from",
        "sure_leave": "Do you want to exit from",
        "no_save": "without saving ?",
-       "text_confirm_exit": "Do you want to exit from creating this form without saving ?",
+       "text_confirm_exit": "Do you want to exit from creating this E-Form without saving ?",
        "cancel": "Cancel",
        "back": "Exit" 
     },
@@ -175,83 +175,84 @@
       }
     },
     "DefaultSignatureModal": {
-      "signature_header": "กำหนดลายเซ็น",
-      "upload_file": "อัพโหลดไฟล์",
-      "signpad": "วาดลายเซ็น",
-      "clearsign": "ล้างค่า",
-      "savesign": "บันทึก",
-      "update_default_success": "อัพเดทข้อมูลสำเร็จ",
-      "update_default_fail": "อัพเดทข้อมูลไม่สำเร็จ",
-      "update_succeed": "สำเร็จ",
-      "update_error": "ไม่สำเร็จ"
+      "signature_header": "Signature Setting",
+      "upload_file": "Upload Signature",
+      "signpad": "Sign Pad",
+      "clearsign": "Clear",
+      "savesign": "Save",
+      "update_default_success": "Updating data is success.",
+      "update_default_fail": "Updating data is incomplete.",
+      "update_succeed": "Success",
+      "update_error": "Error"
     },
     "DefaultStampModal": {
-      "stamp_head": "ลายเซ็น",
-      "stamp_name_show": "ชื่อลายเซ็น",
-      "stamp_upload": "อัพโหลดไฟล์",
-      "stamp_pain": "วาดลายเซ็น",
-      "stamp_delete": "ลบลายเซ็น",
-      "stamp_clear": "ล้างค่า",
-      "stamp_save": "บันทึก",
-      "update_stamp_success": "อัพเดทข้อมูลสำเร็จ",
-      "update_stamp_fail": "อัพเดทข้อมูลไม่สำเร็จ",
-      "stamp_succeed": "สำเร็จ",
-      "stamp_error": "ไม่สำเร็จ"
+      "stamp_head_add": "Signature Adding",
+      "stamp_head_edit": "Signature Editing",
+      "stamp_name_show": "Signature Name",
+      "stamp_upload": "Upload Signature",
+      "stamp_pain": "Sign Pad",
+      "stamp_delete": "Delete Signature",
+      "stamp_clear": "Clear",
+      "stamp_save": "Save",
+      "update_stamp_success": "Updating data is success.",
+      "update_stamp_fail": "Updating data is incomplete.",
+      "stamp_succeed": "Success",
+      "stamp_error": "Error"
     },
     "DeleteForm": {
-      "delete_form1": "ต้องการลบแบบฟอร์ม",
-      "delete_form2": "หรือไม่ ?",
-      "cancel_delete": "ยกเลิก",
-      "confirm_delete": "ตกลง",
-      "delete_success": "ลบแบบฟอร์มสำเร็จ",
-      "delete_fail": "ลบแบบฟอร์มไม่สำเร็จ",
-      "delete_form_succeed": "สำเร็จ",
-      "delete_form_error": "ไม่สำเร็จ"
+      "delete_form1": "Do you want to delete E-Form name \"",
+      "delete_form2": "\" ?",
+      "cancel_delete": "Cancel",
+      "confirm_delete": "OK",
+      "delete_success": "Deleting E-Form is success.",
+      "delete_fail": "Deleting E-Form is incomplete.",
+      "delete_form_succeed": "Success",
+      "delete_form_error": "Error"
     },
     "DeleteMessage": {
-      "texthead_form": "ต้องการยกเลิกข้อความหรือไม่ ?",
-      "cancel_form": "ยกเลิก",
-      "confirm_form": "ตกลง"
+      "texthead_form": "Do you want to cancel comment ?",
+      "cancel_form": "Cancel",
+      "confirm_form": "OK"
     },
     "DocumentReportModal": {
-      "texthead_card": "Export รายงาน Excel",
-      "select_date": "เลือกช่วงวันที่ที่ต้องการ Export",
-      "cancel_export": "ยกเลิก",
-      "range_join": " จนถึง "
+      "texthead_card": "Export Excel Report",
+      "select_date": "Select date range to export.",
+      "cancel_export": "Cancel",
+      "range_join": " to "
     },
     "ImportForm": {
-      "import_file": "นำเข้าไฟล์แบบฟอร์ม",
-      "select_file": "เลือกไฟล์แบบฟอร์ม",
-      "import_form": "นำเข้า"
+      "import_file": "Import E-Form",
+      "select_file": "Select E-Form file",
+      "import_form": "Import"
     },
     "ReturnCorrection": {
-      "text_head_return": "ส่งคืนแก้ไข",
-      "num_return": "ลำดับที่ส่งคืน",
-      "recorrection": "ส่งคืน",
-      "return_file_success": "ส่งคืนแก้ไขเอกสารสำเร็จ",
-      "return_file_fail": "ส่งคืนแก้ไขเอกสารไม่สำเร็จ",
-      "return_revertable_no": "ลำดับที่",
-      "return_succeed": "สำเร็จ",
-      "return_error": "ไม่สำเร็จ"
+      "text_head_return": "Reverting Document",
+      "num_return": "Revert Step",
+      "recorrection": "Revert",
+      "return_file_success": "Reverting document is success.",
+      "return_file_fail": "Reverting document is incomplete.",
+      "return_revertable_no": "Step ",
+      "return_succeed": "Success",
+      "return_error": "Error"
     },
     "SendMail": {
-      "recipient_email": "อีเมลผู้รับ",
-      "send_email": "ส่งอีเมล",
-      "send_email_success": "ส่งอีเมลสำเร็",
-      "send_email_fail": "ส่งอีเมลไม่สำเร็จ",
-      "send_email_succeed": "สำเร็จ",
-      "send_email_error": "ไม่สำเร็จ"
+      "recipient_email": "Destination E-mail",
+      "send_email": "Send E-mail",
+      "send_email_success": "Sending e-mail is success.",
+      "send_email_fail": "Sending e-mail is incomplete.",
+      "send_email_succeed": "Success",
+      "send_email_error": "Error"
     },
     "StampModal": {
-      "message_stamp": "ข้อความ Stamp",
-      "cancel_stamp": "ยกเลิก",
-      "confirm_stamp": "บันทึก"
+      "message_stamp": "Stamp text",
+      "cancel_stamp": "Cancel",
+      "confirm_stamp": "Save"
     },
     "TransferEdit": {
-      "transfer_edit_form": "โอนสิทธิการแก้ไขแบบฟอร์ม",
-      "transfer_email": "E-mail ที่จะโอนสิทธิ",
-      "cancel_transfer": "ยกเลิก",
-      "confirm_transfer": "โอนสิทธิ"
+      "transfer_edit_form": "Editing E-Form Permission Transfer",
+      "transfer_email": "Transfer e-mail E-mail ที่จะโอนสิทธิ",
+      "cancel_transfer": "Cancel",
+      "confirm_transfer": "Transfer"
     }
   },
   "Create_Template": {

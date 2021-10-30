@@ -186,7 +186,8 @@
       "update_error": "ไม่สำเร็จ"
     },
     "DefaultStampModal": {
-      "stamp_head": "ลายเซ็น",
+      "stamp_head_add": "เพิ่มลายเซ็น",
+      "stamp_head_edit": "แก้ไขลายเซ็น",
       "stamp_name_show": "ชื่อลายเซ็น",
       "stamp_upload": "อัพโหลดไฟล์",
       "stamp_pain": "วาดลายเซ็น",
@@ -199,8 +200,8 @@
       "stamp_error": "ไม่สำเร็จ"
     },
     "DeleteForm": {
-      "delete_form1": "ต้องการลบแบบฟอร์ม",
-      "delete_form2": "หรือไม่ ?",
+      "delete_form1": "ต้องการลบแบบฟอร์ม \"",
+      "delete_form2": "\" หรือไม่ ?",
       "cancel_delete": "ยกเลิก",
       "confirm_delete": "ตกลง",
       "delete_success": "ลบแบบฟอร์มสำเร็จ",
@@ -230,14 +231,14 @@
       "recorrection": "ส่งคืน",
       "return_file_success": "ส่งคืนแก้ไขเอกสารสำเร็จ",
       "return_file_fail": "ส่งคืนแก้ไขเอกสารไม่สำเร็จ",
-      "return_revertable_no": "ลำดับที่",
+      "return_revertable_no": "ลำดับที่ ",
       "return_succeed": "สำเร็จ",
       "return_error": "ไม่สำเร็จ"
     },
     "SendMail": {
       "recipient_email": "อีเมลผู้รับ",
       "send_email": "ส่งอีเมล",
-      "send_email_success": "ส่งอีเมลสำเร็",
+      "send_email_success": "ส่งอีเมลสำเร็จ",
       "send_email_fail": "ส่งอีเมลไม่สำเร็จ",
       "send_email_succeed": "สำเร็จ",
       "send_email_error": "ไม่สำเร็จ"
