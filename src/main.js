@@ -24,7 +24,15 @@ Vue.use(device)
 Vue.use(VueApexCharts)
 Vue.use(VueSignaturePad)
 
-Vue.prototype.$api_url = 'https://uatpaperless.one.th/api3'
+// UAT
+Vue.prototype.$api_url = 'https://digitalflow_dev.one.th/api'
+
+// POC
+// Vue.prototype.$api_url = 'https://digitalflow_poc_01.one.th/api'
+
+// PRD
+// Vue.prototype.$api_url = 'https://digitalflow.one.th/api'
+
 // Vue.prototype.$api_url = 'http://localhost:8808'
 Vue.component('vue-draggable-resizable', VueDraggableResizable)
 
