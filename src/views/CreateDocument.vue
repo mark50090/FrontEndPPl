@@ -163,17 +163,17 @@
                           {{textLang.number}} {{ flow_data.index+1 }} : {{ translate(flow_data.action) }} <!-- or ผู้มีสิทธิ์เซ็น -->
                         </v-col>
                         <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pr-0 pb-2"> <!-- show when it is sign step -->
-                          <v-switch dense inset disabled hide-details class="mt-0 pt-0 create-switch-ca" v-model="flow_data.switch_ca">
+                          <v-switch dense inset hide-details class="mt-0 pt-0 create-switch-ca" v-model="flow_data.switch_ca" @change="isDirty = true">
                             <template v-slot:label>
                               <span class="create-switch-ca-label">Certificate (CA)</span>
                             </template>
                           </v-switch>
                         </v-col>
                       </v-row>
-                      <template v-if="flow_data.actor[0].permission_email[0].thai_email">
+                      <template v-if="flow_data.actor[0].permission_email_status">
                       <v-row class="create-row each-step-mail-row" v-for="actor_email in flow_data.actor[0].permission_email" :key="flow_data.index + actor_email.account_id"> <!-- each email row in step -->
                         <v-col cols="8" md="9" lg="9" class="px-0 pt-1 pb-0">
-                          <v-text-field disabled filled dense outlined hide-details color="#67C25D" v-model="actor_email.thai_email" placeholder="@one.th" class="create-setting email-step-box each-email-icon">
+                          <v-text-field dense outlined hide-details color="#67C25D" v-model="actor_email.thai_email" placeholder="@one.th" class="create-setting email-step-box each-email-icon" @change="isDirty = true">
                             <template v-slot:prepend>
                               <v-icon large>mdi-account</v-icon>
                             </template>
@@ -184,10 +184,10 @@
                         </v-col>
                       </v-row>
                     </template>
-                    <template v-else-if="flow_data.actor[0].permission[0]">
+                    <template v-else-if="flow_data.actor[0].permission_status">
                       <v-row class="create-row each-step-mail-row" v-for="actor_role in flow_data.actor[0].permission" :key="flow_data.index + actor_role.role_id"> <!-- each email row in step -->
                         <v-col cols="8" md="9" lg="9" class="px-0 pt-1 pb-0">
-                          <v-text-field disabled filled dense outlined hide-details color="#67C25D" v-model="actor_role.role_name" placeholder="@one.th" class="create-setting email-step-box each-email-icon">
+                          <v-text-field dense outlined hide-details color="#67C25D" v-model="actor_role.role_name" placeholder="@one.th" class="create-setting email-step-box each-email-icon">
                             <template v-slot:prepend>
                               <v-icon large>mdi-account</v-icon>
                             </template>
@@ -452,6 +452,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           case "Sign" : return this.textLang.authorizedsignatory
           case "Sign-Ca" : return this.textLang.authorizedsignatory
           case "Approve" : return this.textLang.Authorizedperson
+          case "Fill" : return 'ผู้กรอกเอกสาร'
           default: return "" 
         }
       },
@@ -576,14 +577,15 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                 if(!flow_data.actor[0].permission_email.length){
                   flow_data.actor[0].permission_email = [{account_id : new Date().getTime()}]
                 }
-                flow_data.switch_ca = false
+                if(flow_data.action == 'Sign-Ca') flow_data.switch_ca = true
+                else flow_data.switch_ca = false
                 flow_data.actor[0].permission_email.forEach(email => {
                   email.checkbox = true
                 })
                 flow_data.actor[0].permission.forEach(role => {
                   role.checkbox = true
                 })
-                this.signArray.push(flow_data.approver.sign_position)
+                if(flow_data.action == 'Sign') this.signArray.push(flow_data.approver.sign_position)
               })
               this.signArray.forEach((element,index) => {
                 element.sign_queue_no = index+1
@@ -625,11 +627,19 @@ import VueDraggableResizable from 'vue-draggable-resizable'
     },
       async getDetailbyEmail(){
         this.actor_email = []
-        this.flow_datas_custom.forEach((ele) => {
-          ele.actor.permission_email.forEach(el => {
-            this.actor_email.push(el.thai_email)
+        if(this.create_tab == 1){
+          this.flow_datas.forEach(ele => {
+            ele.actor[0].permission_email.forEach(el => {
+              this.actor_email.push(el.thai_email)
+            })
           })
-        })
+        }else{
+          this.flow_datas_custom.forEach((ele) => {
+            ele.actor.permission_email.forEach(el => {
+              this.actor_email.push(el.thai_email)
+            })
+          })
+        }
         try {
           this.emitLoading(true)
           var url = '/citizen/api/v1/check_citizen_email'
@@ -687,17 +697,82 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         try {
           this.emitLoading(true)
           if(this.create_tab == 1){
+            flow_data = this.flow_datas.map(xyz => ({
+              "actor": [
+                {
+                  "permission_status": false,
+                  "permission": [],
+                  "permission_email_status": true,
+                  "permission_email": xyz.actor[0].permission_email.map(yz => {
+                    var result = this.user_detail.find(ele => ele.data.thai_email == yz.thai_email)
+                    var res_data = result.data
+                    return {
+                      account_id : res_data.id,
+                      first_name_th: res_data.first_name_th,
+                      last_name_th: res_data.last_name_th,
+                      first_name_eng: res_data.first_name_eng,
+                      last_name_eng: res_data.last_name_eng,
+                      account_title_th: res_data.account_title_th,
+                      account_title_eng: res_data.account_title_eng,
+                      thai_email: res_data.thai_email,
+                      detp_id: null,
+                      role_id: null,
+                      dept_name: null,
+                      role_name: null
+                    }
+                  })
+                }
+              ],
+              "approver": {
+                "account_id": null,
+                "first_name_th": null,
+                "last_name_th": null,
+                "first_name_eng": null,
+                "last_name_eng": null,
+                "account_title_th": null,
+                "account_title_eng": null,
+                "thai_email": null,
+                "detp_id": null,
+                "role_id": null,
+                "dept_name": null,
+                "role_name": null,
+                "status": "Incomplete",
+                "sign_position": xyz.action=='Sign'? {
+                  "sign_llx": xyz.approver.sign_position.sign_llx,
+                  "sign_lly": xyz.approver.sign_position.sign_lly,
+                  "sign_urx": xyz.approver.sign_position.sign_urx,
+                  "sign_ury": xyz.approver.sign_position.sign_ury,
+                  "sign_page": this.switchStamp == true? 'all': xyz.approver.sign_position.sign_page
+                }: undefined
+              },
+              "action": xyz.switch_ca == true && xyz.action == 'Sign'? 'Sign-Ca' : xyz.action,
+              "status": "W",
+              "index": xyz.index
+            }))
             var url = '/transaction/api/v1/addtransaction'
-            var {data} = await this.axios.post(this.$api_url + url,{
+            if(this.isDirty){
+              var body = {
                 flow_id: this.flow_id,
                 file_name: this.uploadedFile.name,
                 pdfbase: this.pdf_src.slice(28),
-                //TODO
+                email_change: this.isDirty,
+                flow_data: flow_data,
                 object_text : {
                   subject : this.documentName, //ชื่อไฟล์
                   message : this.documentComment //ข้อความ
-              },
-            })
+                },
+              }
+            }else{
+              var body = {
+                flow_id: this.flow_id,
+                file_name: this.uploadedFile.name,
+                pdfbase: this.pdf_src.slice(28),
+                object_text : {
+                  subject : this.documentName, //ชื่อไฟล์
+                  message : this.documentComment //ข้อความ
+                },
+              }
+            }
           }else if(this.create_tab == 2){
             // var info = this.$store.state.allEmployeeInfo
             var url = '/transaction/api/v1/addtransaction'
@@ -783,20 +858,26 @@ import VueDraggableResizable from 'vue-draggable-resizable'
               //ลำดับการเซ็น
               "index": xyz.index
             }))
+          }
+          if(this.create_tab == 1){
+            var {data} = await this.axios.post(this.$api_url + url,body)
+          }
+          else if(this.create_tab == 2){
             var {data} = await this.axios.post(this.$api_url + url,{
-                doc_id: this.selected_document_type_custom._id,
-                set_flow: "true",
-                flow_data: flow_data,
-                object_text : {
-                  subject : this.documentName, //ชื่อไฟล์
-                  message : this.documentComment //ข้อความ
-                },
-                pdfbase: this.pdf_src.slice(28),
-                business: JSON.parse(sessionStorage.getItem('selected_business'))
+              doc_id: this.selected_document_type_custom._id,
+              set_flow: "true",
+              flow_data: flow_data,
+              object_text : {
+                subject : this.documentName, //ชื่อไฟล์
+                message : this.documentComment //ข้อความ
+              },
+              pdfbase: this.pdf_src.slice(28),
+              business: JSON.parse(sessionStorage.getItem('selected_business'))
             })
           }
           if(data.status){
             this.transaction_id = data.data.transaction_id
+            if(data.data.new_signposition) this.isNewPosition = true
             // if(this.isDirty) 
             this.saveNewSignPosition()
             if(this.attachedFile.length) this.uploadFiles()
@@ -817,7 +898,6 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                 htmlContainer: 'alert-text-block'
               }
             })
-            this.$router.push('/inbox')
           }
         } catch (error) {
           console.log(error);
@@ -859,25 +939,38 @@ import VueDraggableResizable from 'vue-draggable-resizable'
               index: index
             } 
           }else if(element.action == 'Sign'){
-            if(Array.isArray(element.sign.sign_page)){
-              return {
-                sign_position:{
-                  sign_llx: element.sign.sign_llx,
-                  sign_lly: element.sign.sign_lly,
-                  sign_urx: element.sign.sign_urx,
-                  sign_ury: element.sign.sign_ury,
-                  sign_page: element.sign.sign_page.length == this.pdf_page_list.length? 'all': element.sign.sign_page.join(','),
-                },
-                index: index
+            if(tab_flow_data == this.flow_datas_custom){
+              if(Array.isArray(element.sign.sign_page)){
+                return {
+                  sign_position:{
+                    sign_llx: element.sign.sign_llx,
+                    sign_lly: element.sign.sign_lly,
+                    sign_urx: element.sign.sign_urx,
+                    sign_ury: element.sign.sign_ury,
+                    sign_page: element.sign.sign_page.length == this.pdf_page_list.length? 'all': element.sign.sign_page.join(','),
+                  },
+                  index: index
+                }
+              }else{
+                return {
+                  sign_position:{
+                    sign_llx: element.sign.sign_llx,
+                    sign_lly: element.sign.sign_lly,
+                    sign_urx: element.sign.sign_urx,
+                    sign_ury: element.sign.sign_ury,
+                    sign_page: element.sign.sign_page
+                  },
+                  index: index
+                }
               }
             }else{
-              return {
+              return{
                 sign_position:{
-                  sign_llx: element.sign.sign_llx,
-                  sign_lly: element.sign.sign_lly,
-                  sign_urx: element.sign.sign_urx,
-                  sign_ury: element.sign.sign_ury,
-                  sign_page: element.sign.sign_page
+                  sign_llx: element.approver.sign_position.sign_llx,
+                  sign_lly: element.approver.sign_position.sign_lly,
+                  sign_urx: element.approver.sign_position.sign_urx,
+                  sign_ury: element.approver.sign_position.sign_ury,
+                  sign_page: element.approver.sign_position.sign_page
                 },
                 index: index
               }
@@ -885,17 +978,20 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           }
         })
         try {
-          if(this.statusAction.includes('Sign')){
+          this.emitLoading(true)
+          if((this.create_tab == 2 && this.statusAction.includes('Sign')) || (this.create_tab == 1 && this.isNewPosition)){
             var {data} = await this.axios.put(this.$api_url + url,{
               flow_data: flow_data
             })
             if(data){
-
+              this.emitLoading(false)
             }
           }
         } catch (error) {
+          this.emitLoading(false)
           console.log(error);
         }
+        this.$router.push('/inbox')
       },
       updatePageCount(page_count) {
         this.pdf_page_list = []
@@ -996,6 +1092,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             this.pdf_src = reader.result
             this.loading_pdf = false
           };
+          this.documentName = this.uploadedFile.name.substr(0, this.uploadedFile.name.lastIndexOf("."))
         }
       },
       change_page_fn(type){
