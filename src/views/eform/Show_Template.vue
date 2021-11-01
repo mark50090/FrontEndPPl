@@ -3119,6 +3119,12 @@
             var objName = this.dataTableObjectArray[k].object_name.split('_')[0]
             if(typeof this.dataDict[objName] !== 'undefined') {
               var tableObjIndex = this.dataDict[objName].arrayIndex
+              if(typeof this.dataTableObjectArray[k].style.permission_step === 'undefined') {
+                this.dataTableObjectArray[k].style.permission_step = ""
+              }
+              if(typeof this.dataTableObjectArray[k].style.permission_step_section === 'undefined') {
+                this.dataTableObjectArray[k].style.permission_step_section = ""
+              }
               if((this.dataTableObjectArray[k].style.permission_step == this.currentStep && !this.dataTableObjectArray[k].style.permission_step_section) || (this.dataTableObjectArray[k].style.permission_step_section == this.currentStep && !this.dataTableObjectArray[k].style.permission_step)) {
                 this.isSendBack = true
                 this.isEditable = true
