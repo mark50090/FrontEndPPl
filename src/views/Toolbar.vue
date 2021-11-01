@@ -6,7 +6,7 @@
     </v-overlay>
     <v-row class="toolbar-row toolbar-block">
       <v-toolbar elevation="1" class="main-toolbar">
-        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="drawer = !drawer" class="main-menu-icon"></v-app-bar-nav-icon>
         <v-toolbar-title class="toolbar-logo-block">
           <img height="40px" src="../assets/bot_logo.png" class="mt-1">
           <span class="ml-1 web-name display-pc-only">Digital Workflow</span>
@@ -14,7 +14,7 @@
         <v-spacer></v-spacer>
         <v-toolbar-items class="toolbar-biz-block">
           <v-autocomplete outlined hide-details dense auto-select-first color="rgb(102, 101, 101)" prepend-inner-icon="mdi-briefcase" class="biz-box" v-model="selectedBiz" :items="business" @change="changeBiz" item-text="first_name_th" item-value="id_card_num" return-object></v-autocomplete>
-          <v-divider vertical class="mx-2 my-auto toolbar-divider"></v-divider>
+          <v-divider vertical class="ml-2 my-auto toolbar-divider divider-before-account"></v-divider>
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
               <v-btn text v-on="on" class="toolbar-menu-btn">
@@ -39,6 +39,32 @@
               </v-list-item>
             </v-list>
           </v-menu>
+          <!-- <v-divider vertical class="mr-1 my-auto toolbar-divider divider-after-account"></v-divider>
+          <v-menu offset-y>
+            <template v-slot:activator="{ on }">
+              <v-btn text x-small v-on="on" class="px-1">
+                <img :src="lang_img"  width="25px">
+              </v-btn>
+            </template>
+            <v-list dense nav>
+              <v-list-item>
+                <v-list-item-icon class="lang-img-block">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Flag_of_Thailand_%28non-standard_colours%29.svg" width="27px">
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title class="toolbar-menu-title">ไทย</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-icon class="lang-img-block">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Flag_of_the_United_Kingdom.svg" width="27px">
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title class="toolbar-menu-title">English</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-menu> -->
         </v-toolbar-items>
       </v-toolbar>
     </v-row>
@@ -157,6 +183,7 @@
       open_doc_style_menu: false,
       doc_style_active_class: '',
       allInfo: [],
+      lang_img: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Flag_of_Thailand_%28non-standard_colours%29.svg',
       textLang:{
         setup: 'ตั้งค่า',
         logout: 'ออกจากระบบ',
@@ -310,6 +337,14 @@
     max-height: 87% !important;
   }
 
+  .divider-before-account {
+    margin-right: 8px !important;
+  }
+
+  .divider-after-account {
+    margin-left: 8px !important;
+  }
+
   .toolbar-row {
     width: 100%;
     margin: 0% !important;
@@ -336,6 +371,10 @@
     font-family: 'Sarabun', sans-serif;
     font-size: 14px !important;
     line-height: 24px !important;
+  }
+
+  .lang-img-block {
+    align-items: center;
   }
 
   .list-all-menu {
@@ -391,17 +430,29 @@
   /*========================================*/
 
   @media only screen and (max-width:600px){ /*css for mobile screen*/
+    .main-menu-icon {
+      width: 24px !important;
+    }
+
     .toolbar-logo-block {
       padding-left: 0% !important;
     }
 
     .biz-box {
-      width: 198px;
+      width: 190px;
+    }
+
+    .divider-before-account {
+      margin-right: 1% !important;
+    }
+
+    .divider-after-account {
+      margin-left: 1% !important;
     }
 
     .toolbar-menu-btn {
-      padding-left: 3% !important;
-      padding-right: 2% !important;
+      padding-left: 1% !important;
+      padding-right: 1% !important;
     }
 
     .main-content {
