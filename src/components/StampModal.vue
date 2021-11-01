@@ -26,6 +26,7 @@
         >
           <v-text-field class="m-stamp l-stamp"
             :placeholder="textLang.message_stamp"
+            v-model="message"
             color="rgb(102, 101, 101)"
             outlined
             hide-details
@@ -58,7 +59,7 @@
                   dark
                   depressed
                   block
-                  @click="dialogConfirm = true"
+                  @click="dialogConfirm = true;addStamp()"
 
                   >{{ textLang.confirm_stamp }}</v-btn
                 >
@@ -73,7 +74,7 @@ import { EventBus } from '../EventBus'
 export default {
     data: () => ({
         dialog: false,
-
+        message: "",
         //Language Variable
         textLang: {
           message_stamp: 'ข้อความ Stamp',
@@ -82,12 +83,29 @@ export default {
         }
     }),
     mounted() {
-        EventBus.$on('stamp',this.stamper)
+        EventBus.$on('stamp', this.stamper)
     },
     methods: {
         stamper() {
             this.dialog = true
+        },
+        addStamp() {
+          var tCtx = document.getElementById('textCanvas').getContext('2d')
+          tCtx.canvas.width = tCtx.measureText(this.message).width
+          tCtx.canvas.height = 50
+          tCtx.font = '50px Arial'
+          tCtx.fillText(this.message, 0, 50)
+          tCtx.canvas.width = tCtx.measureText(this.message).width
+          tCtx.canvas.height = 50
+          tCtx.font = '50px Arial'
+          tCtx.fillText(this.message, 0, 50)
+          EventBus.$emit('getstamp', tCtx.canvas.toDataURL())
+          this.message = ''
+          this.dialog = false
         }
+    },
+    beforeDestroy() {
+      EventBus.$off('stamp', this.stamper)
     }
   }
 </script>
