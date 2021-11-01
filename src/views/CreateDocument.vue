@@ -452,6 +452,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           case "Sign" : return this.textLang.authorizedsignatory
           case "Sign-Ca" : return this.textLang.authorizedsignatory
           case "Approve" : return this.textLang.Authorizedperson
+          case "Fill" : return 'ผู้กรอกเอกสาร'
           default: return "" 
         }
       },
@@ -576,14 +577,15 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                 if(!flow_data.actor[0].permission_email.length){
                   flow_data.actor[0].permission_email = [{account_id : new Date().getTime()}]
                 }
-                flow_data.switch_ca = false
+                if(flow_data.action == 'Sign-Ca') flow_data.switch_ca = true
+                else flow_data.switch_ca = false
                 flow_data.actor[0].permission_email.forEach(email => {
                   email.checkbox = true
                 })
                 flow_data.actor[0].permission.forEach(role => {
                   role.checkbox = true
                 })
-                this.signArray.push(flow_data.approver.sign_position)
+                if(flow_data.action == 'Sign') this.signArray.push(flow_data.approver.sign_position)
               })
               this.signArray.forEach((element,index) => {
                 element.sign_queue_no = index+1
@@ -701,26 +703,24 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                   "permission_status": false,
                   "permission": [],
                   "permission_email_status": true,
-                  "permission_email": [
-                    xyz.actor[0].permission_email.map(yz => {
-                      var result = this.user_detail.find(ele => ele.data.thai_email == yz.thai_email)
-                      var res_data = result.data
-                      return {
-                        account_id : res_data.id,
-                        first_name_th: res_data.first_name_th,
-                        last_name_th: res_data.last_name_th,
-                        first_name_eng: res_data.first_name_eng,
-                        last_name_eng: res_data.last_name_eng,
-                        account_title_th: res_data.account_title_th,
-                        account_title_eng: res_data.account_title_eng,
-                        thai_email: res_data.thai_email,
-                        detp_id: null,
-                        role_id: null,
-                        dept_name: null,
-                        role_name: null
-                      }
-                    })
-                  ]
+                  "permission_email": xyz.actor[0].permission_email.map(yz => {
+                    var result = this.user_detail.find(ele => ele.data.thai_email == yz.thai_email)
+                    var res_data = result.data
+                    return {
+                      account_id : res_data.id,
+                      first_name_th: res_data.first_name_th,
+                      last_name_th: res_data.last_name_th,
+                      first_name_eng: res_data.first_name_eng,
+                      last_name_eng: res_data.last_name_eng,
+                      account_title_th: res_data.account_title_th,
+                      account_title_eng: res_data.account_title_eng,
+                      thai_email: res_data.thai_email,
+                      detp_id: null,
+                      role_id: null,
+                      dept_name: null,
+                      role_name: null
+                    }
+                  })
                 }
               ],
               "approver": {
@@ -877,6 +877,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           }
           if(data.status){
             this.transaction_id = data.data.transaction_id
+            if(data.data.new_signposition) this.isNewPosition = true
             // if(this.isDirty) 
             this.saveNewSignPosition()
             if(this.attachedFile.length) this.uploadFiles()
@@ -978,19 +979,19 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         })
         try {
           this.emitLoading(true)
-          if(this.statusAction.includes('Sign')){
+          if((this.create_tab == 2 && this.statusAction.includes('Sign')) || (this.create_tab == 1 && this.isNewPosition)){
             var {data} = await this.axios.put(this.$api_url + url,{
               flow_data: flow_data
             })
             if(data){
               this.emitLoading(false)
-              this.$router.push('/inbox')
             }
           }
         } catch (error) {
           this.emitLoading(false)
           console.log(error);
         }
+        this.$router.push('/inbox')
       },
       updatePageCount(page_count) {
         this.pdf_page_list = []
@@ -1091,6 +1092,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             this.pdf_src = reader.result
             this.loading_pdf = false
           };
+          this.documentName = this.uploadedFile.name
         }
       },
       change_page_fn(type){
