@@ -1,0 +1,16 @@
+version: "3"
+services:
+  app:
+    image: "git.inet.co.th:5555/supanida.sa/paperless_workflow_v3/prd:1.0"
+    ports:
+      - "81:80"
+    networks:
+      - pplv3
+    deploy:
+      replicas: 3
+      placement:
+        constraints: [node.role == worker]
+
+networks:
+  pplv3:
+    external: true
