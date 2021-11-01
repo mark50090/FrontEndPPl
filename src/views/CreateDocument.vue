@@ -1092,7 +1092,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             this.pdf_src = reader.result
             this.loading_pdf = false
           };
-          this.documentName = this.uploadedFile.name
+          this.documentName = this.uploadedFile.name.substr(0, this.uploadedFile.name.lastIndexOf("."))
         }
       },
       change_page_fn(type){
