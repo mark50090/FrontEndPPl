@@ -15,7 +15,7 @@
         </v-col>
         <v-col
           class="pl-0 question-header pr-0" >
-        <b>{{textLang.documentreport}} </b>
+        <b>ใบรายงานตัว</b>
         </v-col>
         </v-row>
             <v-card class="question-in pt-3 pr-5 pl-5 mt-1" outlined>
@@ -48,7 +48,6 @@
 export default {
     data:() => ({
     textLang:{
-      documentreport:'รายงานเอกสาร',
       senddocuments: 'ส่งเอกสาร',
     },
     }),

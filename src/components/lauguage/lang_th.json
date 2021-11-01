@@ -800,7 +800,6 @@
         "choose": "เลือก",
         "linedepartment": "แผนกสายงาน",
         "specifydepartment": "ระบุแผนก",
-        "financeandAdministration": "การเงินและธุรการ",
         "addapprove": "เพิ่ม (อนุมัติ)",
         "addsign": "เพิ่ม (เซ็น)",
         "signingpage": "หน้าที่เซ็น",
@@ -836,6 +835,7 @@
     "rejectapproval": "ปฏิเสธอนุมัติ",
     "specifymessage": "ระบุข้อความ",
     "attachfile":"แนบไฟล์",
+    "attached_file_placeholder": "เลือกไฟล์",
     "succeed": "สำเร็จ",
     "Successfullyapproved": "อนุมัติเอกสารสำเร็จ",
     "Successfullyrejected": "ปฏิเสธเอกสารสำเร็จ",
@@ -876,7 +876,7 @@
       "approved":"อนุมัติแล้ว",
       "inprogress":"กำลังดำเนินการ",
       "rejectapproval":"ปฏิเสธอนุมัติ",
-      "pending":"รอดำเนินกา",
+      "pending":"รอดำเนินการ",
       "inboxheader":{
         "sender":"ผู้ส่ง",
         "type":"ประเภท",
@@ -888,7 +888,6 @@
       "customdoc":"กำหนดเอง"
   },
   "QuestionForm":{
-    "documentreport":"รายงานเอกสาร",
     "senddocuments": "ส่งเอกสาร"
   },
   "ReportDetail":{
@@ -909,7 +908,7 @@
       "sentboxtable":{
         "sender":"ผู้ส่ง",
         "type":"ประเภท",
-        "documentnumber":"เลขที่เอกสา",
+        "documentnumber":"เลขที่เอกสาร",
         "details":"รายละเอียด",
         "status":"สถานะ",
         "date":"วันที่"
@@ -921,7 +920,7 @@
       "defaultsignature": "ลายเซ็นเริ่มต้น",
       "nodefaultsignature": "ไม่มีลายเซ็นเริ่มต้น",
       "selectsignature": "เลือกลายเซ็น",
-      "Editdefaultsignature": "แก้ไขลายเซ็นเริ่มต้น",
+      "Editdefaultsignature": "แก้ไขลายเซ็น",
       "Adddefaultsignature": "เพิ่มลายเซ็นเริ่มต้น",
       "cancel": "ยกเลิก",
       "record": "บันทึก",

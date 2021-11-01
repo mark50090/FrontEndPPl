@@ -240,7 +240,7 @@
                 <v-tab-item>
                   <v-row class="detail-row" v-if="check_sign"> <!-- show when it is current step and the owner of step is that user -->
                     <v-col cols="12" md="12" lg="12" align-self="start" class="pl-0 pr-0 py-1 ">
-                      <v-file-input dense outlined counter multiple show-size small-chips placeholder="เลือกไฟล์" color="#4CAF50" class="attach-file-box" v-model="new_attachment_file">
+                      <v-file-input dense outlined counter multiple show-size small-chips :placeholder="textLang.attached_file_placeholder" color="#4CAF50" class="attach-file-box" v-model="new_attachment_file">
                         <template v-slot:selection="{ text, index }">
                           <v-chip small dark close color="#4CAF50" @click:close="removeFileInput(index)">{{ text }}</v-chip>
                         </template>
@@ -419,6 +419,7 @@ export default {
       approved: 'อนุมัติแล้ว',
       rejectapproval: 'ปฏิเสธอนุมัติ',
       specifymessage: 'ระบุข้อความ',
+      attached_file_placeholder: 'เลือกไฟล์',
       attachfile: 'แนบไฟล์',
       succeed: 'สำเร็จ',
       Successfullyapproved: 'อนุมัติเอกสารสำเร็จ',

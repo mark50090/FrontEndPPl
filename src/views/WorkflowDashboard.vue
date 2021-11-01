@@ -20,7 +20,7 @@
               <v-col cols="12" class="pt-4">
                 <v-card outlined>
                   <v-toolbar color="white" dense flat>
-                    <span style="font-size: 16px">{{textLang.alldocuments}}</span>
+                    <span style="font-size: 16px">{{textLang.allstatus}}</span>
                     <!-- <v-chip
                   label
                   small

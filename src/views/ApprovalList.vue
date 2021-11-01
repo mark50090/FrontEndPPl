@@ -14,7 +14,7 @@
           </v-row >
           <v-row class="approvallist-row approval-header ">
                   <v-col cols="12" md="auto" lg="auto" class="pl-0" align-self="center" >
-                    {{textlang.Allapprovedforms}}
+                    {{textlang.Allapprovedforms}} 100
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-col align-self="center" cols="auto" md="auto" lg="auto" class="pr-0 position-btn-approval ">
