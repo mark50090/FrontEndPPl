@@ -67,6 +67,81 @@
                       </v-row>
                     </vue-draggable-resizable>
                     </template>
+                    <vue-draggable-resizable
+                    :id="item.name"
+                    :draggable="true"
+                    :resizable="true"
+                    v-for="(item, index_position) in stamp_position"
+                    :key="`stamp_${index_position}`"
+                    :x="item.sign_position_x"
+                    :y="item.sign_position_y"
+                    :w="item.sign_box_width"
+                    :h="item.sign_box_heigth"
+                    @activated="onActivated(index_position)"
+                    @deactivated="onDeactivated(index_position)"
+                    @dragstop="onDrag(item,...arguments)"
+                    @resizestop="onResize(item,...arguments)"
+                    :style="{
+                      'background-color': 'rgba(83, 186, 71, 0)',
+                      'display': item.show ? 'block' : 'none',
+                      }"
+                    >
+                      <v-btn
+                        color="#f44336"
+                        elevation="0"
+                        x-small
+                        fab
+                        dark
+                        absolute
+                        v-show="item.active"
+                        style="top:-45px;right:-15px"
+                        @click="delete_stamper_fn(index_position)"
+                      >
+                        <v-icon small>mdi-close</v-icon>
+                      </v-btn>
+                      <v-menu
+                        :close-on-content-click="false"
+                        :nudge-width="200"
+                        offset-x
+                      >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          color="#4CAF50"
+                          elevation="0"
+                          x-small
+                          fab
+                          dark
+                          absolute
+                          v-show="item.active"
+                          style="top:-45px;right:20px"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          <v-icon small>mdi-cog</v-icon>
+                        </v-btn>
+                      </template>
+                       <v-card>
+                         <v-card-title primary-title>
+                         </v-card-title>
+                         <v-card-text>
+                           <v-select
+                             :items="select_page"
+                             v-model="item.page"
+                             multiple
+                             @change="reShowStamp()"
+                             label="หน้าที่"
+                             outlined
+                             dense
+                             hide-details
+                           ></v-select>
+                         </v-card-text>
+                        <v-card-actions>
+
+                        </v-card-actions>
+                      </v-card>
+                      </v-menu>
+                      <img :src="item.base64" height="100%" width="100%" />
+                    </vue-draggable-resizable>
                 </div>
               </v-row>
             </v-card-text>
@@ -294,11 +369,11 @@
             <template v-if="!is_approve">
               <v-divider></v-divider>
               <v-row class="detail-row">
-                <!-- <v-col cols="auto" md="auto" lg="auto" class="pa-2">
+                <v-col cols="auto" md="auto" lg="auto" class="pa-2">
                   <v-btn outlined @click="gostamp()" color="#757575">
                     <v-icon>mdi-stamper</v-icon>
                   </v-btn>
-                </v-col> -->
+                </v-col>
                 <v-spacer></v-spacer>
                 <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-2 py-2">
                   <v-icon>mdi-draw</v-icon>
@@ -328,6 +403,7 @@
         </v-col>
       </v-row>
     </v-card>
+    <canvas id='textCanvas' width="300" height="30" style="display:none"></canvas>
     <StampModal/>
     <showFormMail/>
     <showFromFile/>
@@ -378,6 +454,7 @@ export default {
     new_attachment_file: [],
     attachment_file: [],
     pdf_src: '',
+    select_page:[],
     token: '',
     transaction_id: '',
     default_sign: null,
@@ -388,6 +465,8 @@ export default {
     padStatus: false,
     allStatus: [],
     sign_position: [],
+    stamp_position: [],
+    stamp_position_px: [],
     signArray: [],
     step_flow: [],
     my_name: '',
@@ -452,6 +531,7 @@ export default {
     this.get_attachment_file_fn()
     this.get_signature_name_default_fn()
     EventBus.$on('confirm_deletemessage', this.delete_comment_fn)
+    EventBus.$on('getstamp', this.get_stamper_fn)
   },
   watch: {
     axios_pending (val) {
@@ -606,7 +686,19 @@ export default {
         action: this.doc_details.action,
         string_sign: string_sign,
         comment: !this.comment_status ? this.comment : null,
-        typesign: 'web'
+        typesign: 'web',
+        stamp_comments: this.stamp_position.map(item => {
+          return {
+            sign_llx: item.sign_llx.toString(),
+            sign_lly: item.sign_lly.toString(),
+            sign_page: item.page.length === this.page_count
+              ? 'all'
+              : item.page.toString(),
+            sign_urx: item.sign_urx.toString(),
+            sign_ury: item.sign_ury.toString(),
+            stamp_base: item.base64
+          }
+        })
       }
       if (this.new_attachment_file.length > 0) this.upload_attachment()
       const url = '/transaction/api/v1/updatetransaction'
@@ -746,7 +838,7 @@ export default {
             this.doc_details.transaction_id = doc_data.transaction_id
             this.doc_details.doc_id = doc_data.doc_id
             this.doc_details.sender = doc_data.sender
-            this.doc_details.detail = doc_data.detail
+            this.doc_details.detail = `${doc_data.object_text.subject} ${doc_data.object_text.message}`
             this.doc_details.tracking = doc_data.tracking
             this.doc_details.create_at = doc_data.create_at
             this.doc_details.file_name = doc_data.file_name
@@ -820,7 +912,7 @@ export default {
           const data = response.data
           if (data.status) {
             // if (data.data[0]) this.default_sign = `data:image/png;base64,${data.data[0]}`
-            console.log(data)
+            // console.log(data)
             // this.sign_type = data.data[0]
             this.all_sign = [
               ...Array.from(
@@ -914,10 +1006,12 @@ export default {
           return element
         })
         this.$set(this.sign_position, index, arr)
+        this.select_page = Array.from({ length: this.page_count }, (_, i) => i + 1)
       })
     },
     loaded: function (e) {
       this.reShowSign(this.sign_position)
+      this.reShowStamp()
     },
     reShowSign (data) {
       this.signArray = []
@@ -984,11 +1078,103 @@ export default {
       sessionStorage.setItem('isStep', false)
       sessionStorage.setItem('isOnlyForm', true)
       this.$router.push({ path: '/form/input' })
+    },
+    get_stamper_fn (base64) {
+      this.stamp_position.push({ base64: base64, page: [1] })
+      this.reShowStamp()
+    },
+    delete_stamper_fn (index) {
+      // this.stamp_position.splice(index, 1)
+      this.stamp_position = this.stamp_position.filter((item, index2) => index !== index2)
+      this.reShowStamp()
+    },
+    onResize: function (item, x, y, width, height) {
+      var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
+      var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
+      item.sign_llx = (x / clientWidth).toFixed(3)
+      item.sign_lly = (-(y + item.sign_box_heigth) / clientHeight).toFixed(3)
+      item.sign_urx = (width / clientWidth).toFixed(3)
+      item.sign_ury = (height / clientHeight).toFixed(3)
+      item.sign_position_x = x
+      item.sign_position_y = y
+      item.sign_box_heigth = height
+      item.sign_box_width = width
+    },
+    onDrag: function (item, x, y) {
+      var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
+      var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
+      item.sign_llx = (x / clientWidth).toFixed(4)
+      item.sign_lly = (-(y + item.sign_box_heigth) / clientHeight).toFixed(4)
+      item.sign_position_x = x
+      item.sign_position_y = y
+    },
+    onActivated (index) {
+      const stamp = this.stamp_position[index]
+      this.$set(this.stamp_position, index, { ...stamp, active: true })
+    },
+    onDeactivated (index) {
+      const stamp = this.stamp_position[index]
+      this.$set(this.stamp_position, index, { ...stamp, active: false })
+    },
+    reShowStamp () {
+      for (let index = 0; index < this.stamp_position.length; index++) {
+        const position = this.stamp_position[index]
+        this.stamp_position[index] = {
+          index: index + 1,
+          name: `stamp_position_${index}`,
+          show: false,
+          active: false,
+          page: position.page,
+          base64: position.base64,
+          sign_llx: position.sign_llx || 0,
+          sign_lly: position.sign_lly || 0.95,
+          sign_urx: position.sign_urx || 0.2,
+          sign_ury: position.sign_ury || 0.05,
+          sign_position_x: position.sign_position_x || 0,
+          sign_position_y: position.sign_position_y || 0,
+          sign_box_heigth: position.sign_box_heigth || 0,
+          sign_box_width: position.sign_box_width || 0
+        }
+        var shownonPage = this.stamp_position[index].page
+        var isShow = shownonPage.includes(this.page)
+        this.$set(this.stamp_position, index, { ...this.stamp_position[index], show: isShow })
+        this.setPositionStamp(
+          this.stamp_position[index].index,
+          this.stamp_position[index].sign_llx,
+          this.stamp_position[index].sign_lly,
+          this.stamp_position[index].sign_urx,
+          this.stamp_position[index].sign_ury
+        )
+      }
+    },
+    setPositionStamp (index, llx, lly, urx, ury) {
+      var arr_index = index - 1
+
+      var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
+      var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
+
+      var setHeight = parseFloat(clientHeight) * lly
+
+      var stamp = this.stamp_position[arr_index]
+
+      stamp.sign_llx = llx
+      stamp.sign_lly = lly
+      stamp.sign_urx = urx
+      stamp.sign_ury = ury
+
+      stamp.sign_position_x = clientWidth * (+llx)
+      stamp.sign_position_y = ((-setHeight) + (Math.abs(ury - lly))) + (-clientHeight) * (+lly + (ury - lly))
+      stamp.sign_box_heigth = (clientHeight * (ury))
+      stamp.sign_box_width = (clientWidth * urx)
+
+      this.stamp_position[arr_index] = stamp
+      // console.log(`stamp${arr_index}`, this.stamp_position[arr_index])
     }
   },
   beforeDestroy () {
     sessionStorage.removeItem('transaction_id')
     EventBus.$off('confirm_deletemessage')
+    EventBus.$off('getstamp')
   }
 }
 </script>
