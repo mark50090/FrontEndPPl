@@ -253,6 +253,12 @@
       "transfer_email": "E-mail ที่จะโอนสิทธิ",
       "cancel_transfer": "ยกเลิก",
       "confirm_transfer": "โอนสิทธิ"
+    },
+    "ConfirmDeleteAttachFileModal": {
+      "font_head_deleteattach1": "ต้องการลบไฟล์ \"",
+      "font_head_deleteattach2": "\" หรือไม่ ?",
+      "deleteattach_cancel": "ยกเลิก",
+      "deleteattach_confirm": "ตกลง"
     }
   },
   "Create_Template": {

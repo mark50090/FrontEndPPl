@@ -253,6 +253,12 @@
       "transfer_email": "Transfer e-mail E-mail ที่จะโอนสิทธิ",
       "cancel_transfer": "Cancel",
       "confirm_transfer": "Transfer"
+    },
+    "ConfirmDeleteAttachFileModal": {
+      "font_head_deleteattach1": "Do you want to delete attached file name \"",
+      "font_head_deleteattach2": "\" ?",
+      "deleteattach_cancel": "Cancel",
+      "deleteattach_confirm": "OK"
     }
   },
   "Create_Template": {
