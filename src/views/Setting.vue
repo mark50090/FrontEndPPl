@@ -221,7 +221,7 @@ export default {
       defaultsignature: 'ลายเซ็นเริ่มต้น',
       nodefaultsignature: 'ไม่มีลายเซ็นเริ่มต้น',
       selectsignature: 'เลือกลายเซ็น',
-      Editdefaultsignature: 'แก้ไขลายเซ็นเริ่มต้น',
+      Editdefaultsignature: 'แก้ไขลายเซ็น',
       Adddefaultsignature: 'เพิ่มลายเซ็นเริ่มต้น',
       cancel: 'ยกเลิก',
       record: 'บันทึก',

@@ -417,7 +417,6 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         choose: 'เลือก',
         linedepartment: 'แผนกสายงาน',
         specifydepartment: 'ระบุแผนก',
-        financeandAdministration: 'การเงินและธุรการ',
         addapprove: 'เพิ่ม (อนุมัติ)',
         addsign: 'เพิ่ม (เซ็น)',
         signingpage: 'หน้าที่เซ็น',
