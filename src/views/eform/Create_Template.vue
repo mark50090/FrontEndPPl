@@ -2012,9 +2012,9 @@
                     <v-list-item-content class="py-0 each-step-workflow-mail">
                       {{ email.thai_email }}
                     </v-list-item-content>
-                    <v-list-item-icon class="ml-2 my-0 alert-onechat-block"> <!-- show when this mail is set to alert in One Chat -->
+                    <!-- <v-list-item-icon class="ml-2 my-0 alert-onechat-block"> <!-- show when this mail is set to alert in One Chat 
                       <img height="21px" src="https://www.img.in.th/images/a368504d4cdb93225bda2f04c665ead7.png" />
-                    </v-list-item-icon>
+                    </v-list-item-icon> -->
                   </v-list-item>
                 </v-list>
               </div>
