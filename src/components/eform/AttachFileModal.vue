@@ -12,7 +12,7 @@
 				<ol class="attachfile-content">
 					<li v-for="item in files" :key="item.file_id">
 						<v-row class="row-list">
-							<v-col cols="9" md="10" lg="10" class="pl-2 pr-0">{{item.filename}}</v-col>
+							<v-col cols="8" md="10" lg="10" class="pl-2 pr-0">{{item.filename}}</v-col>
 							<v-spacer></v-spacer> 
 							<!-- <v-icon class="mr-2">mdi-eye-outline</v-icon> -->
 							<v-col v-show="!item.waitUpload" cols="auto" md="auto" lg="auto" class="pr-0 pt-2">
@@ -20,6 +20,11 @@
 									<v-icon>mdi-download</v-icon>
 								</v-btn>
 							</v-col>
+							<!-- <v-col cols="auto" md="auto" lg="auto" class="pr-0 pl-0 pt-2">
+								<v-btn  icon color="#67c25d" @click="optionFormDeleteAttach()">
+									<v-icon>mdi-delete</v-icon>
+								</v-btn>
+							</v-col> -->
 						</v-row>
 					</li>
 				</ol>
@@ -37,11 +42,13 @@
 				<v-spacer></v-spacer>
 			</v-card-actions>
 	  </v-card>
+		<showFormDeleteAttach/>
 	</v-dialog>
 </template>
 
 <script>
  import { EventBus } from '../../EventBus'
+ import showFormDeleteAttach from '../ConfirmDeleteAttachFileModal.vue'
 
  export default {
   data: () => ({
@@ -73,6 +80,9 @@
  			main_color: '#1b9900'
     }
   }),
+  components: {
+	  showFormDeleteAttach
+  },
   mounted() {
 		EventBus.$on('openAttachFile',this.startAttachFileModal)
 		EventBus.$on('changeLang', this.changeLange)
@@ -83,11 +93,14 @@
     EventBus.$off('changeLang')
   },
   methods: {
+	  	optionFormDeleteAttach() {
+			  EventBus.$emit('FormDeleteAttach')
+		  },
 		changeColor() {
 			this.colorObject = JSON.parse(sessionStorage.getItem('biz_theme'))
 			this.color_btn_download = this.colorObject.modal.modal_main_color
 			this.color_btn_download_all = this.colorObject.modal.modal_sub_color
-    },
+    	},
 		startAttachFileModal(folderAttach) {
 			folderAttach.forEach(e => {
 				if(!e.filename) {
