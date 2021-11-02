@@ -89,6 +89,11 @@
 <script>
 import { EventBus } from '../EventBus'
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.Inbox
+      }
+    },
     data: () => ({
       tax_id:'',
       keyword:'',
@@ -124,28 +129,7 @@ import { EventBus } from '../EventBus'
       typeDocument:[{name: 'ทั้งหมด', _id: "", detail: ""}],
       selectedTypeDocs: {name: 'ทั้งหมด', _id: "", detail: ""},
       isReady: false,
-      isChangeTab: false,
-      textLang:{
-        alldocuments:'เอกสารทั้งหมด',
-        search: 'ค้นหา',
-        documenttype: 'ประเภทเอกสาร',
-        documentstatus: 'สถานะเอกสาร',
-        all:'ทั้งหมด',
-        pendingapproval:'รออนุมัติ',
-        approved:'อนุมัติแล้ว',
-        inprogress:'กำลังดำเนินการ',
-        rejectapproval:'ปฏิเสธอนุมัติ',
-        pending:'รอดำเนินการ',
-        inboxheader:{
-          sender:'ผู้ส่ง',
-          type:'ประเภท',
-          documentnumber:'เลขที่เอกสาร',
-          details:'รายละเอียด',
-          status:'สถานะ',
-          date:'วันที่'
-        },
-        customdoc:'กำหนดเอง'
-    }
+      isChangeTab: false
     }),
     
 

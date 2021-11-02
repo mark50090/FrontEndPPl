@@ -39,7 +39,7 @@
               </v-list-item>
             </v-list>
           </v-menu>
-          <!-- <v-divider vertical class="mr-1 my-auto toolbar-divider divider-after-account"></v-divider>
+          <v-divider vertical class="mr-1 my-auto toolbar-divider divider-after-account"></v-divider>
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
               <v-btn text x-small v-on="on" class="px-1">
@@ -47,7 +47,7 @@
               </v-btn>
             </template>
             <v-list dense nav>
-              <v-list-item>
+              <v-list-item @click="changeLang('th')">
                 <v-list-item-icon class="lang-img-block">
                   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Flag_of_Thailand_%28non-standard_colours%29.svg" width="27px">
                 </v-list-item-icon>
@@ -55,7 +55,7 @@
                   <v-list-item-title class="toolbar-menu-title">ไทย</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item>
+              <v-list-item @click="changeLang('en')">
                 <v-list-item-icon class="lang-img-block">
                   <img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Flag_of_the_United_Kingdom.svg" width="27px">
                 </v-list-item-icon>
@@ -64,7 +64,7 @@
                 </v-list-item-content>
               </v-list-item>
             </v-list>
-          </v-menu> -->
+          </v-menu>
         </v-toolbar-items>
       </v-toolbar>
     </v-row>
@@ -289,7 +289,18 @@
           this.open_doc_style_menu = false
           this.doc_style_active_class = ''
         }
-      }
+      },
+      changeLang(item) {
+        if(item == 'th') {
+          this.lang_img = 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Flag_of_Thailand_%28non-standard_colours%29.svg'
+        }
+        else {
+          this.lang_img = 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Flag_of_the_United_Kingdom.svg'
+        }
+        this.$store.commit('changeLanguage',item);
+        sessionStorage.setItem('page_lang',item)
+        EventBus.$emit('changeLang')
+		  },
     }
   }
 </script>
