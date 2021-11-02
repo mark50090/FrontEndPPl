@@ -358,6 +358,11 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       vueSignature,
       VueDraggableResizable
     },
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.CreateDocument
+      }
+    },
     data: () => ({
       create_tab: null,
       pdf_page_list: [],
@@ -401,37 +406,6 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       documentName: '',
       documentComment: '',
       attachedFile: [],
-      textLang:{
-        No: 'ลำดับที่',
-        number: 'ลำดับ',
-        selectfile: 'เลือกไฟล์',
-        selectfilea: 'เลือกไฟล์',
-        setupsending: 'ตั้งค่าการส่ง',
-        approvalform: 'รูปแบบอนุมัติ',
-        custom: 'กำหนดเอง',
-        documentname: 'ชื่อเอกสาร',
-        message: 'ข้อความ',
-        attachfile: 'แนบไฟล์',
-        documenttype: 'ประเภทเอกสาร',
-        documentformat: 'รูปแบบเอกสาร',
-        choose: 'เลือก',
-        linedepartment: 'แผนกสายงาน',
-        specifydepartment: 'ระบุแผนก',
-        addapprove: 'เพิ่ม (อนุมัติ)',
-        addsign: 'เพิ่ม (เซ็น)',
-        signingpage: 'หน้าที่เซ็น',
-        page: 'หน้า',
-        all: 'ทั้งหมด',
-        senddocuments: 'ส่งเอกสาร',
-        authorizedsignatory: 'ผู้มีสิทธิ์เซ็น',
-        Authorizedperson: 'ผู้มีสิทธิ์อนุมัติ',
-        Fetching: 'กำลังดึงข้อมูล กรุณารอสักครู่...',
-        noinformationfound: 'ไม่พบข้อมูล',
-        succeed: 'สำเร็จ',
-        transactionsucceed: 'สร้าง transaction สำเร็จ',
-        fail: 'ไม่สำเร็จ',
-        transactionfail: 'สร้าง transaction ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง'
-      },
       actor_email: []
     }),
     mounted() {
