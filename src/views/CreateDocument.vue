@@ -824,8 +824,32 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                       "permission_email_status": true,
                       "permission_email": 
                       xyz.actor.permission_email.map(yz => {
-                        var result = this.user_detail.find(ele => ele.data.thai_email == yz.thai_email)
-                        var res_data = result.data
+                        var result = []
+                        // var result = this.user_detail.find(ele => ele.data.thai_email == yz.thai_email)
+                        result = this.user_detail.filter(ele => {
+                          if((ele.data.thai_email == yz.thai_email) || 
+                          (ele.data.thai_email2 == yz.thai_email) || 
+                          (ele.data.thai_email3 == yz.thai_email))
+                          return ele
+                        })
+                        result = [...new Set(result)]
+                        if(!result.length) {
+                          this.user_detail.forEach(ele => {
+                            ele.data.email.forEach(e => {
+                              if(e.email == yz.thai_email){
+                                result.push(ele)
+                              }
+                            })
+                            if(ele.data.business_mail){
+                              ele.data.business_mail.forEach(e =>{
+                                if(e.email == yz.thai_email){
+                                  result.push(ele)
+                                }
+                              })
+                            }
+                          })
+                        }
+                        var res_data = result[0].data
                         return {
                           account_id : res_data.id,
                           first_name_th: res_data.first_name_th,
