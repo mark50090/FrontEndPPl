@@ -173,33 +173,53 @@
                         </v-col>
                       </v-row>
                       <template v-if="flow_data.actor[0].permission_email_status">
-                      <v-row class="create-row each-step-mail-row" v-for="actor_email in flow_data.actor[0].permission_email" :key="flow_data.index + actor_email.account_id"> <!-- each email row in step -->
-                        <v-col cols="8" md="9" lg="9" class="px-0 pt-1 pb-0">
-                          <v-text-field dense outlined hide-details color="#67C25D" v-model="actor_email.thai_email" placeholder="@one.th" class="create-setting email-step-box each-email-icon" @change="isDirty = true">
-                            <template v-slot:prepend>
-                              <v-icon large>mdi-account</v-icon>
-                            </template>
-                          </v-text-field>
-                        </v-col>
-                        <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
-                          <v-checkbox hide-details label="OneChat" v-model="actor_email.checkbox" checked class="mt-0 pt-0 onechat-check"></v-checkbox>
-                        </v-col>
-                      </v-row>
-                    </template>
-                    <template v-else-if="flow_data.actor[0].permission_status">
-                      <v-row class="create-row each-step-mail-row" v-for="actor_role in flow_data.actor[0].permission" :key="flow_data.index + actor_role.role_id"> <!-- each email row in step -->
-                        <v-col cols="8" md="9" lg="9" class="px-0 pt-1 pb-0">
-                          <v-text-field dense outlined hide-details color="#67C25D" v-model="actor_role.role_name" placeholder="@one.th" class="create-setting email-step-box each-email-icon">
-                            <template v-slot:prepend>
-                              <v-icon large>mdi-account</v-icon>
-                            </template>
-                          </v-text-field>
-                        </v-col>
-                        <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
-                          <v-checkbox hide-details label="OneChat" v-model="actor_role.checkbox" class="mt-0 pt-0 onechat-check"></v-checkbox>
-                        </v-col>
-                      </v-row>
-                    </template>
+                        <v-row class="create-row each-step-mail-row" v-for="actor_email in flow_data.actor[0].permission_email" :key="flow_data.index + actor_email.account_id"> <!-- each email row in step -->
+                          <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0">
+                            <v-text-field dense outlined hide-details color="#67C25D" v-model="actor_email.thai_email" placeholder="@one.th" class="create-setting email-step-box each-email-icon" @change="isDirty = true">
+                              <template v-slot:prepend>
+                                <v-icon large>mdi-account</v-icon>
+                              </template>
+                            </v-text-field>
+                          </v-col>
+                          <!-- <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
+                            <v-checkbox hide-details label="OneChat" v-model="actor_email.checkbox" checked class="mt-0 pt-0 onechat-check"></v-checkbox>
+                          </v-col> -->
+                          <!-- <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
+                            <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn">
+                              <v-icon>mdi-minus</v-icon>
+                            </v-btn>
+                          </v-col>
+                          <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
+                            <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn">
+                              <v-icon>mdi-plus</v-icon>
+                            </v-btn>
+                          </v-col> -->
+                        </v-row>
+                      </template>
+                      <template v-else-if="flow_data.actor[0].permission_status">
+                        <v-row class="create-row each-step-mail-row" v-for="actor_role in flow_data.actor[0].permission" :key="flow_data.index + actor_role.role_id"> <!-- each email row in step -->
+                          <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0">
+                            <v-text-field dense outlined hide-details readonly color="#67C25D" v-model="actor_role.role_name" class="create-setting email-step-box each-email-icon">
+                              <template v-slot:prepend>
+                                <v-icon large>mdi-account</v-icon>
+                              </template>
+                            </v-text-field>
+                          </v-col>
+                          <!-- <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
+                            <v-checkbox hide-details label="OneChat" v-model="actor_role.checkbox" class="mt-0 pt-0 onechat-check"></v-checkbox>
+                          </v-col> -->
+                          <!-- <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
+                            <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn">
+                              <v-icon>mdi-minus</v-icon>
+                            </v-btn>
+                          </v-col>
+                          <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
+                            <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn">
+                              <v-icon>mdi-plus</v-icon>
+                            </v-btn>
+                          </v-col> -->
+                        </v-row>
+                      </template>
                     </template>
                   </v-card>
                 </v-tab-item>
@@ -221,30 +241,29 @@
                       <v-switch inset v-model="switchCA" hide-details class="mt-0 create-setting-switch"></v-switch>
                     </v-col>
                   </v-row> -->
-                  <v-row class="create-row">
+                  <!-- <v-row class="create-row">
                     <v-col cols="7" md="4" lg="4" align-self="center" class="pl-2 pr-1 pt-1 pb-0 create-setting-title">
                       Stamp All Page :
                     </v-col>
                     <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
                       <v-switch inset hide-details v-model="switchStamp" class="mt-0 create-setting-switch"></v-switch>
                     </v-col>
-                  </v-row>
+                  </v-row> -->
                   <v-row justify="center" class="create-row">
-                    <v-col cols="5" md="4" lg="4" class="pl-0 pr-1 pt-1 pb-2">
+                    <v-col cols="5" md="4" lg="4" class="pl-0 pr-1 pb-2">
                       <v-btn small block color="#67C25D" :disabled="!selected_document_type_custom" @click="addPersonApprove" class="add-step-btn">
                         <v-icon small class="mr-1">mdi-plus</v-icon> {{textLang.addapprove}}
                       </v-btn>
                     </v-col>
-                    <v-col cols="5" md="4" lg="4" class="pl-0 pr-1 pt-1 pb-2">
+                    <v-col cols="5" md="4" lg="4" class="pl-0 pr-1 pb-2">
                       <v-btn small block color="#67C25D" :disabled="!selected_document_type_custom" @click="addPersonSign" class="add-step-btn">
                         <v-icon small class="mr-1">mdi-plus</v-icon> {{textLang.addsign}}
                       </v-btn>
                     </v-col>
                   </v-row>
                   <v-card outlined class="pa-2 all-step-block">
-                    <div class="mb-3"> <!-- each step -->
-                    <template v-for="(flow_data_custom,index) in flow_datas_custom">
-                      <v-row align="center" class="create-row" :key="flow_data_custom.index">
+                    <div v-for="(flow_data_custom,index) in flow_datas_custom" :key="flow_data_custom.index" class="mb-3"> <!-- each step -->
+                      <v-row align="center" class="create-row">
                         <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 py-1 create-setting-title">
                           {{textLang.number}} {{index+1}} : {{ translate(flow_data_custom.action) }} <!-- ผู้มีสิทธิ์อนุมัติ or ผู้มีสิทธิ์เซ็น -->
                         </v-col>
@@ -299,32 +318,31 @@
                         </template>
                       </v-row>
                       <v-row class="create-row each-step-mail-row" v-for="(actor_email,index) in flow_data_custom.actor.permission_email" :key="flow_data_custom.index + actor_email.id"> <!-- each email row in step -->
-                        <v-col cols="7" md="7" lg="7" class="px-0 pt-1 each-email-step-block">
+                        <v-col cols="9" md="10" lg="10" class="px-0 pt-1 each-email-step-block">
                           <v-text-field dense outlined hide-details color="#67C25D" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon">
                             <template v-slot:prepend>
                               <v-icon large>mdi-account</v-icon>
                             </template>
                           </v-text-field>
                         </v-col>
-                        <v-col cols="5" md="5" lg="5" align-self="center" class="pa-0">
+                        <!-- <v-col cols="5" md="5" lg="5" align-self="center" class="pa-0">
                           <v-row class="create-row ">
                             <v-col cols="12" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 py-0">
                               <v-checkbox hide-details label="OneChat" v-model="actor_email.checkbox" class="mt-0 pt-0 onechat-check"></v-checkbox>
-                            </v-col>
-                            <v-col v-if="flow_data_custom.actor.permission_email.length > 1" cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 pl-2 pr-0 add-delete-permission-block"> <!-- delete email in each step button -->
-                              <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn" @click="removeActor(flow_data_custom.index,actor_email)">
-                                <v-icon>mdi-minus</v-icon>
-                              </v-btn>
-                            </v-col>
-                            <v-col v-if="index == flow_data_custom.actor.permission_email.length-1" cols="auto" md="auto" lg="auto" align-self="center" class="pt-0 px-2 add-delete-permission-block"> <!-- add email in each step button -->
-                              <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn" @click="addActor(flow_data_custom.index)">
-                                <v-icon>mdi-plus</v-icon>
-                              </v-btn>
-                            </v-col>
-                          </v-row>
+                            </v-col> -->
+                        <v-col v-if="flow_data_custom.actor.permission_email.length > 1" cols="auto" md="auto" lg="auto" align-self="center" class="pt-1 pl-2 pr-0 add-delete-permission-block"> <!-- delete email in each step button -->
+                          <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn" @click="removeActor(flow_data_custom.index,actor_email)">
+                            <v-icon>mdi-minus</v-icon>
+                          </v-btn>
                         </v-col>
+                        <v-col v-if="index == flow_data_custom.actor.permission_email.length-1" cols="auto" md="auto" lg="auto" align-self="center" class="pt-1 pl-2 pr-0 add-delete-permission-block"> <!-- add email in each step button -->
+                          <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn" @click="addActor(flow_data_custom.index)">
+                            <v-icon>mdi-plus</v-icon>
+                          </v-btn>
+                        </v-col>
+                          <!-- </v-row>
+                        </v-col> -->
                       </v-row>
-                    </template>
                     </div>
                   </v-card>
                 </v-tab-item>
@@ -682,22 +700,22 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                   "permission_email": xyz.actor[0].permission_email.map((yz,index) => {
                     var result = []
                     result = this.user_detail.filter(ele => {
-                      if((ele.data.thai_email == yz.thai_email) || 
-                      (ele.data.thai_email2 == yz.thai_email) || 
-                      (ele.data.thai_email3 == yz.thai_email))
+                      if((ele.data.thai_email == yz.thai_email.trim()) || 
+                      (ele.data.thai_email2 == yz.thai_email.trim()) || 
+                      (ele.data.thai_email3 == yz.thai_email.trim()))
                       return ele
                     })
                     result = [...new Set(result)]
                     if(!result.length) {
                       this.user_detail.forEach(ele => {
                         ele.data.email.forEach(e => {
-                          if(e.email == yz.thai_email){
+                          if(e.email == yz.thai_email.trim()){
                             result.push(ele)
                           }
                         })
                         if(ele.data.business_mail){
                           ele.data.business_mail.forEach(e =>{
-                            if(e.email == yz.thai_email){
+                            if(e.email == yz.thai_email.trim()){
                               result.push(ele)
                             }
                           })
@@ -801,22 +819,22 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                         var result = []
                         // var result = this.user_detail.find(ele => ele.data.thai_email == yz.thai_email)
                         result = this.user_detail.filter(ele => {
-                          if((ele.data.thai_email == yz.thai_email) || 
-                          (ele.data.thai_email2 == yz.thai_email) || 
-                          (ele.data.thai_email3 == yz.thai_email))
+                          if((ele.data.thai_email == yz.thai_email.trim()) || 
+                          (ele.data.thai_email2 == yz.thai_email.trim()) || 
+                          (ele.data.thai_email3 == yz.thai_email.trim()))
                           return ele
                         })
                         result = [...new Set(result)]
                         if(!result.length) {
                           this.user_detail.forEach(ele => {
                             ele.data.email.forEach(e => {
-                              if(e.email == yz.thai_email){
+                              if(e.email == yz.thai_email.trim()){
                                 result.push(ele)
                               }
                             })
                             if(ele.data.business_mail){
                               ele.data.business_mail.forEach(e =>{
-                                if(e.email == yz.thai_email){
+                                if(e.email == yz.thai_email.trim()){
                                   result.push(ele)
                                 }
                               })
@@ -1294,7 +1312,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
   }
 
   .all-step-block {
-    height: calc(100vh - 405px);
+    height: calc(100vh - 366px);
     overflow: auto;
   }
 
@@ -1316,11 +1334,13 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 
   .page-sign-box.v-text-field--outlined.v-input--dense.v-text-field--outlined > .v-input__control > .v-input__slot {
     min-height: 32px !important;
+    padding-left: 3%;
     padding-right: 0%;
   }
 
   .page-sign-box.v-text-field--outlined.v-input--dense .v-label {
     top: 8px !important;
+    left: 9px !important;
     font-size: 13px;
   }
 
@@ -1410,14 +1430,6 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       height: unset;
     }
 
-    .page-sign-box.v-text-field--outlined.v-input--dense.v-text-field--outlined > .v-input__control > .v-input__slot {
-      padding-left: 3%;
-    }
-
-    .page-sign-box.v-text-field--outlined.v-input--dense .v-label {
-      left: 9px !important;
-    }
-
     .each-step-mail-row {
       padding-left: 0% !important;
     }
@@ -1427,7 +1439,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
     } 
 
     .add-delete-permission-block {
-      padding-bottom: 5% !important;
+      padding-bottom: 3% !important;
     }
 
     .delete-permission-btn {
