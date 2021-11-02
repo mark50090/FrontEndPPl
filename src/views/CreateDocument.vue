@@ -42,9 +42,10 @@
                     :page="page"
                     ref="pdfComponent"
                   />
+                  <template v-for="item in signArray">
                     <vue-draggable-resizable
                       :id="item.name"
-                      v-for="item in signArray"
+                      v-if="item.action == 'Sign'"
                       :key="item.key"
                       :x="item.sign_position_x"
                       :y="item.sign_position_y"
@@ -64,6 +65,7 @@
                         </span>
                       </v-row>
                     </vue-draggable-resizable>
+                  </template>
                 </div>
                 </div>
               </v-row>
@@ -163,7 +165,7 @@
                           {{textLang.number}} {{ flow_data.index+1 }} : {{ translate(flow_data.action) }} <!-- or ผู้มีสิทธิ์เซ็น -->
                         </v-col>
                         <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pr-0 pb-2"> <!-- show when it is sign step -->
-                          <v-switch dense inset hide-details class="mt-0 pt-0 create-switch-ca" v-model="flow_data.switch_ca" @change="isDirty = true">
+                          <v-switch disabled dense inset hide-details class="mt-0 pt-0 create-switch-ca" v-model="flow_data.switch_ca" @change="isDirty = true">
                             <template v-slot:label>
                               <span class="create-switch-ca-label">Certificate (CA)</span>
                             </template>
@@ -584,7 +586,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                 flow_data.actor[0].permission.forEach(role => {
                   role.checkbox = true
                 })
-                if(flow_data.action == 'Sign') this.signArray.push(flow_data.approver.sign_position)
+                flow_data.approver.sign_position.action = flow_data.action
+                this.signArray.push(flow_data.approver.sign_position)
               })
               this.signArray.forEach((element,index) => {
                 element.sign_queue_no = index+1
@@ -696,15 +699,38 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         try {
           this.emitLoading(true)
           if(this.create_tab == 1){
-            flow_data = this.flow_datas.map(xyz => ({
+            var flow_data = this.flow_datas.map(xyz => ({
               "actor": [
                 {
                   "permission_status": false,
                   "permission": [],
                   "permission_email_status": true,
-                  "permission_email": xyz.actor[0].permission_email.map(yz => {
-                    var result = this.user_detail.find(ele => ele.data.thai_email == yz.thai_email)
-                    var res_data = result.data
+                  "permission_email": xyz.actor[0].permission_email.map((yz,index) => {
+                    var result = []
+                    result = this.user_detail.filter(ele => {
+                      if((ele.data.thai_email == yz.thai_email) || 
+                      (ele.data.thai_email2 == yz.thai_email) || 
+                      (ele.data.thai_email3 == yz.thai_email))
+                      return ele
+                    })
+                    result = [...new Set(result)]
+                    if(!result.length) {
+                      this.user_detail.forEach(ele => {
+                        ele.data.email.forEach(e => {
+                          if(e.email == yz.thai_email){
+                            result.push(ele)
+                          }
+                        })
+                        if(ele.data.business_mail){
+                          ele.data.business_mail.forEach(e =>{
+                            if(e.email == yz.thai_email){
+                              result.push(ele)
+                            }
+                          })
+                        }
+                      })
+                    }
+                    var res_data = result[index].data
                     return {
                       account_id : res_data.id,
                       first_name_th: res_data.first_name_th,
@@ -748,7 +774,6 @@ import VueDraggableResizable from 'vue-draggable-resizable'
               "status": "W",
               "index": xyz.index
             }))
-            var url = '/transaction/api/v1/addtransaction'
             if(this.isDirty){
               var body = {
                 flow_id: this.flow_id,
@@ -774,7 +799,6 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             }
           }else if(this.create_tab == 2){
             // var info = this.$store.state.allEmployeeInfo
-            var url = '/transaction/api/v1/addtransaction'
             var flow_data = this.flow_datas_custom.map(xyz => ({
               "status_implement": false,
               "input_status": false,
@@ -858,6 +882,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
               "index": xyz.index
             }))
           }
+          var url = '/transaction/api/v1/addtransaction'
           if(this.create_tab == 1){
             var {data} = await this.axios.post(this.$api_url + url,body)
           }
@@ -1034,7 +1059,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             return newItem.index + 1
           },
           sign_urx: "0.200",
-          sign_ury: "0.100"
+          sign_ury: "0.100",
+          action: 'Sign'
         }
         newItem.sign = init_sign
         this.signArray.push(init_sign)
