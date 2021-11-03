@@ -237,7 +237,7 @@ import { EventBus } from '../EventBus'
               this.inbox_data.push(element) // ใส่ค่าที่ได้จาก api ลงในตาราง
             });
           }
-          // this.countTransaction()
+          this.countTransaction()
         } catch (error) {
           console.log(error)
         }

@@ -267,7 +267,7 @@
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
         EventBus.$emit('changeBiz')
         this.isReady = true
-        this.getEmployeeInfo()
+        // this.getEmployeeInfo()
         // this.$router.push({ path: '/inbox' })
       },
       checkCreateDocMenu() {
@@ -291,7 +291,7 @@
       changeLang(item) {
         this.$store.commit('changeLanguage',item);
         sessionStorage.setItem('page_lang',item)
-        EventBus.$emit('changeLang')
+        // EventBus.$emit('changeLang')
 		  },
     }
   }

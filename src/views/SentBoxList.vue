@@ -123,6 +123,7 @@ import { EventBus } from '../EventBus'
       typeDocument:[{name: 'ทั้งหมด', _id: "", detail: ""}],
       selectedTypeDocs: {name: 'ทั้งหมด', _id: "", detail: ""},
       isReady: false,  
+      isChangeTab: false,
     }),
     
     mounted() {
@@ -135,7 +136,8 @@ import { EventBus } from '../EventBus'
       EventBus.$off('changeBiz')
     },
     watch:{
-      "optionsTransaction.page"(newValue,oldValue){ 
+      "optionsTransaction.page"(newValue,oldValue){
+        if (newValue != 1 || !this.isChangeTab) 
             this.searchTransaction({page:newValue}).then(data => {})
         },
       "optionsTransaction.itemsPerPage"(newValue,oldValue){
@@ -145,6 +147,8 @@ import { EventBus } from '../EventBus'
       "document_status"(newValue,oldValue){
         this.optionsTransaction.page = 1
         this.searchTransaction({status:newValue}).then(data => {})
+        this.changeTotalItem()
+        this.isChangeTab = true
       }
     },
 
@@ -181,16 +185,16 @@ import { EventBus } from '../EventBus'
             owned: true ,
           })
           if(data.status){ 
-              data.result.forEach(element => { 
-                  this.sentbox_data.push(element) 
-              });
-            
+            data.result.forEach(element => { 
+              this.sentbox_data.push(element) 
+            });
           }
           this.countTransaction()
         } catch (error) {
           console.log(error)
         }
         this.emitLoading(false)
+        this.isChangeTab = false
       },
       async countTransaction(){
         var status = ""
