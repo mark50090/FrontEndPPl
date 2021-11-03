@@ -18,16 +18,16 @@
         </v-card-title>
         <v-card-text class="pb-0 pt-3">
           <!--<v-row class="s-stamp" >
-            <v-col  cols="12" md="4" lg="4" class=" pl-0 m-stamp a-stamp " align-self="center">
+            <v-col  cols="12" md="4" lg="4" class=" pl-0 m-stamp a-stamp font-color-stamp " align-self="center">
             {{textLang.stamp_type}}:
             </v-col>
             <v-col  cols="12" md="8" lg="8" class=" px-0  a-stamp" align-self="center">
             <v-select dense outlined hide-details :placeholder="textLang.stamp_type"  color="rgb(102, 101, 101)" class="m-stamp l-stamp" :items="items" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }"></v-select>        
             </v-col>
             </v-row>
-            <br class="display-mobile-only">--> 
+            <br class="display-mobile-only"> -->
             <v-row class="s-stamp ">  
-            <v-col  cols="12" md="4" lg="4" class=" pl-0 m-stamp   a-stamp" align-self="center">
+            <v-col  cols="12" md="4" lg="4" class=" pl-0 m-stamp font-color-stamp  a-stamp" align-self="center">
             {{textLang.message_stamp}}:
         </v-col>
           <v-col
@@ -150,6 +150,9 @@ export default {
 }
 .a-stamp{
   padding-top: 4%;
+}
+.font-color-stamp{
+  color: black;
 }
 @media only screen and (max-width:600px){ /*css for mobile screen*/
 .a-stamp{
