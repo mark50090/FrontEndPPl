@@ -48,6 +48,11 @@
 import { EventBus } from '../EventBus'
 import Setting from '../views/Setting.vue'
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.components.DefaultSignatureModal
+    }
+  },
   components: {
     Setting
   },
@@ -65,19 +70,6 @@ export default {
     notify_email: '',
     switch_notify_email: false,
     default_Business: '',
-
-    //Language Variable
-    textLang: {
-      signature_header: 'กำหนดลายเซ็น',
-      upload_file: 'อัพโหลดไฟล์',
-      signpad: 'วาดลายเซ็น',
-      clearsign: 'ล้างค่า',
-      savesign: 'บันทึก',
-      update_default_success: 'อัพเดทข้อมูลสำเร็จ',
-      update_default_fail: 'อัพเดทข้อมูลไม่สำเร็จ',
-      update_succeed: 'สำเร็จ',
-      update_error: 'ไม่สำเร็จ'
-    }
   }),
   mounted() {
     EventBus.$on('DefaultSignature',this.startSettingSignature)

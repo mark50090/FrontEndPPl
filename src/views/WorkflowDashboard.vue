@@ -65,6 +65,11 @@
 import { EventBus } from '../EventBus'
 import VueApexCharts from 'vue-apexcharts'
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.WorkflowDashboard
+    }
+  },
   components: {
     apexcharts: VueApexCharts
   },
@@ -124,11 +129,6 @@ export default {
     workflow_name: '',
     workflow_id: '',
     token: '',
-    textLang:{
-      alldocuments: 'เอกสารทั้งหมด',
-      allstatus: 'สถานะทั้งหมด',
-      
-    }
   }),
   mounted () {
     EventBus.$emit('loadingOverlay', false)

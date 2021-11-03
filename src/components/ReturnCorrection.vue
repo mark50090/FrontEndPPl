@@ -51,23 +51,16 @@
 <script>
 import { EventBus } from '../EventBus'
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.components.ReturnCorrection
+      }
+    },
     data: () => ({
       dialog: false,
       transaction_id: '',
       revertable_order: [],
       selected_order: '',
-
-      //Language Variable
-      textLang: {
-        text_head_return: 'ส่งคืนแก้ไข',
-        num_return: 'ลำดับที่ส่งคืน',
-        recorrection: 'ส่งคืน',
-        return_file_success: 'ส่งคืนแก้ไขเอกสารสำเร็จ',
-        return_file_fail: 'ส่งคืนแก้ไขเอกสารไม่สำเร็จ',
-        return_revertable_no: 'ลำดับที่ ',
-        return_succeed: 'สำเร็จ',
-        return_error: 'ไม่สำเร็จ'
-      }
     }),
     mounted() {
       EventBus.$on('FormReturn',this.getFormReturn)

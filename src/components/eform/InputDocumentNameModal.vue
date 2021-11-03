@@ -119,6 +119,11 @@
 <script>
 import { EventBus } from '../../EventBus'
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.components.InputDocumentNameModal
+    }
+  },
   data: () => ({ 
     dialog: false,
     doc_name: '',
@@ -127,28 +132,6 @@ export default {
     senderPerm: "",
     step_show: true,
     buttonClicked:false,
-    textLang: {
-      name_document: "ตั้งชื่อเอกสาร",
-      order_document: "และลำดับการกรอกเอกสาร",
-      name: "ชื่อเอกสาร:",
-      please_name_document: "กรุณาตั้งชื่อเอกสาร",
-      subject: "เรื่อง:",
-      no_subject: "<ไม่มีหัวเรื่อง>",
-      message: "ข้อความ:",
-      order_filling: "ลำดับการกรอก",
-      delete_no: "ลบลำดับที่",
-      delete_email_btn: "ลบอีเมลผู้กรอก",
-      add_email_btn: "เพิ่มอีเมลผู้กรอก",
-      document_sender: "ผู้ส่งเอกสารเข้าระบบ Paperless",
-      additional: "เอกสารแนบเพิ่มเติม:",
-      please_attachment: "กรุณาเลือกเอกสารแนบ",
-      cancel: "ยกเลิก",
-      save: "บันทึกเอกสาร",
-      input_doc_name: "กรุณากรอกชื่อเอกสาร",
-      reference: "อ้างอิงลำดับที่ ",
-      not_found_email: "ไม่พบอีเมล์ต่อไปนี้ในระบบ",
-      forbidding_email_title: "ไม่สามารถใช้อีเมลต่อไปนี้ในลำดับดังกล่าวได้"
-    },
     alert_text: "",
     orderMessage: {},
     files: [],

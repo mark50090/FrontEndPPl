@@ -47,6 +47,11 @@
 <script>
 import { EventBus } from '../../EventBus'
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.components.SignaturePadModal
+    }
+  },
   data: () => ({
     dialogSign: false,
     option_style: ['Default', 'Sign Pad'],
@@ -56,13 +61,6 @@ export default {
     signOnly: false,
     buttonClicked: false,
     noFlowSign: false,
-    textLang: {
-      sign_approve: "ลงนามอนุมัติ",
-      reject_approval: "ปฏิเสธอนุมัติ",
-      clear_button: "ล้างค่า",
-      approve: "อนุมัติ",
-      cancel: "ยกเลิก"
-    },
     //Color Variable
     // color_dialog_header_bg: '#2ACA9F', //class dialog_title in DeleteModal.vue
     color_ca_switch: '#2ACA9F',

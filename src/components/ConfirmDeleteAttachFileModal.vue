@@ -31,16 +31,14 @@
 <script>
 import { EventBus } from '../EventBus'
   export default {
+    computed: {
+      textLang() {
+          return this.$store.getters.textLang.components.ConfirmDeleteAttachFileModal
+      }
+    },
     data: () => ({
       dialog: false,
-      
       //Language Variable
-      textLang: {
-          font_head_deleteattach1: 'ต้องการลบไฟล์ \"',
-          font_head_deleteattach2: '\" หรือไม่ ?',
-          deleteattach_cancel: 'ยกเลิก',
-          deleteattach_confirm: 'ตกลง'
-      }
     }),
     mounted() {
       EventBus.$on('FormDeleteAttach',this.getFormDeleteAttach)

@@ -84,6 +84,11 @@
 <script>
 import { EventBus } from '../EventBus'
 export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.components.StampModal
+      }
+    },
     data: () => ({
         dialog: false,
         message: "",

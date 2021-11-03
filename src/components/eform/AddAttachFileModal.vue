@@ -37,6 +37,11 @@
   import { EventBus } from '../../EventBus'
 
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.components.AddAttachFileModal
+      }
+    },
     data: () => ({
       add_attach_dialog: false,
       files: [],
@@ -44,15 +49,6 @@
       currentUser: "",
       attachedFiles: [],
       //Language Variable
-      textLang: {
-        attach_header_dialog: "แนบเอกสารเพิ่มเติม",
-        input_attach_title: "เอกสารแนบเพิ่มเติม",
-        placeholder_file: "กรุณาเลือกเอกสารแนบ",
-        cancel_attach_btn: "ยกเลิก",
-        attach_btn: "ตกลง",
-        wait_upload: "รอการอัพโหลด"
-      },
-
       //Color Variable
       color_chip_file: '#2ACA9F',
       color_file_input: '#2ACA9F',

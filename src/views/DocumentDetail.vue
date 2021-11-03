@@ -424,6 +424,11 @@ import vueSignature from 'vue-signature'
 import showFormReturn from '../components/ReturnCorrection'
 import DeleteMessage from '../components/DeleteMessage'
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.DocumentDetail
+    }
+  },
   components: {
     StampModal,
     showFormMail,
@@ -479,45 +484,9 @@ export default {
     is_approve: false,
     is_reject: false,
     isShowRevertButton: true,
-    textLang: {
-      no: 'ลำดับที่',
-      filename: 'ชื่อไฟล์',
-      sendername: 'ชื่อผู้ส่ง',
-      senton: 'ส่งเมื่อ',
-      details: 'รายละเอียด',
-      downloadPDF: 'ดาวน์โหลด PDF',
-      copydocuments: 'คัดลอกเอกสาร',
-      returnedit: 'ส่งคืนแก้ไข',
-      canceldocument: 'ยกเลิกเอกสาร',
-      workorder: 'ลำดับการทำงาน',
-      messagememo: 'บันทึกข้อความ',
-      attachment: 'ไฟล์แนบ',
-      number: 'ลำดับ',
-      you: '(คุณ)',
-      pendingapproval: 'รออนุมัติ',
-      approved: 'อนุมัติแล้ว',
-      rejectapproval: 'ปฏิเสธอนุมัติ',
-      specifymessage: 'ระบุข้อความ',
-      attached_file_placeholder: 'เลือกไฟล์',
-      attachfile: 'แนบไฟล์',
-      succeed: 'สำเร็จ',
-      Successfullyapproved: 'อนุมัติเอกสารสำเร็จ',
-      Successfullyrejected: 'ปฏิเสธเอกสารสำเร็จ',
-      cantread: 'ไม่สามารถอ่าน PDF ได้',
-      approve_fail: 'อนุมัติไม่สำเร็จ',
-      erroroccurred: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
-      fail: 'ไม่สำเร็จ',
-      clear: 'ล้างค่า',
-      warn: 'แจ้งเตือน',
-      notuploadingfiles: 'ไม่อนุญาตให้อัปโหลดไฟล์ ',
-      oversize: ' เนื่องจากมีขนาดเกิน 30 MB',
-      refuse: 'ปฏิเสธ',
-      approvee: 'อนุมัติ'
-    }
   }),
-
-  computed: {
-  },
+  // computed: {
+  // },
   mounted () {
     this.token = sessionStorage.getItem('access_token')
     this.my_name = sessionStorage.getItem('name')

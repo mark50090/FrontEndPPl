@@ -25,18 +25,14 @@
 import { EventBus } from '../../EventBus'
 
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.components.BackFromCreateModal
+    }
+  },
   data: () => ({
     dialog: false,
     page_name: '',
-    textLang: {
-      back_document: "ออกจากหน้า" ,
-      sure_leave: "คุณต้องการออกจากหน้า" ,
-      no_save: "โดยไม่บันทึกหรือไม่" ,
-      text_confirm_exit: "ต้องการออกจากหน้าสร้างแบบฟอร์มโดยไม่บันทึกหรือไม่ ?",
-      cancel: "ยกเลิก" ,
-      back: "ออก" 
-    },
-
     //Color Variable
     // color_dialog_header_bg: '#2ACA9F', //class dialog_title in DeleteModal.vue
     color_back: '#2ACA9F',

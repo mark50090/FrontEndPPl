@@ -169,6 +169,11 @@
 <script>
   import { EventBus } from '../EventBus'
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.Toolbar
+      }
+    },
     data: () => ({
       drawer: null,
       firstname: '',
@@ -184,21 +189,6 @@
       doc_style_active_class: '',
       allInfo: [],
       lang_img: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Flag_of_Thailand_%28non-standard_colours%29.svg',
-      textLang:{
-        setup: 'ตั้งค่า',
-        logout: 'ออกจากระบบ',
-        documentbox: 'กล่องเอกสาร',
-        createdocument: 'สร้างเอกสาร',
-        uploadapprovaldocuments: 'อัพโหลดเอกสารอนุมัติ',
-        filloutdocument: 'กรอกเอกสาร',
-        sentitems: 'รายการที่ส่ง',
-        documentreport: 'รายงานเอกสาร',
-        documentusagereport: 'รายงานการใช้งานเอกสาร',
-        managedocumentformats: 'จัดการรูปแบบเอกสาร',
-        Createapprovalform: 'สร้างรูปแบบอนุมัติ',
-        createform: 'สร้างแบบฟอร์ม',
-        defaultBiz: ''
-      },
     }),
     watch: {
       $route(to, from) {

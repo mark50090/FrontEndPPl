@@ -77,6 +77,11 @@
 <script>
 import { EventBus } from '../EventBus'
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.components.DocumentReportModal
+    }
+  },
   data: () => ({
     dates: [],
     currentdate: new Date().toISOString().substr(0, 10),
@@ -84,14 +89,6 @@ export default {
     menu2: false,
     workflow_id: '',
     template_id: '',
-
-    //Language Variable
-    textLang: {
-      texthead_card: 'Export รายงาน Excel',
-      select_date: 'เลือกช่วงวันที่ที่ต้องการ Export',
-      cancel_export: 'ยกเลิก',
-      range_join: ' จนถึง '
-    }
   }),
   mounted() {
     EventBus.$on('documentreport',this.documentreports)

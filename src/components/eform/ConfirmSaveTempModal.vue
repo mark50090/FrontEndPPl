@@ -23,15 +23,13 @@
 <script>
   import { EventBus } from '../../EventBus'
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.components.ConfirmSaveTempModal
+      }
+    },
     data: () => ({
       dialog_confirm_save: false,
-      textLang: {
-        confirm_save: "ยืนยันการบันทึกรูปแบบเอกสาร" ,
-        sure_save: "ต้องการบันทึกแบบฟอร์มนี้หรือไม่ ?" ,
-        cancel: "ยกเลิก" ,
-        save: "บันทึก" 
-      },
-
       //Color Variable
       // color_dialog_header_bg: '#2ACA9F', //class dialog_title in DeleteModal.vue
       color_save: '#2ACA9F',

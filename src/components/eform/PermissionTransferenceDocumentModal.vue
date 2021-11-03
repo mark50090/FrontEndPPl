@@ -37,6 +37,11 @@
 <script>
   import { EventBus } from '../../EventBus'
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.components.PermissionTransferenceDocument
+      }
+    },
     data: () => ({
       dialog_permission_transference: false,
       email: "",
@@ -44,19 +49,6 @@
       blockEmail: ['wanchai.vach@one.th', 'morragot.ku@one.th'],
       alertTextShow: false,
       alert_text: "",
-
-      //Language Variable
-      textLang: {
-        per_transference: "โอนสิทธิ์การกรอกเอกสาร",
-        email: " One E-mail ที่ต้องการโอนสิทธิ์",
-        cancel: "ยกเลิก",
-        transfer: "โอนสิทธิ์",
-        not_found_email: "ไม่พบอีเมลต่อไปนี้ในระบบ",
-        forbidding_email_title: "ไม่สามารถใช้อีเมลต่อไปนี้ในลำดับดังกล่าวได้",
-        tranfer_success: "โอนสิทธิ์สำเร็จ",
-        tranfer_fail: "โอนสิทธิ์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
-      },
-
       //Color Variable
       color_mail_permission_transference: '#2ACA9F',
       color_permission_btn: '#2ACA9F',

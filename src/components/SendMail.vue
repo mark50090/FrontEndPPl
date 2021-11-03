@@ -67,22 +67,17 @@
 <script>
 import { EventBus } from '../EventBus'
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.components.SendMail
+      }
+    },
     data: () => ({
       dialog: false,
       reveal: false,
       selected_email: [],
       sending_email_array: [],
       sending_email: "",
-
-      //Language Variable
-      textLang: {
-        recipient_email: 'อีเมลผู้รับ',
-        send_email: 'ส่งอีเมล',
-        send_email_success: 'ส่งอีเมลสำเร็จ',
-        send_email_fail: 'ส่งอีเมลไม่สำเร็จ',
-        send_email_succeed: 'สำเร็จ',
-        send_email_error: 'ไม่สำเร็จ'
-      }
     }),
     mounted() {
       EventBus.$on('FormMail',this.getFromMail)
