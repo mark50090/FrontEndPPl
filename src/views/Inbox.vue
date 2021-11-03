@@ -169,7 +169,6 @@ import { EventBus } from '../EventBus'
       goToDocumentDetail(id, event) {
         if(event.document_status == "W") {
           var currentStep = event.flow_data.find(item => item.status == "W")
-          console.log(currentStep)
           if(currentStep && currentStep.action == "Fill" && currentStep.actor[0].permission_email.find(item => item.account_id == this.currentAccount)) {
             this.goToFillPage(event)
           } else {
