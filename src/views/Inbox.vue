@@ -129,7 +129,8 @@ import { EventBus } from '../EventBus'
       typeDocument:[{name: 'ทั้งหมด', _id: "", detail: ""}],
       selectedTypeDocs: {name: 'ทั้งหมด', _id: "", detail: ""},
       isReady: false,
-      isChangeTab: false
+      isChangeTab: false,
+      currentAccount: ""
     }),
     
 
@@ -139,6 +140,7 @@ import { EventBus } from '../EventBus'
       this.countTransaction()
       EventBus.$emit('loadingOverlay', true)
       EventBus.$on('changeBiz', this.changeBiz)
+      this.currentAccount = JSON.parse(sessionStorage.getItem('userProfile')).id
     },
     beforeDestroy() {
       EventBus.$off('changeBiz')
@@ -167,7 +169,7 @@ import { EventBus } from '../EventBus'
       goToDocumentDetail(id, event) {
         if(event.document_status == "W") {
           var currentStep = event.flow_data.find(item => item.status == "W")
-          if(currentStep && currentStep.action == "Fill") {
+          if(currentStep && currentStep.action == "Fill" && currentStep.actor[0].permission_email.find(item => item.account_id == this.currentAccount)) {
             this.goToFillPage(event)
           } else {
             this.goToDetailPage(id)
