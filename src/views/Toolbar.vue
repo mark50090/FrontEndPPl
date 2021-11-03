@@ -201,7 +201,7 @@
       EventBus.$on('loadingOverlay', this.changeLoading)
       this.checkCreateDocMenu()
       this.checkDocStyleMenu()
-      this.changeLang(sessionStorage.getItem('page_lang'))
+      // this.changeLang(sessionStorage.getItem('page_lang'))
     },
     beforeDestroy(){
       sessionStorage.selected_business = ''
@@ -260,7 +260,7 @@
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
         EventBus.$emit('changeBiz')
         this.isReady = true
-        // this.getEmployeeInfo()
+        this.getEmployeeInfo()
         // this.$router.push({ path: '/inbox' })
       },
       checkCreateDocMenu() {
@@ -290,7 +290,7 @@
         }
         this.$store.commit('changeLanguage',item);
         sessionStorage.setItem('page_lang',item)
-        // EventBus.$emit('changeLang')
+        EventBus.$emit('changeLang')
 		  },
     }
   }
