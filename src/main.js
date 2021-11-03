@@ -15,7 +15,6 @@ import device from "vue-device-detector"
 import VueApexCharts from 'vue-apexcharts'
 import VueSignaturePad from 'vue-signature-pad'
 
-
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(VueSweetalert2)
@@ -24,15 +23,7 @@ Vue.use(device)
 Vue.use(VueApexCharts)
 Vue.use(VueSignaturePad)
 
-// UAT
-Vue.prototype.$api_url = 'https://digitalflow_dev.one.th/api'
-
-// POC
-// Vue.prototype.$api_url = 'https://digitalflow_poc_01.one.th/api'
-
-// PRD
-// Vue.prototype.$api_url = 'https://digitalflow.one.th/api'
-
+Vue.prototype.$api_url = 'https://uatpaperless.one.th/api3'
 // Vue.prototype.$api_url = 'http://localhost:8808'
 Vue.component('vue-draggable-resizable', VueDraggableResizable)
 
