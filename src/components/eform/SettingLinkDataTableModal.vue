@@ -110,7 +110,6 @@
       notReady:false,
       tempData: [],
       excelFile: "",
-
       //Color Variable
       // color_dialog_header_bg: '#2ACA9F', //class dialog_title in DeleteModal.vue
       color_loading_bar_bg: '#C2EB81',
@@ -122,10 +121,10 @@
       color_save: '#2ACA9F',
       colorObject: {
       toolbar: {
-  				toolbar_bg_color1: '#C2EB81',
-  				toolbar_bg_color2: '#A1E9C0',
-  				toolbar_font_color: '#0E3852',
-  				menu_select_hover_color: '#E6F3CB'
+  			toolbar_bg_color1: '#C2EB81',
+  			toolbar_bg_color2: '#A1E9C0',
+  			toolbar_font_color: '#0E3852',
+  			menu_select_hover_color: '#E6F3CB'
  			},
  			modal: {
   				modal_main_color: '#2ACA9F',
@@ -138,7 +137,7 @@
       this.tableData = []
       EventBus.$on('openLinkData',this.getDataTable)
       EventBus.$on('changeLang', this.changeLange)
-      this.changeLange()
+      // this.changeLange()
       // this.changeColor()
     },
     beforeDestroy() {

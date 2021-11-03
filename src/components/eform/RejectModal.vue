@@ -39,7 +39,7 @@ export default {
   mounted() {
     EventBus.$on('rejectDocument',this.rejectConfirm)
     EventBus.$on('changeLang', this.changeLange)
-    this.changeLange()
+    // this.changeLange()
   },
   beforeDestroy() {
     EventBus.$off('changeLang')

@@ -695,7 +695,6 @@
     }
   },
   "show_template": {
-    "textLang": {
       "tabMenubar": {
         "back": "Leave Form",
         "review_ex": "Preview",
@@ -779,7 +778,6 @@
         "eform_use": "This E-Form is used by ",
         "upload_fail" : "Uplaoding file is incomplete. Please try again later."
       }
-    }
   },
   "ApprovalList":{
     "search": "Search",

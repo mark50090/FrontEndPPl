@@ -493,8 +493,6 @@ export default {
     is_reject: false,
     isShowRevertButton: true,
   }),
-  // computed: {
-  // },
   mounted () {
     this.token = sessionStorage.getItem('access_token')
     this.my_name = sessionStorage.getItem('name')

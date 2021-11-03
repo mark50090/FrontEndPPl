@@ -35,7 +35,7 @@ export default {
   mounted() {
     EventBus.$on('ConfirmCancelDoc',this.ConfirmCancelDocument)
     EventBus.$on('changeLang', this.changeLange)
-    this.changeLange()
+    // this.changeLange()
   },
   beforeDestroy() {
     EventBus.$off('ConfirmCancelDoc')

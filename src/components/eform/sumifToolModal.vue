@@ -108,7 +108,7 @@
       this.tableData = []
       EventBus.$on('openSumifTool',this.getDataTable)
       EventBus.$on('changeLang', this.changeLange)
-      this.changeLange()
+      // this.changeLange()
       // this.changeColor()
     },
     beforeDestroy() {
