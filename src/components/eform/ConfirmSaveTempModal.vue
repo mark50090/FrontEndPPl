@@ -50,7 +50,7 @@
     mounted() {
       EventBus.$on('openConfirmSave',this.startConfirm)
       EventBus.$on('changeLang', this.changeLange)
-      this.changeLange()
+      // this.changeLange()
       // this.changeColor()
     },
     beforeDestroy() {

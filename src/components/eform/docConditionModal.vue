@@ -160,7 +160,7 @@
     mounted() {
       EventBus.$on('openDocCondition',this.getCondition)
       EventBus.$on('changeLang', this.changeLange)
-      this.changeLange()
+      // this.changeLange()
       // this.changeColor()
     },
     beforeDestroy() {

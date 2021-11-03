@@ -232,7 +232,7 @@
     mounted() {
       EventBus.$on('openHideSetting',this.getOption)
       EventBus.$on('changeLang', this.changeLange)
-      this.changeLange()
+      // this.changeLange()
       // this.changeColor()
     },
     beforeDestroy() {

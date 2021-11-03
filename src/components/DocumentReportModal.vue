@@ -77,11 +77,6 @@
 <script>
 import { EventBus } from '../EventBus'
 export default {
-  computed: {
-    textLang() {
-      return this.$store.getters.textLang.components.DocumentReportModal
-    }
-  },
   data: () => ({
     dates: [],
     currentdate: new Date().toISOString().substr(0, 10),
@@ -100,6 +95,9 @@ export default {
     dateRangeText() {
       return this.dates.map(x => this.setDateFormatBEShort(x)).join(this.textLang.range_join)
     },
+    textLang() {
+      return this.$store.getters.textLang.components.DocumentReportModal
+    }
   },
   methods: {
     documentreports(id) {

@@ -106,7 +106,7 @@
 				}
 			})
 			this.files = folderAttach
-			this.changeLange()
+			// this.changeLange()
 			this.dialog_attach_file = true
 		},
 		fileDownload(file) {

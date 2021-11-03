@@ -54,7 +54,7 @@ export default {
     EventBus.$on('backFromCreate',this.startBackModal)
     EventBus.$on('backFromEdit',this.startBackModal)
     EventBus.$on('changeLang', this.changeLange)
-    this.changeLange()
+    // this.changeLange()
     // this.changeColor()
   },
   beforeDestroy() {

@@ -1232,7 +1232,7 @@
       EventBus.$on('changeAttachFiles', this.changeUploadingFiles)
       EventBus.$on('transferenceDone', this.transferenceDone)
       EventBus.$on('removeAttachFiles', this.removeAttachFiles)
-      this.changeLange()
+      // this.changeLange()
     },
      watch: {
       sleep(val) {

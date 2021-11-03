@@ -85,7 +85,7 @@ export default {
   mounted() {
     EventBus.$on('openSignPad',this.openSignpad)
     EventBus.$on('changeLang', this.changeLange)
-    this.changeLange()
+    // this.changeLange()
     // this.changeColor()
   },
    beforeDestroy() {

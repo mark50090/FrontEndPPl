@@ -60,7 +60,7 @@
     methods: {
       openReferenceDoc(refDoc) {
         this.refDocData = refDoc
-        this.changeLange()
+        // this.changeLange()
         this.dialog_ref_doc = true
       },
       changeColor() {
