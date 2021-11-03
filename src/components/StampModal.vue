@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" persistent max-width="400">
+    <v-dialog v-model="dialog" persistent max-width="450">
       <v-card>
         <v-card-title class="e-stamp pb-0">
         <v-row class="s-stamp">
@@ -16,26 +16,38 @@
       </v-btn>
       </v-row>
         </v-card-title>
-        <v-card-text class="pb-0">
-          <v-row class="s-stamp" >
-        <v-col
-          cols="12"
-          md="12"
-          lg="12"
-          class="px-1"
-        >
-          <v-text-field class="m-stamp l-stamp"
-            :placeholder="textLang.message_stamp"
-            v-model="message"
-            color="rgb(102, 101, 101)"
-            outlined
-            hide-details
-            dense
-          ></v-text-field>
+        <v-card-text class="pb-0 pt-3">
+          <!--<v-row class="s-stamp" >
+            <v-col  cols="12" md="4" lg="4" class=" pl-0 m-stamp a-stamp " align-self="center">
+            {{textLang.stamp_type}}:
+            </v-col>
+            <v-col  cols="12" md="8" lg="8" class=" px-0  a-stamp" align-self="center">
+            <v-select dense outlined hide-details :placeholder="textLang.stamp_type"  color="rgb(102, 101, 101)" class="m-stamp l-stamp" :items="items" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }"></v-select>        
+            </v-col>
+            </v-row>
+            <br class="display-mobile-only">--> 
+            <v-row class="s-stamp ">  
+            <v-col  cols="12" md="4" lg="4" class=" pl-0 m-stamp   a-stamp" align-self="center">
+            {{textLang.message_stamp}}:
         </v-col>
-        </v-row>
+          <v-col
+            cols="12"
+            md="8"
+            lg="8"
+            class="px-0  a-stamp"
+          >
+            <v-text-field class="m-stamp l-stamp"
+              :placeholder="textLang.message_stamp"
+              v-model="message"
+              color="rgb(102, 101, 101)"
+              outlined
+              hide-details
+              dense
+            ></v-text-field>
+          </v-col>
+          </v-row> 
       </v-card-text>
-                <v-card-actions class="pb-3 pt-0">
+                <v-card-actions class="pb-3 pt-2">
                   <v-row class="s-stamp">
           <v-spacer></v-spacer>
           <v-col cols="6"
@@ -75,11 +87,16 @@ export default {
     data: () => ({
         dialog: false,
         message: "",
+        items: [{text: 'วันที่ปัจจุบัน',value:'current_date'},
+                {text: 'ข้อความ',value:'stamp_text'}],
         //Language Variable
         textLang: {
           message_stamp: 'ข้อความ Stamp',
           cancel_stamp: 'ยกเลิก',
-          confirm_stamp: 'บันทึก'
+          confirm_stamp: 'บันทึก',
+          stamp_type: 'ประเภท Stamp',
+          current_date: 'วันที่ปัจจุบัน',
+          text: 'ข้อความ'
         }
     }),
     mounted() {
@@ -130,5 +147,15 @@ export default {
 }
 .l-stamp.v-text-field input{
   line-height: 24px !important;
+}
+.a-stamp{
+  padding-top: 4%;
+}
+@media only screen and (max-width:600px){ /*css for mobile screen*/
+.a-stamp{
+  padding-top: 0%;
+}
+
+
 }
 </style>
