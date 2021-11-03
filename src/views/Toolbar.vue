@@ -201,6 +201,7 @@
       EventBus.$on('loadingOverlay', this.changeLoading)
       this.checkCreateDocMenu()
       this.checkDocStyleMenu()
+      this.changeLang(sessionStorage.getItem('page_lang'))
     },
     beforeDestroy(){
       sessionStorage.selected_business = ''
@@ -234,7 +235,7 @@
         })
         if(this.defaultBiz != '') this.selectedBiz = this.defaultBiz
         else{
-          if(!(sessionStorage.getItem('selected_business'))) this.selectedBiz = this.business[0]
+          if(!(sessionStorage.getItem('selected_business'))|| sessionStorage.getItem('selected_business') == 'undefined') this.selectedBiz = this.business[0]
           // this.changeBiz()
           else this.selectedBiz = JSON.parse(sessionStorage.getItem('selected_business'))
         }
