@@ -172,6 +172,14 @@
     computed: {
       textLang() {
         return this.$store.getters.textLang.Toolbar
+      },
+      lang_img() {
+        if(this.$store.state.currentLanguage == 'th') {
+          return 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Flag_of_Thailand_%28non-standard_colours%29.svg'
+        }
+        else {
+          return 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Flag_of_the_United_Kingdom.svg'
+        }
       }
     },
     data: () => ({
@@ -188,7 +196,6 @@
       open_doc_style_menu: false,
       doc_style_active_class: '',
       allInfo: [],
-      lang_img: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Flag_of_Thailand_%28non-standard_colours%29.svg',
     }),
     watch: {
       $route(to, from) {
@@ -282,12 +289,6 @@
         }
       },
       changeLang(item) {
-        if(item == 'th') {
-          this.lang_img = 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Flag_of_Thailand_%28non-standard_colours%29.svg'
-        }
-        else {
-          this.lang_img = 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Flag_of_the_United_Kingdom.svg'
-        }
         this.$store.commit('changeLanguage',item);
         sessionStorage.setItem('page_lang',item)
         // EventBus.$emit('changeLang')
