@@ -111,6 +111,11 @@ import ImportForm  from '../components/ImportForm'
 import showFormDelete from '../components/DeleteForm.vue'
 import showFormTransfer from '../components/TransferEdit.vue'
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.TemplateList
+      }
+    },
     data: () => ({
       templateform_table_header: [
         {text: 'ลำดับ', align: 'center', sortable: true, value: 'templateform_no'},
@@ -130,24 +135,6 @@ import showFormTransfer from '../components/TransferEdit.vue'
       },
       totalItemsTemplate: 0,
       keyword: "",
-      textLang:{
-        search:'ค้นหา',
-        allforms: 'แบบฟอร์มทั้งหมด',
-        createform: 'สร้างแบบฟอร์ม',
-        importform: 'นำเข้าแบบฟอร์ม',
-        readytouse: 'พร้อมใช้งาน',
-        notavailable: 'ไม่พร้อมใช้งาน',
-        correct: 'แก้ไข',
-        transfercorrection: 'โอนสิทธิการแก้ไข',
-        delete: 'ลบ',
-        number: 'ลำดับ',
-        formname: 'ชื่อแบบฟอร์ม',
-        documentID: 'รหัสเอกสาร',
-        department: 'แผนก',
-        createdby: 'สร้างโดย',
-        lastmodifieddate: 'วันที่แก้ไขล่าสุด',
-        status: 'สถานะ',
-      },
     }),
     components: {
       ImportForm,

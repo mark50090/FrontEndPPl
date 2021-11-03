@@ -913,10 +913,15 @@
   import moment from 'moment'
 
   export default {
-    computed: mapState({
+    computed: {
+      ...mapState({
       objectTemplate: state => state.objectTemplate,
-      uploadedFile: state => state.uploadedFile
-    }),
+      uploadedFile: state => state.uploadedFile,
+      }),
+      textLang() {
+        return this.$store.getters.textLang.show_template
+      }
+    },
     components: {
       ReverseWorkFlowModal,
       InputDocumentNameModal,
@@ -1129,92 +1134,6 @@
       onImport: false,
       changeDefaultDict: {},
       isFirstFill: false,
-      textLang: {
-        tabMenubar: {
-          back: "ออกจากแบบฟอร์มนี้",
-          review_ex: "ดูเอกสารตัวอย่าง",
-          save_doc_btn: "บันทึกเอกสาร",
-          file: "ยื่นเอกสาร",
-          return_edit: "ส่งคืนแก้ไข",
-          reject_doc: "ปฏิเสธอนุมัติ",
-          cancel_doc: "ยกเลิกเอกสาร",
-          page: "หน้า",
-          recalculate_btn: "คำนวณข้อมูลในเอกสารใหม่อีกครั้ง",
-          clear: "ล้าง",
-          more: "เพิ่มเติม",
-          import_other: "Import ข้อมูลจากเอกสารอื่น",
-          attach_file_menu: "แนบเอกสารเพิ่มเติม",
-          export_excel_all_user: "Export Excel ข้อมูลในเอกสารของผู้ใช้",
-          export_excel_myform: "Export Excel การใช้งานเอกสารของฉัน",
-          view_ref_doc: "ดูเอกสารอ้างอิง",
-          view_attachment: "ดูเอกสารแนบ",
-          open_page: "เปิดเพื่อดูหน้ากระดาษ",
-          show_page_tootip: "แสดงหน้ากระดาษ",
-          hide_page_tootip: "ซ่อนหน้ากระดาษ",
-          show_tab:"เปิดแถบแสดง",
-          reviews: "ความคิดเห็น",
-          add_variable: "เพิ่มค่าตัวแปรให้กับข้อความ",
-          not_show_obj_icon: "ไม่แสดงในหน้าเอกสาร",
-          image_box: "กดเพื่อแทรกรูปภาพ",
-          fill: "ช่อง ",
-          must: " ต้อง",
-          greater_than: "มากกว่า ",
-          less_than: "น้อยกว่า",
-          equal: "เท่ากับ ",
-          greater_equal: "มากกว่าหรือเท่ากับ ",
-          lesss_equal: "น้อยกว่าหรือเท่ากับ ",
-          not_equal: "ไม่เท่ากับ ",
-          and: " และ",
-          step: "ลำดับที่ ",
-          save_draft: "บันทึกเอกสารแบบร่าง",
-          simple_doc : "มุมมองเอกสารอย่างง่าย",
-          page_view: "มุมมองหน้ากระดาษ",
-          download_doc: "ดาวน์โหลดเอกสาร",
-          transfer_title: "โอนสิทธิ์การกรอกเอกสาร"
-        },
-        text_dialog: {
-          import: "Import ข้อมูลจาก Excel",
-          files: "ไฟล์ Excel :",
-          select: "กรุณาเลือกไฟล์",
-          cancle: "ยกเลิก",
-          comment: "แสดงความคิดเห็น",
-          write_comment: "เขียนความคิดเห็น...",
-          insert_picture: "แทรกรูปภาพ",
-          image: "รูปภาพ :",
-          select_img: "กรุณาเลือกรูปภาพ",
-          set_messages: "ตั้งค่าตัวแปรให้กับข้อความ",
-          sample_text: "ตัวอย่างข้อความ",
-          define_messages: "กำหนดค่าตัวแปรในข้อความ",
-          record_variable: "บันทึกค่าตัวแปร",
-          document_type_import: "ประเภทเอกสาร :",
-          eform_type_import: "เอกสาร E-Form",
-          cvm_type_import: "เอกสาร CVM (CVM ID)",
-          so_type_import: "หมายเลข SO (SO No.)",
-          invoice_type_import: "หมายเลข Invoice (Invoice No.)",
-          cus_type_import: "หมายเลขลูกค้า (Customer ID)",
-          document_number: "หมายเลขเอกสาร :",
-          import_data: "Import ข้อมูล",
-          import_other: "Import ข้อมูลจากเอกสารอื่น"
-        },
-        alert: {
-          alert_error: "ไม่สำเร็จ",
-          alert_warning: "แจ้งเตือน",
-          alert_success: "สำเร็จ",
-          fill_data: "กรุณากรอกข้อมูลให้ครบถ้วน",
-          assign: "ยื่นเอกสารสำเร็จ",
-          fail: "ยื่นเอกสารไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
-          reverse: "ส่งคืนแก้ไขสำเร็จ",
-          fail_reverse: "ส่งคืนแก้ไขไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
-          fail_template: "ไม่พบแบบฟอร์ม",
-          prefix_maxchar: 'กรอกค่าเกินจำนวนตัวอักษรสูงสุด (',
-          subfix_maxChar: ' ตัวอักษร)',
-          reject_complete: "ปฏิเสธอนุมัติสำเร็จ",
-          reject_fail: "ปฏิเสธอนุมัติไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
-          eform_use: "แบบฟอร์มถูกใช้งานโดย ", 
-          upload_fail : "อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
-        }
-      },
-
        //Color Variable
       // color_dialog_header_bg: '#2ACA9F', //class dialog_title in DeleteModal.vue
       color_loading_bar_bg: '#C2EB81',

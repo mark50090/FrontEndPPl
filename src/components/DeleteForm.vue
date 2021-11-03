@@ -35,21 +35,14 @@
 <script>
 import { EventBus } from '../EventBus'
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.components.DeleteForm
+      }
+    },
     data: () => ({
       dialog: false,
       templateform_name: "",
-      
-      //Language Variable
-      textLang: {
-        delete_form1: 'ต้องการลบแบบฟอร์ม \"',
-        delete_form2: '\" หรือไม่ ?',
-        cancel_delete: 'ยกเลิก',
-        confirm_delete: 'ตกลง',
-        delete_success: 'ลบแบบฟอร์มสำเร็จ',
-        delete_fail: 'ลบแบบฟอร์มไม่สำเร็จ',
-        delete_form_succeed: 'สำเร็จ',
-        delete_form_error: 'ไม่สำเร็จ'
-      }
     }),
     mounted() {
       EventBus.$on('FormDelete',this.getFormDelete)

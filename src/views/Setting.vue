@@ -179,6 +179,11 @@ import { EventBus } from '../EventBus'
 import SignatureModal from '../components/DefaultSignatureModal.vue'
 import DefaultStampModal from '../components/DefaultStampModal.vue'
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.Setting
+    }
+  },
   components: {
     SignatureModal,
     DefaultStampModal
@@ -214,24 +219,6 @@ export default {
     disable_notify_email: true,
     show_Edit_Stamp: Boolean,
     findStamp: '0',
-    textLang:{
-      setgeneralinformation: 'ตั้งค่าข้อมูลทั่วไป',
-      name: 'ชื่อ',
-      Username: 'ชื่อผู้ใช้',
-      defaultsignature: 'ลายเซ็นเริ่มต้น',
-      nodefaultsignature: 'ไม่มีลายเซ็นเริ่มต้น',
-      selectsignature: 'เลือกลายเซ็น',
-      Editdefaultsignature: 'แก้ไขลายเซ็น',
-      Adddefaultsignature: 'เพิ่มลายเซ็นเริ่มต้น',
-      cancel: 'ยกเลิก',
-      record: 'บันทึก',
-      Setupnotifications: 'ตั้งค่าการแจ้งเตือน',
-      succeed:'สำเร็จ',
-      Dataupdatesuccessfully: 'อัพเดทข้อมูลสำเร็จ',
-      fail:'ไม่สำเร็จ',
-      Dataupdatefailed:'อัพเดทข้อมูลไม่สำเร็จ',
-      ChooseBusiness:'เลือก Business',
-    },
   }),
   mounted() {
     this.getUserDetail()

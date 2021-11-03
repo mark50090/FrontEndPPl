@@ -78,6 +78,11 @@
 <script>
 import { EventBus } from '../EventBus'
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.SentBoxList
+      }
+    },
     data: () => ({
       tab: null,
       owned: true,
@@ -118,26 +123,6 @@ import { EventBus } from '../EventBus'
       typeDocument:[{name: 'ทั้งหมด', _id: "", detail: ""}],
       selectedTypeDocs: {name: 'ทั้งหมด', _id: "", detail: ""},
       isReady: false,  
-      textLang:{
-        search:'ค้นหา',
-        documenttype: 'ประเภทเอกสาร',
-        documentstatus:'สถานะเอกสาร',
-        alldocuments:'เอกสารทั้งหมด',
-        all: 'ทั้งหมด',
-        pendingapproval: 'รออนุมัติ',
-        approved: 'อนุมัติแล้ว',
-        inprogress: 'กำลังดำเนินการ',
-        rejectapproval: 'ปฏิเสธอนุมัติ',
-        pending:'รอดำเนินการ',
-        sentboxtable:{
-          sender:'ผู้ส่ง',
-          type:'ประเภท',
-          documentnumber:'เลขที่เอกสาร',
-          details:'รายละเอียด',
-          status:'สถานะ',
-          date:'วันที่',
-      },
-    }
     }),
     
     mounted() {

@@ -38,6 +38,11 @@
 import { EventBus } from '../EventBus'
 import DocumentReport from '../components/DocumentReportModal'
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.ReportDetail
+      }
+    },
     components:{
       DocumentReport
     },
@@ -47,15 +52,7 @@ import DocumentReport from '../components/DocumentReportModal'
       url: "",
       doc_type: "",
       workflow_id: '',
-      textLang:{
-        summaryreportdocument: 'รายงานสรุปรายละเอียดการดำเนินการเอกสาร',
-        no: 'ลำดับที่',
-    }
     }),
-    textLang:{
-      summaryreportdocument: 'รายงานสรุปรายละเอียดการดำเนินการเอกสาร',
-      no: 'ลำดับที่',
-    },
     mounted(){
       this.getTemplateFormReport()
       this.url = JSON.parse(sessionStorage.getItem('selected_template_report')).url

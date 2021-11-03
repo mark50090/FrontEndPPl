@@ -43,15 +43,13 @@
 <script>
 import { EventBus } from '../EventBus'
 export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.components.DeleteMessage
+      }
+    },
     data: () => ({
         dialog: false,
-
-        //Language Variable
-        textLang: {
-          texthead_form: 'ต้องการยกเลิกข้อความหรือไม่ ?',
-          cancel_form: 'ยกเลิก',
-          confirm_form: 'ตกลง'
-        }
     }),
     mounted() {
         EventBus.$on('deletemessage',this.deletemessages)

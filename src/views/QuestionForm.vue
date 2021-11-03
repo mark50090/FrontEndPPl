@@ -46,10 +46,12 @@
 </template>
 <script>
 export default {
-    data:() => ({
-    textLang:{
-      senddocuments: 'ส่งเอกสาร',
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.QuestionForm
+      }
     },
+    data:() => ({
     }),
     
 }

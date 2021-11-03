@@ -52,6 +52,11 @@
 <script>
 import { EventBus } from '../EventBus'
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.FormInputList
+      }
+    },
     data: () => ({
       formdoc_table_header: [
         {text: 'ลำดับ', align: 'center', sortable: true, value: 'form_doc_no'},
@@ -70,15 +75,6 @@ import { EventBus } from '../EventBus'
       },
       totalItemsTemplate: 0,
       keyword: "",
-      textLang:{
-        search: 'ค้นหา',
-        alldocuments: 'เอกสารทั้งหมด',
-        filloutdocument: 'กรอกเอกสาร',
-        number: 'ลำดับ',
-        documentname: 'ชื่อเอกสาร',
-        department: 'แผนก',
-        documentID: 'รหัสเอกสาร',
-    }
     }),
     
     mounted() {

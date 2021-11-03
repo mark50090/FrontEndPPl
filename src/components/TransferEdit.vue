@@ -51,16 +51,13 @@
 <script>
 import { EventBus } from '../EventBus'
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.components.TransferEdit
+      }
+    },
     data: () => ({
       dialog: false,
-
-      //Language Variable
-      textLang: {
-        transfer_edit_form: 'โอนสิทธิการแก้ไขแบบฟอร์ม',
-        transfer_email: 'E-mail ที่จะโอนสิทธิ',
-        cancel_transfer: 'ยกเลิก',
-        confirm_transfer: 'โอนสิทธิ'
-      }
     }),
     mounted() {
       EventBus.$on('FormTransfer',this.getFormTransfer)

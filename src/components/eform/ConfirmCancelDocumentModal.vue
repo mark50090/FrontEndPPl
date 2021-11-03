@@ -22,20 +22,15 @@
 import { EventBus } from '../../EventBus'
 
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.components.ConfirmCancelDocumentModal
+    }
+  },
   data: () => ({
     dialog: false,
     name_doc: '',
     eId: '',
-    textLang: {
-      confirm_delete: "ยืนยันการยกเลิกเอกสาร",
-      sure_delete: "ต้องการยกเลิกเอกสาร ",
-      or_no: " หรือไม่ ?",
-      cancel: "ปิด",
-      yes_canel: "ตกลง",
-      alert_error: "ไม่สำเร็จ",
-      cancel_success: "ยกเลิกเอกสารสำเร็จ",
-      cancel_fail: "ยกเลิกเอกสารไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
-    }
   }),
   mounted() {
     EventBus.$on('ConfirmCancelDoc',this.ConfirmCancelDocument)

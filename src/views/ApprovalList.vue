@@ -40,6 +40,11 @@
 </template>
 <script>
 export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.ApprovalList
+      }
+    },
     data: () => ({
         approval_table_header: [
         {text: 'ลำดับ', align: 'center', sortable: true, value: 'approval_no'},
@@ -57,20 +62,7 @@ export default {
             
           }
           
-      ],
-      textLang: {
-        search: 'ค้นหา',
-        Allapprovedforms: 'รูปแบบอนุมัติทั้งหมด', 
-        Createanapprovalform: 'สร้างรูปแบบอนุมัติ',
-        approval_ta:{
-          number: 'ลำดับ',
-          approvedformatname: 'ชื่อรูปแบบอนุมัติ',
-          details: 'รายละเอียด',
-          lastrevisiondate: 'วันที่เเก้ไขล่าสุด'
-        },
-      }
-
-    
+      ],  
 }),}
 </script>
 <style>

@@ -69,23 +69,16 @@
 <script>
 import { EventBus } from "../../EventBus";
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.components.CreateDropdownDataSetModal
+    }
+  },
   data: () => ({
     dialog_dropdown_dataset: false,
     dataset_panel: [],
     choiceSet: [],
     newChoice: "",
-    textLang: {
-      create_edit: "สร้าง / แก้ไข กลุ่มตัวเลือก",
-      add_group: "เพิ่มกลุ่มตัวเลือก",
-      group_no: "กลุ่มตัวเลือกที่",
-      name_group: "ชื่อกลุ่มตัวเลือก",
-      please_input: "กรุณากรอกชื่อกลุ่มตัวเลือก",
-      delete_group: "ลบกลุ่มตัวเลือก",
-      sub_choices: "ตัวเลือก",
-      cancel: "ยกเลิก",
-      save: "บันทึกกลุ่มตัวเลือก" 
-    },
-
     //Color Variable
     // color_dialog_header_bg: '#2ACA9F', //class dialog_title in DeleteModal.vue
     color_add_choice: '#97E2E7',

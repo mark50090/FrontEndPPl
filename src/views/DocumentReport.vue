@@ -43,6 +43,11 @@
   import { EventBus } from '../EventBus'
   import DocumentReport from '../components/DocumentReportModal'
   export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.DocumentReport
+      }
+    },
     components:{
     DocumentReport
     },
@@ -55,13 +60,6 @@
       ],
       report_data: [],
       keyword: "",
-      textLang:{
-        documentreport: 'รายงานเอกสาร',
-        search: 'ค้นหา', 
-        number: 'ลำดับ',
-        initials: 'ชื่อย่อ',
-        Documenttypename: 'ชื่อประเภทเอกสาร'
-      }
     }),
     
 

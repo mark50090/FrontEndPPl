@@ -21,6 +21,11 @@
 <script>
 import { EventBus } from '../../EventBus'
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.components.rejectModal
+    }
+  },
   data: () => ({
     dialog: false,
     my_form_option: {
@@ -29,14 +34,7 @@ export default {
       eform_id: ''
     },
     dialog_item_name: '',
-    template_code: '',
-    textLang: {
-      confirm_reject: "ยืนยันการปฏิเสธอนุมัติเอกสาร",
-      sure_reject: "ต้องการปฏิเสธอนุมัติเอกสาร",
-      or: "หรือไม่ ?",
-      cancel: "ยกเลิก",
-      reject: "ตกลง",
-    }
+    template_code: ''
   }),
   mounted() {
     EventBus.$on('rejectDocument',this.rejectConfirm)

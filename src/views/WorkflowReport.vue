@@ -87,6 +87,11 @@ import { EventBus } from '../EventBus'
 import DocumentReport from '../components/DocumentReportModal'
 
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.WorkflowReport
+    }
+  },
   components:{
     DocumentReport
     },
@@ -130,13 +135,6 @@ export default {
     workflow_data: [],
     keyword: '',
     axios_pending: 0,
-    textLang:{
-      documentusagereport: 'รายงานการใช้งานเอกสาร',
-      search: 'ค้นหา',
-      number: 'ลำดับ',
-      name: 'ชื่อ Workflow',
-      details: 'รายละเอียด',
-    }
   }),
   mounted () {
     this.getAllFlow()

@@ -51,15 +51,13 @@
  import showFormDeleteAttach from '../ConfirmDeleteAttachFileModal.vue'
 
  export default {
+  computed: {
+    textLang() {
+        return this.$store.getters.textLang.components.AttachFileModal
+    }
+  },
   data: () => ({
 		dialog_attach_file: false,
-		textLang :{
-			 files: "รายการเอกสารแนบ",
-			 not_files: "ไม่มีรายการเอกสารแนบ",
-			 cancel: "ยกเลิก",
-			 download_all: "ดาวน์โหลดเอกสารทั้งหมด",
-			 download: "ดาวน์โหลดเอกสาร",
-		},
 		files:[],
 
 		//Color Variable

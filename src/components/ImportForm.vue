@@ -45,16 +45,14 @@
 <script>
 import { EventBus } from '../EventBus'
 export default {
+    computed: {
+      textLang() {
+        return this.$store.getters.textLang.components.ImportForm
+      }
+    },
     data: () => ({
         dialog: false,
         file: [],
-
-        //Language Variable
-        textLang: {
-          import_file: 'นำเข้าไฟล์แบบฟอร์ม',
-          select_file: 'เลือกไฟล์แบบฟอร์ม',
-          import_form: 'นำเข้า'
-        }
     }),
     mounted() {
         EventBus.$on('importform',this.importforms)

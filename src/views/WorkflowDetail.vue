@@ -83,6 +83,11 @@
 import { EventBus } from '../EventBus'
 import DocumentReport from '../components/DocumentReportModal'
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.WorkflowDetail
+    }
+  },
   components:{
     DocumentReport
     },
@@ -145,19 +150,6 @@ export default {
     workflow_id: '',
     token: '',
     axios_pending: 0,
-    textLang:{
-      documentsummaryreport: 'รายงานสรุปการใช้งานเอกสาร',
-      no: 'ลำดับที่',
-      documenttype: 'ประเภทเอกสาร',
-      documentnumber: 'เลขที่เอกสาร',
-      details: 'รายละเอียด',
-      documentstatus: 'สถานะเอกสาร',
-      sender: 'ผู้ส่งเอกสาร',
-      datesent: 'วันที่ส่ง',
-      processingtime: 'ระยะเวลาดำเนินการ',
-      documentprocessed: 'ระยะเวลาทั้งหมดที่เอกสารถูกดำเนินการ',
-      documentlastorder: 'ระยะเวลาตั้งแต่เอกสารถูกนำเข้าถึงลำดับล่าสุด',
-    }
   }),
   watch: {
     "optionsTransaction.page" () {

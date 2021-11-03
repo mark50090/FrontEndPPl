@@ -54,6 +54,11 @@
 import { EventBus } from '../EventBus'
 import Setting from '../views/Setting.vue'
 export default {
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.components.DefaultStampModal
+    }
+  },
   components: {
     Setting
   },
@@ -73,20 +78,6 @@ export default {
     getStampName: '',
     getSrcBase: '',
     notify_email: '',
-    textLang: {
-      stamp_head_add: 'เพิ่มลายเซ็น',
-      stamp_head_edit: 'แก้ไขลายเซ็น',
-      stamp_name_show: 'ชื่อลายเซ็น',
-      stamp_upload: 'อัพโหลดไฟล์',
-      stamp_pain: 'วาดลายเซ็น',
-      stamp_delete: 'ลบลายเซ็น',
-      stamp_clear: 'ล้างค่า',
-      stamp_save: 'บันทึก',
-      update_stamp_success: 'อัพเดทข้อมูลสำเร็จ',
-      update_stamp_fail: 'อัพเดทข้อมูลไม่สำเร็จ',
-      stamp_succeed: 'สำเร็จ',
-      stamp_error: 'ไม่สำเร็จ'
-    },
     stateDefaultStamp: '',
     checkSignature: true,
     check_default_sign: true,
