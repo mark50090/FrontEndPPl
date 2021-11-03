@@ -244,9 +244,12 @@
       "send_email_error": "Error"
     },
     "StampModal": {
-      "message_stamp": "Stamp text",
+      "message_stamp": "Stamp Text",
       "cancel_stamp": "Cancel",
-      "confirm_stamp": "Save"
+      "confirm_stamp": "Save",
+      "stamp_type": "Stamp Type",
+      "current_date": "Stamp Type",
+      "text": "Text"
     },
     "TransferEdit": {
       "transfer_edit_form": "Editing E-Form Permission Transfer",
