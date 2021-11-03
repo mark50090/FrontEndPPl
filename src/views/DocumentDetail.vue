@@ -246,7 +246,7 @@
                           <span class="step-period">{{ item.diff || '' }}</span>
                         </v-col>
                         <v-spacer></v-spacer>
-                        <!-- <v-col cols="auto" md="auto" lg="auto" class="pl-0 py-0 transfer-permission-btn-block"> <!-- show when it is current step and the owner of step is that user
+                        <!-- <v-col cols="auto" md="auto" lg="auto" class="pl-0 py-0 transfer-permission-btn-block"> show when it is current step and the owner of step is that user
                           <v-btn depressed fab x-small dark color="#074E80">
                             <v-icon>mdi-account-switch</v-icon>
                           </v-btn>
@@ -331,7 +331,7 @@
                         {{ item.filename }}
                       </v-col>
                       <v-spacer></v-spacer>
-                      <v-col cols="2" md="1" lg="1" align-self="start" class="px-0 pt-1 pb-0 text-center">
+                      <v-col cols="1" md="1" lg="1" align-self="start" class="px-0 pt-1 pb-0 text-center">
                         <v-btn @click="optionFormFile(item)" icon small color="#4CAF50" :disabled="chack_disable_preview_attachment_fn(item.type)">
                           <v-icon>mdi-eye</v-icon>
                         </v-btn>
@@ -341,6 +341,11 @@
                           <v-icon>mdi-download</v-icon>
                         </v-btn>
                       </v-col>
+                      <!-- <v-col cols="1" md="1" lg="1" align-self="start" class="px-0 pt-1 pb-0 text-center">
+                        <v-btn icon small color="#4CAF50" @click="optionFormDeleteAttach()">
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                      </v-col> -->
                     </v-row>
                     <v-divider class="mx-2" :key="`${index}_attachment_divider`"></v-divider>
                   </template>
@@ -410,6 +415,7 @@
     <Showpdf/>
     <showFormReturn/>
     <DeleteMessage/>
+    <showFormDeleteAttach/>
   </div>
 </template>
 
@@ -423,6 +429,7 @@ import pdf from 'vue-pdf'
 import vueSignature from 'vue-signature'
 import showFormReturn from '../components/ReturnCorrection'
 import DeleteMessage from '../components/DeleteMessage'
+import showFormDeleteAttach from '../components/ConfirmDeleteAttachFileModal.vue'
 export default {
   components: {
     StampModal,
@@ -432,7 +439,8 @@ export default {
     pdf,
     vueSignature,
     showFormReturn,
-    DeleteMessage
+    DeleteMessage,
+    showFormDeleteAttach
   },
   data: () => ({
     document_detail_tab: null,
@@ -564,6 +572,9 @@ export default {
     }
   },
   methods: {
+    optionFormDeleteAttach() {
+			  EventBus.$emit('FormDeleteAttach')
+		  },
     optionFormReturn () {
       EventBus.$emit('FormReturn', this.transaction_detail)
     },
