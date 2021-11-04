@@ -181,6 +181,7 @@
 
   .add-file-modal-btn {
     font-family: "Sarabun", sans-serif;
+    text-transform: capitalize;
   }
 
   @media only screen and (max-width: 600px) {

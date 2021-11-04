@@ -174,8 +174,8 @@
         <v-divider class="mx-6"></v-divider>
         <v-card-actions class="py-5">
           <v-spacer></v-spacer>
-          <v-btn outlined color="#67c25d" dark class="px-12 mr-4 hide-cond-modal-btn" @click="close()">{{ textLang.cancel }}</v-btn>
-          <v-btn depressed dark color="#67c25d" class="px-5 ml-4 hide-cond-modal-btn" @click="save()">{{ textLang.save }}</v-btn>
+          <v-btn outlined color="#67c25d" dark class="mr-4 hide-cond-modal-btn" @click="close()">{{ textLang.cancel }}</v-btn>
+          <v-btn depressed dark color="#67c25d" class="ml-4 hide-cond-modal-btn" @click="save()">{{ textLang.save }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -533,5 +533,7 @@
 
   .hide-cond-modal-btn {
     font-family: "Sarabun", sans-serif;
+    text-transform: capitalize;
+    width: 142px;
   }
 </style>

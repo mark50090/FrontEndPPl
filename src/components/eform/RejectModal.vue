@@ -95,5 +95,6 @@ export default {
 
   .reject-form-modal-btn {
     font-family: "Sarabun", sans-serif;
+    text-transform: capitalize;
   }
 </style>

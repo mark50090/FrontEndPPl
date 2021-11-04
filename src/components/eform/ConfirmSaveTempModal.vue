@@ -98,5 +98,6 @@
 
   .confirm-save-form-btn {
     font-family: 'Sarabun', sans-serif;
+    text-transform: capitalize;
   }
 </style>

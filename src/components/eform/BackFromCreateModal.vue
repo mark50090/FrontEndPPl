@@ -102,5 +102,6 @@ export default {
 
   .cancel-exit-form-btn {
     font-family: 'Sarabun', sans-serif;
+    text-transform: capitalize;
   }
 </style>

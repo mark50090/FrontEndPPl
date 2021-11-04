@@ -71,7 +71,7 @@
         </v-row>
         <v-card-actions class="pt-0 pb-6">
           <v-spacer></v-spacer>
-          <v-btn color="#4CAF50" @click="close()" class="px-12 mr-4 datatable-setting-modal-btn" outlined>{{ textLang.cancel }}</v-btn>
+          <v-btn color="#4CAF50" @click="close()" class="px-6 mr-4 datatable-setting-modal-btn" outlined>{{ textLang.cancel }}</v-btn>
           <v-btn color="#4CAF50" @click="save()" class="px-6 ml-4 datatable-setting-modal-btn" dark depressed>{{ textLang.save }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>

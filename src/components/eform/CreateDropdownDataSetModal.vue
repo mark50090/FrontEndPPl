@@ -44,7 +44,7 @@
                   </v-col>
                 </v-row>
                 <v-row v-show="item.name" class="pl-2 add-dataset-row">
-                  <v-col cols="1" align-self="center" class="pl-0 choice-title">
+                  <v-col cols="1" align-self="center" class="px-0 choice-title">
                     {{ textLang.sub_choices }} :
                   </v-col>
                   <v-col cols="5" align-self="center" class="pr-0">
@@ -58,7 +58,7 @@
         <v-divider class="ml-8 mr-6"></v-divider>
         <v-card-actions class="py-5">
           <v-spacer></v-spacer>
-          <v-btn outlined color="#67c25d" class="px-12 mr-4 cancel-create-dropdown-dataset" @click="dialog_dropdown_dataset = false,choiceSet = []">{{ textLang.cancel }}</v-btn>
+          <v-btn outlined color="#67c25d" class="px-3 mr-4 cancel-create-dropdown-dataset" @click="dialog_dropdown_dataset = false,choiceSet = []">{{ textLang.cancel }}</v-btn>
           <v-btn depressed color="#67c25d" class="px-3 ml-4 save-create-dropdown-dataset" :disabled="!choiceSet.length" @click="saveChoiceSet()">{{ textLang.save }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
@@ -293,11 +293,14 @@ export default {
 
 .cancel-create-dropdown-dataset {
   font-family: "Sarabun", sans-serif;
+  text-transform: capitalize;
+  width: 146px;
 }
 
 .save-create-dropdown-dataset {
   font-family: "Sarabun", sans-serif;
   color: white !important;
   text-transform: capitalize;
+  width: 146px;
 }
 </style>
