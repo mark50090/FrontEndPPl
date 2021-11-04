@@ -32,7 +32,7 @@
             </v-col>
           </v-row>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="pl-0">
           <v-row class="default-stamp-row">
             <v-spacer></v-spacer>
             <v-col v-if="action_header == 'แก้ไข'" cols="auto" class="pl-0 pr-2"> <!-- show when edit signature -->
@@ -342,6 +342,8 @@ export default {
 
   .upload-stamp-btn {
     font-family: 'Sarabun', sans-serif;
+    text-transform: capitalize;
+    max-width: 100%;
   }
 
   .sign-type-active {

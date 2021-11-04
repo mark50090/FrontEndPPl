@@ -16,7 +16,7 @@
           <v-row align="center" class="text-box-deleteform">
               <v-spacer></v-spacer>
            <v-col align-self="center" class=" pr-1 pl-0" cols="4" lg="4" md="4">
-                <v-btn block color="#757575" dark depressed @click="dialog = false" class="font-send-deleteform">
+                <v-btn block color="#757575" dark depressed @click="dialog = false" class="cancel-delete-form-template">
                     {{ textLang.cancel_delete}}
                 </v-btn>
            </v-col>
@@ -136,8 +136,12 @@ import { EventBus } from '../EventBus'
     color: black;
   }
 
+  .cancel-delete-form-template {
+    font-family: 'Sarabun', sans-serif;
+    text-transform: capitalize;
+  }
+
   .font-send-deleteform {
     font-family: 'Sarabun', sans-serif;
-    
   }
 </style>

@@ -231,6 +231,8 @@ export default {
 
   .upload-signature-btn {
     font-family: 'Sarabun', sans-serif;
+    text-transform: capitalize;
+    max-width: 100%;
   }
 
   .signature-setting-btn-group {

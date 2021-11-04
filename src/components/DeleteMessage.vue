@@ -13,7 +13,7 @@
           md="4"
           lg="4"
           class="pr-1 pl-0">
-          <v-btn class="front-btn-hing" 
+          <v-btn class="cancel-delete-message-btn" 
                   color="#757575"
                   dark  
                   block
@@ -75,6 +75,12 @@ export default {
     font-size: 14px;
     color: black;
 }
+
+.cancel-delete-message-btn {
+  font-family: 'Sarabun', sans-serif;
+  text-transform: capitalize;
+}
+
 .front-btn-hing{
     font-family: 'Sarabun', sans-serif;
 }

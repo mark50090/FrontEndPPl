@@ -141,6 +141,7 @@ export default {
 .b-stamp{
   font-family: 'Sarabun', sans-serif;
   font-size: 14px !important;
+  text-transform: capitalize;
 }
 .l-stamp.v-text-field input{
   line-height: 24px !important;

@@ -211,7 +211,7 @@
     },
     "DeleteMessage": {
       "texthead_form": "ต้องการยกเลิกข้อความหรือไม่ ?",
-      "cancel_form": "ยกเลิก",
+      "cancel_form": "ปิด",
       "confirm_form": "ตกลง"
     },
     "DocumentReportModal": {

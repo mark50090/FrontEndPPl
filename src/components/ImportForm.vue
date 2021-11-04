@@ -102,6 +102,7 @@ export default {
   }
 .front-form {
     font-family: 'Sarabun', sans-serif;
+    text-transform: capitalize;
   }
 .im-form{
     font-family: 'Sarabun', sans-serif;

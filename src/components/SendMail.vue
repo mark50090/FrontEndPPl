@@ -195,5 +195,6 @@ import { EventBus } from '../EventBus'
   .front-send {
     font-family: 'Sarabun', sans-serif;
     font-size: 14px;
+    text-transform: capitalize;
   }
 </style>
