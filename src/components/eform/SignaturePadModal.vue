@@ -25,7 +25,7 @@
             <v-row justify="center" class="mt-1 sign-opt-row">
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pa-0 sign-block-form">
                 <VueSignaturePad v-if="selectedSignStyle == 'Sign Pad'" height="175px" ref="signaturePad" :options="{onBegin, onEnd, penColor: '#0D269A'}" />
-                <v-img v-if="selectedSignStyle == 'Default'" contain max-height="173px" :src="signUrl"></v-img>
+                <v-img v-else contain max-height="173px" :src="currentBase"></v-img>
               </v-col>
             </v-row>
           </v-card-text>
@@ -54,9 +54,10 @@ export default {
   },
   data: () => ({
     dialogSign: false,
-    option_style: ['Default', 'Sign Pad'],
-    selectedSignStyle: 'Default',
+    option_style: ['Sign Pad'],
+    selectedSignStyle: 'Sign Pad',
     signUrl: "",
+    currentBase: "",
     isCa: true,
     signOnly: false,
     buttonClicked: false,
@@ -92,6 +93,14 @@ export default {
     EventBus.$off('changeLang')
     EventBus.$off('openSignPad')
   },
+  watch: {
+    selectedSignStyle(val) {
+      if(val) {
+        this.getSignBase()
+      }
+      
+    }
+  },
   methods: {
     changeColor() {
       this.colorObject = JSON.parse(sessionStorage.getItem('biz_theme'))
@@ -116,16 +125,65 @@ export default {
     openSignpad() {
       this.dialogSign = true
       this.isCa = false
-      this.option_style = ['Default', 'Sign Pad']
-      if(!this.signUrl) {
-        this.selectedSignStyle = 'Sign Pad'
-        this.option_style.splice(0,1)
-      }
+      this.option_style = ['Sign Pad']
+      this.currentBase = ""
+      this.getAllSign()
       this.$nextTick(() => {
         if(typeof this.$refs.signaturePad !== 'undefined') {
           this.$refs.signaturePad.resizeCanvas()
         }
       })
+    },
+    async getAllSign () {
+      const url = '/user_setting/api/v1/get_stamp_name_list'
+      const config = {
+        Authorization: `Bearer ${this.token}`
+      }
+      this.axios.get(`${this.$api_url}${url}`, config)
+        .then((response) => {
+          const data = response.data
+          if (data.status) {
+            if(data.data.length) {
+              this.option_style = []
+              data.data.forEach(e => {
+                this.option_style.push(e)
+              })
+              this.option_style.push('Sign Pad')
+              this.selectedSignStyle = this.option_style[0]
+            }
+          } else {
+            this.option_style = ['Sign Pad']
+          }
+        }
+        )
+        .catch((error) => {
+          if (error.response) {
+            this.option_style = ['Sign Pad']
+          }
+        })
+    },
+    async getSignBase () {
+      if(this.selectedSignStyle != 'Sign Pad') {
+        const url = '/user_setting/api/v1/get_stamp_base64'
+        const config = {
+          Authorization: `Bearer ${this.token}`,
+          params: {
+            StampName: this.selectedSignStyle
+          }
+        }
+        this.axios.get(`${this.$api_url}${url}`, config)
+          .then((response) => {
+            const data = response.data
+            if (data.status) {
+              this.currentBase = data.data
+            }
+          })
+          .catch((error) => {
+            if (error.response) {
+              this.selectedSignStyle = 'Sign Pad'
+            }
+          })
+      }
     },
     undoSign() {
       if(typeof this.$refs.signaturePad !== 'undefined') {
@@ -156,9 +214,8 @@ export default {
           this.dialogSign = false
         }
       } else {
-        // var isNoFlow = this.noFlowSign
-        // EventBus.$emit('saveSign',sign64)
-        // this.dialogSign = false
+        EventBus.$emit('saveSign',this.currentBase)
+        this.dialogSign = false
       }
     },
     rejectSign() {

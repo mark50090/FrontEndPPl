@@ -1095,7 +1095,7 @@ export default {
           this.syncValue()  
         } else if(data.result == 'ER') {
           if(data.messageER == 'RESERVED') {
-            this.$router.push('/form')
+            this.$router.push('/inbox')
             this.$swal({
               backdrop: false,
               position: 'bottom-end',
@@ -1974,7 +1974,7 @@ export default {
                 this.pplLoadTemplate()
               }
             } else {
-              this.$router.push({ path: "/form" })
+              this.$router.push({ path: "/inbox" })
             }
           }
         } else {//result = ER
@@ -2261,7 +2261,7 @@ export default {
 
           if (this.allUserStep && !speacailForm.includes(template_code)) {
             await this.sendInsertChat(data.messageText.data.e_id)
-            this.$router.push({ path: "/form" })
+            this.$router.push({ path: "/inbox" })
           } else {
             this.eform_id = data.messageText.data.e_id
             this.doc_no = data.messageText.doc_number_eform
@@ -2299,7 +2299,7 @@ export default {
           if (this.files.length) {
             // await this.uploadAttachFile(data.messageText.doc_number_eform, data.messageText.data.e_id)
           }
-          this.$router.push({ path: "/form" })
+          this.$router.push({ path: "/inbox" })
         }
       } catch (error) {
         this.notReady = false
@@ -2389,7 +2389,7 @@ export default {
               })
             }
           }
-          this.$router.push({ path: "/form" })
+          this.$router.push({ path: "/inbox" })
         } else {
           if(data.response_bi && data.response_bi.Warning_Detail!=null){
             this.$swal({
@@ -2513,7 +2513,7 @@ export default {
               })
             }
           }
-          this.$router.push({ path: "/form" })
+          this.$router.push({ path: "/inbox" })
         } else {
           if(data.response_bi && data.response_bi.Warning_Detail!=null){
             this.$swal({
