@@ -30,7 +30,8 @@ export default new Vuex.Store({
   },
   mutations: {
     changeLanguage(state,payload){
-      state.currentLanguage = payload
+      state.currentLanguage = payload.toLowerCase()
+      sessionStorage.page_lang = payload.toLowerCase()
     },
     setUploadedFile(state,payload){
       state.uploadedFile = payload
