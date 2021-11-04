@@ -224,6 +224,7 @@
           if(data) {
             if(data.result.other_setting) this.defaultBiz = data.result.other_setting.Default_Business? data.result.other_setting.Default_Business : ''
             else this.defaultBiz = ''
+            this.$store.commit('changeLanguage',data.result.language)
           }
         } catch (error) {
           console.log(error);
@@ -291,8 +292,21 @@
       changeLang(item) {
         this.$store.commit('changeLanguage',item);
         sessionStorage.setItem('page_lang',item)
+        this.setLanguage(item.toUpperCase())
         // EventBus.$emit('changeLang')
 		  },
+      async setLanguage(lang){
+        try {
+          const url = '/user_setting/api/v1/set_usersetting'
+          var { data } = await this.axios.post(this.$api_url + url, 
+            {
+              language: lang
+          })
+          if(data){}
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
   }
 </script>

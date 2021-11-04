@@ -17,8 +17,15 @@ import Vue from "vue";
     if (!dateObj || dateObj.constructor.name != "Date" ) {
       return "";
     }
-    const dateMonthYear  = new Intl.DateTimeFormat('th-TH', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Bangkok'}).format(dateObj) //era for พ.ศ.
-    const hourMinute = new Intl.DateTimeFormat('th-TH', {hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Bangkok' }).format(dateObj)
-    return `${dateMonthYear} เวลา ${hourMinute} น.`
+    if(sessionStorage.page_lang == 'th'){
+      const dateMonthYear  = new Intl.DateTimeFormat('th-TH', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Bangkok'}).format(dateObj) //era for พ.ศ.
+      const hourMinute = new Intl.DateTimeFormat('th-TH', {hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Bangkok' }).format(dateObj)
+      return `${dateMonthYear} เวลา ${hourMinute} น.`
+    }
+    else if(sessionStorage.page_lang == 'en'){
+      const dateMonthYear  = new Intl.DateTimeFormat('en', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Bangkok'}).format(dateObj) //era for พ.ศ.
+      const hourMinute = new Intl.DateTimeFormat('en', {hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Bangkok' }).format(dateObj)
+      return `${dateMonthYear} ${hourMinute}`
+    }
   })
 })()
