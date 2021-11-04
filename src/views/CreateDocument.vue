@@ -45,7 +45,7 @@
                   <template v-for="item in signArray">
                     <vue-draggable-resizable
                       :id="item.name"
-                      v-if="item.action == 'Sign'"
+                      v-if="item.action == 'Sign' || item.action == 'Sign-Ca'"
                       :key="item.key"
                       :x="item.sign_position_x"
                       :y="item.sign_position_y"
@@ -722,7 +722,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                         }
                       })
                     }
-                    var res_data = result[index].data
+                    var res_data = result[0].data
                     return {
                       account_id : res_data.id,
                       first_name_th: res_data.first_name_th,
