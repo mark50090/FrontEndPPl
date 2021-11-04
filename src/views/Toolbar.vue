@@ -208,7 +208,7 @@
       EventBus.$on('loadingOverlay', this.changeLoading)
       this.checkCreateDocMenu()
       this.checkDocStyleMenu()
-      this.changeLang(sessionStorage.getItem('page_lang'))
+      // this.changeLang(sessionStorage.getItem('page_lang'))
     },
     beforeDestroy(){
       sessionStorage.selected_business = ''

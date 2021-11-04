@@ -25,7 +25,7 @@ export default new Vuex.Store({
     })
   ],
   getters: {
-    textLang: state => text_lang['th'],
+    textLang: state => text_lang[state.currentLanguage],
     uploadedFile: state => state.uploadedFile
   },
   mutations: {
