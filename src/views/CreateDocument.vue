@@ -45,7 +45,7 @@
                   <template v-for="item in signArray">
                     <vue-draggable-resizable
                       :id="item.name"
-                      v-if="item.action == 'Sign'"
+                      v-if="item.action == 'Sign' || item.action == 'Sign-Ca'"
                       :key="item.key"
                       :x="item.sign_position_x"
                       :y="item.sign_position_y"
@@ -175,7 +175,7 @@
                       <template v-if="flow_data.actor[0].permission_email_status">
                         <v-row class="create-row each-step-mail-row" v-for="(actor_email,index) in flow_data.actor[0].permission_email" :key="flow_data.index + actor_email.account_id"> <!-- each email row in step -->
                           <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0">
-                            <v-text-field dense outlined hide-details color="#67C25D" v-model="actor_email.thai_email" placeholder="@one.th" class="create-setting email-step-box each-email-icon" @change="isDirty = true">
+                            <v-text-field dense outlined hide-details color="#67C25D" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" placeholder="@one.th" class="create-setting email-step-box each-email-icon" @change="isDirty = true">
                               <template v-slot:prepend>
                                 <v-icon large>mdi-account</v-icon>
                               </template>
@@ -722,7 +722,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                         }
                       })
                     }
-                    var res_data = result[index].data
+                    var res_data = result[0].data
                     return {
                       account_id : res_data.id,
                       first_name_th: res_data.first_name_th,
