@@ -10,7 +10,7 @@
       </v-btn>
       <v-spacer></v-spacer>
       <!-- button for web -->
-      <v-btn v-if="currentStep != ''" depressed rounded large dark color="#FBC02D" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
+      <v-btn v-if="currentStep != '' && currentStep != '1'" depressed rounded large dark color="#FBC02D" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReverse()">
         <v-icon>mdi-reply</v-icon>
         <span class="btn-return-edit">{{ textLang.tabMenubar.return_edit }}</span>
       </v-btn>
