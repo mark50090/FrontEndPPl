@@ -211,7 +211,7 @@
     },
     "DeleteMessage": {
       "texthead_form": "Do you want to cancel comment ?",
-      "cancel_form": "Cancel",
+      "cancel_form": "Close",
       "confirm_form": "OK"
     },
     "DocumentReportModal": {
@@ -253,7 +253,7 @@
     },
     "TransferEdit": {
       "transfer_edit_form": "Editing E-Form Permission Transfer",
-      "transfer_email": "Transfer e-mail E-mail ที่จะโอนสิทธิ",
+      "transfer_email": "Transfer e-mail",
       "cancel_transfer": "Cancel",
       "confirm_transfer": "Transfer"
     },

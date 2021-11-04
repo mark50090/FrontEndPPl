@@ -12,7 +12,7 @@
           <v-row align="center" class="text-box-deleteattach">
               <v-spacer></v-spacer>
            <v-col align-self="center" class=" pr-1 pl-0" cols="4" lg="4" md="4">
-                <v-btn block color="#757575" dark depressed @click="dialog = false" class="font-btn-deleteattach">
+                <v-btn block color="#757575" dark depressed @click="dialog = false" class="cancel-delete-file-btn">
                     {{ textLang.deleteattach_cancel }}
                 </v-btn>
            </v-col>
@@ -64,8 +64,12 @@ import { EventBus } from '../EventBus'
     color: black;
   }
 
+  .cancel-delete-file-btn {
+    font-family: 'Sarabun', sans-serif;
+    text-transform: capitalize;
+  }
+
   .font-btn-deleteattach {
     font-family: 'Sarabun', sans-serif;
-    
   }
 </style>

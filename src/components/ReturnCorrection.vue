@@ -169,6 +169,6 @@ import { EventBus } from '../EventBus'
   }
   .font-send-return {
     font-family: 'Sarabun', sans-serif;
-    
+    text-transform: capitalize;
   }
 </style>
