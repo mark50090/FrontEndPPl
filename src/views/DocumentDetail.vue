@@ -650,10 +650,14 @@ export default {
     },
     async set_approve_fn (type) {
       var string_sign, data
-      if (!this.all_sign[this.sign_type].default) {
-        string_sign = this.$refs.signaturePad.save().split(',')[1]
+      if (this.doc_details.action === 'Approve') {
+        string_sign = null
       } else {
-        string_sign = this.default_sign.split(',')[1]
+        if (!this.all_sign[this.sign_type].default) {
+          string_sign = this.$refs.signaturePad.save().split(',')[1]
+        } else {
+          string_sign = this.default_sign.split(',')[1]
+        }
       }
       data = {
         type: type,
