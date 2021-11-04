@@ -2325,7 +2325,7 @@ export default {
             typesign: "web",
             type: "approve",
             action: "Fill",
-            others: {dataTableObjectArray : this.dataTableObjectArray},
+            others: {dataTableObjectArray : this.dataTableObjectArray, saveStep: this.currentStep - 1},
             is_draft: this.isSaveDraft
           }
         )
@@ -2450,7 +2450,7 @@ export default {
             string_sign: sign64,
             comment: temp_option.newComment,
             is_full: true,
-            others: {dataTableObjectArray : this.dataTableObjectArray}
+            others: {dataTableObjectArray : this.dataTableObjectArray, saveStep: ""}
           }
         )
 
