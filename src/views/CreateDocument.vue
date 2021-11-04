@@ -173,7 +173,7 @@
                         </v-col>
                       </v-row>
                       <template v-if="flow_data.actor[0].permission_email_status">
-                        <v-row class="create-row each-step-mail-row" v-for="actor_email in flow_data.actor[0].permission_email" :key="flow_data.index + actor_email.account_id"> <!-- each email row in step -->
+                        <v-row class="create-row each-step-mail-row" v-for="(actor_email,index) in flow_data.actor[0].permission_email" :key="flow_data.index + actor_email.account_id"> <!-- each email row in step -->
                           <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0">
                             <v-text-field dense outlined hide-details color="#67C25D" v-model="actor_email.thai_email" placeholder="@one.th" class="create-setting email-step-box each-email-icon" @change="isDirty = true">
                               <template v-slot:prepend>
@@ -184,22 +184,22 @@
                           <!-- <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
                             <v-checkbox hide-details label="OneChat" v-model="actor_email.checkbox" checked class="mt-0 pt-0 onechat-check"></v-checkbox>
                           </v-col> -->
-                          <!-- <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
-                            <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn">
+                          <v-col v-if="flow_data.actor[0].permission_email.length > 1" cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
+                            <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn" @click="removeActorFlow(flow_data.index,actor_email)">
                               <v-icon>mdi-minus</v-icon>
                             </v-btn>
                           </v-col>
-                          <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
-                            <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn">
+                          <v-col v-if="index == flow_data.actor[0].permission_email.length-1" cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
+                            <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn" @click="addActorFlow(flow_data.index)">
                               <v-icon>mdi-plus</v-icon>
                             </v-btn>
-                          </v-col> -->
+                          </v-col>
                         </v-row>
                       </template>
                       <template v-else-if="flow_data.actor[0].permission_status">
                         <v-row class="create-row each-step-mail-row" v-for="actor_role in flow_data.actor[0].permission" :key="flow_data.index + actor_role.role_id"> <!-- each email row in step -->
                           <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0">
-                            <v-text-field dense outlined hide-details readonly color="#67C25D" v-model="actor_role.role_name" class="create-setting email-step-box each-email-icon">
+                            <v-text-field dense outlined hide-details readonly filled disabled color="#67C25D" v-model="actor_role.role_name" class="create-setting email-step-box each-email-icon">
                               <template v-slot:prepend>
                                 <v-icon large>mdi-account</v-icon>
                               </template>
@@ -208,7 +208,7 @@
                           <!-- <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
                             <v-checkbox hide-details label="OneChat" v-model="actor_role.checkbox" class="mt-0 pt-0 onechat-check"></v-checkbox>
                           </v-col> -->
-                          <!-- <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
+                          <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
                             <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn">
                               <v-icon>mdi-minus</v-icon>
                             </v-btn>
@@ -217,7 +217,7 @@
                             <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn">
                               <v-icon>mdi-plus</v-icon>
                             </v-btn>
-                          </v-col> -->
+                          </v-col>
                         </v-row>
                       </template>
                     </template>
@@ -446,7 +446,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           case "Sign-Ca" : return this.textLang.authorizedsignatory
           case "Approve" : return this.textLang.Authorizedperson
           case "Fill" : return 'ผู้กรอกเอกสาร'
-          default: return "" 
+          default: return keyword 
         }
       },
       changeBiz(){
@@ -1117,9 +1117,20 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           email.checkbox = true
         })
       },
+      addActorFlow(index){
+        var newItem = {
+          account_id: new Date().getTime(),
+          thai_email: ''
+        }
+        this.flow_datas[index].actor[0].permission_email.push(newItem)
+      },
       removeActor(index,item){
         var target_index = this.flow_datas_custom[index].actor.permission_email.indexOf(item);
         this.flow_datas_custom[index].actor.permission_email.splice(target_index, 1)  
+      },
+      removeActorFlow(index,item){
+        var target_index = this.flow_datas[index].actor[0].permission_email.indexOf(item);
+        this.flow_datas[index].actor[0].permission_email.splice(target_index, 1)
       },
       inputFile(){
         this.basePDF()
