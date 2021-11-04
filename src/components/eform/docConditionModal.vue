@@ -117,8 +117,8 @@
         <v-divider class="mx-6"></v-divider>
         <v-card-actions class="py-5">
           <v-spacer></v-spacer>
-          <v-btn outlined color="#67c25d" class="px-12 mr-4 validate-doc-modal-btn" @click="close()">{{ textLang.cancel_modal_btn }}</v-btn>
-          <v-btn depressed dark color="#67c25d" class="px-5 ml-4 validate-doc-modal-btn" @click="save()">{{ textLang.save_setting_btn }}</v-btn>
+          <v-btn outlined color="#67c25d" class="mr-4 validate-doc-modal-btn" @click="close()">{{ textLang.cancel_modal_btn }}</v-btn>
+          <v-btn depressed dark color="#67c25d" class="ml-4 validate-doc-modal-btn" @click="save()">{{ textLang.save_setting_btn }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -286,5 +286,7 @@
 
   .validate-doc-modal-btn {
     font-family: 'Sarabun', sans-serif;
+    text-transform: capitalize;
+    width: 142px;
   }
 </style>
