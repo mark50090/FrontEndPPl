@@ -1007,7 +1007,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
               },
               index: index
             } 
-          }else if(element.action == 'Sign'){
+          }else if(element.action == 'Sign' || element.action == 'Sign-Ca'){
             if(tab_flow_data == this.flow_datas_custom){
               if(Array.isArray(element.sign.sign_page)){
                 return {
