@@ -261,10 +261,13 @@ export default {
         const url = '/user_setting/api/v1/get_usersetting'
         var { data } = await this.axios.get(this.$api_url + url)
         if(data) {
-          this.confirmBusiness = data.result.other_setting.Default_Business.first_name_th
-          this.switch_notify_email = data.result.other_setting.Default_NotifyEmail
-          this.notify_email = data.result.other_setting.Notify_Email
-          this.set_notify_email = data.result.other_setting.Notify_Email
+          if (data.result.other_setting != undefined) {
+            this.confirmBusiness = data.result.other_setting.Default_Business.first_name_th
+            this.default_Business = data.result.other_setting.Default_Business
+            this.switch_notify_email = data.result.other_setting.Default_NotifyEmail
+            this.notify_email = data.result.other_setting.Notify_Email
+            this.set_notify_email = data.result.other_setting.Notify_Email
+          }
           this.default_sign = data.result.default_sign
           this.default_stamp = data.result.default_stamp
           if (this.default_stamp != '') {
