@@ -20,11 +20,11 @@
 									<v-icon>mdi-download</v-icon>
 								</v-btn>
 							</v-col>
-							<!-- <v-col cols="auto" md="auto" lg="auto" class="pr-0 pl-0 pt-2">
-								<v-btn  icon color="#67c25d" @click="optionFormDeleteAttach()">
+							<v-col cols="auto" md="auto" lg="auto" class="pr-0 pl-0 pt-2">
+								<v-btn  icon color="#67c25d" @click="optionFormDeleteAttach(item)">
 									<v-icon>mdi-delete</v-icon>
 								</v-btn>
-							</v-col> -->
+							</v-col>
 						</v-row>
 					</li>
 				</ol>
@@ -91,8 +91,8 @@
     EventBus.$off('changeLang')
   },
   methods: {
-	  	optionFormDeleteAttach() {
-			  EventBus.$emit('FormDeleteAttach')
+	  	optionFormDeleteAttach(file) {
+			  EventBus.$emit('FormDeleteAttach', file, sessionStorage.getItem('transaction_id'))
 		  },
 		changeColor() {
 			this.colorObject = JSON.parse(sessionStorage.getItem('biz_theme'))

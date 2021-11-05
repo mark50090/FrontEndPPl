@@ -261,7 +261,11 @@
       "font_head_deleteattach1": "Do you want to delete attached file name \"",
       "font_head_deleteattach2": "\" ?",
       "deleteattach_cancel": "Cancel",
-      "deleteattach_confirm": "OK"
+      "deleteattach_confirm": "OK",
+      "alert_error": "Error",
+      "alert_success": "Success",
+      "success_message": "The attachment has been deleted.",
+      "error_filenotfound": "Attachment not found"
     }
   },
   "Create_Template": {
