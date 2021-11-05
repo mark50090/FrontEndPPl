@@ -205,19 +205,6 @@
                               </template>
                             </v-text-field>
                           </v-col>
-                          <!-- <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
-                            <v-checkbox hide-details label="OneChat" v-model="actor_role.checkbox" class="mt-0 pt-0 onechat-check"></v-checkbox>
-                          </v-col> -->
-                          <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
-                            <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn">
-                              <v-icon>mdi-minus</v-icon>
-                            </v-btn>
-                          </v-col>
-                          <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
-                            <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn">
-                              <v-icon>mdi-plus</v-icon>
-                            </v-btn>
-                          </v-col>
                         </v-row>
                       </template>
                     </template>
@@ -572,12 +559,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                 }
                 if(flow_data.action == 'Sign-Ca') flow_data.switch_ca = true
                 else flow_data.switch_ca = false
-                flow_data.actor[0].permission_email.forEach(email => {
-                  email.checkbox = true
-                })
-                flow_data.actor[0].permission.forEach(role => {
-                  role.checkbox = true
-                })
+                if(flow_data.actor[0].permission_status) this.permission_role_email = 'role'
+                if(flow_data.actor[0].permission_email_status) this.permission_role_email = 'email'
                 flow_data.approver.sign_position.action = flow_data.action
                 this.signArray.push(flow_data.approver.sign_position)
               })
@@ -691,81 +674,127 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         try {
           this.emitLoading(true)
           if(this.create_tab == 1){
-            var flow_data = this.flow_datas.map(xyz => ({
-              "actor": [
-                {
-                  "permission_status": false,
-                  "permission": [],
-                  "permission_email_status": true,
-                  "permission_email": xyz.actor[0].permission_email.map((yz,index) => {
-                    var result = []
-                    result = this.user_detail.filter(ele => {
-                      if((ele.data.thai_email == yz.thai_email.trim()) || 
-                      (ele.data.thai_email2 == yz.thai_email.trim()) || 
-                      (ele.data.thai_email3 == yz.thai_email.trim()))
-                      return ele
-                    })
-                    result = [...new Set(result)]
-                    if(!result.length) {
-                      this.user_detail.forEach(ele => {
-                        ele.data.email.forEach(e => {
-                          if(e.email == yz.thai_email.trim()){
-                            result.push(ele)
-                          }
+            var flow_data = this.flow_datas.map(xyz => {
+              if(xyz.actor[0].permission_email_status){
+                return {
+                  "actor": [
+                    {
+                      "permission_status": false,
+                      "permission": [],
+                      "permission_email_status": true,
+                      "permission_email": xyz.actor[0].permission_email.map((yz,index) => {
+                        var result = []
+                        result = this.user_detail.filter(ele => {
+                          if((ele.data.thai_email == yz.thai_email.trim()) || 
+                          (ele.data.thai_email2 == yz.thai_email.trim()) || 
+                          (ele.data.thai_email3 == yz.thai_email.trim()))
+                          return ele
                         })
-                        if(ele.data.business_mail){
-                          ele.data.business_mail.forEach(e =>{
-                            if(e.email == yz.thai_email.trim()){
-                              result.push(ele)
+                        result = [...new Set(result)]
+                        if(!result.length) {
+                          this.user_detail.forEach(ele => {
+                            ele.data.email.forEach(e => {
+                              if(e.email == yz.thai_email.trim()){
+                                result.push(ele)
+                              }
+                            })
+                            if(ele.data.business_mail){
+                              ele.data.business_mail.forEach(e =>{
+                                if(e.email == yz.thai_email.trim()){
+                                  result.push(ele)
+                                }
+                              })
                             }
                           })
                         }
+                        var res_data = result[0].data
+                        return {
+                          account_id : res_data.id,
+                          first_name_th: res_data.first_name_th,
+                          last_name_th: res_data.last_name_th,
+                          first_name_eng: res_data.first_name_eng,
+                          last_name_eng: res_data.last_name_eng,
+                          account_title_th: res_data.account_title_th,
+                          account_title_eng: res_data.account_title_eng,
+                          thai_email: res_data.thai_email,
+                          detp_id: null,
+                          role_id: null,
+                          dept_name: null,
+                          role_name: null
+                        }
                       })
                     }
-                    var res_data = result[0].data
-                    return {
-                      account_id : res_data.id,
-                      first_name_th: res_data.first_name_th,
-                      last_name_th: res_data.last_name_th,
-                      first_name_eng: res_data.first_name_eng,
-                      last_name_eng: res_data.last_name_eng,
-                      account_title_th: res_data.account_title_th,
-                      account_title_eng: res_data.account_title_eng,
-                      thai_email: res_data.thai_email,
-                      detp_id: null,
-                      role_id: null,
-                      dept_name: null,
-                      role_name: null
-                    }
-                  })
+                  ],
+                  "approver": {
+                    "account_id": null,
+                    "first_name_th": null,
+                    "last_name_th": null,
+                    "first_name_eng": null,
+                    "last_name_eng": null,
+                    "account_title_th": null,
+                    "account_title_eng": null,
+                    "thai_email": null,
+                    "detp_id": null,
+                    "role_id": null,
+                    "dept_name": null,
+                    "role_name": null,
+                    "status": "Incomplete",
+                    "sign_position": xyz.action=='Sign'? {
+                      "sign_llx": xyz.approver.sign_position.sign_llx,
+                      "sign_lly": xyz.approver.sign_position.sign_lly,
+                      "sign_urx": xyz.approver.sign_position.sign_urx,
+                      "sign_ury": xyz.approver.sign_position.sign_ury,
+                      "sign_page": this.switchStamp == true? 'all': xyz.approver.sign_position.sign_page
+                    }: undefined
+                  },
+                  "action": xyz.switch_ca == true && xyz.action == 'Sign'? 'Sign-Ca' : xyz.action,
+                  "status": "W",
+                  "index": xyz.index
                 }
-              ],
-              "approver": {
-                "account_id": null,
-                "first_name_th": null,
-                "last_name_th": null,
-                "first_name_eng": null,
-                "last_name_eng": null,
-                "account_title_th": null,
-                "account_title_eng": null,
-                "thai_email": null,
-                "detp_id": null,
-                "role_id": null,
-                "dept_name": null,
-                "role_name": null,
-                "status": "Incomplete",
-                "sign_position": xyz.action=='Sign'? {
-                  "sign_llx": xyz.approver.sign_position.sign_llx,
-                  "sign_lly": xyz.approver.sign_position.sign_lly,
-                  "sign_urx": xyz.approver.sign_position.sign_urx,
-                  "sign_ury": xyz.approver.sign_position.sign_ury,
-                  "sign_page": this.switchStamp == true? 'all': xyz.approver.sign_position.sign_page
-                }: undefined
-              },
-              "action": xyz.switch_ca == true && xyz.action == 'Sign'? 'Sign-Ca' : xyz.action,
-              "status": "W",
-              "index": xyz.index
-            }))
+              }else if(xyz.actor[0].permission_status){
+                return{
+                  "actor": [
+                    {
+                      "permission_status": true,
+                      "permission": xyz.actor[0].permission.map(yz => ({
+                        "dept_id": null,
+                        "dept_name": null,
+                        "role_id": yz.role_id,
+                        "role_level": yz.role_level,
+                        "role_name": yz.role_name,
+                      })),
+                      "permission_email_status": false,
+                      "permission_email": []
+                    }
+                  ],
+                  "approver": {
+                    "account_id": null,
+                    "first_name_th": null,
+                    "last_name_th": null,
+                    "first_name_eng": null,
+                    "last_name_eng": null,
+                    "account_title_th": null,
+                    "account_title_eng": null,
+                    "thai_email": null,
+                    "detp_id": null,
+                    "role_id": null,
+                    "dept_name": null,
+                    "role_name": null,
+                    "status": "Incomplete",
+                    "sign_position": xyz.action=='Sign'? {
+                      "sign_llx": xyz.approver.sign_position.sign_llx,
+                      "sign_lly": xyz.approver.sign_position.sign_lly,
+                      "sign_urx": xyz.approver.sign_position.sign_urx,
+                      "sign_ury": xyz.approver.sign_position.sign_ury,
+                      "sign_page": this.switchStamp == true? 'all': xyz.approver.sign_position.sign_page
+                    }: undefined
+                  },
+                  "action": xyz.switch_ca == true && xyz.action == 'Sign'? 'Sign-Ca' : xyz.action,
+                  "status": "W",
+                  "index": xyz.index
+                }
+              }
+            })
             if(this.isDirty){
               var body = {
                 flow_id: this.flow_id,
