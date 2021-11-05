@@ -217,7 +217,7 @@
           <v-spacer></v-spacer>
           <!-- toggle comment button-->
           <v-btn v-if="show_comment == true && commentAble" depressed x-small color="grey lighten-2" class="px-0 open-page-select-btn" @click="toggleComment()"><v-icon large>mdi-chevron-right</v-icon></v-btn>
-          <v-btn v-else-if="show_comment == false && commentAble" depressed color="grey lighten-2" class="open-page-select-btn show-comment-btn"  @click="toggleComment()">{{ textLang.tabMenubar.show_tab }}<br class="display-mobile-only">{{ textLang.tabMenubar.reviews }}</v-btn>
+          <v-btn v-else-if="show_comment == false && commentAble" depressed color="grey lighten-2" class="open-page-select-btn show-comment-btn"  @click="toggleComment()">{{ textLang.tabMenubar.show_tab }}<br class="display-mobile-only">{{ textLang.tabMenubar.reviews }}<br class="display-mobile-only">{{ textLang.tabMenubar.comment_tab3 }}</v-btn>
         </v-toolbar>
         <v-row justify="center" class="mt-3 temp-name">
           <h3>{{template_name}} <span v-if="doc_name">: {{doc_name}}</span></h3>
@@ -8469,7 +8469,7 @@
   }
 
   .send-back-btn-icon:hover .btn-view-attachment {
-    width: 95px !important;
+    width: 152px !important;
   }
 
   .btn-view-attachment {
@@ -8597,7 +8597,7 @@
   }
 
   .not-show-icon {
-    position: absolute;
+    position: absolute !important;
     top: -50%;
     left: 0%;
     z-index: 1;
@@ -8605,30 +8605,29 @@
   }
 
   .not-show-icon-textarea {
-    position: absolute;
-    top: -1%;
+    position: absolute !important;
+    top: -19%;
     z-index: 1;
     opacity: 0.5;
   }
 
   .not-show-icon-editorbox {
-    position: absolute;
-    top: -20%;
+    position: absolute !important;
+    top: -8%;
     z-index: 1;
     opacity: 0.5;
   }
 
   .not-show-icon-checkbox {
-    position: absolute;
+    position: absolute !important;
     top: -50%;
-    left: 13%;
     z-index: 1;
     opacity: 0.5;
   }
 
   .not-show-icon-image {
-    position: absolute;
-    top: -10%;
+    position: absolute !important;
+    top: -7%;
     z-index: 1;
     opacity: 0.5;
   }
@@ -8764,6 +8763,14 @@
     overflow: auto;
   }
 
+  .tox-notifications-container {
+    display: none !important;
+  }
+
+  .tox .tox-editor-header {
+    z-index: 10 !important;
+  }
+
   #workpaper {
     font-family: 'Sarabun', sans-serif;
   }
@@ -8804,6 +8811,7 @@
 
   .insert-image-btn-modal {
     font-family: 'Sarabun', sans-serif;
+    text-transform: capitalize;
   }
 
   .textarea-variable-modal-header {

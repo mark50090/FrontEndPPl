@@ -261,7 +261,11 @@
       "font_head_deleteattach1": "Do you want to delete attached file name \"",
       "font_head_deleteattach2": "\" ?",
       "deleteattach_cancel": "Cancel",
-      "deleteattach_confirm": "OK"
+      "deleteattach_confirm": "OK",
+      "alert_error": "Error",
+      "alert_success": "Success",
+      "success_message": "The attachment has been deleted.",
+      "error_filenotfound": "Attachment not found"
     }
   },
   "Create_Template": {
@@ -712,12 +716,13 @@
         "export_excel_all_user": "Export All Users's Data As Excel",
         "export_excel_myform": "Export Using Of My Documents As Excel",
         "view_ref_doc": "View Reference Documents",
-        "view_attachment": "View Attach Files",
+        "view_attachment": "View Attached Files",
         "open_page": "Open Paper Tap",
         "show_page_tootip": "Show this page",
         "hide_page_tootip": "Hide this page",
         "show_tab": "Open ",
-        "reviews": "Comments Tab",
+        "reviews": "Comments",
+        "comment_tab3": " Tab",
         "add_variable": "Add variable values in the text",
         "not_show_obj_icon": "Not Show In Document",
         "image_box": "Click to Insert Image",
@@ -757,7 +762,7 @@
         "so_type_import": "SO Number (SO No.)",
         "invoice_type_import": "Invoice Number(Invoice No.)",
         "cus_type_import": "Customer ID",
-        "document_number": "Document Number :",
+        "document_number": "Document Number:",
         "import_data": "Import Data",
         "import_other": "Import Data From Other Document"
       },

@@ -14,12 +14,12 @@
           </v-row >
           <v-row class="approvallist-row approval-header ">
                   <v-col cols="12" md="auto" lg="auto" class="pl-0" align-self="center" >
-                    {{textlang.Allapprovedforms}} 100
+                    {{textLang.Allapprovedforms}} 100
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-col align-self="center" cols="auto" md="auto" lg="auto" class="pr-0 position-btn-approval ">
                     <v-btn depressed dark color="#67C25D" class="create-approval-btn">
-                      <v-icon class="mr-2">mdi-plus</v-icon>{{textlang.Createanapprovalform}}</v-btn>
+                      <v-icon class="mr-2">mdi-plus</v-icon>{{textLang.Createanapprovalform}}</v-btn>
                 </v-col>
                 </v-row>
         <v-row class="approvallist-row mt-1">
@@ -103,6 +103,7 @@ export default {
 .create-approval-btn {
     font-family: 'Sarabun', sans-serif;
     font-size: 14px !important;
+    text-transform: capitalize;
 }
 .approval-table {
     width: 100%;
