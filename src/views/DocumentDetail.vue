@@ -341,11 +341,11 @@
                           <v-icon>mdi-download</v-icon>
                         </v-btn>
                       </v-col>
-                      <!-- <v-col cols="1" md="1" lg="1" align-self="start" class="px-0 pt-1 pb-0 text-center">
-                        <v-btn icon small color="#4CAF50" @click="optionFormDeleteAttach()">
+                      <v-col cols="1" md="1" lg="1" align-self="start" class="px-0 pt-1 pb-0 text-center" >
+                        <v-btn icon small color="#4CAF50" @click="optionFormDeleteAttach(item)" :disabled="item.account_id != account_id">
                           <v-icon>mdi-delete</v-icon>
                         </v-btn>
-                      </v-col> -->
+                      </v-col>
                     </v-row>
                     <v-divider class="mx-2" :key="`${index}_attachment_divider`"></v-divider>
                   </template>
@@ -365,7 +365,7 @@
               </v-col>
               <v-spacer></v-spacer>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-1 py-2">
-                <v-btn depressed color="#1CC6A9" :disabled="false" class="approve-btn" @click="set_approve_fn('approve')">{{textLang.approvee}}</v-btn>
+                <v-btn depressed color="#1CC6A9" :disabled="!(padStatus || all_sign[sign_type].default || is_approve)" class="approve-btn" @click="set_approve_fn('approve')">{{textLang.approvee}}</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-2 py-2">
                 <v-btn depressed dark color="error" class="approve-btn" @click="set_approve_fn('reject')">{{textLang.refuse}}</v-btn>
@@ -387,12 +387,12 @@
                   <v-select dense outlined hide-details color="#4CAF50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="all_sign" item-text="name" item-value="index" v-model="sign_type" @change="get_signature_default_fn" class="sign-type sign-type-box sign-type-dropdown-icon"></v-select>
                 </v-col>
                 <v-col cols="auto" md="auto" lg="auto" class="pr-0 py-2">
-                  <v-btn depressed small color="#1D9BDE" :disabled="all_sign[sign_type].default" class="clear-sign-btn" @click="clearSignature()">{{textLang.clear}}</v-btn>
+                  <v-btn depressed small color="#1D9BDE" :disabled="all_sign[sign_type].default || !padStatus" class="clear-sign-btn" @click="clearSignature()">{{textLang.clear}}</v-btn>
                 </v-col>
                 <v-spacer></v-spacer>
               </v-row>
               <v-row justify="center" align="center" class="detail-row">
-                <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pa-0 sign-block">
+                <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pa-0 sign-block" id="sign-block">
                   <!-- sign pad -->
                   <v-img
                     v-if="all_sign[sign_type].default"
@@ -432,7 +432,7 @@ import DeleteMessage from '../components/DeleteMessage'
 import showFormDeleteAttach from '../components/ConfirmDeleteAttachFileModal.vue'
 export default {
   computed: {
-    textLang() {
+    textLang () {
       return this.$store.getters.textLang.DocumentDetail
     }
   },
@@ -467,7 +467,7 @@ export default {
     new_attachment_file: [],
     attachment_file: [],
     pdf_src: '',
-    select_page:[],
+    select_page: [],
     token: '',
     transaction_id: '',
     default_sign: null,
@@ -492,11 +492,14 @@ export default {
     is_approve: false,
     is_reject: false,
     isShowRevertButton: true,
+    account_id: null,
+    setTimeOutResize: null
   }),
   mounted () {
     this.token = sessionStorage.getItem('access_token')
     this.my_name = sessionStorage.getItem('name')
     this.transaction_id = sessionStorage.getItem('transaction_id')
+    this.account_id = JSON.parse(sessionStorage.getItem('userProfile')).id
     this.getTemplateId(this.transaction_id)
     if (!this.transaction_id) {
       this.$router.replace({ name: 'inbox' })
@@ -507,6 +510,8 @@ export default {
     this.get_signature_name_default_fn()
     EventBus.$on('confirm_deletemessage', this.delete_comment_fn)
     EventBus.$on('getstamp', this.get_stamper_fn)
+    EventBus.$on('afterDeleteAttach', this.after_delete_attach_fn)
+    window.addEventListener('resize', this.resize_window_fn)
   },
   watch: {
     axios_pending (val) {
@@ -539,9 +544,12 @@ export default {
     }
   },
   methods: {
-    optionFormDeleteAttach() {
-			  EventBus.$emit('FormDeleteAttach')
-		  },
+    optionFormDeleteAttach (file) {
+      EventBus.$emit('FormDeleteAttach', file, sessionStorage.getItem('transaction_id'))
+    },
+    after_delete_attach_fn () {
+      this.get_attachment_file_fn()
+    },
     optionFormReturn () {
       EventBus.$emit('FormReturn', this.transaction_detail)
     },
@@ -580,6 +588,13 @@ export default {
     },
     deletemessage () {
       EventBus.$emit('deletemessage')
+    },
+    resize_window_fn () {
+      clearTimeout(this.setTimeOutResize)
+      this.setTimeOutResize = setTimeout(() => {
+        this.reShowSign(this.sign_position)
+        this.reShowStamp()
+      }, 100)
     },
     change_page_fn (type) {
       switch (type) {
@@ -820,7 +835,7 @@ export default {
             this.doc_details.transaction_id = doc_data.transaction_id
             this.doc_details.doc_id = doc_data.doc_id
             this.doc_details.sender = doc_data.sender
-            this.doc_details.detail = `${doc_data.object_text.subject} ${doc_data.object_text.message}`
+            this.doc_details.detail = `${doc_data.object_text.subject || ''} ${doc_data.object_text.message || ''}`
             this.doc_details.tracking = doc_data.tracking
             this.doc_details.create_at = doc_data.create_at
             this.doc_details.file_name = doc_data.file_name
@@ -936,6 +951,7 @@ export default {
         })
     },
     async get_signature_default_fn () {
+      this.padStatus = false
       if (!this.all_sign[this.sign_type].default) return
       if (this.all_sign[this.sign_type].signImage !== null) {
         this.default_sign = this.all_sign[this.sign_type].signImage
@@ -1062,7 +1078,7 @@ export default {
       this.$router.push({ path: '/form/input' })
     },
     get_stamper_fn (base64) {
-      this.stamp_position.push({ base64: base64, page: [1] })
+      this.stamp_position.push({ base64: base64, page: [this.page] })
       this.reShowStamp()
     },
     delete_stamper_fn (index) {
@@ -1071,6 +1087,7 @@ export default {
       this.reShowStamp()
     },
     onResize: function (item, x, y, width, height) {
+      // console.log('onResize');
       var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
       var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
       item.sign_llx = (x / clientWidth).toFixed(3)
@@ -1083,6 +1100,7 @@ export default {
       item.sign_box_width = width
     },
     onDrag: function (item, x, y) {
+      // console.log('onDrag');
       var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
       var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
       item.sign_llx = (x / clientWidth).toFixed(4)
@@ -1157,6 +1175,8 @@ export default {
     sessionStorage.removeItem('transaction_id')
     EventBus.$off('confirm_deletemessage')
     EventBus.$off('getstamp')
+    EventBus.$off('afterDeleteAttach')
+    window.removeEventListener('resize', this.resize_window_fn)
   }
 }
 </script>

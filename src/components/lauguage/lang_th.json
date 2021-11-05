@@ -261,7 +261,11 @@
       "font_head_deleteattach1": "ต้องการลบไฟล์ \"",
       "font_head_deleteattach2": "\" หรือไม่ ?",
       "deleteattach_cancel": "ยกเลิก",
-      "deleteattach_confirm": "ตกลง"
+      "deleteattach_confirm": "ตกลง",
+      "alert_error": "ไม่สำเร็จ",
+      "alert_success": "สำเร็จ",
+      "success_message": "ลบไฟล์แนบเรียบร้อยแล้ว",
+      "error_filenotfound": "ไม่พบไฟล์แนบ"
     }
   },
   "Create_Template": {
