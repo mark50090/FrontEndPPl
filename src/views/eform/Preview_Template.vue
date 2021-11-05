@@ -126,7 +126,7 @@
             </v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.save_draft }}</v-list-item-title>
           </v-list-item> -->
-          <v-list-item v-if="(((!isPreview && !editStep && !allUserStep) || allUserStep) || (isPublic && !isPreview)) && ready && false " @click="openDocName(false)">
+          <v-list-item v-if="ready && currentStep != ''" @click="openDocName(false)">
             <v-list-item-icon>
               <v-icon color="#4CAF50">mdi-file-hidden</v-icon>
             </v-list-item-icon>
@@ -332,14 +332,14 @@
         </v-card-title>
         <v-card-text class="pt-4">
           <v-row class="save-doc-row">
-            <v-col cols="12" md="2" lg="2" align-self="start" class="pl-0 pt-5 pb-0 title-name-paperless">{{ textLang.offer_dialog.subject_new }} </v-col>
-            <v-col cols="12" md="10" lg="10" class="px-0 pb-0">
+            <v-col cols="12" md="4" lg="4" align-self="start" class="pl-0 pr-2 pt-5 pb-0 title-name-paperless">{{ textLang.offer_dialog.subject_new }} </v-col>
+            <v-col cols="12" md="8" lg="8" class="px-0 pb-0">
               <v-text-field outlined dense class="title-name-paperless-value paperless-input-line" color="#4CAF50" v-model="pplSubject" :error="name_ppl_error" :error-messages="error_file_name_ppl_msg"></v-text-field>
             </v-col>
           </v-row>
           <v-row class="mt-0 save-doc-row">
-            <v-col cols="12" md="2" lg="2" class="pl-0 pt-0 title-name-paperless">{{ textLang.offer_dialog.message }}</v-col>
-            <v-col cols="12" md="10" lg="10" class="px-0 pt-0">
+            <v-col cols="12" md="4" lg="4" class="pl-0 pt-0 title-name-paperless">{{ textLang.offer_dialog.message }}</v-col>
+            <v-col cols="12" md="8" lg="8" class="px-0 pt-0">
               <v-textarea outlined dense hide-details no-resize rows="6" color="#4CAF50" class="pad-textarea message-paperless-row title-name-paperless-value" v-model="pplBody"></v-textarea>
             </v-col>
           </v-row>
@@ -450,7 +450,7 @@
         </v-card-text>
         <v-card-actions class="pt-4 pb-5">
           <v-spacer></v-spacer>
-          <v-btn outlined color="#4CAF50" dark class="px-8 mr-2 attach-file-modal-btn" @click="holdFiles=[]; dialogFiles = false">{{ textLang.offer_dialog.cancel }}</v-btn>
+          <v-btn outlined color="#4CAF50" dark class="px-8 mr-2 cancel-attach-modal-btn" @click="holdFiles=[]; dialogFiles = false">{{ textLang.offer_dialog.cancel }}</v-btn>
           <v-btn depressed dark color="#4CAF50" class="px-9 ml-2 attach-file-modal-btn" @click="dialogFiles = false; changeHoldFiles()" >{{ textLang.offer_dialog.ok }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
@@ -4071,6 +4071,11 @@ export default {
   display: block !important;
 }
 
+.cancel-attach-modal-btn {
+  font-family: "Sarabun", sans-serif;
+  text-transform: capitalize;
+}
+
 .attach-file-modal-btn {
   font-family: "Sarabun", sans-serif;
 }
@@ -4106,11 +4111,13 @@ export default {
 
 .cancel-efrom-modal-btn {
   font-family: "Sarabun", sans-serif;
+  text-transform: capitalize;
 }
 
 .save-eform-modal-btn {
   font-family: "Sarabun", sans-serif;
   color: white !important;
+  text-transform: capitalize;
 }
 
 
