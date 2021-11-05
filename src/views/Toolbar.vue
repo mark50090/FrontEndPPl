@@ -79,7 +79,7 @@
             <v-list-item-title class="menu-title">{{textLang.documentbox}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-group no-action color="#53ba47" :value="open_create_menu" active-class="menu-create-doc" :class="create_menu_active_class">
+        <v-list-group no-action color="#53ba47" :value="open_create_menu" active-class="menu-create-doc" :class="create_menu_active_class + ' menu-down-icon'">
           <template v-slot:activator>
             <v-list-item-icon>
               <v-icon>mdi-file-edit-outline</v-icon>
@@ -401,6 +401,10 @@
   .menu-active {
     background-color: #53ba47;
     color: white !important;
+  }
+
+  .v-application--is-ltr .menu-down-icon  .v-list-item__icon:last-of-type:not(:only-child) {
+    margin-left: 0% !important;
   }
 
   .menu-icon-svg-active > .v-list-item__icon > svg > path {
