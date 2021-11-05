@@ -352,13 +352,13 @@
       "tools_create": "เครื่องมือในการสร้าง"
     },
     "tips_data": {
-      "ctrl_arrow": "ctrl + ปุ่มลูกศร: ใช้สำหรับปรับขนาด Object",
+      "ctrl_arrow": "CTRL + ปุ่มลูกศร: ใช้สำหรับปรับขนาด Object",
       "moving_object": "ปุ่มลูกศร: ใช้สำหรับเคลื่อนย้าย Object",
-      "delete_keys": "ปุ่ม delete: ใช้สำหรับลบ Object",
-      "c_copy": "ctrl + c: ใช้สำหรับคัดลอก object ที่กำลังเลือกอยู่",
-      "v_pasting": "ctrl + v: ใช้สำหรับวาง object ที่คัดลอกมาลงบนหน้ากระดาษ",
-      "z_reverting": "ctrl + z: ใช้สำหรับย้อน object ที่ถูกลบไปก่อนหน้ากลับมา",
-      "selecting": "ctrl + การกดเลือก object หลาย ๆ อัน: เป็นการเลือก object ทีเดียวหลายอันเพื่อให้สามารถไปกดลบ object เหล่านั้นทีเดียวได้ที่แถบคุณสมบัติ"
+      "delete_keys": "ปุ่ม Delete: ใช้สำหรับลบ Object",
+      "c_copy": "CTRL + C: ใช้สำหรับคัดลอก object ที่กำลังเลือกอยู่",
+      "v_pasting": "CTRL + V: ใช้สำหรับวาง object ที่คัดลอกมาลงบนหน้ากระดาษ",
+      "z_reverting": "CTRL + Z: ใช้สำหรับย้อน object ที่ถูกลบไปก่อนหน้ากลับมา",
+      "selecting": "CTRL + การกดเลือก object หลาย ๆ อัน: เป็นการเลือก object ทีเดียวหลายอันเพื่อให้สามารถไปกดลบ object เหล่านั้นทีเดียวได้ที่แถบคุณสมบัติ"
     },
     "property_text": {
       "property_object": "คุณสมบัติของ Object",

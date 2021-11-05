@@ -355,7 +355,7 @@
             </v-row>
             <v-row class="row-prop">
               <v-col cols="4" align-self="center" class="title-prop-block">
-                <span class="title-prop">{{ textLang.set_format_form.en_data }}</span>
+                <span class="title-force-date-prop">{{ textLang.set_format_form.en_data }}</span>
               </v-col>
               <v-col cols="8" align-self="center" class="pl-0 pr-2">
                 <v-menu :close-on-content-click="false" v-model="menu_date_force">
@@ -2773,7 +2773,7 @@ export default {
     template_name(val) {
       if(val == '') {
         this.name_template_error = true
-        this.error_file_name_msg = 'กรุณากรอกชื่อแบบฟอร์ม'
+        this.error_file_name_msg = this.textLang.set_format_form.please_fill_in
       } else {
         this.name_template_error = false
         this.error_file_name_msg = ''
@@ -8046,7 +8046,7 @@ export default {
 
 .name-page {
   font-family: 'Sarabun', sans-serif;
-  width: 15%;
+  width: 20%;
 }
 
 .create-menu {
@@ -8200,6 +8200,12 @@ export default {
 .title-prop {
   font-family: 'Sarabun', sans-serif;
   font-size: 14px;
+  color: black;
+}
+
+.title-force-date-prop {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 12px;
   color: black;
 }
 
@@ -8675,6 +8681,7 @@ export default {
 
 .insert-img-modal-btn {
   font-family: 'Sarabun', sans-serif;
+  text-transform: capitalize;
 }
 
 .input-box {
