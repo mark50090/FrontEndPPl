@@ -46,18 +46,26 @@
     computed: {
       textLang() {
         return this.$store.getters.textLang.DocumentReport
+      },
+      report_table_header() {
+        return [
+          {text: this.textLang.number , align: 'center', sortable: false, value: 'report_no'},
+          {text: this.textLang.initials , align: 'center', sortable: false, value: 'shorten_name'},
+          {text: this.textLang.Documenttypename , align: 'start', sortable: false, value: 'doc_type'},
+          {text: 'View / Export Excel', align: 'start', sortable: false, value: 'action'},
+        ]
       }
     },
     components:{
-    DocumentReport
+      DocumentReport
     },
     data: () => ({
-      report_table_header: [
-        {text: 'ลำดับ', align: 'center', sortable: true, value: 'report_no'},
-        {text: 'ชื่อย่อ', align: 'center', sortable: true, value: 'shorten_name'},
-        {text: 'ชื่อประเภทเอกสาร', align: 'start', sortable: true, value: 'doc_type'},
-        {text: 'View / Export Excel', align: 'start', sortable: false, value: 'action'},
-      ],
+      // report_table_header: [
+      //   {text: 'ลำดับ', align: 'center', sortable: true, value: 'report_no'},
+      //   {text: 'ชื่อย่อ', align: 'center', sortable: true, value: 'shorten_name'},
+      //   {text: 'ชื่อประเภทเอกสาร', align: 'start', sortable: true, value: 'doc_type'},
+      //   {text: 'View / Export Excel', align: 'start', sortable: false, value: 'action'},
+      // ],
       report_data: [],
       keyword: "",
     }),

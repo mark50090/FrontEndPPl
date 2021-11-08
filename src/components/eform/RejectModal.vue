@@ -21,12 +21,19 @@
 <script>
 import { EventBus } from '../../EventBus'
 export default {
-  computed: {
-    textLang() {
-      return this.$store.getters.textLang.components.rejectModal
-    }
-  },
+  // computed: {
+  //   textLang() {
+  //     return this.$store.getters.textLang.components.rejectModal
+  //   }
+  // },
   data: () => ({
+    textLang: {
+      confirm_reject: "ยืนยันการปฏิเสธอนุมัติเอกสาร",
+      sure_reject: "ต้องการปฏิเสธอนุมัติเอกสาร",
+      or: "หรือไม่ ?",
+      cancel: "ยกเลิก",
+      reject: "ตกลง",
+    },
     dialog: false,
     my_form_option: {
       name: '',
@@ -39,7 +46,7 @@ export default {
   mounted() {
     EventBus.$on('rejectDocument',this.rejectConfirm)
     EventBus.$on('changeLang', this.changeLange)
-    // this.changeLange()
+    this.changeLange()
   },
   beforeDestroy() {
     EventBus.$off('changeLang')

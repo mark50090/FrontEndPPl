@@ -37,12 +37,20 @@
   import { EventBus } from '../../EventBus'
 
   export default {
-    computed: {
-      textLang() {
-        return this.$store.getters.textLang.components.AddAttachFileModal
-      }
-    },
+    // computed: {
+    //   textLang() {
+    //     return this.$store.getters.textLang.components.AddAttachFileModal
+    //   }
+    // },
     data: () => ({
+      textLang: {
+        attach_header_dialog: "แนบเอกสารเพิ่มเติม",
+        input_attach_title: "เอกสารแนบเพิ่มเติม",
+        placeholder_file: "กรุณาเลือกเอกสารแนบ",
+        cancel_attach_btn: "ยกเลิก",
+        attach_btn: "ตกลง",
+        wait_upload: "รอการอัพโหลด"
+      },
       add_attach_dialog: false,
       files: [],
       selFiles: [],
@@ -71,6 +79,7 @@
     mounted() {
       EventBus.$on('attachFiles', this.startAttach)
       EventBus.$on('changeLang', this.changeLange)
+      this.changeLange()
       // this.changeColor()
     },
     watch: {

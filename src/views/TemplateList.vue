@@ -114,19 +114,31 @@ import showFormTransfer from '../components/TransferEdit.vue'
     computed: {
       textLang() {
         return this.$store.getters.textLang.TemplateList
+      },
+      templateform_table_header() {
+        return [
+          {text: this.textLang.number , align: 'center', sortable: false, value: 'templateform_no'},
+          {text: this.textLang.formname , align: 'start', sortable: false, value: 'templateform_name'},
+          {text: this.textLang.documentID , align: 'center', sortable: false, value: 'templateform_codedoc'},
+          {text: this.textLang.department , align: 'center', sortable: false, value: 'templateform_department'},
+          {text: this.textLang.createdby , align: 'start', sortable: false, value: 'templateform_fullname'},
+          {text: this.textLang.lastmodifieddate , align: 'center', sortable: false, value: 'templateform_date'},
+          {text: this.textLang.status , align: 'start', sortable: false, value: 'templateform_status'},
+          {text: '', align: 'center', sortable: false, value: 'templateform_dowm'}
+        ]
       }
     },
     data: () => ({
-      templateform_table_header: [
-        {text: 'ลำดับ', align: 'center', sortable: true, value: 'templateform_no'},
-        {text: 'ชื่อแบบฟอร์ม', align: 'start', sortable: true, value: 'templateform_name'},
-        {text: 'รหัสเอกสาร', align: 'center', sortable: true, value: 'templateform_codedoc'},
-        {text: 'แผนก', align: 'center', sortable: true, value: 'templateform_department'},
-        {text: 'สร้างโดย', align: 'start', sortable: true, value: 'templateform_fullname'},
-        {text: 'วันที่แก้ไขล่าสุด', align: 'center', sortable: true, value: 'templateform_date'},
-        {text: 'สถานะ', align: 'start', sortable: true, value: 'templateform_status'},
-        {text: '', align: 'center', sortable: false, value: 'templateform_dowm'}
-      ],
+      // templateform_table_header: [
+      //   {text: 'ลำดับ', align: 'center', sortable: true, value: 'templateform_no'},
+      //   {text: 'ชื่อแบบฟอร์ม', align: 'start', sortable: true, value: 'templateform_name'},
+      //   {text: 'รหัสเอกสาร', align: 'center', sortable: true, value: 'templateform_codedoc'},
+      //   {text: 'แผนก', align: 'center', sortable: true, value: 'templateform_department'},
+      //   {text: 'สร้างโดย', align: 'start', sortable: true, value: 'templateform_fullname'},
+      //   {text: 'วันที่แก้ไขล่าสุด', align: 'center', sortable: true, value: 'templateform_date'},
+      //   {text: 'สถานะ', align: 'start', sortable: true, value: 'templateform_status'},
+      //   {text: '', align: 'center', sortable: false, value: 'templateform_dowm'}
+      // ],
      templateform_data: [],
       formdoc_data: [],
       optionsTemplate: {

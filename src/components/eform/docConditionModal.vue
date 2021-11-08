@@ -128,16 +128,48 @@
 <script>
   import { EventBus } from '../../EventBus'
   export default {
-    computed: {
-      textLang() {
-        return this.$store.getters.textLang.components.docConditionModal
-      }
-    },
+    // computed: {
+    //   textLang() {
+    //     return this.$store.getters.textLang.components.docConditionModal
+    //   }
+    // },
     data: () => ({
       dialog_condition: false,
       docCondition:[],
       cond_step: [],
-      
+      textLang: {
+        validation_doc_modal_title: "ตั้งค่าการตรวจสอบความถูกต้องของเอกสาร",
+        validate_list_title: "รายการเงื่อนไขที่จะตรวจสอบ",
+        condition_num: "เงื่อนไขที่",
+        condition_title: "เงื่อนไข",
+        step_check_cond_type: "ลำดับที่ตรวจสอบ",
+        check_all_step_choice: "ทั้งหมด",
+        check_custom_step_choice: "กำหนดเอง",
+        step_check_cond_title: "ลำดับที่",
+        step_check_cond_placeholder: "เลือก",
+        alert_title: "ข้อความแจ้งเตือน",
+        add_condition_btn: "เพิ่มเงื่อนไข",
+        delete_condition_btn: "ลบเงื่อนไข",
+        cancel_modal_btn: "ยกเลิก",
+        save_setting_btn: "บันทึกการตั้งค่า",
+        help_card: {
+          help_validate: "เป็นเงื่อนไขสำหรับตรวจสอบความถูกต้องในการกรอกเอกสาร โดยสามารถเลือกตรวจสอบ object ตามเงื่อนไขที่กำหนดเองได้ ซึ่งในการใส่ชื่อ object จะใช้เครื่องหมาย $ นำหน้าชื่อ ส่วนเครื่องหมายที่ใช้ในการเปรียบเทียบต่างๆจะมีดังนี้",
+          plus_sign: "บวก",
+          minus_sign: "ลบ",
+          multiple_sign: "คูณ",
+          divide_sign: "หาร",
+          equal_sign: "เท่ากับ",
+          not_equal_sign: "ไม่เท่ากับ",
+          less_sign: "น้อยกว่า",
+          less_eq_sign: "น้อยกว่าหรือเท่ากับ",
+          more_sign: "มากกว่า",
+          more_eq_sign: "มากกว่าหรือเท่ากับ",
+          length_meaning: "ค่าจำนวนตัวอักษรในข้อความ โดยใส่ต่อหลังจากชื่อ object ที่ต้องการค่า",
+          and_sign: "และ (ใช้เชื่อมเงื่อนไขย่อยหลายๆเงื่อนไข โดยใส่วงเล็บครอบแต่ละเงื่อนไขก่อนที่จะใส่เครื่องหมายเชื่อม)",
+          or_sign: "หรือ (ใช้เชื่อมเงื่อนไขย่อยหลายๆเงื่อนไข โดยใส่วงเล็บครอบแต่ละเงื่อนไขก่อนที่จะใส่เครื่องหมายเชื่อม)",
+          condition_example: "ตัวอย่างเงื่อนไข"
+        }
+      },
       //Color Variable
       color_validate_box: '#2ACA9F',
       color_add_condition_btn: '#2ACA9F',
@@ -160,7 +192,7 @@
     mounted() {
       EventBus.$on('openDocCondition',this.getCondition)
       EventBus.$on('changeLang', this.changeLange)
-      // this.changeLange()
+      this.changeLange()
       // this.changeColor()
     },
     beforeDestroy() {

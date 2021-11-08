@@ -47,12 +47,19 @@
 <script>
 import { EventBus } from '../../EventBus'
 export default {
-  computed: {
-    textLang() {
-      return this.$store.getters.textLang.components.SignaturePadModal
-    }
-  },
+  // computed: {
+  //   textLang() {
+  //     return this.$store.getters.textLang.components.SignaturePadModal
+  //   }
+  // },
   data: () => ({
+    textLang: {
+      sign_approve: "ลงนามอนุมัติ",
+      reject_approval: "ปฏิเสธอนุมัติ",
+      clear_button: "ล้างค่า",
+      approve: "อนุมัติ",
+      cancel: "ยกเลิก"
+    },
     dialogSign: false,
     option_style: ['Sign Pad'],
     selectedSignStyle: 'Sign Pad',
@@ -86,7 +93,7 @@ export default {
   mounted() {
     EventBus.$on('openSignPad',this.openSignpad)
     EventBus.$on('changeLang', this.changeLange)
-    // this.changeLange()
+    this.changeLange()
     // this.changeColor()
   },
    beforeDestroy() {

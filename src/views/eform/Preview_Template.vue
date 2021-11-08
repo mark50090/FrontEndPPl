@@ -469,15 +469,10 @@ import ConfirmCancelDocumentModal from '../../components/eform/ConfirmCancelDocu
 import { mapState } from 'vuex'
 
 export default {
-  computed: {
-    ...mapState({
+  computed: mapState({
     objectTemplate: state => state.objectTemplate,
-    uploadedFile: state => state.uploadedFile,
-    }),
-    textLang() {
-      return this.$store.getters.textLang.preview_template
-    }
-  },
+    uploadedFile: state => state.uploadedFile
+  }),
   components: {
     InputDocumentNameModal,
     SignaturePadModal,
@@ -486,6 +481,65 @@ export default {
     ConfirmCancelDocumentModal
   },
   data: () => ({
+    textLang:{
+      tabMenubar: {
+        back_page: "ย้อนกลับไปหน้ากรอกข้อมูล",
+        back_to: "ออกจากแบบฟอร์มนี้",
+        save_doc: "บันทึกเอกสาร",
+        save_draft: "บันทึกเอกสารแบบร่าง",
+        page: "หน้า",
+        view_ref_doc: "ดูเอกสารอ้างอิง",
+        attach_doc: "แนบเอกสารเพิ่มเติม",
+        download_doc: "ดาวน์โหลดเอกสาร",
+        copy: "คัดลอก",
+        forward_mail: "ส่งเอกสารเป็นอีเมล",
+        next_temp_btn: "กรอกเอกสารถัดไป",
+        more: "เพิ่มเติม",
+        view_attachment: "ดูเอกสารแนบ",
+        cancel_doc: "ยกเลิกเอกสาร",
+        open_comment_btn: "เปิดแถบ",
+        comment_btn: "ความคิดเห็น",
+        comment_header: "ความคิดเห็น"
+      },
+      offer_dialog: {
+        offer: "เสนอเซ็น",
+        offer_paperless_new: "บันทึกเอกสาร",
+        offer_paperless_old: "เสนอเซ็นผ่านระบบ Paperless",
+        subject_new: "ชื่อเอกสาร:",
+        subject_old: "เรื่อง:",
+        password_setting: "ตั้งค่ารหัสผ่านเอกสาร (pdf)",
+        no_subject: "<ไม่มีหัวเรื่อง>",
+        message: "ข้อความ:",
+        doc_type: "ประเภทเอกสาร paperless:",
+        doc_format: "รูปแบบเอกสาร paperless:",
+        add_attachments: "เอกสารแนบเพิ่มเติม",
+        attached_file_placeholder: "เลือกเอกสารแนบ",
+        please_choose: "กรุณาเลือกเอกสารแนบ",
+        doc_system: "แนบเอกสารเพิ่มเติม",
+        choose: "เลือก",
+        note: "หมายเหตุ",
+        re_number: "อ้างอิงลำดับที่",
+        cancel: "ยกเลิก",
+        ok: "ตกลง",
+        default: "(ค่าเริ่มต้น)",
+        please_input: "กรุณากรอกข้อมูล Email ให้ครบถ้วน",
+        email_found: "ไม่พบอีเมล์ต่อไปนี้ในระบบ",
+        name_ppl_error: "กรุณากรอกชื่อเอกสาร",
+        pdf_setting_error:"กรุณาตั้งค่ารหัสผ่าน",
+        wait_upload: "รอการอัพโหลด",
+        already_save: "เอกสารในลำดับนี้ ถูกบันทึกแล้ว"
+      },
+      alert:{
+        alert_warning: "แจ้งเตือน",
+        alert_success: "สำเร็จ",
+        alert_error: "ไม่สำเร็จ",
+        send_complete: "เสนอเซ็นสำเร็จ",
+        send_fail: "เสนอเซ็นไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
+        upload_fail : "อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
+        duplicate_user_form: "แบบฟอร์มถูกใช้งานโดยผู้ใช้อื่น",
+        duplicate_save: "บันทึกเอกสารไม่สำเร็จ เนื่องจากเอกสารในลำดับนี้ถูกบันทึกแล้ว"
+      }
+    },
     alert: false,
     alert_error: false,
     dialogFiles: false,
@@ -672,10 +726,11 @@ export default {
     EventBus.$on('saveSign', this.saveSign)
     EventBus.$on("emitSaveDocument", this.saveDocument)
     EventBus.$on('changeAttachFiles', this.changeUploadingFiles)
-    // EventBus.$on('changeLang', this.changeLange)
+    EventBus.$on('changeLang', this.changeLange)
     EventBus.$on('setPdfPass', this.setPdfPass)
     this.refDataDoc = JSON.parse(sessionStorage.getItem('refDataDoc'))
-    // this.changeLange()
+    EventBus.$on('changeLang', this.changeLange)
+    this.changeLange()
     // this.changeColor()
   },
   watch: {

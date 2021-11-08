@@ -38,33 +38,43 @@
         </v-card>
     </div>
 </template>
+
 <script>
 export default {
-    computed: {
-      textLang() {
-        return this.$store.getters.textLang.ApprovalList
-      }
+  computed: {
+    textLang() {
+      return this.$store.getters.textLang.ApprovalList
     },
-    data: () => ({
-        approval_table_header: [
-        {text: 'ลำดับ', align: 'center', sortable: true, value: 'approval_no'},
-        {text: 'ชื่อรูปแบบอนุมัติ', align: 'start', sortable: true, value: 'approval_name'},
-        {text: 'รายละเอียด', align: 'start', sortable: false, value: 'details_approval'},
-        {text: 'วันที่เเก้ไขล่าสุด', align: 'center', sortable: true, value: 'edit_date_approval'},
+    approval_table_header() {
+      return [
+        {text: this.textLang.approval_ta.number , align: 'center', sortable: false, value: 'approval_no'},
+        {text: this.textLang.approval_ta.approvedformatname , align: 'start', sortable: false, value: 'approval_name'},
+        {text: this.textLang.approval_ta.details , align: 'start', sortable: false, value: 'details_approval'},
+        {text: this.textLang.approval_ta.lastrevisiondate , align: 'center', sortable: false, value: 'edit_date_approval'},
         {text: '', align: 'center', sortable: false, value: 'more_approval'}
-      ],
-      approval_data: [
-          {
-            approval_no: '1',
-            approval_name: 'TEST-DEV-รายละเอียดงบประมาณแนบท้ายโครงการ',
-            details_approval: 'Outsource',
-            edit_date_approval: '19 ม.ค. พ.ศ.2556',
-            
-          }
-          
-      ],  
-}),}
+      ]
+    }
+  },
+  data: () => ({
+    // approval_table_header: [
+    //   {text: 'ลำดับ', align: 'center', sortable: true, value: 'approval_no'},
+    //   {text: 'ชื่อรูปแบบอนุมัติ', align: 'start', sortable: true, value: 'approval_name'},
+    //   {text: 'รายละเอียด', align: 'start', sortable: false, value: 'details_approval'},
+    //   {text: 'วันที่เเก้ไขล่าสุด', align: 'center', sortable: true, value: 'edit_date_approval'},
+    //   {text: '', align: 'center', sortable: false, value: 'more_approval'}
+    // ],
+    approval_data: [
+      {
+        approval_no: '1',
+        approval_name: 'TEST-DEV-รายละเอียดงบประมาณแนบท้ายโครงการ',
+        details_approval: 'Outsource',
+        edit_date_approval: '19 ม.ค. พ.ศ.2556',  
+      }      
+    ],  
+  })
+}
 </script>
+
 <style>
 .approvallist-row {
     width: 100%;

@@ -92,6 +92,16 @@ import { EventBus } from '../EventBus'
     computed: {
       textLang() {
         return this.$store.getters.textLang.Inbox
+      },
+      inbox_header() {
+        return [
+          {text: this.textLang.inboxheader.sender , align: 'start', sortable: false, value: 'sender_name'},
+          {text: this.textLang.inboxheader.type , align: 'start', sortable: false, value: 'flow_detail.name'},
+          {text: this.textLang.inboxheader.documentnumber , align: 'start', sortable: false, value: 'document_id'},
+          {text: this.textLang.inboxheader.details , align: 'start', sortable: false, value: 'detail'},
+          {text: this.textLang.inboxheader.status , align: 'center', sortable: false, value: 'document_status_text'},
+          {text: this.textLang.inboxheader.date , align: 'start', sortable: false, value: 'updatedAt'}
+        ]
       }
     },
     data: () => ({
@@ -116,14 +126,14 @@ import { EventBus } from '../EventBus'
       count_transaction_inprogress: 0,
       count_transaction_rejected: 0,
       count_transaction_incoming: 0,
-      inbox_header: [
-        {text: 'ผู้ส่ง', align: 'start', sortable: true, value: 'sender_name'},
-        {text: 'ประเภท', align: 'start', sortable: true, value: 'flow_detail.name'},
-        {text: 'เลขที่เอกสาร', align: 'start', sortable: true, value: 'document_id'},
-        {text: 'รายละเอียด', align: 'start', sortable: false, value: 'detail'},
-        {text: 'สถานะ', align: 'center', sortable: true, value: 'document_status_text'},
-        {text: 'วันที่', align: 'start', sortable: true, value: 'updatedAt'}
-      ],
+      // inbox_header: [
+      //   {text: 'ผู้ส่ง', align: 'start', sortable: true, value: 'sender_name'},
+      //   {text: 'ประเภท', align: 'start', sortable: true, value: 'flow_detail.name'},
+      //   {text: 'เลขที่เอกสาร', align: 'start', sortable: true, value: 'document_id'},
+      //   {text: 'รายละเอียด', align: 'start', sortable: false, value: 'detail'},
+      //   {text: 'สถานะ', align: 'center', sortable: true, value: 'document_status_text'},
+      //   {text: 'วันที่', align: 'start', sortable: true, value: 'updatedAt'}
+      // ],
       inbox_data: [
         // {sender: 'คนดีย์ สิ้นชีวาลัย', doc_type: 'ใบเบิกเงินค่ารักษาพยาบาล', document_id: 'OTHER-63000000214', detail: 'ขอเบิกค่าถอนฟันหน่อยนะ', document_status_text: '', updateAt: '30/12/2020'},
       ],

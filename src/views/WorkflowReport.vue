@@ -90,48 +90,30 @@ export default {
   computed: {
     textLang() {
       return this.$store.getters.textLang.WorkflowReport
+    },
+    report_table_header() {
+      return [
+        { text: this.textLang.number , align: 'center', sortable: false, value: 'workflow_no', width: '100px' },
+        { text: this.textLang.name , align: 'center', sortable: false, value: 'workflow_name' },
+        { text: this.textLang.details , align: 'start', sortable: false, value: 'workflow_detail' },
+        { text: 'View', align: 'center', sortable: false, value: 'view', width: '70px' },
+        { text: 'Dashboard', align: 'center', sortable: false, value: 'dashboard', width: '102px' },
+        { text: 'Export Excel', align: 'center', sortable: false, value: 'excel', width: '80px' }
+      ]
     }
   },
   components:{
     DocumentReport
     },
   data: () => ({
-    report_table_header: [
-      { text: 'ลำดับ', align: 'center', sortable: true, value: 'workflow_no', width: '100px' },
-      {
-        text: 'ชื่อ Workflow',
-        align: 'center',
-        sortable: true,
-        value: 'workflow_name'
-      },
-      {
-        text: 'รายละเอียด',
-        align: 'start',
-        sortable: true,
-        value: 'workflow_detail'
-      },
-      {
-        text: 'View',
-        align: 'center',
-        sortable: false,
-        value: 'view',
-        width: '70px'
-      },
-      {
-        text: 'Dashboard',
-        align: 'center',
-        sortable: false,
-        value: 'dashboard',
-        width: '102px'
-      },
-      {
-        text: 'Export Excel',
-        align: 'center',
-        sortable: false,
-        value: 'excel',
-        width: '80px'
-      }
-    ],
+    // report_table_header: [
+    //   { text: 'ลำดับ', align: 'center', sortable: true, value: 'workflow_no', width: '100px' },
+    //   { text: 'ชื่อ Workflow', align: 'center', sortable: true, value: 'workflow_name' },
+    //   { text: 'รายละเอียด', align: 'start', sortable: true, value: 'workflow_detail' },
+    //   { text: 'View', align: 'center', sortable: false, value: 'view', width: '70px' },
+    //   { text: 'Dashboard', align: 'center', sortable: false, value: 'dashboard', width: '102px' },
+    //   { text: 'Export Excel', align: 'center', sortable: false, value: 'excel', width: '80px' }
+    // ],
     workflow_data: [],
     keyword: '',
     axios_pending: 0,
