@@ -366,6 +366,9 @@ import VueDraggableResizable from 'vue-draggable-resizable'
     computed: {
       textLang() {
         return this.$store.getters.textLang.CreateDocument
+      },
+      loading_list_text(){
+        return this.textLang[this.loading_list_langkey]
       }
     },
     data: () => ({
@@ -404,7 +407,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       switchStamp: false,
       switchCA: false,
       isFormValid: false,
-      loading_list_text: '',
+      loading_list_langkey: '',
       loading_template: false,
       loading_type: false,
       isDirty: false,
@@ -500,7 +503,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       },
       async getDocumentType(){
         this.loading_type = true
-        this.loading_list_text = this.textLang.Fetching
+        this.loading_list_langkey = 'Fetching'
         this.document_type_list = []
         try {
           var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
@@ -514,7 +517,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         } catch (error) {
           console.log(error);
         }
-        this.loading_list_text = this.textLang.noinformationfound
+        this.loading_list_langkey = 'noinformationfound'
         this.loading_type = false
       },
       async getDocumentTemplate(){
@@ -523,7 +526,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.signArray = []
         this.flow_datas = []
         this.isDirty = false
-        this.loading_list_text = this.textLang.Fetching
+        this.loading_list_langkey = 'Fetching'
         this.loading_template = true
         try {
           var url = `/flowdata/api/v1/getbydocID?document_type_id=${this.selected_document_type._id}`
@@ -537,7 +540,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           console.log(error);
         }
         this.loading_template = false
-        this.loading_list_text = this.textLang.noinformationfound
+        this.loading_list_langkey = 'noinformationfound'
       },
       async getFlowData(){
         this.emitLoading(true)

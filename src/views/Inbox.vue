@@ -26,7 +26,7 @@
             <!-- filter document status for mobile only -->
             <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 doc-type-title display-mobile-only">{{textLang.documentstatus}}</v-col>
             <v-col cols="7" md="4" lg="4" class="px-0 pb-0 display-mobile-only">
-              <v-select outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="doc_status_list" v-model="document_status" class="status-doc-box type-doc-dropdown-icon"></v-select>
+              <v-select outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" v-model="document_status" item-value="value" item-text="text" :menu-props="{ bottom: true, offsetY: true }" :items="docStatusOptions" class="status-doc-box type-doc-dropdown-icon"></v-select>
             </v-col>
           </v-row>
           <v-row class="mt-5 inbox-row all-doc-header">
@@ -102,6 +102,12 @@ import { EventBus } from '../EventBus'
           {text: this.textLang.inboxheader.status , align: 'center', sortable: false, value: 'document_status_text'},
           {text: this.textLang.inboxheader.date , align: 'start', sortable: false, value: 'updatedAt'}
         ]
+      },
+      docStatusOptions(){
+        return this.doc_status_list.map(e => ({
+          ...e,
+          text: this.textLang[e.lang]
+        }))
       }
     },
     data: () => ({
@@ -111,12 +117,13 @@ import { EventBus } from '../EventBus'
       lim:'',
       owned: false,
       tab: null,
-      doc_status_list: [{text:'ทั้งหมด', value:'all'},
-        {text:'รออนุมัติ', value:'waiting'},
-        {text:'อนุมัติแล้ว', value:'approved'},
-        {text:'กำลังดำเนินการ', value:'inprogress'},
-        {text:'ปฏิเสธอนุมัติ', value:'rejected'},
-        {text:'รอดำเนินการ', value:'incoming'}
+      doc_status_list: [
+        {text:'ทั้งหมด',lang: 'all',value:'all'}, 
+        {text: 'รออนุมัติ',lang: 'pendingapproval',value:'waiting'}, 
+        {text: 'อนุมัติแล้ว',lang: 'approved',value:'approved'}, 
+        {text: 'กำลังดำเนินการ', lang: 'inprogress',value:'inprogress'}, 
+        {text: 'ปฏิเสธอนุมัติ',lang: 'rejectapproval',value:'rejected'}, 
+        {text: 'รอดำเนินการ',lang: 'pending',value:'incoming'}
       ],
       //["","waiting","approved","inprogress","rejected","incoming"]
       document_status: 'all',
