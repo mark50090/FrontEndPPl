@@ -113,7 +113,7 @@
             <v-list-item-title class="menu-title">{{textLang.sentitems}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/report" active-class="menu-active menu-icon-svg-active">
+        <v-list-item to="/report" active-class="menu-active menu-icon-svg-active" v-if="role_admin">
           <v-list-item-icon>
             <svg style="width:24px;height:24px" viewBox="0 0 24 24">
               <path fill="rgba(0, 0, 0, 0.54)" d="M2 12H4V17H20V12H22V17C22 18.11 21.11 19 20 19H4C2.9 19 2 18.11 2 17V12M12 15L17.55 9.54L16.13 8.13L13 11.25V2H11V11.25L7.88 8.13L6.46 9.55L12 15Z" />
@@ -123,7 +123,7 @@
             <v-list-item-title class="menu-title">{{textLang.documentreport}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/summary_workflow" active-class="menu-active">
+        <v-list-item to="/summary_workflow" active-class="menu-active" v-if="role_admin">
           <v-list-item-icon>
             <v-icon>mdi-file-document</v-icon>
           </v-list-item-icon>
@@ -131,7 +131,7 @@
             <v-list-item-title class="menu-title">{{textLang.documentusagereport}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-group no-action color="#53ba47" :value="open_doc_style_menu" active-class="menu-create-doc" :class="'doc-style-dropdown-icon ' +  doc_style_active_class">
+        <v-list-group no-action color="#53ba47" :value="open_doc_style_menu" v-if="role_designer" active-class="menu-create-doc" :class="'doc-style-dropdown-icon ' +  doc_style_active_class">
           <template v-slot:activator>
             <v-list-item-icon>
               <v-icon>mdi-file-cog</v-icon>
@@ -196,6 +196,8 @@
       open_doc_style_menu: false,
       doc_style_active_class: '',
       allInfo: [],
+      role_admin: false,
+      role_designer: false
     }),
     watch: {
       $route(to, from) {
@@ -208,6 +210,8 @@
       EventBus.$on('loadingOverlay', this.changeLoading)
       this.checkCreateDocMenu()
       this.checkDocStyleMenu()
+      if(sessionStorage.role_admin == 'true') this.role_admin = true
+      if(sessionStorage.role_designer == 'true') this.role_designer = true
       // this.changeLang(sessionStorage.getItem('page_lang'))
     },
     beforeDestroy(){

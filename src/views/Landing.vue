@@ -30,6 +30,8 @@ export default {
         this.$apiConfig.setToken(data.data.access_token)
         this.$apiConfig.setRefreshToken(data.data.refresh_token)
         this.getUserDetail()
+        this.getRoleAdmin()
+        this.getRoleDesigner()
       } catch (error) {
         console.log(error);
       }
@@ -62,7 +64,27 @@ export default {
       sessionStorage.setItem('isStep',false)
       sessionStorage.setItem('isOnlyForm',true)
       this.$router.push({ 'path': '/form/input'})
-    }, 
+    },
+    async getRoleAdmin(){
+      try {
+        var url = '/citizen/api/v1/checkadmin'
+        var { data } = await this.axios.post(this.$api_url + url)
+        if(data.status) sessionStorage.setItem('role_admin',true)
+        else sessionStorage.setItem('role_admin',false)
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getRoleDesigner(){
+      try {
+        var url = '/citizen/api/v1/checkdesigner'
+        var { data } = await this.axios.post(this.$api_url + url)
+        if(data.status) sessionStorage.setItem('role_designer',true)
+        else sessionStorage.setItem('role_designer',false)
+      } catch (error) {
+        console.log(error);
+      }
+    } 
   }
 }
 </script>
