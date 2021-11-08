@@ -96,14 +96,14 @@ export default {
       { text: 'ข้อความ', value: 'stamp_text' }],
     stamp_type_value: 'stamp_text',
     // Language Variable
-    textLang: {
-      message_stamp: 'ข้อความ Stamp',
-      cancel_stamp: 'ยกเลิก',
-      confirm_stamp: 'บันทึก',
-      stamp_type: 'ประเภท Stamp',
-      current_date: 'วันที่ปัจจุบัน',
-      text: 'ข้อความ'
-    }
+    // textLang: {
+    //   message_stamp: 'ข้อความ Stamp',
+    //   cancel_stamp: 'ยกเลิก',
+    //   confirm_stamp: 'บันทึก',
+    //   stamp_type: 'ประเภท Stamp',
+    //   current_date: 'วันที่ปัจจุบัน',
+    //   text: 'ข้อความ'
+    // }
   }),
   mounted () {
     EventBus.$on('stamp', this.stamper)
