@@ -913,7 +913,7 @@
     "all": "All",
     "pendingapproval": "Waiting",
     "approved": "Approved",
-    "inprogress": "In Progres",
+    "inprogress": "In Progress",
     "rejectapproval": "Rejected",
     "pending":"Incoming",
     "sentboxtable":{
