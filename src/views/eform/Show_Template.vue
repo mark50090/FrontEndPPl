@@ -917,7 +917,6 @@
       objectTemplate: state => state.objectTemplate,
       uploadedFile: state => state.uploadedFile
     }),
-
     components: {
       ReverseWorkFlowModal,
       InputDocumentNameModal,
@@ -1385,19 +1384,19 @@
         if(sessionStorage.getItem('page_lang') == 'th') {
           var lang_th = require('@/components/lauguage/lang_th.json')
           this.textLang = lang_th.show_template.textLang
-          this.typeDocImport[0].text = lang_th.show_template.textLang.text_dialog.eform_type_import
-          this.typeDocImport[1].text = lang_th.show_template.textLang.text_dialog.cvm_type_import
-          this.typeDocImport[2].text = lang_th.show_template.textLang.text_dialog.so_type_import
-          this.typeDocImport[3].text = lang_th.show_template.textLang.text_dialog.cus_type_import
-          this.typeDocImport[4].text = lang_th.show_template.textLang.text_dialog.invoice_type_import
+          this.typeDocImport[0].text = this.textLang.text_dialog.eform_type_import
+          this.typeDocImport[1].text = this.textLang.text_dialog.cvm_type_import
+          this.typeDocImport[2].text = this.textLang.text_dialog.so_type_import
+          this.typeDocImport[3].text = this.textLang.text_dialog.cus_type_import
+          this.typeDocImport[4].text = this.textLang.text_dialog.invoice_type_import
         } else if(sessionStorage.getItem('page_lang') == 'en') {
           var lang_en = require('@/components/lauguage/lang_en.json')
           this.textLang = lang_en.show_template.textLang
-          this.typeDocImport[0].text = lang_en.show_template.textLang.text_dialog.eform_type_import
-          this.typeDocImport[1].text = lang_en.show_template.textLang.text_dialog.cvm_type_import
-          this.typeDocImport[2].text = lang_en.show_template.textLang.text_dialog.so_type_import
-          this.typeDocImport[3].text = lang_en.show_template.textLang.text_dialog.cus_type_import
-          this.typeDocImport[4].text = lang_th.show_template.textLang.text_dialog.invoice_type_import
+          this.typeDocImport[0].text = this.textLang.text_dialog.eform_type_import
+          this.typeDocImport[1].text = this.textLang.text_dialog.cvm_type_import
+          this.typeDocImport[2].text = this.textLang.text_dialog.so_type_import
+          this.typeDocImport[3].text = this.textLang.text_dialog.cus_type_import
+          this.typeDocImport[4].text = this.textLang.text_dialog.invoice_type_import
         }
       },
       switchView() {
