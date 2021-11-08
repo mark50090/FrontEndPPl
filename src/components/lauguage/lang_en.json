@@ -806,6 +806,7 @@
     "documentname": "Document Name",
     "message": "Message",
     "attachfile": "Attached File",
+    "selectattachment": "Select attached file",
     "documenttype": "Workflow Type",
     "documentformat": "Workflow",
     "choose": "Choose",
@@ -817,14 +818,16 @@
     "page": "Page",
     "all": "All",
     "senddocuments": "Send Document",
-    "authorizedsignatory": "Signing Permission",
-    "Authorizedperson": "Approving Permission",
+    "authorizedsignatory": "Signing",
+    "Authorizedperson": "Approving",
+    "fill_permission": "Filling",
     "Fetching": "Loading...",
     "noinformationfound": "Data Not found",
     "succeed": "Success",
     "transactionsucceed": "Creating transaction is success.",
     "fail": "Error",
-    "transactionfail": "Creating transaction is incomplete. Please try again later."
+    "transactionfail": "Creating transaction is incomplete. Please try again later.",
+    "alert_email_data": "No data in selected e-mail."
   },
   "DocumentDetail": {
     "no":"Step",

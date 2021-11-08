@@ -806,6 +806,7 @@
     "documentname": "ชื่อเอกสาร",
     "message": "ข้อความ",
     "attachfile": "แนบไฟล์",
+    "selectattachment": "เลือกไฟล์แนบ",
     "documenttype": "ประเภทเอกสาร",
     "documentformat": "รูปแบบเอกสาร",
     "choose": "เลือก",
@@ -819,12 +820,14 @@
     "senddocuments": "ส่งเอกสาร",
     "authorizedsignatory": "ผู้มีสิทธิ์เซ็น",
     "Authorizedperson": "ผู้มีสิทธิ์อนุมัติ",
+    "fill_permission": "ผู้กรอกเอกสาร",
     "Fetching": "กำลังดึงข้อมูล กรุณารอสักครู่...",
     "noinformationfound": "ไม่พบข้อมูล",
     "succeed": "สำเร็จ",
     "transactionsucceed": "สร้าง transaction สำเร็จ",
     "fail": "ไม่สำเร็จ",
-    "transactionfail": "สร้าง transaction ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
+    "transactionfail": "สร้าง transaction ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
+    "alert_email_data": "ไม่มีข้อมูลของอีเมลล์ที่เลือก"
   },
   "DocumentDetail": {
     "no":"ลำดับที่",

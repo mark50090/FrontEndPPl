@@ -74,7 +74,7 @@
         </v-col>
         <v-col cols="12" md="6" lg="6">
           <v-row class="create-row">
-            <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pt-2 select-file-title">
+            <v-col cols="3" md="auto" lg="auto" align-self="center" class="pl-0 pt-2 select-file-title">
               {{textLang.selectfile}} :
             </v-col>
             <v-col cols="9" md="" lg="" class="px-0 pt-2">
@@ -103,7 +103,7 @@
                 <!-- document setting tab -->
                 <v-tab-item>
                   <v-row class="create-row">
-                    <v-col cols="4" md="3" lg="3" align-self="center" class="pl-2 pt-4 create-setting-title">
+                    <v-col cols="4" md="3" lg="3" align-self="center" class="pl-2 pr-1 pt-4 create-setting-title">
                       {{textLang.documentname}} :
                     </v-col>
                     <v-col cols="8" md="9" lg="9" align-self="center" class="px-0 pt-4">
@@ -432,7 +432,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           case "Sign" : return this.textLang.authorizedsignatory
           case "Sign-Ca" : return this.textLang.authorizedsignatory
           case "Approve" : return this.textLang.Authorizedperson
-          case "Fill" : return 'ผู้กรอกเอกสาร'
+          case "Fill" : return this.textLang.fill_permission
           default: return keyword 
         }
       },
@@ -635,7 +635,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                 position: 'bottom-end',
                 width: '330px',
                 title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">'+ this.textLang.fail+'</strong>',
-                text: 'ไม่มีข้อมูลของอีเมลล์ที่เลือก',
+                text: this.textLang.alert_email_data,
                 showCloseButton: true,
                 showConfirmButton: false,
                 timer: 5000,
@@ -657,7 +657,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             position: 'bottom-end',
             width: '330px',
             title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#E53935" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg><strong class="alert-title">'+ this.textLang.fail+'</strong>',
-            text: 'ไม่มีข้อมูลของอีเมลล์ที่เลือก',
+            text: this.textLang.alert_email_data,
             showCloseButton: true,
             showConfirmButton: false,
             timer: 5000,
@@ -1297,6 +1297,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 
   .create-tab-title {
     font-family: 'Sarabun', sans-serif;
+    text-transform: capitalize;
   }
 
   .create-detail-block {
@@ -1349,6 +1350,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
   .add-step-btn {
     font-family: 'Sarabun', sans-serif;
     color: white !important;
+    text-transform: capitalize;
   }
 
   .all-step-block {
@@ -1427,6 +1429,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
   .send-doc-btn {
     font-family: 'Sarabun', sans-serif;
     color: white !important;
+    text-transform: capitalize;
   }
 
   #pdfBg_create {
