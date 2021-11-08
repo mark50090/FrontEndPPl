@@ -18,7 +18,7 @@
             </v-col>
             <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 front-sentbox-title display-mobile-only">{{textLang.documentstatus}}</v-col>
             <v-col cols="7" md="4" lg="4" class="px-0 pb-0 display-mobile-only">
-              <v-select outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="sent_box_select" v-model="document_status" class="status-doc-sentbox sent-box-dropdown-icon"></v-select>
+              <v-select outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="docStatusOptions" v-model="document_status" item-value="value" item-text="text" class="status-doc-sentbox sent-box-dropdown-icon"></v-select>
             </v-col>
           </v-row>
           <v-row class="mt-2 sentbox-row alldoc-sent-header">
@@ -91,6 +91,12 @@ import { EventBus } from '../EventBus'
           {text: this.textLang.sentboxtable.status , align: 'center', sortable: false, value: 'document_status_text'},
           {text: this.textLang.sentboxtable.date , align: 'start', sortable: false, value: 'updatedAt'},
         ]
+      },
+      docStatusOptions(){
+        return this.sent_box_select.map(e => ({
+          ...e,
+          text: this.textLang[e.lang]
+        }))
       }
     },
     data: () => ({
@@ -106,12 +112,13 @@ import { EventBus } from '../EventBus'
       count_transaction_inprogress: 0,
       count_transaction_rejected: 0,
       count_transaction_incoming: 0,
-      sent_box_select: [{text:'ทั้งหมด', value:'all'},
-        {text:'รออนุมัติ', value:'waiting'},
-        {text:'อนุมัติแล้ว', value:'approved'},
-        {text:'กำลังดำเนินการ', value:'inprogress'},
-        {text:'ปฏิเสธอนุมัติ', value:'rejected'},
-        {text:'รอดำเนินการ', value:'incoming'}
+      sent_box_select: [
+        {text:'ทั้งหมด',lang: 'all',value:'all'}, 
+        {text: 'รออนุมัติ',lang: 'pendingapproval',value:'waiting'}, 
+        {text: 'อนุมัติแล้ว',lang: 'approved',value:'approved'}, 
+        {text: 'กำลังดำเนินการ', lang: 'inprogress',value:'inprogress'}, 
+        {text: 'ปฏิเสธอนุมัติ',lang: 'rejectapproval',value:'rejected'}, 
+        {text: 'รอดำเนินการ',lang: 'pending',value:'incoming'}
       ],
       // sentbox_table_header: [
       //   {text: 'ผู้ส่ง', align: 'start', sortable: true, value: 'sender_name'},
