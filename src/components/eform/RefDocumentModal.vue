@@ -30,12 +30,18 @@
   import { EventBus } from '../../EventBus'
 
   export default {
-    computed: {
-      textLang() {
-        return this.$store.getters.textLang.components.RefDocumentModal
-      }
-    },
+    // computed: {
+    //   textLang() {
+    //     return this.$store.getters.textLang.components.RefDocumentModal
+    //   }
+    // },
     data: () => ({
+      textLang:{
+        ref_doc_title: "รายการเอกสารอ้างอิง",
+        not_files: "ไม่มีรายการเอกสารอ้างอิง",
+        cancel: "ยกเลิก",
+        no_pdf: "ไม่สามารถเปิดเอกสารได้"
+      },
       dialog_ref_doc: false,
       refDocData: [],
       //Color Variable
@@ -55,6 +61,8 @@
     }),
     mounted() {
       EventBus.$on('openReferenceDocument', this.openReferenceDoc)
+      EventBus.$on('changeLang', this.changeLange)
+      this.changeLange()
       // this.changeColor()
     },
     methods: {

@@ -81,6 +81,16 @@ import { EventBus } from '../EventBus'
     computed: {
       textLang() {
         return this.$store.getters.textLang.SentBoxList
+      },
+      sentbox_table_header() {
+        return [
+          {text: this.textLang.sentboxtable.sender , align: 'start', sortable: false, value: 'sender_name'},
+          {text: this.textLang.sentboxtable.type , align: 'start', sortable: false, value: 'flow_detail.name'},
+          {text: this.textLang.sentboxtable.documentnumber , align: 'start', sortable: false, value: 'document_id'},
+          {text: this.textLang.sentboxtable.details , align: 'start', sortable: false, value: 'detail'},
+          {text: this.textLang.sentboxtable.status , align: 'center', sortable: false, value: 'document_status_text'},
+          {text: this.textLang.sentboxtable.date , align: 'start', sortable: false, value: 'updatedAt'},
+        ]
       }
     },
     data: () => ({
@@ -103,14 +113,14 @@ import { EventBus } from '../EventBus'
         {text:'ปฏิเสธอนุมัติ', value:'rejected'},
         {text:'รอดำเนินการ', value:'incoming'}
       ],
-      sentbox_table_header: [
-        {text: 'ผู้ส่ง', align: 'start', sortable: true, value: 'sender_name'},
-        {text: 'ประเภท', align: 'start', sortable: true, value: 'flow_detail.name'},
-        {text: 'เลขที่เอกสาร', align: 'start', sortable: true, value: 'document_id'},
-        {text: 'รายละเอียด', align: 'start', sortable: false, value: 'detail'},
-        {text: 'สถานะ', align: 'center', sortable: true, value: 'document_status_text'},
-        {text: 'วันที่', align: 'start', sortable: true, value: 'updatedAt'},
-      ],
+      // sentbox_table_header: [
+      //   {text: 'ผู้ส่ง', align: 'start', sortable: true, value: 'sender_name'},
+      //   {text: 'ประเภท', align: 'start', sortable: true, value: 'flow_detail.name'},
+      //   {text: 'เลขที่เอกสาร', align: 'start', sortable: true, value: 'document_id'},
+      //   {text: 'รายละเอียด', align: 'start', sortable: false, value: 'detail'},
+      //   {text: 'สถานะ', align: 'center', sortable: true, value: 'document_status_text'},
+      //   {text: 'วันที่', align: 'start', sortable: true, value: 'updatedAt'},
+      // ],
       sentbox_data: [
           // {
           //   sent_box_sender: 'ธวัชชัย หนองรวง',

@@ -185,12 +185,42 @@
 <script>
   import { EventBus } from '../../EventBus'
   export default {
-    computed: {
-      textLang() {
-        return this.$store.getters.textLang.components.hideSettingModal
-      }
-    },
+    // computed: {
+    //   textLang() {
+    //     return this.$store.getters.textLang.components.hideSettingModal
+    //   }
+    // },
     data: () => ({
+      textLang: {
+        setting_object: "ตั้งค่าเงื่อนไขการซ่อน Object",
+        hidden_conditions: "จะถูกซ่อนตามเงื่อนไขต่อไปนี้",
+        condition_group_title: "กลุ่มเงื่อนไขที่",
+        add_group_cond: "เพิ่มกลุ่มเงื่อนไข",
+        condition_1: "เงื่อนไขที่ 1",
+        name_object: "ชื่อ Object",
+        condition: "เงื่อนไข",
+        cost: "ค่า",
+        conditional_connector: "ตัวเชื่อมเงื่อนไข",
+        conditional_connector_group: "ตัวเชื่อมกลุ่มเงื่อนไข",
+        add_condition: "เพิ่มเงื่อนไข",
+        conditions_no: "เงื่อนไขที่",
+        delete_condition: "ลบเงื่อนไข",
+        delete_condition_group: "ลบกลุ่มเงื่อนไข",
+        cancel: "ยกเลิก",
+        save: "บันทึกการตั้งค่า",
+        logicFx: {
+         equal: "เท่ากับ",
+         not_equal: "ไม่เท่ากับ",
+         greather: "มากกว่าเท่ากับ",
+         lass_equal: "น้อยกว่าเท่ากับ",
+         greather_than: "มากกว่า",
+         less_than: "น้อยกว่า"
+       },
+       intFx: {
+         and: "และ",
+         or: "หรือ"
+       }
+      },
       dialog_hide_setting: false,
       logicFx: [{text:"เท่ากับ", value:"=="},{text:"ไม่เท่ากับ", value:"!="},{text:"มากกว่าเท่ากับ", value:">="},
       {text:"น้อยกว่าเท่ากับ", value:"<="},{text:"มากกว่า", value:">"},{text:"น้อยกว่า", value:"<"}],
@@ -232,7 +262,7 @@
     mounted() {
       EventBus.$on('openHideSetting',this.getOption)
       EventBus.$on('changeLang', this.changeLange)
-      // this.changeLange()
+      this.changeLange()
       // this.changeColor()
     },
     beforeDestroy() {

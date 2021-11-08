@@ -81,11 +81,11 @@
 <script>
   import { EventBus } from '../../EventBus'
   export default {
-    computed: {
-      textLang() {
-        return this.$store.getters.textLang.components.SettingLinkDataTableModal
-      }
-    },
+    // computed: {
+    //   textLang() {
+    //     return this.$store.getters.textLang.components.SettingLinkDataTableModal
+    //   }
+    // },
     watch:{
       tableData (v){
         if(this.scrollPosition.length == 0)
@@ -93,6 +93,15 @@
       }
     },
     data: () => ({
+      textLang: {
+        setting: "ตั้งค่าการเชื่อมโยงข้อมูลของตาราง",
+        row: "แถวที่",
+        import_data: "นำเข้าข้อมูลตัวเลือกจาก Excel",
+        group_option: "ตัวเลือกที่",
+        select: "เลือกแถวที่ต้องการเชื่อมโยงข้อมูล(สามารถเชื่อมโยงได้ภายในแถวเดียวกันเท่านั้น) จากนั้นกดปุ่ม + เพื่อเพิ่มจำนวนตัวเลือกของข้อมูลที่ต้องการเชื่อมโยง หรือกดปุ่ม - เพื่อลบตัวเลือกที่ไม่ต้องการ โดยช่องกรอกแต่ละช่องจะแทนเซลล์ที่อยู่ในแถวนั้นๆ เมื่อกำหนดค่าให้แต่ละช่อง หากนำไปใช้แล้วมีการกรอกค่าตรงกับค่าที่ได้กำหนดไว้ช่องใดช่องหนึ่ง ค่าจากช่องอื่นที่ได้กำหนดไว้ก็จะถูกนำมาแสดงด้วย ตัวอย่างเช่นกำหนดให้ช่องเซลล์ datatable1_R1C1 = \"Hello\", datatable1_R1C2 = \"99\", datatable1_R1C3 = \"World\" เมื่อมีการกรอกข้อมูลในช่องเซลล์ datatable1_R1C2 ว่า 99 ข้อมูลในช่องเซลล์ datatable1_R1C1 และ datatable1_R1C3 จะเป็น \"Hello\" และ \"World\" ตามลำดับ หรือถ้าหากช่องเซลล์ datatable1_R1C1 มีการกรอกคำว่า \"Hello\" ช่องเซลล์ datatable1_R1C2 และ datatable1_R1C3 จะเป็น \"99\" และ \"World\" ตามลำดับ นอกจากนั้นหากต้องการ import ข้อมูลตัวเลือกจากไฟล์ Excel ในไฟล์ Excel นั้นต้องใส่ข้อมูลตัวเลือกเริ่มตั้งแต่ช่อง A1 เรียงไปเป็นแนวนอนเรื่อยๆตามจำนวนข้อมูลที่ต้องกรอกในตัวเลือกนั้นๆ โดยข้อมูลที่กรอกใน 1 แถวคือข้อมูลของ 1 ตัวเลือก หากต้องการเพิ่มข้อมูลตัวเลือกให้ไปใส่ข้อมูลเพิ่มที่แถวใหม่",
+        cancel: "ยกเลิก",
+        save: "บันทึกการตั้งค่า"
+      },
       dialog_link_datatable: false,
       isActive: false,
       datatable_obj: {},
@@ -137,7 +146,7 @@
       this.tableData = []
       EventBus.$on('openLinkData',this.getDataTable)
       EventBus.$on('changeLang', this.changeLange)
-      // this.changeLange()
+      this.changeLange()
       // this.changeColor()
     },
     beforeDestroy() {

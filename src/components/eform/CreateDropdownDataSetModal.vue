@@ -69,12 +69,23 @@
 <script>
 import { EventBus } from "../../EventBus";
 export default {
-  computed: {
-    textLang() {
-      return this.$store.getters.textLang.components.CreateDropdownDataSetModal
-    }
-  },
+  // computed: {
+  //   textLang() {
+  //     return this.$store.getters.textLang.components.CreateDropdownDataSetModal
+  //   }
+  // },
   data: () => ({
+    textLang: {
+      create_edit: "สร้าง / แก้ไข กลุ่มตัวเลือก",
+      add_group: "เพิ่มกลุ่มตัวเลือก",
+      group_no: "กลุ่มตัวเลือกที่",
+      name_group: "ชื่อกลุ่มตัวเลือก",
+      please_input: "กรุณากรอกชื่อกลุ่มตัวเลือก",
+      delete_group: "ลบกลุ่มตัวเลือก",
+      sub_choices: "ตัวเลือก",
+      cancel: "ยกเลิก",
+      save: "บันทึกกลุ่มตัวเลือก" 
+    },
     dialog_dropdown_dataset: false,
     dataset_panel: [],
     choiceSet: [],
@@ -104,7 +115,7 @@ export default {
   mounted() {
     EventBus.$on("openCreateDropdownDataset", this.getDropdown);
     EventBus.$on('changeLang', this.changeLange)
-    // this.changeLange()
+    this.changeLange()
     // this.changeColor()
   },
   beforeDestroy() {

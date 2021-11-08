@@ -86,56 +86,70 @@ export default {
   computed: {
     textLang() {
       return this.$store.getters.textLang.WorkflowDetail
+    },
+    report_header() {
+      return [
+        { text: this.textLang.no , sortable: false, value: 'index', width: '100px' },
+        { text: this.textLang.documenttype , value: 'flow_name' },
+        { text: this.textLang.documentnumber , value: 'document_id' },
+        { text: this.textLang.details , value: 'detail' },
+        { text: this.textLang.documentstatus , value: 'document_status' },
+        { text: this.textLang.sender , value: 'sender_name' },
+        { text: this.textLang.datesent , value: 'send_date' },
+        { text: this.textLang.processingtime , value: 'step' },
+        { text: this.textLang.documentprocessed , value: 'completed_time' },
+        { text: this.textLang.documentlastorder , value: 'process_time' }
+      ]
     }
   },
   components:{
     DocumentReport
     },
   data: () => ({
-    report_header: [
-      {
-        text: 'ลำดับที่',
-        sortable: false,
-        value: 'index',
-        width: '100px'
-      },
-      {
-        text: 'ประเภทเอกสาร',
-        value: 'flow_name'
-      },
-      {
-        text: 'เลขที่เอกสาร',
-        value: 'document_id'
-      },
-      {
-        text: 'รายละเอียด',
-        value: 'detail'
-      },
-      {
-        text: 'สถานะเอกสาร',
-        value: 'document_status'
-      },
-      {
-        text: 'ผู้ส่งเอกสาร',
-        value: 'sender_name'
-      },
-      {
-        text: 'วันที่ส่ง',
-        value: 'send_date'
-      },
-      {
-        text: 'ระยะเวลาดำเนินการ',
-        value: 'step'
-      },
-      {
-        text: 'ระยะเวลาทั้งหมดที่เอกสารถูกดำเนินการ',
-        value: 'completed_time'
-      },
-      {
-        text: 'ระยะเวลาตั้งแต่เอกสารถูกนำเข้าถึงลำดับล่าสุด',
-        value: 'process_time'
-      }
-    ],
+    // report_header: [
+    //   {
+    //     text: 'ลำดับที่',
+    //     sortable: false,
+    //     value: 'index',
+    //     width: '100px'
+    //   },
+    //   {
+    //     text: 'ประเภทเอกสาร',
+    //     value: 'flow_name'
+    //   },
+    //   {
+    //     text: 'เลขที่เอกสาร',
+    //     value: 'document_id'
+    //   },
+    //   {
+    //     text: 'รายละเอียด',
+    //     value: 'detail'
+    //   },
+    //   {
+    //     text: 'สถานะเอกสาร',
+    //     value: 'document_status'
+    //   },
+    //   {
+    //     text: 'ผู้ส่งเอกสาร',
+    //     value: 'sender_name'
+    //   },
+    //   {
+    //     text: 'วันที่ส่ง',
+    //     value: 'send_date'
+    //   },
+    //   {
+    //     text: 'ระยะเวลาดำเนินการ',
+    //     value: 'step'
+    //   },
+    //   {
+    //     text: 'ระยะเวลาทั้งหมดที่เอกสารถูกดำเนินการ',
+    //     value: 'completed_time'
+    //   },
+    //   {
+    //     text: 'ระยะเวลาตั้งแต่เอกสารถูกนำเข้าถึงลำดับล่าสุด',
+    //     value: 'process_time'
+    //   }
+    // ],
     report_data: [],
     optionsTransaction: {
       page: 1,

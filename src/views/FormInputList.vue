@@ -55,19 +55,28 @@ import { EventBus } from '../EventBus'
     computed: {
       textLang() {
         return this.$store.getters.textLang.FormInputList
+      },
+      formdoc_table_header() {
+        return [
+          {text: this.textLang.number , align: 'center', sortable: false, value: 'form_doc_no'},
+          {text: this.textLang.documentname , align: 'start', sortable: false, value: 'form_doc_name'},
+          {text: this.textLang.department , align: 'center', sortable: false, value: 'form_doc_department'},
+          {text: this.textLang.documentID , align: 'center', sortable: false, value: 'form_doc_code'},
+          {text: '', align: 'center', sortable: false, value: 'form_doc_insert'}
+        ]
       }
     },
     data: () => ({
-      formdoc_table_header: [
-        {text: 'ลำดับ', align: 'center', sortable: true, value: 'form_doc_no'},
-        {text: 'ชื่อเอกสาร', align: 'start', sortable: true, value: 'form_doc_name'},
-        {text: 'แผนก', align: 'center', sortable: true, value: 'form_doc_department'},
-        // {text: 'ประเภทเอกสาร', align: 'center', sortable: true, value: 'form_doc_type'},
-        {text: 'รหัสเอกสาร', align: 'center', sortable: true, value: 'form_doc_code'},
-        // {text: 'วันที่บังคับใช้', align: 'center', sortable: true, value: 'form_doc_date'},
-        // {text: 'เวอร์ชั่น', align: 'center', sortable: true, value: 'form_doc_version'},
-        {text: '', align: 'center', sortable: false, value: 'form_doc_insert'}
-      ],
+      // formdoc_table_header: [
+      //   {text: 'ลำดับ', align: 'center', sortable: true, value: 'form_doc_no'},
+      //   {text: 'ชื่อเอกสาร', align: 'start', sortable: true, value: 'form_doc_name'},
+      //   {text: 'แผนก', align: 'center', sortable: true, value: 'form_doc_department'},
+      //   // {text: 'ประเภทเอกสาร', align: 'center', sortable: true, value: 'form_doc_type'},
+      //   {text: 'รหัสเอกสาร', align: 'center', sortable: true, value: 'form_doc_code'},
+      //   // {text: 'วันที่บังคับใช้', align: 'center', sortable: true, value: 'form_doc_date'},
+      //   // {text: 'เวอร์ชั่น', align: 'center', sortable: true, value: 'form_doc_version'},
+      //   {text: '', align: 'center', sortable: false, value: 'form_doc_insert'}
+      // ],
       formdoc_data: [],
       optionsTemplate: {
         page:1,

@@ -229,6 +229,7 @@
             if(data.result.other_setting) this.defaultBiz = data.result.other_setting.Default_Business? data.result.other_setting.Default_Business : ''
             else this.defaultBiz = ''
             this.$store.commit('changeLanguage',data.result.language)
+            EventBus.$emit('changeLang')
           }
         } catch (error) {
           console.log(error);
@@ -297,7 +298,7 @@
         this.$store.commit('changeLanguage',item);
         sessionStorage.setItem('page_lang',item)
         this.setLanguage(item.toUpperCase())
-        // EventBus.$emit('changeLang')
+        EventBus.$emit('changeLang')
 		  },
       async setLanguage(lang){
         try {

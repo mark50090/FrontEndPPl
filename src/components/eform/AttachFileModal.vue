@@ -51,21 +51,27 @@
  import showFormDeleteAttach from '../ConfirmDeleteAttachFileModal.vue'
 
  export default {
-  computed: {
-    textLang() {
-        return this.$store.getters.textLang.components.AttachFileModal
-    }
-  },
+//   computed: {
+//     textLang() {
+//         return this.$store.getters.textLang.components.AttachFileModal
+//     }
+//   },
   data: () => ({
 		dialog_attach_file: false,
 		files:[],
-
+		textLang :{
+			 files: "รายการเอกสารแนบ",
+			 not_files: "ไม่มีรายการเอกสารแนบ",
+			 cancel: "ยกเลิก",
+			 download_all: "ดาวน์โหลดเอกสารทั้งหมด",
+			 download: "ดาวน์โหลดเอกสาร",
+		},
 		//Color Variable
 		// color_dialog_header_bg: '#2ACA9F', //class dialog_title in DeleteModal.vue
 		color_btn_download: '#2ACA9F',
 		color_btn_download_all: '#97E2E7',
 		colorObject: {
-       toolbar: {
+        toolbar: {
   				toolbar_bg_color1: '#C2EB81',
   				toolbar_bg_color2: '#A1E9C0',
   				toolbar_font_color: '#0E3852',
@@ -82,12 +88,13 @@
 	  showFormDeleteAttach
   },
   mounted() {
-		EventBus.$on('openAttachFile',this.startAttachFileModal)
-		EventBus.$on('changeLang', this.changeLange)
-		// this.changeColor()
+	EventBus.$on('openAttachFile',this.startAttachFileModal)
+	EventBus.$on('changeLang', this.changeLange)
+	this.changeLange()
+	// this.changeColor()
   },
   beforeDestroy() {
-		EventBus.$off('openAttachFile')
+	EventBus.$off('openAttachFile')
     EventBus.$off('changeLang')
   },
   methods: {
