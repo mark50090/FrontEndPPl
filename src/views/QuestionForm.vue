@@ -102,6 +102,7 @@ export default {
 }
 .font-send-btn{
  font-family: 'Sarabun', sans-serif;
+ text-transform: capitalize;
 }
 /*========================================*/
 

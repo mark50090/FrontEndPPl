@@ -26,7 +26,7 @@
             <!-- filter document status for mobile only -->
             <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 doc-type-title display-mobile-only">{{textLang.documentstatus}}</v-col>
             <v-col cols="7" md="4" lg="4" class="px-0 pb-0 display-mobile-only">
-              <v-select outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="doc_status_list" class="status-doc-box type-doc-dropdown-icon"></v-select>
+              <v-select outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" :menu-props="{ bottom: true, offsetY: true }" :items="doc_status_list" v-model="document_status" class="status-doc-box type-doc-dropdown-icon"></v-select>
             </v-col>
           </v-row>
           <v-row class="mt-5 inbox-row all-doc-header">
@@ -101,7 +101,13 @@ import { EventBus } from '../EventBus'
       lim:'',
       owned: false,
       tab: null,
-      doc_status_list: ['ทั้งหมด', 'รออนุมัติ', 'อนุมัติแล้ว', 'กำลังดำเนินการ', 'ปฏิเสธอนุมัติ', 'รอดำเนินการ'],
+      doc_status_list: [{text:'ทั้งหมด', value:'all'},
+        {text:'รออนุมัติ', value:'waiting'},
+        {text:'อนุมัติแล้ว', value:'approved'},
+        {text:'กำลังดำเนินการ', value:'inprogress'},
+        {text:'ปฏิเสธอนุมัติ', value:'rejected'},
+        {text:'รอดำเนินการ', value:'incoming'}
+      ],
       //["","waiting","approved","inprogress","rejected","incoming"]
       document_status: 'all',
       count_transaction_total: 0,
@@ -326,7 +332,8 @@ import { EventBus } from '../EventBus'
 
   .inbox-tab-title {
     font-family: 'Sarabun', sans-serif;
-    font-size: 14px;
+    font-size: 14px !important;
+    text-transform: capitalize !important;
   }
 
   .search-box {
@@ -400,6 +407,7 @@ import { EventBus } from '../EventBus'
     font-family: 'Sarabun', sans-serif;
     font-size: 16px !important;
     color: black !important;
+    text-transform: capitalize;
   }
 
   .status-doc-num .v-badge__badge {
