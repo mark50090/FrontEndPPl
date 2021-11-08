@@ -264,7 +264,7 @@
       "deleteattach_confirm": "ตกลง",
       "alert_error": "ไม่สำเร็จ",
       "alert_success": "สำเร็จ",
-      "success_message": "ลบไฟล์แนบเรียบร้อยแล้ว",
+      "success_message": "ลบไฟล์แนบสำเร็จ",
       "error_filenotfound": "ไม่พบไฟล์แนบ"
     }
   },
