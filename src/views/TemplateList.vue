@@ -267,6 +267,7 @@ import showFormTransfer from '../components/TransferEdit.vue'
   .front-btn-templateform {
     font-family: 'Sarabun', sans-serif;
     font-size: 14px !important;
+    text-transform: capitalize;
   }
 
   .front-templateform-down {

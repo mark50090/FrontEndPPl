@@ -27,7 +27,7 @@
         <v-divider></v-divider>
         <v-row class="font-all">
           <v-col cols="5" md="2" lg="2" class="py-4 pl-4 all-font-color">
-            OneEmail
+            One E-mail
           </v-col>
           <v-col class="all-font-color py-4 pr-2">
             {{thai_email}}
@@ -115,10 +115,10 @@
                     <v-autocomplete class="font-dropdown ic-dropdown text-dropdown" :placeholder="this.textLang.ChooseBusiness" append-icon="mdi-chevron-down" auto-select-first outlined dense hide-details color="#67C25D" v-model="selectedBiz" :items="noneForChangeBiz" item-text="first_name_th" item-value="id_card_num" return-object></v-autocomplete>
                   </v-col>
                   <v-col cols="auto" md="auto" lg="auto" class="pr-0 position-btn-mobile-cancel" align-self="center">
-                    <v-btn depressed color="#757575" small dark @click="stateBusinessOff()">{{textLang.cancel}}</v-btn>
+                    <v-btn depressed color="#757575" small dark @click="stateBusinessOff()" class="setting-default-business-btn">{{textLang.cancel}}</v-btn>
                   </v-col>
                   <v-col cols="auto" md="auto" lg="auto" align-self="center">
-                    <v-btn depressed color="#67C25D" small dark @click="set_usersetting()"> {{textLang.record}}</v-btn>
+                    <v-btn depressed color="#67C25D" small dark @click="set_usersetting()" class="setting-default-business-btn"> {{textLang.record}}</v-btn>
                   </v-col>
                 </v-row>
           </v-col>
@@ -450,6 +450,10 @@ export default {
   justify-content: center;
   align-items: center;
   display: flex;
+}
+
+.setting-default-business-btn {
+  text-transform: capitalize;
 }
 
 .def-ic-status-point{
