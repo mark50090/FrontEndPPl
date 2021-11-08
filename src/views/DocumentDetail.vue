@@ -168,7 +168,7 @@
               </v-col>
             </v-row>
             <v-row class="detail-row">
-              <v-col cols="3" md="2" lg="2" class="pl-0 pt-1 pb-0 doc-detail-title">
+              <v-col cols="3" md="2" lg="2" class="pl-0 pr-0 pt-1 pb-0 doc-detail-title">
                 <b>{{textLang.sendername}}</b>
               </v-col>
               <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0 doc-detail-title">
@@ -195,8 +195,8 @@
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
                 <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="download_pdf_fn">{{textLang.downloadPDF}}</v-btn>
               </v-col>
-              <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
-                <v-btn v-if="template_id" depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="copyDocument()">{{textLang.copydocuments}}</v-btn>
+              <v-col v-if="template_id" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0">
+                <v-btn depressed x-small dark color="#4CAF50" class="download-pdf-btn" @click="copyDocument()">{{textLang.copydocuments}}</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from inbox page -->
                 <v-btn @click="optionFormMail()" depressed x-small dark color="#4CAF50" class="download-pdf-btn">
@@ -1251,6 +1251,7 @@ export default {
   .doc-detail-tab-title {
     font-family: 'Sarabun', sans-serif;
     font-size: 14px;
+    text-transform: capitalize;
   }
 
   .doc-detail-tab-data {
@@ -1373,6 +1374,7 @@ export default {
   .approve-btn {
     font-family: 'Sarabun', sans-serif;
     color: white !important;
+    text-transform: capitalize;
   }
 
   .sign-type {
@@ -1396,6 +1398,7 @@ export default {
   .clear-sign-btn {
     font-family: 'Sarabun', sans-serif;
     color: white !important;
+    text-transform: capitalize;
   }
 
   .sign-block {
