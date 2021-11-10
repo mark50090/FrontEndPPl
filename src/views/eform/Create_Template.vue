@@ -1789,7 +1789,7 @@
                   <span class="title-prop">{{ textLang.property_type.order_refer }}</span>
                 </v-col>
                 <v-col cols="8" align-self="center" class="pl-0 pr-2 pb-0">
-                  <v-autocomplete outlined dense hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :items="step_choices" v-model="objectArray[selected_array][selected_object].style.permission_step" color="#4caf50" class="prop-input create-prop-line-height create-prop-dropdown-icon"></v-autocomplete>
+                  <v-autocomplete outlined dense hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" :items="step_choices_options" item-text="text" item-value="value" v-model="objectArray[selected_array][selected_object].style.permission_step" color="#4caf50" class="prop-input create-prop-line-height create-prop-dropdown-icon"></v-autocomplete>
                 </v-col>
               </v-row>
               <br>
@@ -2266,11 +2266,17 @@ var ArrowEventHandle
 var CrtlEventHandle = false
 
 export default {
-  // computed: {
+  computed: {
   //   textLang() {
   //       return this.$store.getters.textLang.Create_Template
   //   }
-  // },
+  step_choices_options() {
+    return this.step_choices.map((x,i) => ({
+      ...x,
+      text: i == 0? this.textLang.property_type.sender_flow : this.textLang.property_type.step_flow + i
+    }))
+  }
+  },
   components: {
     SettingLinkDataTableModal,
     CreateDropdownDataSetModal,
