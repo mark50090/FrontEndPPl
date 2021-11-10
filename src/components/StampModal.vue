@@ -87,13 +87,19 @@ export default {
   computed: {
     textLang () {
       return this.$store.getters.textLang.components.StampModal
+    },
+    items() {
+      return [
+        { text: this.textLang.current_date , value: 'current_date' },
+        { text: this.textLang.text , value: 'stamp_text' }
+      ]
     }
   },
   data: () => ({
     dialog: false,
     message: '',
-    items: [{ text: 'วันที่ปัจจุบัน', value: 'current_date' },
-      { text: 'ข้อความ', value: 'stamp_text' }],
+    // items: [{ text: 'วันที่ปัจจุบัน', value: 'current_date' },
+    //   { text: 'ข้อความ', value: 'stamp_text' }],
     stamp_type_value: 'stamp_text',
     // Language Variable
     // textLang: {
