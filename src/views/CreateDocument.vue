@@ -686,7 +686,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           })
           if(data.status) {
             if(!data.data) {
-              this.pdf_src = ""
+              this.clearUploadedFile()
               this.$swal({
                 backdrop: false,
                 position: 'bottom-end',
