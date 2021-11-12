@@ -814,6 +814,7 @@
     "choose": "Choose",
     "linedepartment": "Department",
     "specifydepartment": "Department",
+    "pdf_password_title": "PDF Password Setting",
     "addapprove": "Add (Approve)",
     "addsign": "Add (Sign)",
     "signingpage": "Signed Page",
@@ -829,7 +830,8 @@
     "transactionsucceed": "Creating transaction is success.",
     "fail": "Error",
     "transactionfail": "Creating transaction is incomplete. Please try again later.",
-    "alert_email_data": "No data in selected e-mail."
+    "alert_email_data": "No data in selected e-mail.",
+    "alert_pdf_password": "Please set the password."
   },
   "DocumentDetail": {
     "no":"Step",

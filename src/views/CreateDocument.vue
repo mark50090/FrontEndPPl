@@ -158,6 +158,14 @@
                       <!-- <span class="create-setting-title">การเงินและธุรการ</span> --> <!-- when it has only one department -->
                     </v-col>
                   </v-row>
+                  <!-- <v-row class="create-row">
+                    <v-col cols="5" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-5 pb-0 create-setting-title">
+                      {{ textLang.pdf_password_title }} :
+                    </v-col>
+                    <v-col cols="7" md="8" lg="8" class="px-0 pb-0">
+                      <v-text-field dense outlined color="#4caf50" :rules="[() => !!pdf_password || textLang.alert_pdf_password]" v-model="pdf_password" class="create-setting create-setting-input message-pdf-password"></v-text-field>
+                    </v-col>
+                  </v-row> -->
                   <v-card outlined class="mt-4 px-2 pb-2 workflow-block">
                     <template  v-for="flow_data in flow_datas" >
                       <v-row class="create-row" :key="flow_data.index">
@@ -234,6 +242,14 @@
                     </v-col>
                     <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
                       <v-switch inset hide-details v-model="switchStamp" class="mt-0 create-setting-switch"></v-switch>
+                    </v-col>
+                  </v-row> -->
+                  <!-- <v-row class="create-row">
+                    <v-col cols="12" md="4" lg="4" align-self="start" class="pl-2 pt-6 pb-0 create-setting-title">
+                      {{ textLang.pdf_password_title }} :
+                    </v-col>
+                    <v-col cols="12" md="8" lg="8" align-self="center" class="pr-0 pt-4 pb-0 create-attach-file-block">
+                      <v-text-field dense outlined persistent-hint color="#4caf50" hint="optional" class="create-setting create-setting-input"></v-text-field>
                     </v-col>
                   </v-row> -->
                   <v-row justify="center" class="create-row">
@@ -391,6 +407,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       document_type_list: [],
       selected_document_template: '',
       document_template_list: [],
+      pdf_password: '',
       actionOrder: 1,
       action: '',
       flow_datas: [],
@@ -1363,8 +1380,12 @@ import VueDraggableResizable from 'vue-draggable-resizable'
     padding-left: 0% !important;
   }
 
+  .message-pdf-password .v-messages__message {
+    line-height: 20px !important;
+  }
+
   .workflow-block {
-    height: calc(100vh - 433px);
+    height: calc(100vh - 466px);
     overflow: auto;
   }
 
@@ -1393,7 +1414,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
   }
 
   .all-step-block {
-    height: calc(100vh - 366px);
+    height: calc(100vh - 448px);
     overflow: auto;
   }
 
