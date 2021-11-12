@@ -249,7 +249,9 @@
       "confirm_stamp": "Save",
       "stamp_type": "Stamp Type",
       "current_date": "Current Date",
-      "text": "Text"
+      "text": "Text",
+      "juristic_person": "Juristic Person",
+      "name": "Stamp Name"
     },
     "TransferEdit": {
       "transfer_edit_form": "Editing E-Form Permission Transfer",

@@ -46,6 +46,26 @@
             ></v-text-field>
           </v-col>
           </v-row>
+        <!--  <v-row class="s-stamp " >
+            <v-col  cols="12" md="4" lg="4" class=" pl-0 m-stamp font-color-stamp  a-stamp" align-self="center">
+            Stamp:
+        </v-col>
+          <v-col
+            cols="12"
+            md="8"
+            lg="8"
+            class="px-0  a-stamp"
+          >
+            <v-autocomplete class="m-stamp l-stamp"
+              :placeholder="textLang.name"
+              color="rgb(102, 101, 101)"
+              outlined
+              hide-details
+              dense
+              append-icon="mdi-chevron-down"
+            ></v-autocomplete>
+          </v-col>
+          </v-row> -->
       </v-card-text>
                 <v-card-actions class="pb-3 pt-2">
                   <v-row class="s-stamp">
@@ -91,7 +111,8 @@ export default {
     items() {
       return [
         { text: this.textLang.current_date , value: 'current_date' },
-        { text: this.textLang.text , value: 'stamp_text' }
+        { text: this.textLang.text , value: 'stamp_text' },
+        // { text: this.textLang.juristic_person , value: 'juristic_person'}
       ]
     }
   },
@@ -99,7 +120,8 @@ export default {
     dialog: false,
     message: '',
     // items: [{ text: 'วันที่ปัจจุบัน', value: 'current_date' },
-    //   { text: 'ข้อความ', value: 'stamp_text' }],
+    //   { text: 'ข้อความ', value: 'stamp_text' },
+    //   { text: 'นิติบุคคล', value: 'juristic_person' }],
     stamp_type_value: 'stamp_text',
     // Language Variable
     // textLang: {
@@ -108,7 +130,9 @@ export default {
     //   confirm_stamp: 'บันทึก',
     //   stamp_type: 'ประเภท Stamp',
     //   current_date: 'วันที่ปัจจุบัน',
-    //   text: 'ข้อความ'
+    //   text: 'ข้อความ',
+    //   juristic_person: 'นิติบุคคล',
+    //   name: 'ชื่อ Stamp'
     // }
   }),
   mounted () {
@@ -150,6 +174,7 @@ export default {
 </script>
 
 <style>
+
 .s-stamp{
   width: 100%;
   margin: 0% !important;
