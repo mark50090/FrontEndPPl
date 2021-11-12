@@ -816,6 +816,7 @@
     "choose": "เลือก",
     "linedepartment": "แผนกสายงาน",
     "specifydepartment": "ระบุแผนก",
+    "pdf_password_title": "ตั้งค่ารหัสผ่าน PDF",
     "addapprove": "เพิ่ม (อนุมัติ)",
     "addsign": "เพิ่ม (เซ็น)",
     "signingpage": "หน้าที่เซ็น",
@@ -831,7 +832,8 @@
     "transactionsucceed": "สร้าง transaction สำเร็จ",
     "fail": "ไม่สำเร็จ",
     "transactionfail": "สร้าง transaction ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง",
-    "alert_email_data": "ไม่มีข้อมูลของอีเมลล์ที่เลือก"
+    "alert_email_data": "ไม่มีข้อมูลของอีเมลล์ที่เลือก",
+    "alert_pdf_password": "กรุณาตั้งค่ารหัสผ่าน"
   },
   "DocumentDetail": {
     "no":"ลำดับที่",
