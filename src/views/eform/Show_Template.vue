@@ -6353,19 +6353,27 @@
       },
       changeConTable(checkObj) {
         try {
-          var findDict = this.dataDict[checkObj.style.contTable]
-          if(typeof findDict !== 'undefined') {
-            var element = document.getElementsByClassName(checkObj.name + "-obj")[0]
-            var rect = element.getBoundingClientRect()
-            var element2 = document.getElementById(this.objectArray[findDict.objectType][findDict.arrayIndex].name)
-            var rect2 = element2.getBoundingClientRect()
-            var paper = document.getElementById("workpaper")
-            var paperRect = paper.getBoundingClientRect()
-            this.objectArray[findDict.objectType][findDict.arrayIndex].top = checkObj.top + rect.height - 1
-            if(this.objectArray[findDict.objectType][findDict.arrayIndex].style.contTable && this.objectArray[findDict.objectType][findDict.arrayIndex].style.contTable != checkObj.object_name) {
-              this.changeConTable(this.objectArray[findDict.objectType][findDict.arrayIndex])
-            }
+          var contTableArray = []
+          if(checkObj.style.contTable.includes(",")) {
+            contTableArray = checkObj.style.contTabl.split(",")
+          } else {
+            contTableArray.push(checkObj.style.contTable)
           }
+          contTableArray.forEach(e => {
+            var findDict = this.dataDict[e]
+            if(typeof findDict !== 'undefined') {
+              var element = document.getElementsByClassName(checkObj.name + "-obj")[0]
+              var rect = element.getBoundingClientRect()
+              var element2 = document.getElementById(this.objectArray[findDict.objectType][findDict.arrayIndex].name)
+              var rect2 = element2.getBoundingClientRect()
+              var paper = document.getElementById("workpaper")
+              var paperRect = paper.getBoundingClientRect()
+              this.objectArray[findDict.objectType][findDict.arrayIndex].top = checkObj.top + rect.height - 1
+              if(this.objectArray[findDict.objectType][findDict.arrayIndex].style.contTable && this.objectArray[findDict.objectType][findDict.arrayIndex].style.contTable != checkObj.object_name) {
+                this.changeConTable(this.objectArray[findDict.objectType][findDict.arrayIndex])
+              }
+            }
+          })
         } catch(e) {
           console.log(e)
         }
