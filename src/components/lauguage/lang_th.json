@@ -491,7 +491,8 @@
       "start_date_custom": "กำหนดวันที่เริ่มต้น",
       "start_date_day": "วัน",
       "no_default": "ไม่แสดงค่าเริ่มต้น",
-      "default_input": "ค่าเริ่มต้นจาก Object อื่น"
+      "default_input": "ค่าเริ่มต้นจาก Object อื่น",
+      "search_api": "API เชื่อมต่อข้อมูล"
     },
     "tips_help_message": {
       "box_displaying": "กล่องสำหรับแสดงข้อความบนแบบฟอร์ม",
