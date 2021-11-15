@@ -337,6 +337,12 @@
               <v-text-field outlined dense class="title-name-paperless-value paperless-input-line" color="#4CAF50" v-model="pplSubject" :error="name_ppl_error" :error-messages="error_file_name_ppl_msg"></v-text-field>
             </v-col>
           </v-row>
+          <!-- <v-row class="mt-0 save-doc-row">
+            <v-col cols="12" md="4" lg="4" align-self="start" class="pl-0 pt-2 title-name-paperless">{{ textLang.offer_dialog.password_setting }}</v-col>
+            <v-col cols="12" md="8" lg="8" class="px-0 py-0">
+              <v-text-field dense outlined color="#4CAF50" v-model="pdfPasswordSetting" :error="pdf_setting_error" :error-messages="error_pdf_setting_password" class="title-name-paperless-value paperless-input-line error-messages-set"></v-text-field>
+            </v-col>
+          </v-row> -->
           <v-row class="mt-0 save-doc-row">
             <v-col cols="12" md="4" lg="4" class="pl-0 pt-0 title-name-paperless">{{ textLang.offer_dialog.message }}</v-col>
             <v-col cols="12" md="8" lg="8" class="px-0 pt-0">
@@ -507,7 +513,7 @@ export default {
         offer_paperless_old: "เสนอเซ็นผ่านระบบ Paperless",
         subject_new: "ชื่อเอกสาร:",
         subject_old: "เรื่อง:",
-        password_setting: "ตั้งค่ารหัสผ่านเอกสาร (pdf)",
+        password_setting: "ตั้งค่ารหัสผ่าน PDF:",
         no_subject: "<ไม่มีหัวเรื่อง>",
         message: "ข้อความ:",
         doc_type: "ประเภทเอกสาร paperless:",
@@ -4145,6 +4151,10 @@ export default {
 .save-doc-row {
   width: 100%;
   margin: 0%;
+}
+
+.error-messages-set .v-messages__message {
+  line-height: 20px !important;
 }
 
 .attached-file-save-modal {

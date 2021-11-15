@@ -667,7 +667,7 @@
       "offer_paperless_old": "Send for Signing in Paperless",
       "subject_new": "Document Name(subject):",
       "subject_old": "subject:",
-      "password_setting": "Document(pdf)'s Password Setting",
+      "password_setting": "PDF Password Setting:",
       "no_subject": "<No Subject>",
       "message": "Message:",
       "doc_type": "Paperless Document Type:",
@@ -685,7 +685,7 @@
       "please_input": "Email can not has empty value. Please fill in.",
       "email_found": "Can not find these following e-mail",
       "name_ppl_error": "Please fill in document name (subject)",
-      "pdf_setting_error":"Please set document(pdf)'s password.",
+      "pdf_setting_error":"Please set the password.",
       "wait_upload": "Wait For Uploading",
       "already_save": "This Document Step Is Already Saved."
     },

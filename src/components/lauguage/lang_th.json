@@ -667,7 +667,7 @@
       "offer_paperless_old": "เสนอเซ็นผ่านระบบ Paperless",
       "subject_new": "ชื่อเอกสาร(เรื่อง):",
       "subject_old": "เรื่อง:",
-      "password_setting": "ตั้งค่ารหัสผ่านเอกสาร (pdf)",
+      "password_setting": "ตั้งค่ารหัสผ่าน PDF:",
       "no_subject": "<ไม่มีหัวเรื่อง>",
       "message": "ข้อความ:",
       "doc_type": "ประเภทเอกสาร paperless:",
