@@ -250,7 +250,7 @@
       "stamp_type": "Stamp Type",
       "current_date": "Current Date",
       "text": "Text",
-      "juristic_person": "Juristic Person",
+      "juristic_person": "Company",
       "name": "Stamp Name"
     },
     "TransferEdit": {
@@ -982,7 +982,8 @@
     "documentusagereport": "Workflow Report",
     "managedocumentformats": "Template Setting",
     "Createapprovalform": "Create Workflow",
-    "createform": "Create E-Form"
+    "createform": "Create E-Form",
+    "transaction_alert": "Sorry, transaction is full. You will be unable to process transaction. Please contact support team."
   },
   "WorkflowDashboard": {
     "alldocuments": "All Documents",
