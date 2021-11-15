@@ -164,6 +164,9 @@ import { EventBus } from '../EventBus'
       EventBus.$emit('loadingOverlay', true)
       EventBus.$on('changeBiz', this.changeBiz)
       this.currentAccount = JSON.parse(sessionStorage.getItem('userProfile')).id
+      if(sessionStorage.getItem('preinput_id') && sessionStorage.getItem('pre_template_id')) {
+        this.redirectTemplate()
+      }
     },
     beforeDestroy() {
       EventBus.$off('changeBiz')
@@ -188,6 +191,24 @@ import { EventBus } from '../EventBus'
     methods: {
       emitLoading(isLoad) {
         EventBus.$emit('loadingOverlay', isLoad)
+      },
+      redirectTemplate() {
+        let tempOption = {
+          template_id: sessionStorage.getItem('pre_template_id'),
+          isCopy: false,
+          isImport: false,
+          transaction_id: "",
+          preinput_id: sessionStorage.getItem('preinput_id')
+        }
+        sessionStorage.setItem('option',JSON.stringify(tempOption))
+        sessionStorage.setItem('isDocEdit',false)
+        sessionStorage.setItem('isDocStep',true)
+        sessionStorage.setItem('isBack',false)
+        sessionStorage.setItem('isStep',false)
+        sessionStorage.setItem('isOnlyForm',true)
+        sessionStorage.setItem('pre_template_id', "")
+        sessionStorage.setItem('preinput_id', "")
+        this.$router.push({ 'path': '/form/input'})
       },
       goToDocumentDetail(id, event) {
         if(event.document_status == "W") {

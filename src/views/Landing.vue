@@ -13,10 +13,15 @@
 export default {
   props: [
     "shared_token",
-    "transaction_id"
+    "transaction_id",
+    "token",
+    "preinput_id",
+    "template_id"
   ],
   mounted(){
     if(this.shared_token) this.getToken()
+    if(this.token) this.setToken()
+    if(this.preinput_id && this.template_id) this.setPretemplate()
   },
   methods:{
       // this.$store.dispatch("changeHospital",this.hospital_code || sessionStorage.hospital_code)
@@ -35,6 +40,21 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async setToken(){
+      try {
+        this.$apiConfig.setToken(this.token)
+        this.$apiConfig.setRefreshToken(this.token)
+        this.getUserDetail()
+        this.getRoleAdmin()
+        this.getRoleDesigner()
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    setPretemplate() {
+      sessionStorage.setItem('preinput_id', this.preinput_id)
+      sessionStorage.setItem('pre_template_id', this.template_id)
     },
     async getUserDetail(){ // get user detail to show name, email and business list
         try {
