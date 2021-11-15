@@ -6355,7 +6355,7 @@
         try {
           var contTableArray = []
           if(checkObj.style.contTable.includes(",")) {
-            contTableArray = checkObj.style.contTabl.split(",")
+            contTableArray = checkObj.style.contTable.split(",")
           } else {
             contTableArray.push(checkObj.style.contTable)
           }
