@@ -273,7 +273,7 @@
           formData.append('excel_file', this.excelFile)
           this.notReady = true
           try {
-            var { data } = await this.axios.post(this.$api + '/import_excel_datatable',
+            var { data } = await this.axios.post(this.$eform_api + '/import_excel_datatable',
             formData,
             {
               headers: {

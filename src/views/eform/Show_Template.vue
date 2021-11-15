@@ -1643,7 +1643,7 @@
       getPublicData() {
         // this.getPublicTemplate(sessionStorage.getItem("temp_code"))
       },
-      async getTemplate(template_id, transaction_id) {
+      async getTemplate(template_id) {
         var template = {}
         try {
           var { data } = await this.axios.get(this.$api_url + '/template_form/api/v1/getTemplateFormById?template_id=' + template_id)
@@ -3049,6 +3049,7 @@
             }
 
             if(e.object_type == "autofillbox" || e.object_type == "number2textbox" ) {
+              
               if(!cmp.disable && !(cmp.value.show == 'ref_no')) {
                 cmp.value.isValued = false
               }
@@ -3056,6 +3057,7 @@
                 cmp.value = {show: cmp.value.show}
               }
               cmp.value = this.initailDatabind(cmp)
+              console.log(cmp.value)
               if(typeof cmp.value.show_index === 'undefined' || cmp.value.show_index == 'undefined') {
                 if(cmp.value.isUser) {
                   cmp.value = ""
@@ -3188,6 +3190,112 @@
           })
         } else {
           this.sleep = true
+        }
+      },
+      async importData(type, id, isImportInRow, selectedRow) {
+        try{
+          var url = ""
+          if(type == "preinput") {
+            url = this.$api_url + "/external_service/api/v1/get_preinput?preinput_id=" +id
+          }
+          if(url) {
+            var { data } = await this.axios.get(url)
+            if(data.status) {
+                var dataObj = data.result.json_data
+                var template = []
+                if(dataObj) {
+                  Object.keys(dataObj).forEach(e => {
+                    var jk = ""
+                    if(typeof dataObj[e] === 'object' && dataObj[e].isRowImport) {
+                      var obj = this.objectArray['datatable'].find(item => item.object_name == e)
+                      if(obj) {
+                        var obj1Row = Number(dataObj[e].row_data.length)
+                        var obj2Row = Number(obj.style.table.crow)
+                        if(obj1Row > obj2Row) {
+                          for(let i=0; i< obj1Row-obj2Row; i++) {
+                            this.addTableRow(obj.object_name ,true)
+                          }
+                        }
+                      }
+                      let row_index = 1
+                      dataObj[e].row_data.forEach(e2 => {
+                        Object.keys(e2).forEach(e3 => {
+                          template.push({
+                            json_key: `${e3}_${String(row_index)}`,
+                            value: e2[e3]
+                          })
+                        })
+                        row_index++
+                      })
+                    } else {
+                      if(isImportInRow && selectedRow) {
+                        jk = `${e}_${String(selectedRow)}`
+                      } else {
+                        jk = e
+                      }
+                      template.push({
+                        json_key: jk,
+                        value: dataObj[e]
+                      })
+                    }
+                    
+                  })
+
+                  this.objectTypeInput.forEach(t => {
+                    this.objectArray[t].forEach(e => {
+                      if(typeof e.value !== 'undefined' && e.value && e.value.show == 'ref_no' && !this.option.isCopy) {
+                        e.value.show_index = this.refDocNo
+                        e.value.isValued = true
+                        e.value.isUser = true
+                      } else {
+                        var obj = template.find(item => item.json_key== e.style.json_key)
+                        if(obj && !e.style.noInputRef && t != 'autofillbox') {
+                          if(e.object_type == 'datepickerbox' && obj.value.includes("/")) {
+                            obj.value = this.thaiDateToDate(obj.value)
+                          }
+                          e.value = obj.value
+                        }
+                      }
+                    })
+                  })
+
+                  Object.keys(this.dataTableObjectArray).forEach(e => {
+                    var obj = template.find(item => item.json_key == this.dataTableObjectArray[e].style.json_key)
+                    if(obj && ! this.dataTableObjectArray[e].style.noInputRef) {
+                      if(this.dataTableObjectArray[e].object_type == 'linkdatabox') {
+                        if(this.dataTableObjectArray[e].valueList) {
+                          let findValue = this.dataTableObjectArray[e].valueList.find(item => item.text == obj.value)
+                          if(findValue) {
+                            this.dataTableObjectArray[e].value = findValue.value
+                            this.dataTableObjectArray[e].show_value = findValue.text
+                          }
+                        }
+                        
+                      } else {
+                        if(this.dataTableObjectArray[e].object_type == 'datepickerbox' && obj.value.includes("/")) {
+                          obj.value = this.thaiDateToDate(obj.value)
+                        }
+                        this.dataTableObjectArray[e].value = obj.value
+                        this.dataTableObjectArray[e].show_value = obj.value
+                      }
+                      
+                    }
+                  })
+
+                  this.getDataTableList(false)
+                  if(Object.keys(this.dataTableObjectArray).length) {
+                    Object.keys(this.dataTableObjectArray).forEach(e => {
+                      var calType = ['datepickerbox', 'inputbox', 'timebox', 'linkdatabox', 'dropdownbox']
+                      if(calType.includes(this.dataTableObjectArray[e].object_type)) {
+                        this.change_calculate(e,false)
+                      }
+                    })
+                  }
+                }
+              }
+          }
+        } catch(e) {
+          console.log(e)
         }
       },
       fixObjectStyle(style) {
@@ -3782,6 +3890,10 @@
         if(this.isFirstFill) {
           this.checkChangeDefault(true)
         }
+
+        if(this.option.preinput_id) {
+          this.importData("preinput", this.option.preinput_id)
+        }
         this.checkContSleep = true
       },
       checkContTable() {
@@ -4148,7 +4260,7 @@
             isValued: false
           }
         } else {
-          if(!obj.value.isValued || obj.value.show == "doc_no") {
+          if(!obj.value.isValued) {
             value.isValued = true
             if(item == 'firstname_th' && !this.isPublic) {
               if(typeof obj.value.show_index === 'undefined' || obj.disable) {
@@ -4196,12 +4308,6 @@
                   isUser: false,
                   show: item,
                   isValued: false
-                }
-              } else {
-                if(typeof this.template_option.document_detail === 'undefined') {
-                  value.show_index = this.template_option.doc_number_eform
-                } else {
-                  value.show_index = this.template_option.document_detail[0].prefix
                 }
               }
             } else if(item == 'firstname_en' && !this.isPublic) {
@@ -6258,7 +6364,11 @@
         var objIndex = this.dataDict[obj].arrayIndex
         if(!this.objectArray[objArray][objIndex].style.maxRow || this.objectArray[objArray][objIndex].style.maxRow > this.objectArray[objArray][objIndex].style.table.crow) {
         if(objArray == 'datatable' && typeof this.objectArray[objArray][objIndex] !== 'undefined') {
-          this.objectArray[objArray][objIndex].style.valueList.push([])
+          if(this.objectArray[objArray][objIndex].style.valueList) {
+            this.objectArray[objArray][objIndex].style.valueList.push([])
+          } else {
+            this.objectArray[objArray][objIndex].style.valueList = []
+          }
           var column = this.objectArray[objArray][objIndex].style.table.ccol
           var column = parseInt(this.objectArray[objArray][objIndex].style.table.ccol)
           var row = parseInt(this.objectArray[objArray][objIndex].style.table.crow) +1
@@ -8309,9 +8419,6 @@
               html += e.show_value + "</div>"
             } else if (e.object_type == "autofillbox") {
               if (e.value.isUser && !(e.value.show == "function")) {
-                if (e.value.show == "doc_no") {
-                  e.value.show_index = this.doc_no
-                }
                 html += this.replaceGtLt(e.value.show_index + e.style.suffix) + "</div>"
               } else {
                 e.value.show_array == "calculatebox" || (e.value.show_array == "inputbox" && e.value.isComma)? (html += this.replaceGtLt(this.numberToComma(e.value.show_value, e.style.isComma) + e.style.suffix) + "</div>")
