@@ -547,7 +547,7 @@
                             <input  v-if="(!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue) && (!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable) && (typeof dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value] !== 'undefined') && (!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].valueList[dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value].text)" :placeholder="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].placeholder" :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :readonly="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue" :style="'height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + '; box-shadow:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.boxShadow + ';'" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value" hide-details @input="change_calculate(item.object_name + '_' + 'R' + r.index + 'C' + c.index,false)">
                             <div v-if="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixedValue || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :style="'white-space: normal; color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + ';'">{{dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show_value}}</div>
                           </div>
-                          <input :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-input'" v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'inputbox'" :placeholder="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].placeholder" :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :style="'height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + '; box-shadow:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.boxShadow + ';'" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" hide-details @input="toCapital(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index]) ,change_calculate(item.object_name + '_' + 'R' + r.index + 'C' + c.index,false)">
+                          <input :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-input'" v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'inputbox'" :placeholder="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].placeholder" :disabled="isSendStep || dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :style="'height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + '; box-shadow:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.boxShadow + ';'" v-model="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" hide-details @keyup.enter="searchInputText(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index], true, r.index)" @input="toCapital(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index]) ,change_calculate(item.object_name + '_' + 'R' + r.index + 'C' + c.index,false)">
                           <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'textfield'" :style="'word-break: break-word; height:100%!important; width:100%; text-align: ' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color + '!important;'">
                             {{dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value}} 
                           </div>
@@ -3295,6 +3295,92 @@
               }
           }
         } catch(e) {
+          console.log(e)
+        }
+      },
+      async searchInputText(obj, isDatatable, row) {
+        try {
+        if(obj && obj.style && obj.style.search_api) {
+          let searchkeyword = obj.style.json_key
+          if(isDatatable) {
+            searchkeyword = searchkeyword.split(`_${String(row)}`).join("")
+          }
+          var { data } = await this.axios.post(this.$api_url + "/external_service/api/v1/search_external_data", {
+            search_api: obj.style.search_api,
+            keyword: searchkeyword,
+            value: obj.value
+          })
+          if(data.status && data.result) {
+            var importData = []
+            if(isDatatable) {
+              Object.keys(data.result).forEach(e => {
+                importData.push({
+                  json_key: `${e}_${String(row)}`,
+                  value: data.result[e]
+                })
+              })
+            } else {
+              Object.keys(data.result).forEach(e => {
+                importData.push({
+                  json_key: e,
+                  value: data.result[e]
+                })
+              })
+            }
+            if(importData.length) {
+              this.objectTypeInput.forEach(t => {
+                this.objectArray[t].forEach(e => {
+                  if(typeof e.value !== 'undefined' && e.value && e.value.show == 'ref_no' && !this.option.isCopy) {
+                    e.value.show_index = this.refDocNo
+                    e.value.isValued = true
+                    e.value.isUser = true
+                  } else {
+                    var obj = importData.find(item => item.json_key== e.style.json_key)
+                    if(obj && !e.style.noInputRef && t != 'autofillbox') {
+                      if(e.object_type == 'datepickerbox' && obj.value.includes("/")) {
+                        obj.value = this.thaiDateToDate(obj.value)
+                      }
+                      e.value = obj.value
+                    }
+                  }
+                })
+              })
+
+              Object.keys(this.dataTableObjectArray).forEach(e => {
+                var obj = importData.find(item => item.json_key == this.dataTableObjectArray[e].style.json_key)
+                if(obj && ! this.dataTableObjectArray[e].style.noInputRef) {
+                  if(this.dataTableObjectArray[e].object_type == 'linkdatabox') {
+                    if(this.dataTableObjectArray[e].valueList) {
+                      let findValue = this.dataTableObjectArray[e].valueList.find(item => item.text == obj.value)
+                      if(findValue) {
+                        this.dataTableObjectArray[e].value = findValue.value
+                        this.dataTableObjectArray[e].show_value = findValue.text
+                      }
+                    }
+                  } else {
+                    if(this.dataTableObjectArray[e].object_type == 'datepickerbox' && obj.value.includes("/")) {
+                      obj.value = this.thaiDateToDate(obj.value)
+                    }
+                      this.dataTableObjectArray[e].value = obj.value
+                      this.dataTableObjectArray[e].show_value = obj.value
+                  }    
+                }
+              })
+
+              this.getDataTableList(false)
+              if(Object.keys(this.dataTableObjectArray).length) {
+                Object.keys(this.dataTableObjectArray).forEach(e => {
+                  var calType = ['datepickerbox', 'inputbox', 'timebox', 'linkdatabox', 'dropdownbox']
+                  if(calType.includes(this.dataTableObjectArray[e].object_type)) {
+                    this.change_calculate(e,false)
+                  }
+                })
+              }
+            }
+          }
+        }
+        }
+        catch(e) {
           console.log(e)
         }
       },

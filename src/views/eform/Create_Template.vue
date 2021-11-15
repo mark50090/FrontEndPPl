@@ -1768,6 +1768,15 @@
                         </v-tooltip>
                       </td>
                     </tr>
+                    <tr v-if="selected_array == 'inputbox' || (selectedCell && (dataTableObjectArray[selectedCell].object_type == 'inputbox'))">
+                      <td class="property-title no-border">{{textLang.property_type.search_api}}:</td>
+                      <td class="no-border" v-if="!selectedCell">
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="objectArray[selected_array][selected_object].style.search_api"></v-text-field>
+                      </td>
+                      <td class="no-border" v-if="selectedCell">
+                        <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.search_api"></v-text-field>
+                      </td>
+                    </tr>
                     <tr v-if="custom_object_name">
                       <td class="property-title no-border">{{ textLang.property_type.hide_object }}:</td>
                       <td class="py-1 no-border">
@@ -2509,7 +2518,8 @@ export default {
         start_date_custom: "กำหนดวันที่เริ่มต้น",
         start_date_day: "วัน",
         no_default: "ไม่แสดงค่าเริ่มต้น",
-        default_input: `ค่าเริ่มต้นจาก Object อื่น`
+        default_input: `ค่าเริ่มต้นจาก Object อื่น`,
+        search_api: "API เชื่อมต่อข้อมูล"
       },
       tips_help_message: {
         box_displaying: "กล่องสำหรับแสดงข้อความบนแบบฟอร์ม",

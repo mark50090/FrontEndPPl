@@ -491,7 +491,8 @@
       "start_date_custom": "Custom Start Date",
       "start_date_day": "days",
       "no_default": "No Default Date",
-      "default_input": "Default Value from Other Object"
+      "default_input": "Default Value from Other Object",
+      "search_api": "Data Sync API"
     },
     "tips_help_message": {
       "box_displaying": "Used for displaying text in the document.",
