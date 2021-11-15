@@ -213,6 +213,21 @@
       if(sessionStorage.role_admin == 'true') this.role_admin = true
       if(sessionStorage.role_designer == 'true') this.role_designer = true
       // this.changeLang(sessionStorage.getItem('page_lang'))
+
+      // Alert Transaction Full
+      // this.$swal({
+      //   backdrop: false,
+      //   width: '100%',
+      //   position: 'top',
+      //   background: '#FFCDD2',
+      //   title: '<svg style="width:35px;height:35px" viewBox="0 0 24 24"><path fill="#D50000" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="transaction-alert-text">' + this.textLang.transaction_alert + '</strong>',
+      //   showConfirmButton: false,
+      //   customClass: {
+      //     container: 'transaction-alert-container',
+      //     popup: 'transaction-alert-box',
+      //     title: 'transaction-alert-text-block'
+      //   }
+      // })
     },
     beforeDestroy(){
       sessionStorage.selected_business = ''
@@ -453,6 +468,29 @@
     background-color: rgb(245, 245, 245);
   }
 
+  .transaction-alert-container {
+    margin-left: 256px;
+    top: 58px !important;
+  }
+
+  .transaction-alert-box {
+    padding-bottom: 1% !important;
+  }
+
+  .transaction-alert-text-block {
+    text-align: left !important;
+    display: inline-flex !important;
+    padding-top: 1% !important;
+  }
+
+  .transaction-alert-text {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 16px;
+    margin-left: 3%;
+    align-self: center;
+    color: #D50000;
+  }
+
   /*========================================*/
 
   @media only screen and (max-width:600px){ /*css for mobile screen*/
@@ -484,6 +522,15 @@
     .main-content {
       margin-top: 56px;
       height: calc(100vh - 56px);
+    }
+
+    .transaction-alert-container {
+      margin-left: 0px;
+      top: 52px !important;
+    }
+
+    .transaction-alert-text {
+      font-size: 14px;
     }
   }
 </style>
