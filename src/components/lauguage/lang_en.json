@@ -853,6 +853,7 @@
     "pendingapproval": "Waiting",
     "approved": "Approved",
     "rejectapproval": "Rejected",
+    "cancel_status": "Canceled",
     "specifymessage": "Write comment",
     "attachfile":"Attached File",
     "attached_file_placeholder": "Select file",

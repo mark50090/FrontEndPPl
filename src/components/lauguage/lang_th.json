@@ -853,6 +853,7 @@
     "pendingapproval": "รออนุมัติ",
     "approved": "อนุมัติแล้ว",
     "rejectapproval": "ปฏิเสธอนุมัติ",
+    "cancel_status": "ยกเลิก",
     "specifymessage": "ระบุข้อความ",
     "attachfile":"แนบไฟล์",
     "attached_file_placeholder": "เลือกไฟล์",

@@ -236,6 +236,7 @@
                         <v-icon v-else-if="item.status == 'R'" size="30" color="#f44336">mdi-close-circle-outline</v-icon> <!-- deny -->
                         <v-icon v-else-if="item.status == 'N'  && !is_reject" size="30" color="#9e9e9e">mdi-clock-outline</v-icon> <!-- step not arrive yet -->
                         <v-icon v-else-if="is_reject" size="30" color="#9e9e9e">mdi-circle-slice-8</v-icon> <!-- step other if reject transaction -->
+                        <!--<v-icon size="30" color="#bd2929">mdi-cancel</v-icon>--> <!-- cancel -->
                       </template>
                       <v-row class="detail-row">
                         <v-col cols="3" md="2" lg="2" align-self="start" class="px-0 py-0 step-doc-title">
@@ -261,6 +262,7 @@
                           <span v-if="!item_name.approved && item.status == 'W' && !is_reject" class="wait-user-approve-status">{{textLang.pendingapproval}}</span> <!-- wait for approve status -->
                           <span v-if="item_name.approved == 'Y'" class="approved-status">{{textLang.approved}}</span> <!-- approved status -->
                           <span v-if="item_name.approved == 'R'" class="deny-status">{{textLang.rejectapproval}}</span> <!-- deny status -->
+                          <!--<span class="cancel-status">{{ textLang.cancel_status }}</span>--> <!-- cancel status -->
                         </v-col>
                         <v-col v-if="item_name.approved && (item_name.approved == 'Y' || item_name.approved == 'R')" cols="12" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-0 pb-1 time-approve-block"> <!-- show when status is approved or deny -->
                           <v-icon small color="black" class="pr-1">mdi-timer-outline</v-icon>
@@ -1291,6 +1293,12 @@ export default {
     font-family: 'Sarabun', sans-serif;
     font-size: 13px;
     color: #FF0000;
+  }
+
+  .cancel-status {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    color: #bd2929;
   }
 
   .time-approved {
