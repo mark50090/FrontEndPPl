@@ -268,6 +268,12 @@
       "alert_success": "Success",
       "success_message": "The attachment has been deleted.",
       "error_filenotfound": "Attachment not found"
+    },
+    "ConfirmCancelDocModal": {
+      "font_head_confirmcanceldoc1": "Do you want to cancel document name \"",
+      "font_head_confirmcanceldoc2": "\" ?",
+      "confirmcanceldoc_cancel": "Close",
+      "confirmcanceldoc_confirm": "OK"
     }
   },
   "Create_Template": {
