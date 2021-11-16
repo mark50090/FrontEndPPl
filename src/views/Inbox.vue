@@ -59,6 +59,10 @@
                 {{textLang.pending}}
                 <v-badge inline light color="#FCCD5A" :content="count_transaction_incoming" class="status-doc-num"></v-badge>
               </v-btn>
+              <!-- <v-btn outlined tile value="cancel" class="status-doc-btn">
+                {{textLang.cancel_status}}
+                <v-badge inline dark color="#bd2929" content="300"></v-badge>
+              </v-btn> -->
             </v-btn-toggle>
           </v-row>
           <v-row class="inbox-row">
@@ -77,6 +81,7 @@
                 <v-chip color="#6EC4D6" v-if="item.document_status_text == 'inprogress'">{{textLang.inprogress}}</v-chip> <!--สถานะ กำลังดำเนินการ -->
                 <v-chip color="#F49393" v-if="item.document_status_text == 'rejected'">{{textLang.rejectapproval}}</v-chip> <!--สถานะ ปฏิเสธอนุมัติ -->
                 <v-chip color="#FCCD5A" v-if="item.document_status_text == 'incoming'">{{textLang.pending}}</v-chip> <!--สถานะ รอดำเนินการ -->
+                <!--<v-chip dark color="#bd2929" >{{textLang.cancel_status}}</v-chip>--> <!-- สถานะ ยกเลิก -->
               </template>
             </v-data-table>
           </v-row>
@@ -123,7 +128,8 @@ import { EventBus } from '../EventBus'
         {text: 'อนุมัติแล้ว',lang: 'approved',value:'approved'}, 
         {text: 'กำลังดำเนินการ', lang: 'inprogress',value:'inprogress'}, 
         {text: 'ปฏิเสธอนุมัติ',lang: 'rejectapproval',value:'rejected'}, 
-        {text: 'รอดำเนินการ',lang: 'pending',value:'incoming'}
+        {text: 'รอดำเนินการ',lang: 'pending',value:'incoming'},
+        {text: 'ยกเลิก',lang: 'cancel_status',value:'cancel'}
       ],
       //["","waiting","approved","inprogress","rejected","incoming"]
       document_status: 'all',
