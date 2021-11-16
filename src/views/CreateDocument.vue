@@ -188,6 +188,11 @@
                                 <v-icon large>mdi-account</v-icon>
                               </template>
                             </v-text-field>
+                            <!-- <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="" placeholder="e-mail" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon">
+                              <template v-slot:prepend>
+                                <v-icon large>mdi-account</v-icon>
+                              </template>
+                            </v-combobox> -->
                           </v-col>
                           <!-- <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
                             <v-checkbox hide-details label="OneChat" v-model="actor_email.checkbox" checked class="mt-0 pt-0 onechat-check"></v-checkbox>
@@ -327,6 +332,11 @@
                               <v-icon large>mdi-account</v-icon>
                             </template>
                           </v-text-field>
+                          <!-- <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="" placeholder="e-mail" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon">
+                            <template v-slot:prepend>
+                              <v-icon large>mdi-account</v-icon>
+                            </template>
+                          </v-combobox> -->
                         </v-col>
                         <!-- <v-col cols="5" md="5" lg="5" align-self="center" class="pa-0">
                           <v-row class="create-row ">
