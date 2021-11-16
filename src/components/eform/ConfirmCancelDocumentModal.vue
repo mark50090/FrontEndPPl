@@ -69,7 +69,7 @@ export default {
     async summitCancel() {
       try {
         // this.notReady = true
-        // var { data } = await this.axios.put(ApiConverterFunction.convertDoctorApi(this.$api_v6) + '/upload_eform',
+        // var { data } = await this.axios.put(this.$api_v6 + '/upload_eform',
         // {
         //   e_id: this.eId,
         //   status:"cancel"
