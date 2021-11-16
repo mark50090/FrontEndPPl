@@ -141,7 +141,7 @@
       async deleteFile(item) {
         try {
           // var { data } = await this.axios.get(
-          //   ApiConverterFunction.convertDoctorApi(this.$api) + "/attract_file/delete/" + item.file_id,
+          //   this.$api + "/attract_file/delete/" + item.file_id,
           //   {
           //     headers: {
           //       Authorization:

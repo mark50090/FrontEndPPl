@@ -46,7 +46,7 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogRefDoc = true">
+          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogRefDoc = true">
             <v-list-item-icon><v-icon>mdi-file-import-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
@@ -96,7 +96,7 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogRefDoc = true">
+          <v-list-item v-if="(!isSendStep || isComplete) && isSelf" @click="dialogRefDoc = true">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-import-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
@@ -1204,6 +1204,7 @@
       attachedFiles: [],
       files: [],
       typeDocImport: [{text:"เอกสาร E-Form", value:"eform"}, {text:"เอกสาร CVM (CVM ID)", value:"cvm"}, {text:"หมายเลข SO (SO No.)", value:"so"},{text: 'หมายเลขลูกค้า (Customer ID)', value: 'cus_id'},{text: 'หมายเลข Invoice(Invoice No.)', value: 'invoice'}],
+      // typeDocImport: [{text:"เอกสาร E-Form", value:"eform"}],
       importType: "eform",
       isEmailStep: false,
       uploadFolder: "",
@@ -1778,7 +1779,7 @@
       async getPublicTemplate(template_id) {
         // var template = {}
         // try {
-        //   var { data } = await this.axios.get(ApiConverterFunction.convertDoctorApi(this.$eform_api) + '/template_guest?template=' + template_id)
+        //   var { data } = await this.axios.get(this.$eform_api + '/template_guest?template=' + template_id)
         //   this.notReady = false
         //   if(data.result == 'OK') {
         //     template = data.data
@@ -2137,6 +2138,7 @@
         if(this.importType == 'eform') {
           this.getTemplateRefdoc(doc_no)
         } else {
+          console.log(doc_no)
           this.getOtherService(doc_no, this.importType, isImportInRow, selectedRow)
         }
       },
@@ -2151,12 +2153,11 @@
         return holdDate.toISOString().substr(0, 10)
       },
       async getTemplateRefdoc(doc_no, transaction_id) {
-        console.log(transaction_id)
         var template = []
         var template_id = ""
         try {
           this.onImport = true
-          var url = `${this.$api_url}/template_form/api/v1/get_eform_ref?document_id=${doc_no}`
+          var url = `${this.$api_url}/template_form/api/v1/get_eform_ref?document_id=${doc_no}&tax_id=${this.template_option.tax_id}`
           if(transaction_id) {
             url = `${this.$api_url}/template_form/api/v1/get_eform_ref?transaction_id=${transaction_id}`
           }
@@ -2308,11 +2309,11 @@
       async getOtherService(doc_no,serviceName, isImportInRow, selectedRow) {
         var path = ""
         if(serviceName == 'cvm') {
-          path = ApiConverterFunction.convertDoctorApi(this.$eform_api) + "/data_from_cvm?cvm_id=" + doc_no
+          path = this.$eform_api + "/data_from_cvm?cvm_id=" + doc_no
         } else if(serviceName == 'so') {
-          path = ApiConverterFunction.convertDoctorApi(this.$eform_node_api) + "/data_from_erp?so_number=" + doc_no
+          path = this.$eform_node_api + "/data_from_erp?so_number=" + doc_no
         } else if(serviceName == 'invoice') {
-          path = ApiConverterFunction.convertDoctorApi(this.$eform_node_api) + "/data_bank_statement?invoice=" + doc_no
+          path = this.$eform_node_api + "/data_bank_statement?invoice=" + doc_no
         }
         var template = []
         if(doc_no) {
@@ -7561,7 +7562,7 @@
         try {
           this.notReady = true
           var { data } = await this.axios.post(
-            ApiConverterFunction.convertDoctorApi(this.$eform_api_v2) + "/attract_file",
+            this.$eform_api_v2 + "/attract_file",
             formData)
           this.notReady = false
           if(data.result == "OK") {
@@ -8289,11 +8290,11 @@
         var url = ""
         var resArray = []
         if(type == 'pro_th' || type == 'pro_en') {
-          url = ApiConverterFunction.convertDoctorApi(this.$eform_api) + '/thailand_provinces'
+          url = this.$eform_api + '/thailand_provinces'
         } else if(type == 'dis_th' || type == 'dis_en') {
-          url = ApiConverterFunction.convertDoctorApi(this.$eform_api) + '/thailand_provinces?provinces_id=' + value
+          url = this.$eform_api + '/thailand_provinces?provinces_id=' + value
         } else if(type == 'subdis_th' || type == 'subdis_en') {
-          url = ApiConverterFunction.convertDoctorApi(this.$eform_api) + '/thailand_provinces?amphure_id=' + value
+          url = this.$eform_api + '/thailand_provinces?amphure_id=' + value
         }
         try {
           var { data } = await this.axios.get(url)
