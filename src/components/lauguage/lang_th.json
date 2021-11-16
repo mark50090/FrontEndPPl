@@ -928,6 +928,7 @@
     "inprogress": "กำลังดำเนินการ",
     "rejectapproval": "ปฏิเสธอนุมัติ",
     "pending":"รอดำเนินการ",
+    "cancel_status": "ยกเลิก",
     "sentboxtable":{
       "sender":"ผู้ส่ง",
       "type":"ประเภท",
