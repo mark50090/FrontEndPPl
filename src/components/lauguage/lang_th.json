@@ -899,6 +899,7 @@
     "inprogress":"กำลังดำเนินการ",
     "rejectapproval":"ปฏิเสธอนุมัติ",
     "pending":"รอดำเนินการ",
+    "cancel_status": "ยกเลิก",
     "inboxheader":{
       "sender":"ผู้ส่ง",
       "type":"ประเภท",

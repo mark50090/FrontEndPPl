@@ -899,6 +899,7 @@
     "inprogress":"In Progress",
     "rejectapproval":"Rejected",
     "pending":"Incoming",
+    "cancel_status": "Cancel",
     "inboxheader":{
       "sender":"Sender",
       "type":"Workflow Type",
