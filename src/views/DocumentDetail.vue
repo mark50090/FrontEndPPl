@@ -209,7 +209,7 @@
                   {{textLang.returnedit}}
                 </v-btn>
               </v-col>
-              <v-col v-if="false" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
+              <v-col v-if="showCancelButton" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
                 <v-btn depressed x-small dark color="error" class="download-pdf-btn">{{textLang.canceldocument}}</v-btn>
               </v-col>
             </v-row>
@@ -495,7 +495,8 @@ export default {
     is_reject: false,
     isShowRevertButton: true,
     account_id: null,
-    setTimeOutResize: null
+    setTimeOutResize: null,
+    showCancelButton: false
   }),
   mounted () {
     this.token = sessionStorage.getItem('access_token')
@@ -800,6 +801,7 @@ export default {
                 this.isShowRevertButton = element.actor.map(item => item.name).includes(sessionStorage.getItem('name'))
               }
             })
+            
             if (data.data.flow_step[0].status == 'W' || data.data.document_status == 'Y' || data.data.document_status == 'R') {
               this.isShowRevertButton = false
             }
@@ -845,6 +847,7 @@ export default {
             this.doc_details.step_index = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.step_index : null
             this.doc_details.action = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.action : null
             this.pdf_src = `data:application/pdf;base64,${data.data.pdfbase}`
+            this.showCancelButton = doc_data.document_status == 'W' && this.my_name == `${doc_data.sender.split(' ')[0]} ${doc_data.sender.split(' ')[1]}`
           }
         })
         .catch((error) => {
@@ -1089,7 +1092,7 @@ export default {
       this.reShowStamp()
     },
     onResize: function (item, x, y, width, height) {
-      // console.log('onResize');
+      console.log(x, y, width, height);
       var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
       var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
       item.sign_llx = (x / clientWidth).toFixed(3)
@@ -1100,15 +1103,16 @@ export default {
       item.sign_position_y = y
       item.sign_box_heigth = height
       item.sign_box_width = width
+      this.onDrag(item, x, y)
     },
     onDrag: function (item, x, y) {
-      // console.log('onDrag');
       var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
       var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
       item.sign_llx = (x / clientWidth).toFixed(4)
       item.sign_lly = (-(y + item.sign_box_heigth) / clientHeight).toFixed(4)
       item.sign_position_x = x
       item.sign_position_y = y
+      this.reShowStamp()
     },
     onActivated (index) {
       const stamp = this.stamp_position[index]
