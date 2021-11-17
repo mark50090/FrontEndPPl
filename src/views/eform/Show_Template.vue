@@ -665,13 +665,13 @@
                           </div>
                           <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'inputimagebox'" :style="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color +'!important; text-align:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';'">
                             <!-- <div v-show="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box-cover'" style="width:100%; height:100%;"> -->
-                              <div v-show="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box'" @click="openUploadImage(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index], r.index, item)" :style="'height:' + r.size + 'px;' + ' background-color:#e6e6e6;'">
+                              <div v-show="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box'" @click="openUploadImage(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index], r.index, c.index, item)" :style="'height:' + r.size + 'px;' + ' background-color:#e6e6e6;'">
                                 <div style="position:relative; top:40%; font-size:16px; text-align:center; color:grey; white-space: normal;">{{ textLang.tabMenubar.image_box }}</div>
                               </div>
                             <!-- </div> -->
                             <div v-show="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" :style="'width:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.image_width + '; height:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.image_height + '; border: 0px; text-align:center;'">
                               <v-btn dark fab x-small color="grey lighten-1" class="datatable-delete-img" v-show="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixValue && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" @click="deleteUploadImage(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index], true)"><v-icon>mdi-close</v-icon></v-btn>
-                              <img :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-img'" :src="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" height='100%'>
+                              <img :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-img'" :src="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" :height="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.image_height" :width="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.image_width">
                             </div>
                         </div>
                         </div>
@@ -1129,6 +1129,7 @@
       option: {},
       sleep: false,
       cellUpload: false,
+      cellSize: {width: "auto", height: "auto"},
       selected_array: null,
       selected_object: null,
       one_result_data: {},
@@ -7925,6 +7926,17 @@
             if(this.cellUpload) {
               this.dataTableObjectArray[this.cellUpload].value = data.url[0].url
               this.dataTableObjectArray[this.cellUpload].show_value = data.url[0].url
+              let img = new Image()
+              img.src = data.url[0].url
+              img.onload = () => {
+                if(img.width > img.height) {
+                  this.dataTableObjectArray[this.cellUpload].style.image_width = String(this.cellSize.width) + "px"
+                  this.dataTableObjectArray[this.cellUpload].style.image_height = "auto"
+                } else {
+                  this.dataTableObjectArray[this.cellUpload].style.image_width = "auto"
+                  this.dataTableObjectArray[this.cellUpload].style.image_height = String(this.cellSize.height) + "px"
+                }
+              }
             } else {
               this.objectArray[this.selected_array][this.selected_object].value = data.url[0].url
             }
@@ -7935,10 +7947,15 @@
           console.log(error.message)
         }
       },
-      openUploadImage(obj, row, parent_obj) {
+      openUploadImage(obj, row, col, parent_obj) {
         if(!obj.disable) {
           if(obj.object_name.startsWith('datatable')) {
             var cellHeight = parent_obj.style.table.rowsize[Number(row) - 1].size
+            var cellWidth = parent_obj.style.table.colsize[Number(col) - 1].size
+            this.cellSize = {
+              width: cellWidth,
+              height: cellHeight
+            }
             this.dataTableObjectArray[obj.object_name].style.image_width = "auto"
             this.dataTableObjectArray[obj.object_name].style.image_height = String(cellHeight) + "px"
             this.dialogImageUpload = true
