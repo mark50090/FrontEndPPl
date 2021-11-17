@@ -8149,6 +8149,7 @@ export default {
         if(data.messageER != 'ER') {
           if(this.selectedCell) {
             this.dataTableObjectArray[this.selectedCell].value = data.url[0].url
+            this.dataTableObjectArray[this.selectedCell].style.fixValue = true
           } else {
             this.objectArray[this.selected_array][this.selected_object].value = data.url[0].url
           }
@@ -8162,6 +8163,7 @@ export default {
     async deleteUploadImage(obj) {
       if(obj.object_name.startsWith('datatable')) {
         this.dataTableObjectArray[obj.object_name].value = ''
+        this.dataTableObjectArray[this.selectedCell].style.fixValue = false
       } else {
         this.selectObject(obj, 'inputimagebox')
         this.objectArray[this.selected_array][this.selected_object].value = ''
