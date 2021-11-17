@@ -59,10 +59,10 @@
                 {{textLang.pending}}
                 <v-badge inline light color="#FCCD5A" :content="count_transaction_incoming" class="status-doc-num"></v-badge>
               </v-btn>
-              <!-- <v-btn outlined tile value="cancel" class="status-doc-btn">
+              <v-btn outlined tile value="cancelled" class="status-doc-btn">
                 {{textLang.cancel_status}}
-                <v-badge inline dark color="#bd2929" content="300"></v-badge>
-              </v-btn> -->
+                <v-badge inline dark color="#bd2929" :content="count_transaction_cancel"></v-badge>
+              </v-btn>
             </v-btn-toggle>
           </v-row>
           <v-row class="inbox-row">
@@ -81,7 +81,7 @@
                 <v-chip color="#6EC4D6" v-if="item.document_status_text == 'inprogress'">{{textLang.inprogress}}</v-chip> <!--สถานะ กำลังดำเนินการ -->
                 <v-chip color="#F49393" v-if="item.document_status_text == 'rejected'">{{textLang.rejectapproval}}</v-chip> <!--สถานะ ปฏิเสธอนุมัติ -->
                 <v-chip color="#FCCD5A" v-if="item.document_status_text == 'incoming'">{{textLang.pending}}</v-chip> <!--สถานะ รอดำเนินการ -->
-                <!--<v-chip dark color="#bd2929" >{{textLang.cancel_status}}</v-chip>--> <!-- สถานะ ยกเลิก -->
+                <v-chip dark color="#bd2929" v-if="item.document_status_text == 'cancelled'">{{textLang.cancel_status}}</v-chip> <!-- สถานะ ยกเลิก -->
               </template>
             </v-data-table>
           </v-row>
@@ -129,7 +129,7 @@ import { EventBus } from '../EventBus'
         {text: 'กำลังดำเนินการ', lang: 'inprogress',value:'inprogress'}, 
         {text: 'ปฏิเสธอนุมัติ',lang: 'rejectapproval',value:'rejected'}, 
         {text: 'รอดำเนินการ',lang: 'pending',value:'incoming'},
-        {text: 'ยกเลิก',lang: 'cancel_status',value:'cancel'}
+        {text: 'ยกเลิก',lang: 'cancel_status',value:'cancelled'}
       ],
       //["","waiting","approved","inprogress","rejected","incoming"]
       document_status: 'all',
@@ -139,6 +139,7 @@ import { EventBus } from '../EventBus'
       count_transaction_inprogress: 0,
       count_transaction_rejected: 0,
       count_transaction_incoming: 0,
+      count_transaction_cancel: 0,
       // inbox_header: [
       //   {text: 'ผู้ส่ง', align: 'start', sortable: true, value: 'sender_name'},
       //   {text: 'ประเภท', align: 'start', sortable: true, value: 'flow_detail.name'},
@@ -318,6 +319,7 @@ import { EventBus } from '../EventBus'
             this.count_transaction_rejected = res.rejected.toString()
             this.count_transaction_inprogress = res.inprogress.toString()
             this.count_transaction_incoming = res.incoming.toString()
+            this.count_transaction_cancel = res.cancelled.toString()
           }
           this.changeTotalItem()
           this.isReady = true
@@ -333,6 +335,7 @@ import { EventBus } from '../EventBus'
         else if(this.document_status == 'rejected') this.totalItemsTransaction = parseInt(this.count_transaction_rejected)
         else if(this.document_status == 'inprogress') this.totalItemsTransaction = parseInt(this.count_transaction_inprogress)
         else if(this.document_status == 'incoming') this.totalItemsTransaction = parseInt(this.count_transaction_incoming)
+        else if(this.document_status == 'cancelled') this.totalItemsTransaction = parseInt(this.count_transaction_cancel)
       },
       async getTypeDocs() { 
         try {
