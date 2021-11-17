@@ -663,6 +663,17 @@
                               ></v-time-picker>
                             </v-menu>
                           </div>
+                          <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].hideBysection && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'inputimagebox'" :style="'border:1px dashed lightgrey;color:'+ dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color +'!important; text-align:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';'">
+                            <div v-show="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box-cover'" style="width:100%; height:100%;">
+                              <div :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box'" fill-height justify-center align-center>
+                                <div style="position:absolute; font-size:16px; text-align:center;" @click="openUploadImage(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index], r.index, item)">{{ textLang.tabMenubar.image_box }}</div>
+                              </div>
+                            </div>
+                            <div v-show="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" :style="'width:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.image_width + '; height:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.image_height + '; border: 0px;'">
+                              <v-btn dark fab x-small color="grey lighten-1" class="delete-img" v-show="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.fixValue && !dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].disable" @click="deleteUploadImage(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index], true)"><v-icon>mdi-close</v-icon></v-btn>
+                              <img :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-img'" :src="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" height='100%'>
+                            </div>
+                        </div>
                         </div>
                         <div v-if="c.index == item.style.table.colsize[0].index && r.deleteAble && item.style.addTable && item.addAble" class="delete-row-button-block">
                           <v-btn fab dark depressed x-small color="red accent-4" @click="deleteTableRow(item.object_name, r)"><v-icon>mdi-minus</v-icon></v-btn>
@@ -1117,6 +1128,7 @@
       ],
       option: {},
       sleep: false,
+      cellUpload: false,
       selected_array: null,
       selected_object: null,
       one_result_data: {},
@@ -7910,33 +7922,57 @@
           })
           this.notReady = false
           if(data.messageER != 'ER') {
-            this.objectArray[this.selected_array][this.selected_object].value = data.url[0].url
+            if(this.cellUpload) {
+              this.dataTableObjectArray[this.cellUpload].value = data.url[0].url
+              this.dataTableObjectArray[this.cellUpload].show_value = data.url[0].url
+            } else {
+              this.objectArray[this.selected_array][this.selected_object].value = data.url[0].url
+            }
+            this.uploadImage = []
           }
         } catch (error) {
           this.notReady = false
           console.log(error.message)
         }
       },
-      openUploadImage(obj) {
+      openUploadImage(obj, row, parent_obj) {
         if(!obj.disable) {
-          this.selected_array = this.dataDict[obj.object_name].objectType
-          this.selected_object = this.dataDict[obj.object_name].arrayIndex
-          if(parseFloat(obj.width) > parseFloat(obj.height)) {
-            this.objectArray[this.selected_array][this.selected_object].style.image_width = "auto"
-            this.objectArray[this.selected_array][this.selected_object].style.image_height = obj.height + "px"
+          if(obj.object_name.startsWith('datatable')) {
+            var cellHeight = parent_obj.style.table.rowsize[Number(row) - 1].size
+            this.dataTableObjectArray[obj.object_name].style.image_width = "auto"
+            this.dataTableObjectArray[obj.object_name].style.image_height = String(cellHeight) + "px"
+            this.dialogImageUpload = true
+            this.cellUpload = obj.object_name
           } else {
-            this.objectArray[this.selected_array][this.selected_object].style.image_width = obj.width + "px"
-            this.objectArray[this.selected_array][this.selected_object].style.image_height = "auto"
+            this.selected_array = this.dataDict[obj.object_name].objectType
+            this.selected_object = this.dataDict[obj.object_name].arrayIndex
+            if(parseFloat(obj.width) > parseFloat(obj.height)) {
+              this.objectArray[this.selected_array][this.selected_object].style.image_width = "auto"
+              this.objectArray[this.selected_array][this.selected_object].style.image_height = obj.height + "px"
+            } else {
+              this.objectArray[this.selected_array][this.selected_object].style.image_width = obj.width + "px"
+              this.objectArray[this.selected_array][this.selected_object].style.image_height = "auto"
+            }
+            this.dialogImageUpload = true
+            this.cellUpload = false
           }
-          this.dialogImageUpload = true
+          
         }
         
       },
-      async deleteUploadImage(obj) {
+      async deleteUploadImage(obj, isCell) {
         if(!obj.disable) {
-          this.selectObject(obj, obj.object_type)
-          var imageLink = this.objectArray[this.selected_array][this.selected_object].value
-          this.objectArray[this.selected_array][this.selected_object].value = ''
+          var imageLink =  ""
+          if(isCell) {
+            imageLink = this.dataTableObjectArray[obj.object_name].value
+            this.dataTableObjectArray[obj.object_name].value = ''
+            this.dataTableObjectArray[obj.object_name].show_value = ''
+          } else {
+            this.selectObject(obj, obj.object_type)
+            imageLink = this.objectArray[this.selected_array][this.selected_object].value
+            this.objectArray[this.selected_array][this.selected_object].value = ''
+          }
+          
           try {
             var { data } = await this.axios.post(this.$eform_api + '/del_image',
             {
