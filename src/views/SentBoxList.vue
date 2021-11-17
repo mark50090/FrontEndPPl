@@ -50,10 +50,10 @@
                 {{textLang.pending}}
                 <v-badge inline light color="#FCCD5A" :content="count_transaction_incoming" class="status-sentbox-num"></v-badge>
               </v-btn>
-              <!-- <v-btn outlined tile value="cancel" class="status-sentbox-btn">
+              <v-btn outlined tile value="cancelled" class="status-sentbox-btn">
                 {{textLang.cancel_status}}
-                <v-badge inline dark color="#bd2929" content="300"></v-badge>
-              </v-btn> -->
+                <v-badge inline dark color="#bd2929" :content="count_transaction_cancel"></v-badge>
+              </v-btn>
             </v-btn-toggle>
           </v-row>
           <v-row class="sentbox-row">
@@ -72,7 +72,7 @@
                 <v-chip color="#6EC4D6" v-if="item.document_status_text == 'inprogress'">{{textLang.inprogress}}</v-chip> 
                 <v-chip color="#F49393" v-if="item.document_status_text == 'rejected'">{{textLang.rejectapproval}}</v-chip> 
                 <v-chip color="#FCCD5A" v-if="item.document_status_text == 'incoming'">{{textLang.pending}}</v-chip>
-                <!-- <v-chip dark color="#bd2929" >{{textLang.cancel_status}}</v-chip> -->
+                <v-chip dark color="#bd2929" v-if="item.document_status_text == 'cancelled'">{{textLang.cancel_status}}</v-chip>
               </template>
             </v-data-table>
           </v-row>
@@ -117,6 +117,7 @@ import { EventBus } from '../EventBus'
       count_transaction_inprogress: 0,
       count_transaction_rejected: 0,
       count_transaction_incoming: 0,
+      count_transaction_cancel: 0,
       sent_box_select: [
         {text:'ทั้งหมด',lang: 'all',value:'all'}, 
         {text: 'รออนุมัติ',lang: 'pendingapproval',value:'waiting'}, 
@@ -124,7 +125,7 @@ import { EventBus } from '../EventBus'
         {text: 'กำลังดำเนินการ', lang: 'inprogress',value:'inprogress'}, 
         {text: 'ปฏิเสธอนุมัติ',lang: 'rejectapproval',value:'rejected'}, 
         {text: 'รอดำเนินการ',lang: 'pending',value:'incoming'},
-        {text: 'ยกเลิก',lang: 'cancel_status',value:'cancel'}
+        {text: 'ยกเลิก',lang: 'cancel_status',value:'cancelled'}
       ],
       // sentbox_table_header: [
       //   {text: 'ผู้ส่ง', align: 'start', sortable: true, value: 'sender_name'},
@@ -249,6 +250,7 @@ import { EventBus } from '../EventBus'
             this.count_transaction_rejected = res.rejected.toString()
             this.count_transaction_inprogress = res.inprogress.toString()
             this.count_transaction_incoming = res.incoming.toString()
+            this.count_transaction_cancel = res.cancelled.toString()
           }
           this.changeTotalItem()
           this.isReady = true
@@ -264,6 +266,7 @@ import { EventBus } from '../EventBus'
         else if(this.document_status == 'rejected') this.totalItemsTransaction = parseInt(this.count_transaction_rejected)
         else if(this.document_status == 'inprogress') this.totalItemsTransaction = parseInt(this.count_transaction_inprogress)
         else if(this.document_status == 'incoming') this.totalItemsTransaction = parseInt(this.count_transaction_incoming)
+        else if(this.document_status == 'cancelled') this.totalItemsTransaction = parseInt(this.count_transaction_cancel)
       },
       async getTypeDocs() { 
         try {
