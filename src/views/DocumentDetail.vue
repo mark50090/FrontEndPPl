@@ -418,6 +418,7 @@
     <showFormReturn/>
     <DeleteMessage/>
     <showFormDeleteAttach/>
+    <showFormConfirmCancelDoc/>
   </div>
 </template>
 
@@ -432,6 +433,7 @@ import vueSignature from 'vue-signature'
 import showFormReturn from '../components/ReturnCorrection'
 import DeleteMessage from '../components/DeleteMessage'
 import showFormDeleteAttach from '../components/ConfirmDeleteAttachFileModal.vue'
+import showFormConfirmCancelDoc from '../components/ConfirmCancelDocModal.vue'
 export default {
   computed: {
     textLang () {
@@ -447,7 +449,8 @@ export default {
     vueSignature,
     showFormReturn,
     DeleteMessage,
-    showFormDeleteAttach
+    showFormDeleteAttach,
+    showFormConfirmCancelDoc
   },
   data: () => ({
     document_detail_tab: null,
@@ -547,6 +550,9 @@ export default {
     }
   },
   methods: {
+    optionFormConfirmCancelDoc () {
+      EventBus.$emit('FormConfirmCancelDoc')
+    },
     optionFormDeleteAttach (file) {
       EventBus.$emit('FormDeleteAttach', file, sessionStorage.getItem('transaction_id'))
     },
