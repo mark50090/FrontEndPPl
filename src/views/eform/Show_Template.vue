@@ -9133,6 +9133,13 @@
     right: -3%;
   }
 
+  .datatable-delete-img {
+    position: absolute;
+    right: 0%;
+    width: 20px !important;
+    height: 20px !important;
+  }
+
   .add-row-button-block {
     position: absolute;
     right: -75px;
