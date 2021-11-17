@@ -229,7 +229,7 @@
               <div v-show="item.show">
                 <table :class="item.name + '-table ' + item.name + '-obj'" :id="item.name + '-table'" class="object-table" style="width:max-content;">
                   <tr :class="item.name + '-table'" v-for="r in item.style.table.rowsize" :key="r.index" class="object-table" :style="'height:' + r.size + 'px;'">
-                    <td :class="item.name + '-table'" v-for="c in item.style.table.colsize" :key="c.index" class="object-table table-icon-eye" :style="'width:' + String(c.size) + 'px;' + ' background-color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.background_color + ';'" v-on:click="selectCellObject(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index])" >
+                    <td :class="item.name + '-table'" v-for="c in item.style.table.colsize" :key="c.index" class="object-table table-icon-eye" :style="'width:' + String(c.size) + 'px;' + ' background-color:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.background_color + ';'" v-on:click="selectCellObject(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index], r.index, c.index )" >
                       <v-icon v-if="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.hideDisplay && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show" small color="red" class="icon-eye-datatable">mdi-eye-off-outline</v-icon>
                       <div :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name" v-show="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].show"
                       :style="'font-size:'+ dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_size + 'px; text-overflow: ellipsis; white-space: nowrap; color:lightgrey; overflow: hidden; ' + 'width:' + String(c.size)+'; max-height:' + String(Number(r.size)-2) + 'px;'">
@@ -249,6 +249,17 @@
                         <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'checkbox'" :style="'border:1px dashed lightgrey;color:'+ dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color +'!important; text-align:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';'">
                             <img :width="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_size + 'px'" src="https://eform.one.th/eform_api/api/v1/view_image?file_name=50214806880_3fc2cb62-99be-43b3-bfbb-7274606298c3.png">
                             <span> {{dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].text}}</span>
+                        </div>
+                        <div v-if="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.noCellData && dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].object_type == 'inputimagebox'" :style="'border:1px dashed lightgrey;color:'+ dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_color +'!important; text-align:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.font_align + ';'">
+                            <div v-show="!dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box-cover'" style="width:100%; height:100%;">
+                              <div :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-box'" fill-height justify-center align-center>
+                                <div style="position:absolute; top:40%; width:100%; height:75%; font-size:16px; text-align:center;">{{ textLang.tabMenubar.insert_img }}</div>
+                              </div>
+                            </div>
+                            <div v-show="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" :style="'width:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.image_width + '; height:' + dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].style.image_height + '; border: 0px;'">
+                              <v-btn dark fab x-small color="grey lighten-1" class="delete-img" v-show="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" @click="deleteUploadImage(dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index])"><v-icon>mdi-close</v-icon></v-btn>
+                              <img :id="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].name + '-img'" :src="dataTableObjectArray[item.object_name + '_' + 'R' + r.index + 'C' + c.index].value" height='100%'>
+                            </div>
                         </div>
                       </div>
                     </td>
@@ -2021,7 +2032,7 @@
                     <v-list-item-content class="py-0 each-step-workflow-mail">
                       {{ email.thai_email }}
                     </v-list-item-content>
-                    <!-- <v-list-item-icon class="ml-2 my-0 alert-onechat-block"> <!-- show when this mail is set to alert in One Chat 
+                    <!-- <v-list-item-icon class="ml-2 my-0 alert-onechat-block">
                       <img height="21px" src="https://www.img.in.th/images/a368504d4cdb93225bda2f04c665ead7.png" />
                     </v-list-item-icon> -->
                   </v-list-item>
@@ -2961,7 +2972,7 @@ export default {
     refOrders: [],
     datatableRoleCell: [],
     cellObjectTypes: [{text:'ค่าเริ่มต้น', value:'linkdatabox'}, {text:'Text Field', value:'textfield'}, {text:'Input Box', value:'inputbox'}, 
-      {text:'Dropdown Box', value:'dropdownbox'}, {text:'Datepicker Box', value:'datepickerbox'},{text:'Time Box', value:'timebox'}, {text:'Check Box', value:'checkbox'}, {text:'Calculate Box', value:'calculatebox'}],
+      {text:'Dropdown Box', value:'dropdownbox'}, {text:'Datepicker Box', value:'datepickerbox'},{text:'Time Box', value:'timebox'}, {text:'Check Box', value:'checkbox'}, {text:'Calculate Box', value:'calculatebox'}, {text:'Image Box', value:'inputimagebox'}],
     step_can_see: [],
     webhookUrl: [{
       service: "",
@@ -5764,7 +5775,7 @@ export default {
         }
       }
     },
-    selectCellObject(obj) {
+    selectCellObject(obj, row, col) {
       if(this.objectArray[this.selected_array][this.selected_object].page != this.currentPage) {
           this.selectPlain()
       } else {
@@ -5895,13 +5906,17 @@ export default {
           this.initailDatabind()
         } else if(type == 'inputimagebox') {
           this.custom_cell_permission = true
+          if(!this.dataTableObjectArray[obj.object_name].value) {
+            this.openUploadImage(this.dataTableObjectArray[obj.object_name], row)
+          }
+         
           this.help_message = this.textLang.tips_help_message.picture_box
         } else if(type == 'linkdatabox') {
           this.custom_object_fontsize = true
           this.custom_object_font = true
           this.custom_object_fontcolor = true
           this.help_message = this.textLang.tips_help_message.box_displaying
-        }
+        } 
       }
     },
     changeCellObject() {
@@ -5931,6 +5946,8 @@ export default {
       } else if(objType == 'datepickerbox') {
         this.dataTableObjectArray[this.selectedCell].style.isCellTextField = false
         this.change_dateformat()
+      } else if(objType == 'inputimagebox') {
+        this.dataTableObjectArray[this.selectedCell].style.isCellTextField = false
       }
 
       if(this.objectTypeInput.includes(objType)) {
@@ -8103,7 +8120,7 @@ export default {
         this.objectArray[this.selected_array][this.selected_object].style.alterChoices = choiceDict
       }
     },
-    openUploadImage(obj) {
+    openUploadImage(obj, row) {
       if(obj.object_name == this.objectArray[this.selected_array][this.selected_object].object_name) {
         if(parseFloat(obj.width) > parseFloat(obj.height)) {
           this.objectArray[this.selected_array][this.selected_object].style.image_width = "auto"
@@ -8112,6 +8129,11 @@ export default {
           this.objectArray[this.selected_array][this.selected_object].style.image_width = obj.width + "px"
           this.objectArray[this.selected_array][this.selected_object].style.image_height = "auto"
         }
+        this.dialogImageUpload = true
+      } else if(obj.object_name.startsWith('datatable')) {
+        var cellHeight = this.objectArray[this.selected_array][this.selected_object].style.table.rowsize[Number(row) - 1].size
+        this.dataTableObjectArray[obj.object_name].style.image_width = "auto"
+        this.dataTableObjectArray[obj.object_name].style.image_height = String(cellHeight) + "px"
         this.dialogImageUpload = true
       }
     },
@@ -8125,7 +8147,12 @@ export default {
         formData)
         this.notReady = false
         if(data.messageER != 'ER') {
-          this.objectArray[this.selected_array][this.selected_object].value = data.url[0].url
+          if(this.selectedCell) {
+            this.dataTableObjectArray[this.selectedCell].value = data.url[0].url
+          } else {
+            this.objectArray[this.selected_array][this.selected_object].value = data.url[0].url
+          }
+          this.uploadImage = []
         }
       } catch (error) {
         this.notReady = false
@@ -8133,9 +8160,12 @@ export default {
       }
     },
     async deleteUploadImage(obj) {
-      this.selectObject(obj, 'inputimagebox')
-      var imageLink = this.objectArray[this.selected_array][this.selected_object].value
-      this.objectArray[this.selected_array][this.selected_object].value = ''
+      if(obj.object_name.startsWith('datatable')) {
+        this.dataTableObjectArray[obj.object_name].value = ''
+      } else {
+        this.selectObject(obj, 'inputimagebox')
+        this.objectArray[this.selected_array][this.selected_object].value = ''
+      }
     },
     genHtmlFontsize(value, html) {
       html += "font-size: " + value + "px;"
