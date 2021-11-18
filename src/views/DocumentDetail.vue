@@ -210,7 +210,7 @@
                 </v-btn>
               </v-col>
               <v-col v-if="showCancelButton" cols="auto" md="auto" lg="auto" class="pl-0 pr-1 pt-1 pb-0"> <!-- show when it is document detail from sent document page -->
-                <v-btn depressed x-small dark color="error" class="download-pdf-btn">{{textLang.canceldocument}}</v-btn>
+                <v-btn @click="optionFormConfirmCancelDoc" depressed x-small dark color="error" class="download-pdf-btn">{{textLang.canceldocument}}</v-btn>
               </v-col>
             </v-row>
           </v-card>
@@ -236,7 +236,7 @@
                         <v-icon v-else-if="item.status == 'R'" size="30" color="#f44336">mdi-close-circle-outline</v-icon> <!-- deny -->
                         <v-icon v-else-if="item.status == 'N'  && !is_reject" size="30" color="#9e9e9e">mdi-clock-outline</v-icon> <!-- step not arrive yet -->
                         <v-icon v-else-if="is_reject" size="30" color="#9e9e9e">mdi-circle-slice-8</v-icon> <!-- step other if reject transaction -->
-                        <!--<v-icon size="30" color="#bd2929">mdi-cancel</v-icon>--> <!-- cancel -->
+                        <v-icon v-else-if="item.status == 'C'" size="30" color="#bd2929">mdi-cancel</v-icon> <!-- cancel -->
                       </template>
                       <v-row class="detail-row">
                         <v-col cols="3" md="2" lg="2" align-self="start" class="px-0 py-0 step-doc-title">
@@ -262,7 +262,7 @@
                           <span v-if="!item_name.approved && item.status == 'W' && !is_reject" class="wait-user-approve-status">{{textLang.pendingapproval}}</span> <!-- wait for approve status -->
                           <span v-if="item_name.approved == 'Y'" class="approved-status">{{textLang.approved}}</span> <!-- approved status -->
                           <span v-if="item_name.approved == 'R'" class="deny-status">{{textLang.rejectapproval}}</span> <!-- deny status -->
-                          <!--<span class="cancel-status">{{ textLang.cancel_status }}</span>--> <!-- cancel status -->
+                          <span v-if="item.status == 'C'" class="cancel-status">{{ textLang.cancel_status }}</span> <!-- cancel status -->
                         </v-col>
                         <v-col v-if="item_name.approved && (item_name.approved == 'Y' || item_name.approved == 'R')" cols="12" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-0 pb-1 time-approve-block"> <!-- show when status is approved or deny -->
                           <v-icon small color="black" class="pr-1">mdi-timer-outline</v-icon>
@@ -499,13 +499,16 @@ export default {
     isShowRevertButton: true,
     account_id: null,
     setTimeOutResize: null,
-    showCancelButton: false
+    showCancelButton: false,
+    tax_id: '',
+    stampCAList: []
   }),
   mounted () {
     this.token = sessionStorage.getItem('access_token')
     this.my_name = sessionStorage.getItem('name')
     this.transaction_id = sessionStorage.getItem('transaction_id')
     this.account_id = JSON.parse(sessionStorage.getItem('userProfile')).id
+    this.tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
     this.getTemplateId(this.transaction_id)
     if (!this.transaction_id) {
       this.$router.replace({ name: 'inbox' })
@@ -514,9 +517,11 @@ export default {
     this.get_detail_fn()
     this.get_attachment_file_fn()
     this.get_signature_name_default_fn()
+    this.get_stamp_ca_fn()
     EventBus.$on('confirm_deletemessage', this.delete_comment_fn)
     EventBus.$on('getstamp', this.get_stamper_fn)
     EventBus.$on('afterDeleteAttach', this.after_delete_attach_fn)
+    EventBus.$on('cancelDoc', this.cancel_doc_fn)
     window.addEventListener('resize', this.resize_window_fn)
   },
   watch: {
@@ -551,7 +556,10 @@ export default {
   },
   methods: {
     optionFormConfirmCancelDoc () {
-      EventBus.$emit('FormConfirmCancelDoc')
+      const data = {
+        name: this.doc_details.doc_id
+      }
+      EventBus.$emit('FormConfirmCancelDoc', data)
     },
     optionFormDeleteAttach (file) {
       EventBus.$emit('FormDeleteAttach', file, sessionStorage.getItem('transaction_id'))
@@ -587,7 +595,7 @@ export default {
         })
     },
     gostamp () {
-      EventBus.$emit('stamp')
+      EventBus.$emit('stamp', this.stampCAList)
     },
     gopdf () {
       EventBus.$emit('showpdf', this.pdf_src)
@@ -764,6 +772,55 @@ export default {
           this.axios_pending--
         })
     },
+    async cancel_doc_fn () {
+      const data = {
+        document_id: this.doc_details.doc_id,
+        transaction_id: this.doc_details.transaction_id,
+        tracking: this.doc_details.tracking
+      }
+      const url = '/transaction/api/v1/deltransaction'
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.token}`
+        }
+      }
+      this.axios_pending++
+      this.axios.put(`${this.$api_url}${url}`, data, config)
+        .then((response) => {
+          console.log(response)
+          this.$router.replace({ name: 'inbox' })
+          this.$swal({
+            backdrop: false,
+            position: 'bottom-end',
+            width: '330px',
+            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.succeed + '</strong>',
+            text: this.textLang.Successfullycancel,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 5000,
+            customClass: {
+              popup: 'alert-card',
+              title: 'alert-title-block',
+              closeButton: 'close-alert-btn',
+              htmlContainer: 'alert-text-block'
+            }
+          })
+        })
+        .catch((error) => {
+          if (error.response) {
+            const errResponse = error.response.data
+            if (errResponse.message === 'error read pdf') {
+              this.error_swal_fn(this.textLang.cantread)
+            } else {
+              this.error_swal_fn(errResponse.message || this.textLang.erroroccurred)
+            }
+            this.$router.replace({ name: 'inbox' })
+          }
+        })
+        .then(() => {
+          this.axios_pending--
+        })
+    },
     async upload_attachment () {
       const url = '/file-component/api/saveFile'
       const config = {
@@ -807,30 +864,33 @@ export default {
                 this.isShowRevertButton = element.actor.map(item => item.name).includes(sessionStorage.getItem('name'))
               }
             })
-            
+
             if (data.data.flow_step[0].status == 'W' || data.data.document_status == 'Y' || data.data.document_status == 'R') {
               this.isShowRevertButton = false
             }
+
             doc_data.flow_step.forEach((flowData, index) => {
               flowData.active_count = flowData.actor.filter(item => (item.approved === 'Y' || item.approved === 'R')).length
               this.$set(this.sign_position, index, flowData.sign_position)
               this.$set(this.step_flow, index, flowData)
 
               // chack status waiting and account approve
-              if (flowData.status.toLowerCase() === 'w') {
-                this.last_step = index
-                const find_name_in_w = flowData.actor.findIndex((element) => element.name === this.my_name)
-                if (find_name_in_w > -1 && this.$route.name === 'document_detail') {
-                  if (flowData.actor[find_name_in_w].approved !== undefined) {
-                    const statusMyApprove = flowData.actor[find_name_in_w].approved
-                    if (statusMyApprove === 'Y' || statusMyApprove === 'R') this.check_sign = false
-                    else this.check_sign = true
-                  } else this.check_sign = true
-                  this.ca_switch = flowData.send_update.action.toLowerCase() === 'sign-ca'
-                  this.is_approve = flowData.send_update.action.toLowerCase() === 'approve'
+              if (data.data.document_status != 'C') {
+                if (flowData.status.toLowerCase() === 'w') {
+                  this.last_step = index
+                  const find_name_in_w = flowData.actor.findIndex((element) => element.name === this.my_name)
+                  if (find_name_in_w > -1 && this.$route.name === 'document_detail') {
+                    if (flowData.actor[find_name_in_w].approved !== undefined) {
+                      const statusMyApprove = flowData.actor[find_name_in_w].approved
+                      if (statusMyApprove === 'Y' || statusMyApprove === 'R') this.check_sign = false
+                      else this.check_sign = true
+                    } else this.check_sign = true
+                    this.ca_switch = flowData.send_update.action.toLowerCase() === 'sign-ca'
+                    this.is_approve = flowData.send_update.action.toLowerCase() === 'approve'
+                  }
+                } else if (flowData.status.toLowerCase() === 'r') {
+                  this.is_reject = true
                 }
-              } else if (flowData.status.toLowerCase() === 'r') {
-                this.is_reject = true
               }
 
               // allow sign position
@@ -908,6 +968,27 @@ export default {
         .then(() => {
           this.axios_pending--
         })
+    },
+    async get_stamp_ca_fn () {
+      const url = `/business_stamp/api/v1/get_business_stamp?tax_id=${this.tax_id}`
+      const config = {
+        Authorization: `Bearer ${this.token}`
+      }
+      try {
+        this.axios_pending++
+        const { data } = await this.axios.get(`${this.$api_url}${url}`, config)
+        if (data.status) {
+          this.stampCAList = [...data.result]
+          this.stampCAList.map((item, index) => {
+            item.index = index
+            return item
+          })
+        }
+      } catch (error) {
+        this.stampCAList = []
+      } finally {
+        this.axios_pending--
+      }
     },
     async get_signature_name_default_fn () {
       const url = '/user_setting/api/v1/get_stamp_name_list'
@@ -1098,7 +1179,6 @@ export default {
       this.reShowStamp()
     },
     onResize: function (item, x, y, width, height) {
-      console.log(x, y, width, height);
       var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
       var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
       item.sign_llx = (x / clientWidth).toFixed(3)
@@ -1118,7 +1198,7 @@ export default {
       item.sign_lly = (-(y + item.sign_box_heigth) / clientHeight).toFixed(4)
       item.sign_position_x = x
       item.sign_position_y = y
-      this.reShowStamp()
+      // this.reShowStamp()
     },
     onActivated (index) {
       const stamp = this.stamp_position[index]
@@ -1188,6 +1268,7 @@ export default {
     EventBus.$off('confirm_deletemessage')
     EventBus.$off('getstamp')
     EventBus.$off('afterDeleteAttach')
+    EventBus.$off('cancelDoc')
     window.removeEventListener('resize', this.resize_window_fn)
   }
 }
