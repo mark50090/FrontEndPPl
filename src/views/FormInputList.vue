@@ -16,7 +16,7 @@
             {{textLang.alldocuments}} {{totalItemsTemplate}} 
           </v-row>
           <v-row class="mt-3 formdoc-row">
-            <v-data-table fixed-header :loading="false" :headers="formdoc_table_header" :items="formdoc_data" :server-items-length="totalItemsTemplate" class="front-table-center formdoc-table formdoc-table-border formdoc-table-header hide-formdoc-table-progress formdoc-table-data" :footer-props="{'items-per-page-options': [5, 10, 15, 20]}">
+            <v-data-table fixed-header :loading="false" :headers="formdoc_table_header" :items="formdoc_data" :options.sync="optionsTemplate" :server-items-length="totalItemsTemplate" class="front-table-center formdoc-table formdoc-table-border formdoc-table-header hide-formdoc-table-progress formdoc-table-data" :footer-props="{'items-per-page-options': [5, 10, 15, 20]}">
               <template v-slot:loading> <!-- loading data in table -->
                 <v-row align="center" justify="center" class="formdoc-row formdoc-data-load-block">
                   <img width="100px" src="../assets/loader.gif" class="formdoc-load">
@@ -85,7 +85,15 @@ import { EventBus } from '../EventBus'
       totalItemsTemplate: 0,
       keyword: "",
     }),
-    
+    watch:{
+      "optionsTemplate.page"(newValue,oldValue){
+          this.searchTemplate({page:newValue}).then(data => {})
+        },
+      "optionsTemplate.itemsPerPage"(newValue,oldValue){
+          this.optionsTransaction.page = 1
+          this.searchTemplate({page:1, itemsPerPage:newValue}).then(data => {})
+        }
+    },
     mounted() {
       this.searchTemplate()
       EventBus.$emit('loadingOverlay', true)
@@ -110,7 +118,7 @@ import { EventBus } from '../EventBus'
             tax_id: tax_id, 
             keyword: this.keyword,
             lim: itemsPerPage, 
-            offset: (page-1)*itemsPerPage || 0, 
+            off: (page-1)*itemsPerPage || 0, 
             is_active: true,
             is_fill: true
           })

@@ -25,7 +25,7 @@
             </v-col>
           </v-row>
           <v-row class="table-top-spacer templateform-row">
-            <v-data-table fixed-header :loading="false" :headers="templateform_table_header" :items="templateform_data" :server-items-length="totalItemsTemplate"
+            <v-data-table fixed-header :loading="false" :headers="templateform_table_header" :items="templateform_data" :options.sync="optionsTemplate" :server-items-length="totalItemsTemplate"
             class="fronttemplate-table-center templateform-table templateform-table-border templateform-table-header hide-templateform-table-progress templateform-table-data" 
             :footer-props="{'items-per-page-options': [5, 10, 15, 20]}">
               <template v-slot:loading> <!-- loading data in table -->
@@ -163,6 +163,15 @@ import showFormTransfer from '../components/TransferEdit.vue'
       EventBus.$off('changeBiz')
       EventBus.$off('getTemplateList')
     },
+    watch:{
+      "optionsTemplate.page"(newValue,oldValue){
+          this.searchTemplate({page:newValue}).then(data => {})
+        },
+      "optionsTemplate.itemsPerPage"(newValue,oldValue){
+          this.optionsTransaction.page = 1
+          this.searchTemplate({page:1, itemsPerPage:newValue}).then(data => {})
+        }
+    },
     methods: { 
       optionFormTransfer() {
         EventBus.$emit('FormTransfer')
@@ -185,7 +194,7 @@ import showFormTransfer from '../components/TransferEdit.vue'
             tax_id: tax_id, 
             keyword: this.keyword,
             lim: itemsPerPage, 
-            offset: (page-1)*itemsPerPage || 0, 
+            off: (page-1)*itemsPerPage || 0, 
           })
           if(data.status){
             let index = 1
