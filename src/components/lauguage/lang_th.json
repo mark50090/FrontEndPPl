@@ -679,6 +679,7 @@
       "message": "ข้อความ:",
       "doc_type": "ประเภทเอกสาร paperless:",
       "doc_format": "รูปแบบเอกสาร paperless:",
+      "doc_sender": "ผู้ส่งเอกสาร",
       "add_attachments": "เอกสารแนบเพิ่มเติม",
       "attached_file_placeholder": "เลือกเอกสารแนบ",
       "please_choose": "กรุณาเลือกเอกสารแนบ",

@@ -388,7 +388,9 @@
                 </template>
                 <!-- <v-text-field v-show="!item.ref_step || (item.ref_step == 'ref-undefined')" outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" v-for="e in item.one_email" :key="e.ex_email" v-model="e.email"></v-text-field>
                 <v-text-field v-show="item.ref_step &&  (item.ref_step != 'ref-undefined')" readonly outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" :value="textLang.offer_dialog.re_number + item.ref_step"></v-text-field> -->
-                 <v-text-field v-for="actor in item.actor[0].permission_email" :key="actor.account_id" v-show="!item.editable" readonly outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" :value="actor.thai_email"></v-text-field>
+                 <v-text-field  v-show="!item.editable && item.actor[0].permission_sender_status" readonly outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" :value="textLang.offer_dialog.doc_sender"></v-text-field>
+                 <v-text-field v-for="actor in item.actor[0].permission_email" :key="actor.account_id" v-show="!item.editable" outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" :error="!actor.thai_email || actor.invalid" v-model="actor.thai_email"></v-text-field>
+                 <v-text-field v-for="role in item.actor[0].permission" :key="role.role_id" v-show="!item.editable" readonly outlined dense hide-details color="#4CAF50" class="mb-3 type-paperless" :value="role.role_name"></v-text-field>
               </v-timeline-item>
             </v-timeline>
           </v-row>
@@ -523,6 +525,7 @@ export default {
         message: "ข้อความ:",
         doc_type: "ประเภทเอกสาร paperless:",
         doc_format: "รูปแบบเอกสาร paperless:",
+        doc_sender: "ผู้ส่งเอกสาร",
         add_attachments: "เอกสารแนบเพิ่มเติม",
         attached_file_placeholder: "เลือกเอกสารแนบ",
         please_choose: "กรุณาเลือกเอกสารแนบ",
@@ -1818,8 +1821,9 @@ export default {
       this.pplSubject = temp_option.template_name
       this.dialog_ppl = true
     },
-    checkName() {
-      if(this.pplSubject != '') {
+    async checkName() {
+      var validEmail = await this.checkNullEmail(this.flow_data)
+      if(this.pplSubject != '' && validEmail) {
         if(sessionStorage.getItem('signStep') == 'true') {
           EventBus.$emit('openSignPad')
         } else {
@@ -2535,6 +2539,7 @@ export default {
             string_sign: sign64,
             comment: temp_option.newComment,
             is_full: true,
+            flow_data: this.flow_data,
             others: {dataTableObjectArray : this.dataTableObjectArray, saveStep: ""}
           }
         )
@@ -3625,30 +3630,71 @@ export default {
       }
       
     },
-    async checkNullEmail(Template_step) {
+    async checkNullEmail(flow_data) {
+      var validEmail = true
       var checkMailArray = []
-      var checkValue = true
-      var validEmail = false
-      for (let i = 0; i < Template_step.length; i++) {
-        for (let j = 0; j < Template_step[i].one_email.length; j++) {
-          if (
-            (Template_step[i].one_email[j].email == null ||
-              Template_step[i].one_email[j].email == "") &&
-            Template_step[i].ref_step == null
-          ) {
-            checkValue = false
-          } else if (Template_step[i].ref_step == null) {
-            checkMailArray.push({
-              oneEmail: Template_step[i].one_email[j].email.trim()
-            });
+      var indexKeeper = []
+      for(let i=0; i< flow_data.length; i++) {
+        let flow_valid_count = 0
+        if(!flow_data[i].actor[0].permission.length) {
+          for(let j=0; j<flow_data[i].actor[0].permission_email.length; j++) {
+            if(flow_data[i].actor[0].permission_email[j].thai_email) {
+              flow_valid_count++
+              flow_data[i].actor[0].permission_email[j].thai_email = flow_data[i].actor[0].permission_email[j].thai_email.toLowerCase()
+              flow_data[i].actor[0].permission_email[j].thai_email = flow_data[i].actor[0].permission_email[j].thai_email.trim()
+              flow_data[i].actor[0].permission_email[j].thai_email = flow_data[i].actor[0].permission_email[j].thai_email.replace(/ /g, "")
+              flow_data[i].actor[0].permission_email[j].thai_email = flow_data[i].actor[0].permission_email[j].thai_email.split(" ").join("")
+              checkMailArray.push(flow_data[i].actor[0].permission_email[j].thai_email)
+              indexKeeper.push({
+                i_index: i,
+                j_index: j
+              })
+            }
+          }
+          if(!flow_valid_count) {
+            validEmail = false
           }
         }
       }
-      if (checkValue) {
-        validEmail = await this.checkOneEmail(checkMailArray)
-      } else {
+      if(validEmail) {
+        var mailResult = await this.checkOneEmail(checkMailArray)
+        for(let i=0; i<mailResult.length; i++) {
+          if(!mailResult[i].valid) {
+            flow_data[indexKeeper[i].i_index].actor[0].permission_email[indexKeeper[i].j_index] = {
+              account_id: null,
+              account_title_eng: null,
+              account_title_th: null,
+              first_name_eng: null,
+              first_name_th: null,
+              invalid: true,
+              last_name_eng: null,
+              last_name_th: null,
+              thai_email: checkMailArray[i],
+            }
+            validEmail = false
+          } else {
+            flow_data[indexKeeper[i].i_index].actor[0].permission_email[indexKeeper[i].j_index] = {
+              account_id: mailResult[i].data.id,
+              account_title_eng: mailResult[i].data.account_title_eng,
+              account_title_th: mailResult[i].data.account_title_th,
+              first_name_eng: mailResult[i].data.first_name_eng,
+              first_name_th: mailResult[i].data.first_name_th,
+              invalid: false,
+              last_name_eng: mailResult[i].data.last_name_eng,
+              last_name_th: mailResult[i].data.last_name_th,
+              thai_email: mailResult[i].data.thai_email,
+            }
+          }
+        }
+      }
+      this.step_show = false
+      this.step_show = true
+      if(!validEmail) {
         this.alert_text_bool = true
         this.alert_text = this.textLang.offer_dialog.please_input
+      } else {
+        this.alert_text_bool = false
+        this.alert_text = ""
       }
       return validEmail
     },
@@ -3674,36 +3720,18 @@ export default {
       );
     },
     async checkOneEmail(checkMailArray) {
+      var result = []
       try {
-        var validEmail = false;
-        var { data } = await this.axios.post(this.$api + "/checkonemail",
-          checkMailArray)
-        if (data.result == "OK") {
-          var dataEmail = data.messageText
-          var errorMail = []
-          for (let i = 0; i < dataEmail.length; i++) {
-            var mailStatus = dataEmail[i].result
-            if (mailStatus == "Fail")
-              errorMail.push(checkMailArray[i].oneEmail)
-          }
-          if (errorMail.length > 0) {
-            // email not found in oneid
-            var msg = this.textLang.offer_dialog.email_found +"<ul>"
-            for (let i = 0; i < errorMail.length; i++) {
-              msg = msg + "<li>" + errorMail[i] + "</li>"
-            }
-            msg = msg + "</ul>"
-            this.alert_text_bool = true
-            this.alert_text = msg
-          } else {
-            validEmail = true;
-          }
+        var { data } = await this.axios.post(this.$api_url + "/citizen/api/v1/check_citizen_email",{
+          email: checkMailArray
+        })
+        if (data.status) {
+          result = data.result
         }
-        return validEmail;
       } catch (error) {
         console.log(error.message)
-        return validEmail
       }
+      return result
     },
     async pplUploadDocument() {
       if(this.files.length > 0) {

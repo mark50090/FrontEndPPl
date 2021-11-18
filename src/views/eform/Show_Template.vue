@@ -7932,6 +7932,15 @@
                 if(img.width > img.height) {
                   this.dataTableObjectArray[this.cellUpload].style.image_width = String(this.cellSize.width) + "px"
                   this.dataTableObjectArray[this.cellUpload].style.image_height = "auto"
+                } else if(img.width == img.height) {
+                  if(this.cellSize.width < this.cellSize.height) {
+                    this.dataTableObjectArray[this.cellUpload].style.image_width = String(this.cellSize.width) + "px"
+                    this.dataTableObjectArray[this.cellUpload].style.image_height = "auto"
+                  } else {
+                    this.dataTableObjectArray[this.cellUpload].style.image_width = "auto"
+                    this.dataTableObjectArray[this.cellUpload].style.image_height = String(this.cellSize.height) + "px"
+                  }
+                  
                 } else {
                   this.dataTableObjectArray[this.cellUpload].style.image_width = "auto"
                   this.dataTableObjectArray[this.cellUpload].style.image_height = String(this.cellSize.height) + "px"
