@@ -25,7 +25,7 @@
             </v-col>
           </v-row>
           <v-row class="table-top-spacer templateform-row">
-            <v-data-table fixed-header :loading="false" :headers="templateform_table_header" :items="templateform_data" 
+            <v-data-table fixed-header :loading="false" :headers="templateform_table_header" :items="templateform_data" :server-items-length="totalItemsTemplate"
             class="fronttemplate-table-center templateform-table templateform-table-border templateform-table-header hide-templateform-table-progress templateform-table-data" 
             :footer-props="{'items-per-page-options': [5, 10, 15, 20]}">
               <template v-slot:loading> <!-- loading data in table -->

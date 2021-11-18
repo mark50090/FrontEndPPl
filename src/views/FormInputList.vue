@@ -16,7 +16,7 @@
             {{textLang.alldocuments}} {{totalItemsTemplate}} 
           </v-row>
           <v-row class="mt-3 formdoc-row">
-            <v-data-table fixed-header :loading="false" :headers="formdoc_table_header" :items="formdoc_data" class="front-table-center formdoc-table formdoc-table-border formdoc-table-header hide-formdoc-table-progress formdoc-table-data" :footer-props="{'items-per-page-options': [5, 10, 15, 20]}">
+            <v-data-table fixed-header :loading="false" :headers="formdoc_table_header" :items="formdoc_data" :server-items-length="totalItemsTemplate" class="front-table-center formdoc-table formdoc-table-border formdoc-table-header hide-formdoc-table-progress formdoc-table-data" :footer-props="{'items-per-page-options': [5, 10, 15, 20]}">
               <template v-slot:loading> <!-- loading data in table -->
                 <v-row align="center" justify="center" class="formdoc-row formdoc-data-load-block">
                   <img width="100px" src="../assets/loader.gif" class="formdoc-load">
