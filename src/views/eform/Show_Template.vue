@@ -78,7 +78,7 @@
             <v-list-item-icon><v-icon>mdi-script-text-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
           </v-list-item>  -->
-          <v-list-item @click="downloadFromEid()">
+          <v-list-item v-if="currentStep != '' && currentStep != '1'" @click="downloadFromEid()">
             <v-list-item-icon><v-icon>mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item> 
@@ -156,7 +156,7 @@
             <v-list-item-icon><v-icon color="#4CAF50">mdi-script-text-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
           </v-list-item> -->
-          <v-list-item v-if="false" @click="downloadFromEid()">
+          <v-list-item v-if="currentStep != '' && currentStep != '1'"  @click="downloadFromEid()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item>
