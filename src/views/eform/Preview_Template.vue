@@ -2551,6 +2551,10 @@ export default {
             comment: temp_option.newComment,
             is_full: true,
             flow_data: this.flow_data,
+            object_text: {
+              subject: this.pplSubject,
+              message: this.pplBody
+            },
             others: {dataTableObjectArray : this.dataTableObjectArray, saveStep: ""}
           }
         )
