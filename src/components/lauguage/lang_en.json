@@ -877,7 +877,8 @@
     "notuploadingfiles": "Not allow to upload file name \"",
     "oversize": "\" because file size is over than 30MB.",
     "refuse":"Reject",
-    "approvee": "Approve"
+    "approvee": "Approve",
+    "Successfullycancel": "Cancel Success"
   },
   "DocumentReport": {
     "documentreport": "Document Report",

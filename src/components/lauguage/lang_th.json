@@ -877,7 +877,8 @@
     "notuploadingfiles": "ไม่อนุญาตให้อัปโหลดไฟล์ ",
     "oversize": " เนื่องจากมีขนาดเกิน 30 MB",
     "refuse":"ปฏิเสธ",
-    "approvee": "อนุมัติ"
+    "approvee": "อนุมัติ",
+    "Successfullycancel": "ยกเลิกเอกสารสำเร็จ"
   },
   "DocumentReport": {
     "documentreport": "รายงานเอกสาร",

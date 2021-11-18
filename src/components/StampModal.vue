@@ -46,7 +46,7 @@
             ></v-text-field>
           </v-col>
           </v-row>
-        <!--  <v-row class="s-stamp " >
+         <v-row class="s-stamp " v-if="stamp_type_value === 'juristic_person'">
             <v-col  cols="12" md="4" lg="4" class=" pl-0 m-stamp font-color-stamp  a-stamp" align-self="center">
             Stamp:
         </v-col>
@@ -58,6 +58,10 @@
           >
             <v-autocomplete class="m-stamp l-stamp"
               :placeholder="textLang.name"
+              :items="stampCAList"
+              item-text="stamp_name"
+              item-value="index"
+              v-model="stamp_ca_value"
               color="rgb(102, 101, 101)"
               outlined
               hide-details
@@ -65,7 +69,7 @@
               append-icon="mdi-chevron-down"
             ></v-autocomplete>
           </v-col>
-          </v-row> -->
+          </v-row>
       </v-card-text>
                 <v-card-actions class="pb-3 pt-2">
                   <v-row class="s-stamp">
@@ -112,7 +116,7 @@ export default {
       return [
         { text: this.textLang.current_date , value: 'current_date' },
         { text: this.textLang.text , value: 'stamp_text' },
-        // { text: this.textLang.juristic_person , value: 'juristic_person'}
+        { text: this.textLang.juristic_person , value: 'juristic_person'}
       ]
     }
   },
@@ -123,6 +127,8 @@ export default {
     //   { text: 'ข้อความ', value: 'stamp_text' },
     //   { text: 'นิติบุคคล', value: 'juristic_person' }],
     stamp_type_value: 'stamp_text',
+    stampCAList: [],
+    stamp_ca_value: 0
     // Language Variable
     // textLang: {
     //   message_stamp: 'ข้อความ Stamp',
@@ -141,17 +147,27 @@ export default {
   watch: {
     stamp_type_value () {
       this.message = ''
+      this.stamp_ca_value = 0
     }
   },
   methods: {
-    stamper () {
+    stamper (stampCAList) {
       this.dialog = true
       this.stamp_type_value = 'stamp_text'
+      this.stampCAList = stampCAList
     },
     addStamp () {
       if (this.stamp_type_value === 'current_date') {
         var date = new Date()
         this.message = new Intl.DateTimeFormat('th-TH', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Bangkok' }).format(date)
+      } else if (this.stamp_type_value === 'juristic_person') {
+        if (this.stampCAList[this.stamp_ca_value]) {
+          EventBus.$emit('getstamp', this.stampCAList[this.stamp_ca_value].base64)
+          this.dialog = false
+        }
+        return
+      } else if (this.stamp_type_value === 'stamp_text') {
+        if (!this.message) return
       }
       var tCtx = document.getElementById('textCanvas').getContext('2d')
       tCtx.canvas.width = tCtx.measureText(this.message).width
