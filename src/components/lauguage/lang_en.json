@@ -679,6 +679,7 @@
       "message": "Message:",
       "doc_type": "Paperless Document Type:",
       "doc_format": "Paperless Template:",
+      "doc_sender": "Sender",
       "add_attachments": "Attached File",
       "attached_file_placeholder": "Choose file",
       "please_choose": "Please select attached files",
