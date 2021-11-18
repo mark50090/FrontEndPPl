@@ -1,8 +1,15 @@
+# dev-test
 FROM node:lts-alpine as build-stage
-WORKDIR /app
-COPY package.json ./
+WORKDIR /tmp
+COPY package*.json ./
 RUN npm install
+
+WORKDIR /app
+RUN cp -a /tmp/node_modules /app
+
+# COPY ./custom_lib/pdfjs-dist /app/node_modules/pdfjs-dist
 COPY . .
+RUN cp -a ./custom_lib/pdfjs-dist /app/node_modules/
 RUN npm run build
 
 # production stage
