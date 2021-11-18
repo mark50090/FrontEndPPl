@@ -2510,6 +2510,17 @@ export default {
         this.optionsPage = opsPage
         var sizeTemp = [{}]
         var orientationTemp = [{}]
+        this.flow_data.forEach(e => {
+          if(!e.actor[0].permission.length && !e.permission_sender_status) {
+            var tempEmail = []
+            e.actor[0].permission_email.forEach(e2 => {
+              if(e2.thai_email) {
+                tempEmail.push(e2)
+              }
+            })
+            e.actor[0].permission_email = tempEmail
+          }
+        })
         for (var i = 1; i <= this.pageOrientation.length; i++) {
           sizeTemp[0][String(i)] = []
           var Okey = Object.keys(this.pageOrientation[i - 1])[0]
@@ -3636,7 +3647,7 @@ export default {
       var indexKeeper = []
       for(let i=0; i< flow_data.length; i++) {
         let flow_valid_count = 0
-        if(!flow_data[i].actor[0].permission.length) {
+        if(!flow_data[i].actor[0].permission.length && !flow_data[i].actor[0].permission_sender_status) {
           for(let j=0; j<flow_data[i].actor[0].permission_email.length; j++) {
             if(flow_data[i].actor[0].permission_email[j].thai_email) {
               flow_valid_count++
@@ -3650,6 +3661,14 @@ export default {
                 j_index: j
               })
             }
+          }
+          if(flow_valid_count < flow_data[i].sign_count) {
+            validEmail = false
+            flow_data[i].actor[0].permission_email.forEach(e => {
+              if(!e.thai_email) {
+                e.invalid = true
+              }
+            })
           }
           if(!flow_valid_count) {
             validEmail = false
