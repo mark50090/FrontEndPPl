@@ -4350,6 +4350,9 @@
           this.selected_object = this.dataDict[item.object_name].arrayIndex
       },
       initailDatabind(obj) {
+        if(obj.disable) {
+          return obj.value
+        }
         var item = obj.value.show
         var value = {isUser: true, show: item, isValued: false }
         // if(typeof obj.value.show_index === 'undefined') {
