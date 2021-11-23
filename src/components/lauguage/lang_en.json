@@ -793,7 +793,11 @@
         "reject_fail": "Reject incompletely. Please try again later.",
         "eform_use": "This E-Form is used by ",
         "upload_fail" : "Uplaoding file is incomplete. Please try again later."
-      }
+      },
+      "Successfullycancel": "Cancel Success",
+      "succeed": "Success",
+      "cantread": "Can not read PDF.",
+      "erroroccurred": "Something went wrong. Please try again later."
     }
   },
   "ApprovalList":{

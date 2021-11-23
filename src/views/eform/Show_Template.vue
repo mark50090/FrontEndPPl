@@ -18,7 +18,7 @@
         <v-icon>mdi-file-excel-outline</v-icon>
         <span class="btn-reject-doc save-draft-word">{{ textLang.tabMenubar.reject_doc }}</span>
       </v-btn>
-      <v-btn v-if="false" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
+      <v-btn  v-if="currentStep != '' && isOwner"  depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
         <v-icon>mdi-file-cancel-outline</v-icon>
         <span class="btn-cancel-doc">{{ textLang.tabMenubar.cancel_doc }}</span>
       </v-btn>
@@ -800,9 +800,9 @@
     <RefDocumentModal/>
     <AttachFileModal/>
     <RejectModal/>
-    <ConfirmCancelDocumentModal/>
     <AddAttachFileModal/>
     <PermissionTransferenceDocumentModal />
+    <showFormConfirmCancelDoc/>
     <!-- <SignaturePadModal/> -->
 
     <!-- Import Image Modal -->
@@ -917,9 +917,9 @@
   import RejectModal from '../../components/eform/RejectModal'
   import RefDocumentModal from '../../components/eform/RefDocumentModal'
   import Editor from '@tinymce/tinymce-vue'
-  import ConfirmCancelDocumentModal from '../../components/eform/ConfirmCancelDocumentModal'
   import AddAttachFileModal from '../../components/eform/AddAttachFileModal'
   import PermissionTransferenceDocumentModal from '../../components/eform/PermissionTransferenceDocumentModal'
+  import showFormConfirmCancelDoc from '../../components/ConfirmCancelDocModal.vue'
   import { mapState } from 'vuex'
   import moment from 'moment'
 
@@ -934,10 +934,10 @@
       AttachFileModal,
       RejectModal,
       RefDocumentModal,
-      ConfirmCancelDocumentModal,
       'editor': Editor,
       AddAttachFileModal,
-      PermissionTransferenceDocumentModal
+      PermissionTransferenceDocumentModal,
+      showFormConfirmCancelDoc
     },
     data: () => ({
       textLang: {
@@ -1268,6 +1268,7 @@
       EventBus.$off('changeAttachFiles')
       EventBus.$off('transferenceDone')
       EventBus.$off('removeAttachFiles')
+      EventBus.$off('cancelDoc')
       if(this.option.eform_id && !this.onSave && this.docReserved) {
         this.returnEform(this.option.eform_id)
       }
@@ -1326,6 +1327,7 @@
       EventBus.$on('changeAttachFiles', this.changeUploadingFiles)
       EventBus.$on('transferenceDone', this.transferenceDone)
       EventBus.$on('removeAttachFiles', this.removeAttachFiles)
+      EventBus.$on('cancelDoc', this.cancelDocument)
       this.changeLange()
     },
      watch: {
@@ -7686,8 +7688,62 @@
         EventBus.$emit('rejectDocument',eId)
       },
       openCancel() {
-        var tempOpt = this.option
-        EventBus.$emit('ConfirmCancelDoc',tempOpt)
+        var data = {
+          name: this.template_option.document_id,
+          isShowTemplate: true
+        }
+        EventBus.$emit('FormConfirmCancelDoc',data)
+      },
+      async cancelDocument (isOnShowTemplate) {
+        if(isOnShowTemplate) {
+          const data = {
+            document_id: this.template_option.document_id,
+            transaction_id: this.template_option.transaction_id,
+            tracking: ""
+          }
+          const url = '/transaction/api/v1/deltransaction'
+          const config = {
+            headers: {
+              Authorization: `Bearer ${this.token}`
+            }
+          }
+          this.axios_pending++
+          this.axios.put(`${this.$api_url}${url}`, data, config)
+            .then((response) => {
+              console.log(response)
+              this.$router.replace({ name: 'inbox' })
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.succeed + '</strong>',
+                text: this.textLang.Successfullycancel,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            })
+            .catch((error) => {
+              if (error.response) {
+                const errResponse = error.response.data
+                if (errResponse.message === 'error read pdf') {
+                  this.error_swal_fn(this.textLang.cantread)
+                } else {
+                  this.error_swal_fn(errResponse.message || this.textLang.erroroccurred)
+                }
+                this.$router.replace({ name: 'inbox' })
+              }
+            })
+            .then(() => {
+              this.axios_pending--
+            })
+        }
       },
       async summitReject(detail) {
         try {
