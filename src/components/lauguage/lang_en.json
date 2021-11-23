@@ -912,6 +912,8 @@
     "rejectapproval":"Rejected",
     "pending":"Incoming",
     "cancel_status": "Cancel",
+    "date_filter_title": "Date Range",
+    "join_date_text": " to ",
     "inboxheader":{
       "sender":"Sender",
       "type":"Workflow Type",

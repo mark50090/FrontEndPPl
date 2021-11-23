@@ -912,6 +912,8 @@
     "rejectapproval":"ปฏิเสธอนุมัติ",
     "pending":"รอดำเนินการ",
     "cancel_status": "ยกเลิก",
+    "date_filter_title": "ช่วงวันที่",
+    "join_date_text": " ถึง ",
     "inboxheader":{
       "sender":"ผู้ส่ง",
       "type":"ประเภท",
