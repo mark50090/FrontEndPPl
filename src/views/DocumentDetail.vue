@@ -772,54 +772,56 @@ export default {
           this.axios_pending--
         })
     },
-    async cancel_doc_fn () {
-      const data = {
-        document_id: this.doc_details.doc_id,
-        transaction_id: this.doc_details.transaction_id,
-        tracking: this.doc_details.tracking
-      }
-      const url = '/transaction/api/v1/deltransaction'
-      const config = {
-        headers: {
-          Authorization: `Bearer ${this.token}`
+    async cancel_doc_fn (isOnShowTemplate) {
+      if(!isOnShowTemplate) {
+        const data = {
+          document_id: this.doc_details.doc_id,
+          transaction_id: this.doc_details.transaction_id,
+          tracking: this.doc_details.tracking
         }
-      }
-      this.axios_pending++
-      this.axios.put(`${this.$api_url}${url}`, data, config)
-        .then((response) => {
-          console.log(response)
-          this.$router.replace({ name: 'inbox' })
-          this.$swal({
-            backdrop: false,
-            position: 'bottom-end',
-            width: '330px',
-            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.succeed + '</strong>',
-            text: this.textLang.Successfullycancel,
-            showCloseButton: true,
-            showConfirmButton: false,
-            timer: 5000,
-            customClass: {
-              popup: 'alert-card',
-              title: 'alert-title-block',
-              closeButton: 'close-alert-btn',
-              htmlContainer: 'alert-text-block'
+        const url = '/transaction/api/v1/deltransaction'
+        const config = {
+          headers: {
+            Authorization: `Bearer ${this.token}`
+          }
+        }
+        this.axios_pending++
+        this.axios.put(`${this.$api_url}${url}`, data, config)
+          .then((response) => {
+            console.log(response)
+            this.$router.replace({ name: 'inbox' })
+            this.$swal({
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.succeed + '</strong>',
+              text: this.textLang.Successfullycancel,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 5000,
+              customClass: {
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
+            })
+          })
+          .catch((error) => {
+            if (error.response) {
+              const errResponse = error.response.data
+              if (errResponse.message === 'error read pdf') {
+                this.error_swal_fn(this.textLang.cantread)
+              } else {
+                this.error_swal_fn(errResponse.message || this.textLang.erroroccurred)
+              }
+              this.$router.replace({ name: 'inbox' })
             }
           })
-        })
-        .catch((error) => {
-          if (error.response) {
-            const errResponse = error.response.data
-            if (errResponse.message === 'error read pdf') {
-              this.error_swal_fn(this.textLang.cantread)
-            } else {
-              this.error_swal_fn(errResponse.message || this.textLang.erroroccurred)
-            }
-            this.$router.replace({ name: 'inbox' })
-          }
-        })
-        .then(() => {
-          this.axios_pending--
-        })
+          .then(() => {
+            this.axios_pending--
+          })
+      }
     },
     async upload_attachment () {
       const url = '/file-component/api/saveFile'
