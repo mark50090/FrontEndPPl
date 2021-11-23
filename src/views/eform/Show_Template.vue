@@ -7929,26 +7929,26 @@
             if(this.cellUpload) {
               this.dataTableObjectArray[this.cellUpload].value = data.url[0].url
               this.dataTableObjectArray[this.cellUpload].show_value = data.url[0].url
-              let img = new Image()
-              img.src = data.url[0].url
-              img.onload = () => {
-                if(img.width > img.height) {
-                  this.dataTableObjectArray[this.cellUpload].style.image_width = String(this.cellSize.width) + "px"
-                  this.dataTableObjectArray[this.cellUpload].style.image_height = "auto"
-                } else if(img.width == img.height) {
-                  if(this.cellSize.width < this.cellSize.height) {
-                    this.dataTableObjectArray[this.cellUpload].style.image_width = String(this.cellSize.width) + "px"
-                    this.dataTableObjectArray[this.cellUpload].style.image_height = "auto"
-                  } else {
-                    this.dataTableObjectArray[this.cellUpload].style.image_width = "auto"
-                    this.dataTableObjectArray[this.cellUpload].style.image_height = String(this.cellSize.height) + "px"
-                  }
+              // let img = new Image()
+              // img.src = data.url[0].url
+              // img.onload = () => {
+              //   if(img.width > img.height) {
+              //     this.dataTableObjectArray[this.cellUpload].style.image_width = String(this.cellSize.width) + "px"
+              //     this.dataTableObjectArray[this.cellUpload].style.image_height = "auto"
+              //   } else if(img.width == img.height) {
+              //     if(this.cellSize.width < this.cellSize.height) {
+              //       this.dataTableObjectArray[this.cellUpload].style.image_width = String(this.cellSize.width) + "px"
+              //       this.dataTableObjectArray[this.cellUpload].style.image_height = "auto"
+              //     } else {
+              //       this.dataTableObjectArray[this.cellUpload].style.image_width = "auto"
+              //       this.dataTableObjectArray[this.cellUpload].style.image_height = String(this.cellSize.height) + "px"
+              //     }
                   
-                } else {
-                  this.dataTableObjectArray[this.cellUpload].style.image_width = "auto"
-                  this.dataTableObjectArray[this.cellUpload].style.image_height = String(this.cellSize.height) + "px"
-                }
-              }
+              //   } else {
+              //     this.dataTableObjectArray[this.cellUpload].style.image_width = "auto"
+              //     this.dataTableObjectArray[this.cellUpload].style.image_height = String(this.cellSize.height) + "px"
+              //   }
+              // }
             } else {
               this.objectArray[this.selected_array][this.selected_object].value = data.url[0].url
             }
@@ -7968,7 +7968,7 @@
               width: cellWidth,
               height: cellHeight
             }
-            this.dataTableObjectArray[obj.object_name].style.image_width = "auto"
+            this.dataTableObjectArray[obj.object_name].style.image_width = String(cellWidth) + "px"
             this.dataTableObjectArray[obj.object_name].style.image_height = String(cellHeight) + "px"
             this.dialogImageUpload = true
             this.cellUpload = obj.object_name

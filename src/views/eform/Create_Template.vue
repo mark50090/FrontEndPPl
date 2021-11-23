@@ -5906,7 +5906,7 @@ export default {
         } else if(type == 'inputimagebox') {
           this.custom_cell_permission = true
           if(!this.dataTableObjectArray[obj.object_name].value) {
-            this.openUploadImage(this.dataTableObjectArray[obj.object_name], row)
+            this.openUploadImage(this.dataTableObjectArray[obj.object_name], row, col)
           }
          
           this.help_message = this.textLang.tips_help_message.picture_box
@@ -8119,7 +8119,7 @@ export default {
         this.objectArray[this.selected_array][this.selected_object].style.alterChoices = choiceDict
       }
     },
-    openUploadImage(obj, row) {
+    openUploadImage(obj, row, col) {
       if(obj.object_name == this.objectArray[this.selected_array][this.selected_object].object_name) {
         if(parseFloat(obj.width) > parseFloat(obj.height)) {
           this.objectArray[this.selected_array][this.selected_object].style.image_width = "auto"
@@ -8131,7 +8131,8 @@ export default {
         this.dialogImageUpload = true
       } else if(obj.object_name.startsWith('datatable')) {
         var cellHeight = this.objectArray[this.selected_array][this.selected_object].style.table.rowsize[Number(row) - 1].size
-        this.dataTableObjectArray[obj.object_name].style.image_width = "auto"
+        var cellWidth = this.objectArray[this.selected_array][this.selected_object].style.table.colsize[Number(col) - 1].size
+        this.dataTableObjectArray[obj.object_name].style.image_width = String(cellWidth) + "px"
         this.dataTableObjectArray[obj.object_name].style.image_height = String(cellHeight) + "px"
         this.dialogImageUpload = true
       }
