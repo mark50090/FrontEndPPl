@@ -158,14 +158,14 @@
                       <!-- <span class="create-setting-title">การเงินและธุรการ</span> --> <!-- when it has only one department -->
                     </v-col>
                   </v-row>
-                  <!-- <v-row class="create-row">
+                  <v-row class="create-row" v-if="is_password">
                     <v-col cols="5" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-5 pb-0 create-setting-title">
                       {{ textLang.pdf_password_title }} :
                     </v-col>
                     <v-col cols="7" md="8" lg="8" class="px-0 pb-0">
-                      <v-text-field dense outlined color="#4caf50" :rules="[() => !!pdf_password || textLang.alert_pdf_password]" v-model="pdf_password" class="create-setting create-setting-input message-pdf-password"></v-text-field>
+                      <v-text-field dense outlined color="#4caf50" :rules="[() => !!pdf_password || textLang.alert_pdf_password]" v-model="pdf_password" :error="pdf_password == ''" class="create-setting create-setting-input message-pdf-password"></v-text-field>
                     </v-col>
-                  </v-row> -->
+                  </v-row>
                   <v-card outlined class="mt-4 px-2 pb-2 workflow-block">
                     <template  v-for="flow_data in flow_datas" >
                       <v-row class="create-row" :key="flow_data.index">
@@ -220,6 +220,17 @@
                           </v-col>
                         </v-row>
                       </template>
+                      <template v-else-if="flow_data.actor[0].permission_sender_status">
+                        <v-row class="create-row each-step-mail-row" v-for="actor_sender in flow_data.actor[0].permission_sender"> <!-- each email row in step -->
+                          <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0">
+                            <v-text-field dense outlined hide-details readonly filled disabled color="#67C25D" placeholder="ผู้ส่งเอกสาร" class="create-setting email-step-box each-email-icon">
+                              <template v-slot:prepend>
+                                <v-icon large>mdi-account</v-icon>
+                              </template>
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                      </template>
                     </template>
                   </v-card>
                 </v-tab-item>
@@ -249,14 +260,14 @@
                       <v-switch inset hide-details v-model="switchStamp" class="mt-0 create-setting-switch"></v-switch>
                     </v-col>
                   </v-row> -->
-                  <!-- <v-row class="create-row">
+                  <v-row class="create-row">
                     <v-col cols="12" md="4" lg="4" align-self="start" class="pl-2 pt-6 pb-0 create-setting-title">
                       {{ textLang.pdf_password_title }} :
                     </v-col>
                     <v-col cols="12" md="8" lg="8" align-self="center" class="pr-0 pt-4 pb-0 create-attach-file-block">
-                      <v-text-field dense outlined persistent-hint color="#4caf50" hint="optional" class="create-setting create-setting-input"></v-text-field>
+                      <v-text-field v-model='pdf_password_custom' @input="inputPassword()" dense outlined persistent-hint color="#4caf50" hint="optional" class="create-setting create-setting-input"></v-text-field>
                     </v-col>
-                  </v-row> -->
+                  </v-row>
                   <v-row justify="center" class="create-row">
                     <v-col cols="5" md="4" lg="4" class="pl-0 pr-1 pb-2">
                       <v-btn small block color="#67C25D" :disabled="!selected_document_type_custom" @click="addPersonApprove" class="add-step-btn">
@@ -365,7 +376,7 @@
           </v-card>
           <v-row v-if="(create_tab == 1) || (create_tab == 2)" justify="end" class="create-row">
             <v-col cols="auto" md="auto" lg="auto" class="pt-1">
-              <v-btn depressed color="#67C25D" :disabled="(!selected_document_template) && (!selected_document_type_custom) || !isFormValid" class="send-doc-btn" @click="getDetailbyEmail">{{textLang.senddocuments}}</v-btn>
+              <v-btn depressed color="#67C25D" :disabled="(!selected_document_template) && (!selected_document_type_custom) || !isFormValid || !uploadedFile" class="send-doc-btn" @click="getDetailbyEmail">{{textLang.senddocuments}}</v-btn>
             </v-col>
           </v-row>
         </v-col>
@@ -418,6 +429,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       selected_document_template: '',
       document_template_list: [],
       pdf_password: '',
+      pdf_password_custom: '',
       actionOrder: 1,
       action: '',
       flow_datas: [],
@@ -441,7 +453,9 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       documentName: '',
       documentComment: '',
       attachedFile: [],
-      actor_email: []
+      actor_email: [],
+      is_password: false,
+      is_password_custom: false
     }),
     mounted() {
       this.getDocumentType()
@@ -531,6 +545,10 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.pdf_src = undefined
         this.signArray = []
         this.flow_datas_custom = []
+        this.flow_datas = []
+        this.selected_document_template = ''
+        this.selected_document_type = ''
+        this.is_password = false
         this.isDirty = false
       },
       async getDocumentType(){
@@ -583,6 +601,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             var url = `/flowdata/api/v1/get1/?_id=${this.selected_document_template._id}&tax_id=${tax_id}`
             var {data} = await this.axios.get(this.$api_url + url)
             if(data.status){
+              if (data.data.is_password) this.is_password = true
+              else this.is_password = false
               for (let index = 0; index < this.page_count; index++) {
                 this.pdf_page_list.push({text:index+1,value:index+1})
               }
@@ -613,6 +633,10 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         }
         this.emitLoading(false)
       },
+      inputPassword(){
+        if(this.pdf_password_custom != '') this.is_password_custom = true
+        else this.is_password_custom = false
+      },
       async uploadFiles() {
       let formData = new FormData()
       this.attachedFile.forEach(e => {
@@ -641,9 +665,13 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.actor_email = []
         if(this.create_tab == 1){
           this.flow_datas.forEach(ele => {
-            ele.actor[0].permission_email.forEach(el => {
-              this.actor_email.push(el.thai_email)
-            })
+            if(!ele.actor[0].permission_email.thai_email){
+              return
+            }else{
+              ele.actor[0].permission_email.forEach(el => {
+                this.actor_email.push(el.thai_email)
+              })
+            }
           })
         }else{
           this.flow_datas_custom.forEach((ele) => {
@@ -859,6 +887,53 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                   "status": "W",
                   "index": xyz.index
                 }
+              }else if(xyz.actor[0].permission_sender_status){
+                return{
+                  "actor": [
+                    {
+                      "permission_status": false,
+                      "permission": [],
+                      "permission_email_status": false,
+                      "permission_email": [],
+                      "permission_sender_status": true,
+                      "permission_sender":{
+                        "account_id": null,
+                        "account_title_eng": null,
+                        "account_title_th": null,
+                        "first_name_eng": null,
+                        "first_name_th": null,
+                        "last_name_eng": null,
+                        "last_name_th": null,
+                        "thai_email": null
+                      }
+                    }
+                  ],
+                  "approver": {
+                    "account_id": null,
+                    "first_name_th": null,
+                    "last_name_th": null,
+                    "first_name_eng": null,
+                    "last_name_eng": null,
+                    "account_title_th": null,
+                    "account_title_eng": null,
+                    "thai_email": null,
+                    "detp_id": null,
+                    "role_id": null,
+                    "dept_name": null,
+                    "role_name": null,
+                    "status": "Incomplete",
+                    "sign_position": xyz.action=='Sign'? {
+                      "sign_llx": xyz.approver.sign_position.sign_llx,
+                      "sign_lly": xyz.approver.sign_position.sign_lly,
+                      "sign_urx": xyz.approver.sign_position.sign_urx,
+                      "sign_ury": xyz.approver.sign_position.sign_ury,
+                      "sign_page": this.switchStamp == true? 'all': xyz.approver.sign_position.sign_page
+                    }: undefined
+                  },
+                  "action": xyz.switch_ca == true && xyz.action == 'Sign'? 'Sign-Ca' : xyz.action,
+                  "status": "W",
+                  "index": xyz.index,
+                }
               }
             })
             if(this.isDirty){
@@ -872,6 +947,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                   subject : this.documentName, //ชื่อไฟล์
                   message : this.documentComment //ข้อความ
                 },
+                is_password : this.is_password,
+                password: this.pdf_password,
               }
             }else{
               var body = {
@@ -882,6 +959,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                   subject : this.documentName, //ชื่อไฟล์
                   message : this.documentComment //ข้อความ
                 },
+                is_password : this.is_password,
+                password: this.pdf_password,
               }
             }
           }else if(this.create_tab == 2){
@@ -1007,7 +1086,9 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                 message : this.documentComment //ข้อความ
               },
               pdfbase: this.pdf_src.slice(28),
-              business: JSON.parse(sessionStorage.getItem('selected_business'))
+              business: JSON.parse(sessionStorage.getItem('selected_business')),
+              is_password: this.is_password_custom,
+              password: this.pdf_password_custom,
             })
           }
           if(data.status){
@@ -1141,6 +1222,9 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.flow_datas = []
         this.selected_document_template = ''
         this.isDirty = false
+        this.is_password = false
+        this.pdf_password_custom = ''
+        this.pdf_password = ''
       },
       addPersonSign(){
         var index = this.flow_datas_custom.length
