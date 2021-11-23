@@ -188,7 +188,7 @@
                                 <v-icon large>mdi-account</v-icon>
                               </template>
                             </v-text-field>
-                            <!-- <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="" placeholder="e-mail" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon">
+                            <!-- <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-magnify" placeholder="e-mail" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon">
                               <template v-slot:prepend>
                                 <v-icon large>mdi-account</v-icon>
                               </template>
@@ -343,7 +343,7 @@
                               <v-icon large>mdi-account</v-icon>
                             </template>
                           </v-text-field>
-                          <!-- <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="" placeholder="e-mail" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon">
+                          <!-- <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-magnify" placeholder="e-mail" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon">
                             <template v-slot:prepend>
                               <v-icon large>mdi-account</v-icon>
                             </template>
@@ -1565,6 +1565,10 @@ import VueDraggableResizable from 'vue-draggable-resizable'
   .email-step-box.v-text-field.v-text-field--enclosed:not(.v-text-field--rounded) > .v-input__control > .v-input__slot {
     padding-left: 2% !important;
     padding-right: 0% !important;
+  }
+
+  .email-search-icon.v-select.v-select--is-menu-active .v-input__icon--append .v-icon {
+    transform: none !important;
   }
 
   .onechat-check {
