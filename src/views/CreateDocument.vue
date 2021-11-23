@@ -665,7 +665,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.actor_email = []
         if(this.create_tab == 1){
           this.flow_datas.forEach(ele => {
-            if(!ele.actor[0].permission_email.thai_email){
+            if(!ele.actor[0].permission_email[0].thai_email){
               return
             }else{
               ele.actor[0].permission_email.forEach(el => {
