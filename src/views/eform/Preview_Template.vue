@@ -342,13 +342,13 @@
               <v-text-field outlined dense class="title-name-paperless-value paperless-input-line" color="#4CAF50" v-model="pplSubject" :error="name_ppl_error" :error-messages="error_file_name_ppl_msg"></v-text-field>
             </v-col>
           </v-row>
-          <!-- <v-row class="mt-0 save-doc-row">
+          <v-row class="mt-0 save-doc-row" v-if="isPassword">
             <v-col cols="12" md="4" lg="4" align-self="start" class="pl-0 pt-2 title-name-paperless">{{ textLang.offer_dialog.password_setting }}</v-col>
             <v-col cols="12" md="8" lg="8" class="px-0 py-0">
               <v-text-field dense outlined color="#4CAF50" v-model="pdfPasswordSetting" :error="pdf_setting_error" :error-messages="error_pdf_setting_password" class="title-name-paperless-value paperless-input-line error-messages-set"></v-text-field>
             </v-col>
-          </v-row> -->
-          <v-row class="mt-0 save-doc-row">
+          </v-row>
+          <v-row class="mt-0 save-doc-row" >
             <v-col cols="12" md="4" lg="4" class="pl-0 pt-0 title-name-paperless">{{ textLang.offer_dialog.message }}</v-col>
             <v-col cols="12" md="8" lg="8" class="px-0 pt-0">
               <v-textarea outlined dense hide-details no-resize rows="6" color="#4CAF50" class="pad-textarea message-paperless-row title-name-paperless-value" v-model="pplBody"></v-textarea>
@@ -659,6 +659,7 @@ export default {
     option: {},
     contTableArray: [],
     flow_data: [],
+    isPassword: false,
     signNoFlow: false,
     noFlowSignPic: "",
     thenOpenPpl: false,
@@ -1257,6 +1258,7 @@ export default {
             var {data} = await this.axios.get(this.$api_url + url)
             if(data.status){
               this.flow_data = data.data.flow_data
+              this.isPassword = data.data.is_password
               console.log(data.data)
             }
           }
@@ -2551,6 +2553,8 @@ export default {
             comment: temp_option.newComment,
             is_full: true,
             flow_data: this.flow_data,
+            is_password: this.isPassword,
+            password: this.pdfPasswordSetting,
             object_text: {
               subject: this.pplSubject,
               message: this.pplBody
