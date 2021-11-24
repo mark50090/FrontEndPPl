@@ -143,7 +143,7 @@
                   </v-row>
                   <v-row class="create-row">
                     <v-col cols="5" md="4" lg="4" align-self="center" class="pl-2 pb-0 create-setting-title">
-                      {{textLang.documentformat}} :
+                      {{textLang.documentformat}} : 
                     </v-col>
                     <v-col cols="7" md="8" lg="8" class="px-0 pb-0">
                       <v-autocomplete  :no-data-text="loading_list_text" :loading="loading_template" v-model="selected_document_template" :items="document_template_list" item-text="name" item-value="_id" return-object @change="getFlowData" dense outlined hide-details auto-select-first color="#4caf50" :placeholder="textLang.choose" append-icon="mdi-chevron-down" :disabled="false" :filled="false" class="create-setting create-setting-input email-step-box create-setting-dropdown-icon"></v-autocomplete>
@@ -183,16 +183,17 @@
                       <template v-if="flow_data.actor[0].permission_email_status">
                         <v-row class="create-row each-step-mail-row" v-for="(actor_email,index) in flow_data.actor[0].permission_email" :key="flow_data.index + actor_email.account_id"> <!-- each email row in step -->
                           <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0">
-                            <v-text-field dense outlined hide-details color="#67C25D" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" placeholder="@one.th" class="create-setting email-step-box each-email-icon" @change="isDirty = true">
+                            <!-- <v-text-field dense outlined hide-details color="#67C25D" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" placeholder="@one.th" class="create-setting email-step-box each-email-icon" @change="isDirty = true">
                               <template v-slot:prepend>
                                 <v-icon large>mdi-account</v-icon>
                               </template>
-                            </v-text-field>
-                            <!-- <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-magnify" placeholder="e-mail" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon">
-                              <template v-slot:prepend>
-                                <v-icon large>mdi-account</v-icon>
-                              </template>
-                            </v-combobox> -->
+                            </v-text-field> -->
+                            <v-combobox dense outlined hide-details  color="#67C25D" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" append-icon="mdi-magnify" @click:append="search_citizen()" placeholder="@one.th" class="create-setting email-step-box each-email-icon email-search-icon" @keyup.enter="search_citizen()" @keyup="getEmail=[]" :items="getEmail" @change="isDirty = true" >
+                              <li v-model="findIndexArray=index"></li>
+                                <template v-slot:prepend>
+                                  <v-icon large>mdi-account</v-icon>
+                                </template>
+                            </v-combobox>
                           </v-col>
                           <!-- <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
                             <v-checkbox hide-details label="OneChat" v-model="actor_email.checkbox" checked class="mt-0 pt-0 onechat-check"></v-checkbox>
@@ -338,16 +339,17 @@
                       </v-row>
                       <v-row class="create-row each-step-mail-row" v-for="(actor_email,index) in flow_data_custom.actor.permission_email" :key="flow_data_custom.index + actor_email.id"> <!-- each email row in step -->
                         <v-col cols="9" md="10" lg="10" class="px-0 pt-1 each-email-step-block">
-                          <v-text-field dense outlined hide-details color="#67C25D" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon">
+                          <!-- <v-text-field dense outlined hide-details color="#67C25D" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon">
                             <template v-slot:prepend>
                               <v-icon large>mdi-account</v-icon>
                             </template>
-                          </v-text-field>
-                          <!-- <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-magnify" placeholder="e-mail" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon">
-                            <template v-slot:prepend>
-                              <v-icon large>mdi-account</v-icon>
-                            </template>
-                          </v-combobox> -->
+                          </v-text-field> -->
+                          <v-combobox dense outlined hide-details color="#67C25D" append-icon="mdi-magnify" @click:append="search_citizen_custom()" @keyup.enter="search_citizen_custom()" @keyup="getEmail=[]" :items="getEmail" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon">
+                            <li v-model="findIndexArray=index"></li>
+                              <template v-slot:prepend>
+                                <v-icon large>mdi-account</v-icon>
+                              </template>
+                          </v-combobox>
                         </v-col>
                         <!-- <v-col cols="5" md="5" lg="5" align-self="center" class="pa-0">
                           <v-row class="create-row ">
@@ -455,7 +457,9 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       attachedFile: [],
       actor_email: [],
       is_password: false,
-      is_password_custom: false
+      is_password_custom: false,
+      getEmail: [],
+      findIndexArray:''
     }),
     mounted() {
       this.getDocumentType()
@@ -657,10 +661,10 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         } else {
             
         }
-      } catch (error) {
-        console.log(error);
-      }
-    },
+        } catch (error) {
+          console.log(error);
+        }
+      },
       async getDetailbyEmail(){
         this.actor_email = []
         if(this.create_tab == 1){
@@ -670,10 +674,12 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             }else{
               ele.actor[0].permission_email.forEach(el => {
                 this.actor_email.push(el.thai_email)
+                console.log(el.thai_email)
               })
             }
           })
         }else{
+          console.log(this.flow_datas_custom)
           this.flow_datas_custom.forEach((ele) => {
             ele.actor.permission_email.forEach(el => {
               this.actor_email.push(el.thai_email)
@@ -1387,6 +1393,63 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         sign.sign_box_width = (clientWidth*urx)
 
         this.$set(this.signArray,arr_index,sign)
+      },
+      async search_citizen() {
+        this.actor_email = []
+        let searchEmail = []
+        this.flow_datas.forEach(ele => {
+          ele.actor[0].permission_email.forEach(el => {
+            searchEmail.push(el.thai_email)
+          })
+        })
+        searchEmail = searchEmail[this.findIndexArray]
+        searchEmail = searchEmail.trim()
+        console.log("searchEmail",searchEmail)
+        try {
+          this.getEmail = []
+          var url = `/citizen/api/v1/search_citizen`
+          var {data} = await this.axios.post(this.$api_url + url, {keyword: searchEmail} )
+          if(data.status) {
+            let getEmail = data.result
+            for (let index = 0; index < getEmail.length; index++) {
+              this.getEmail.push(getEmail[index].citizen_data.thai_email)
+            }
+          }
+          searchEmail = []
+          console.log("getEmail",this.getEmail)
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async search_citizen_custom() {
+        this.actor_email = []
+        let searchEmail = []
+        console.log(this.flow_datas_custom)
+        this.flow_datas_custom.forEach(ele => {
+          ele.actor.permission_email.forEach(el => {
+            searchEmail.push(el.thai_email)
+          })
+        })
+        console.log("searchEmail",searchEmail)
+        searchEmail = searchEmail[this.findIndexArray]
+        searchEmail = searchEmail.trim()
+        console.log("findIndexArray",this.findIndexArray)
+        // console.log("searchEmail",this.searchEmail)
+        try {
+          this.getEmail = []
+          var url = `/citizen/api/v1/search_citizen`
+          var {data} = await this.axios.post(this.$api_url + url, {keyword: searchEmail} )
+          if(data.status) {
+            let getEmail = data.result
+            for (let index = 0; index < getEmail.length; index++) {
+              this.getEmail.push(getEmail[index].citizen_data.thai_email)
+            }
+          }
+          searchEmail = []
+          console.log("getEmail",this.getEmail)
+        } catch (error) {
+          console.log(error);
+        }
       },
     }
   }
