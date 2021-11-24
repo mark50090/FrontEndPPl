@@ -263,7 +263,7 @@
                           <span v-if="!item_name.approved && item.status == 'W' && !is_reject" class="wait-user-approve-status">{{textLang.pendingapproval}}</span> <!-- wait for approve status -->
                           <span v-if="item_name.approved == 'Y'" class="approved-status">{{textLang.approved}}</span> <!-- approved status -->
                           <span v-if="item_name.approved == 'R'" class="deny-status">{{textLang.rejectapproval}}</span> <!-- deny status -->
-                          <span v-if="item.status == 'C'" class="cancel-status">{{ textLang.cancel_status }}</span> <!-- cancel status -->
+                          <span v-if="item.status == 'C' && !item_name.approved" class="cancel-status">{{ textLang.cancel_status }}</span> <!-- cancel status -->
                         </v-col>
                         <v-col v-if="item_name.approved && (item_name.approved == 'Y' || item_name.approved == 'R')" cols="12" md="4" lg="4" align-self="start" class="pl-2 pr-1 pt-0 pb-1 time-approve-block"> <!-- show when status is approved or deny -->
                           <v-icon small color="black" class="pr-1">mdi-timer-outline</v-icon>
