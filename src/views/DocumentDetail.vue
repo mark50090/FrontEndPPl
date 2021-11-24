@@ -419,6 +419,7 @@
     <DeleteMessage/>
     <showFormDeleteAttach/>
     <showFormConfirmCancelDoc/>
+    <PassPdf/>
   </div>
 </template>
 
@@ -434,6 +435,7 @@ import showFormReturn from '../components/ReturnCorrection'
 import DeleteMessage from '../components/DeleteMessage'
 import showFormDeleteAttach from '../components/ConfirmDeleteAttachFileModal.vue'
 import showFormConfirmCancelDoc from '../components/ConfirmCancelDocModal.vue'
+import PassPdf from '../components/PassPdf.vue'
 export default {
   computed: {
     textLang () {
@@ -450,7 +452,8 @@ export default {
     showFormReturn,
     DeleteMessage,
     showFormDeleteAttach,
-    showFormConfirmCancelDoc
+    showFormConfirmCancelDoc,
+    PassPdf
   },
   data: () => ({
     document_detail_tab: null,
