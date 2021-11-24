@@ -221,7 +221,7 @@
                         </v-row>
                       </template>
                       <template v-else-if="flow_data.actor[0].permission_sender_status">
-                        <v-row class="create-row each-step-mail-row" v-for="actor_sender in flow_data.actor[0].permission_sender"> <!-- each email row in step -->
+                        <v-row class="create-row each-step-mail-row" v-for="actor_sender in flow_data.actor[0].permission_sender" :key="actor_sender.account_id"> <!-- each email row in step -->
                           <v-col cols="9" md="10" lg="10" class="px-0 pt-1 pb-0">
                             <v-text-field dense outlined hide-details readonly filled disabled color="#67C25D" placeholder="ผู้ส่งเอกสาร" class="create-setting email-step-box each-email-icon">
                               <template v-slot:prepend>
@@ -598,7 +598,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         try {
           if(this.selected_document_template){
             var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
-            var url = `/flowdata/api/v1/get1/?_id=${this.selected_document_template._id}&tax_id=${tax_id}`
+            var url = `/flowdata/api/v1/get1/?_id=${this.selected_document_template._id}&tax_id=${tax_id}&no_base=true`
             var {data} = await this.axios.get(this.$api_url + url)
             if(data.status){
               if (data.data.is_password) this.is_password = true

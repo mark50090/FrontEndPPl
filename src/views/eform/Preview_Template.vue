@@ -731,7 +731,7 @@ export default {
     }
     this.currentStep = Number(sessionStorage.getItem('current_step'))
     this.getData()
-    this.getLocation()
+    // this.getLocation()
     this.getFlowData()
     this.currentUser = sessionStorage.getItem("oneuser")
     if (sessionStorage.getItem("all_user_step")) {
@@ -1254,12 +1254,11 @@ export default {
         try {
           if(JSON.parse(sessionStorage.getItem('template_option')).flow_id){
             var tax_id = JSON.parse(sessionStorage.getItem('template_option')).tax_id
-            var url = `/flowdata/api/v1/get1/?_id=${JSON.parse(sessionStorage.getItem('template_option')).flow_id}&tax_id=${tax_id}`
+            var url = `/flowdata/api/v1/get1/?_id=${JSON.parse(sessionStorage.getItem('template_option')).flow_id}&tax_id=${tax_id}&no_base=true`
             var {data} = await this.axios.get(this.$api_url + url)
             if(data.status){
               this.flow_data = data.data.flow_data
               this.isPassword = data.data.is_password
-              console.log(data.data)
             }
           }
         } catch (error) {
@@ -1498,20 +1497,29 @@ export default {
     },
     async changeConTable(checkObj) {
       try {
-         var contTable = this.template_array.find(item => item.object_name == checkObj.style.contTable)
-        if(contTable) {
-          var indx = this.template_array.indexOf(contTable)
-          var element = document.getElementsByClassName(checkObj.name + "-obj")[0]
-          var rect = element.getBoundingClientRect()
-          var element2 = document.getElementById(this.template_array[indx].name)
-          var paper = document.getElementById("workpaper")
-          var paperRect = paper.getBoundingClientRect()
-          this.template_array[indx].top = checkObj.top + rect.height - 1
-          element2.style.top = String(checkObj.top + rect.height - 1) + "px"
-          if(contTable.style.contTable && contTable.style.contTable != checkObj.object_name) {
-            await this.changeConTable(contTable)
+        var contTableArray = []
+        if(checkObj.style.contTable.includes(",")) {
+          contTableArray = checkObj.style.contTable.split(",")
+        } else {
+          contTableArray.push(checkObj.style.contTable)
+        }
+        for(let i=0; i<contTableArray.length; i++) {
+          let contTable = this.template_array.find(item => item.object_name == contTableArray[i])
+          if(contTable) {
+            let indx = this.template_array.indexOf(contTable)
+            let element = document.getElementsByClassName(checkObj.name + "-obj")[0]
+            let rect = element.getBoundingClientRect()
+            let element2 = document.getElementById(this.template_array[indx].name)
+            let paper = document.getElementById("workpaper")
+            let paperRect = paper.getBoundingClientRect()
+            this.template_array[indx].top = checkObj.top + rect.height - 1
+            element2.style.top = String(checkObj.top + rect.height - 1) + "px"
+            if(contTable.style.contTable && contTable.style.contTable != checkObj.object_name) {
+              await this.changeConTable(contTable)
+            }
           }
         }
+        
       } catch(e) {
         console.log(e)
       }
@@ -2534,6 +2542,10 @@ export default {
         } else if (temp_option.description) {
           description = temp_option.description
         }
+        let isSkipFirstStep = false
+        if(sessionStorage.getItem('isSkipFirstStep') == 'true') {
+          isSkipFirstStep = true
+        }
         // this.template_array
         var url = this.$api_url + '/template_form/api/v1/create_template_form'
         var data = {}
@@ -2555,6 +2567,8 @@ export default {
             flow_data: this.flow_data,
             is_password: this.isPassword,
             password: this.pdfPasswordSetting,
+            is_skip_first_step: isSkipFirstStep,
+            is_draft: this.isSaveDraft,
             object_text: {
               subject: this.pplSubject,
               message: this.pplBody
