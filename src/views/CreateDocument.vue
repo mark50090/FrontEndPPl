@@ -188,7 +188,7 @@
                                 <v-icon large>mdi-account</v-icon>
                               </template>
                             </v-text-field> -->
-                            <v-combobox dense outlined hide-details auto-select-first color="#67C25D" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" @input.native="actor_email.thai_email=$event.srcElement.value" append-icon="mdi-magnify" @click:append="search_citizen(actor_email.thai_email)" placeholder="@one.th" class="create-setting email-step-box each-email-icon email-search-icon" @keyup.enter="search_citizen(actor_email.thai_email)" @keyup="getEmail=[]" :items="getEmail" >
+                            <v-combobox dense outlined hide-details auto-select-first color="#67C25D" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" @input.native="actor_email.thai_email=$event.srcElement.value" append-icon="mdi-magnify" @click:append="search_citizen(actor_email.thai_email)" placeholder="@one.th" class="create-setting email-step-box each-email-icon email-search-icon" @keyup.enter="search_citizen(actor_email.thai_email)" @keyup="getEmail=[]" :items="getEmail" @change="isDirty = true">
                               <template v-slot:prepend>
                                 <v-icon large>mdi-account</v-icon>
                               </template>
@@ -198,12 +198,12 @@
                             <v-checkbox hide-details label="OneChat" v-model="actor_email.checkbox" checked class="mt-0 pt-0 onechat-check"></v-checkbox>
                           </v-col> -->
                           <v-col v-if="flow_data.actor[0].permission_email.length > 1" cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
-                            <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn" @click="removeActorFlow(flow_data.index,actor_email)">
+                            <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn" @click="removeActorFlow(flow_data.index,actor_email),getEmail=[]">
                               <v-icon>mdi-minus</v-icon>
                             </v-btn>
                           </v-col>
                           <v-col v-if="index == flow_data.actor[0].permission_email.length-1" cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 pt-1 pb-0">
-                            <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn" @click="addActorFlow(flow_data.index)">
+                            <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn" @click="addActorFlow(flow_data.index),getEmail=[]">
                               <v-icon>mdi-plus</v-icon>
                             </v-btn>
                           </v-col>
@@ -343,7 +343,7 @@
                               <v-icon large>mdi-account</v-icon>
                             </template>
                           </v-text-field> -->
-                          <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-magnify" @click:append="search_citizen_custom(actor_email.thai_email)" @input.native="actor_email.thai_email=$event.srcElement.value" @keyup.enter="search_citizen_custom(actor_email.thai_email)" @keyup="getEmail=[]" :items="getEmail" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon">
+                          <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-magnify" @click:append="search_citizen_custom(actor_email.thai_email)" @input.native="actor_email.thai_email=$event.srcElement.value" @keyup.enter="search_citizen_custom(actor_email.thai_email)" @keyup="getEmail=[]" :items="getEmail" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon" >
                             <template v-slot:prepend>
                               <v-icon large>mdi-account</v-icon>
                             </template>
@@ -355,12 +355,12 @@
                               <v-checkbox hide-details label="OneChat" v-model="actor_email.checkbox" class="mt-0 pt-0 onechat-check"></v-checkbox>
                             </v-col> -->
                         <v-col v-if="flow_data_custom.actor.permission_email.length > 1" cols="auto" md="auto" lg="auto" align-self="center" class="pt-1 pl-2 pr-0 add-delete-permission-block"> <!-- delete email in each step button -->
-                          <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn" @click="removeActor(flow_data_custom.index,actor_email)">
+                          <v-btn outlined fab x-small color="#67C25D" class="delete-permission-btn" @click="removeActor(flow_data_custom.index,actor_email),getEmail=[]">
                             <v-icon>mdi-minus</v-icon>
                           </v-btn>
                         </v-col>
                         <v-col v-if="index == flow_data_custom.actor.permission_email.length-1" cols="auto" md="auto" lg="auto" align-self="center" class="pt-1 pl-2 pr-0 add-delete-permission-block"> <!-- add email in each step button -->
-                          <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn" @click="addActor(flow_data_custom.index)">
+                          <v-btn depressed fab x-small dark color="#67C25D" class="delete-permission-btn" @click="addActor(flow_data_custom.index),getEmail=[]">
                             <v-icon>mdi-plus</v-icon>
                           </v-btn>
                         </v-col>
@@ -682,7 +682,6 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           })
         }
         try {
-          console.log("actor_email",this.actor_email)
           this.emitLoading(true)
           var url = '/citizen/api/v1/check_citizen_email'
           var {data} = await this.axios.post(this.$api_url + url,{
@@ -1229,6 +1228,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.pdf_password = ''
       },
       addPersonSign(){
+        this.getEmail = []
         var index = this.flow_datas_custom.length
         var newItem = {
           index: index,
@@ -1264,6 +1264,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.reShowSign(this.signArray)
       },
       addPersonApprove(){
+        this.getEmail = []
         var index = this.flow_datas_custom.length
         var newItem = {
           index: index,
@@ -1392,7 +1393,6 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       },
       async search_citizen(item) {
         item = item.trim()
-        console.log(item)
         try {
           this.getEmail = []
           var url = `/citizen/api/v1/search_citizen`
