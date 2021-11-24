@@ -1292,7 +1292,7 @@ export default {
         sign_box_width: position.sign_box_width || 0
       }
       var shownonPage = this.position_Qrcode.sign_page
-      console.log(this.transaction_detail)
+      // console.log(this.transaction_detail)
       var isShow = shownonPage.includes(this.page) && (this.transaction_detail.document_status !== 'Y' && this.transaction_detail.document_status !== 'C')
       this.$set(this.position_Qrcode, 'show', isShow)
       this.setPositionQRCode(
