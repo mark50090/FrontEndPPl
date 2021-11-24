@@ -207,22 +207,22 @@ import { EventBus } from '../EventBus'
     },
     watch:{
       "optionsTransaction.page"(newValue,oldValue){
-        if (newValue != 1 || !this.isChangeTab) 
-            this.searchTransaction({page:newValue}).then(data => {})
+        if (newValue != 1 || !this.isChangeTab) {
+          this.searchTransaction({page:newValue}).then(data => {})
+          this.countTransaction()
+        }
         },
       "optionsTransaction.itemsPerPage"(newValue,oldValue){
           this.optionsTransaction.page = 1
           this.searchTransaction({page:1, itemsPerPage:newValue}).then(data => {})
+          this.countTransaction()
         },
       "document_status"(newValue,oldValue){
         this.optionsTransaction.page = 1
         this.searchTransaction({status:newValue}).then(data => {})
-        this.changeTotalItem()
+        this.countTransaction()
         this.isChangeTab = true
       },
-      // "date_filter" (val) {
-      //   this.date_filter_text = this.formatDate(this.date_filter)
-      // },
     },
 
     methods: {
@@ -232,11 +232,6 @@ import { EventBus } from '../EventBus'
         this.date_filter_menu = false
         this.date_filter_menu_mobile = false
       },
-      // formatDate (date) {
-      //   if (!date) return null
-      //   const [year, month, day] = date[0].split('-')
-      //   return `${month}/${day}/${year}`
-      // },
       emitLoading(isLoad) {
         EventBus.$emit('loadingOverlay', isLoad)
       },
@@ -330,12 +325,12 @@ import { EventBus } from '../EventBus'
               element.detail = `${element.object_text.subject} ${element.object_text.message}`
               this.inbox_data.push(element) // ใส่ค่าที่ได้จาก api ลงในตาราง
             });
+            this.emitLoading(false)
           }
-          this.countTransaction()
+          // this.countTransaction()
         } catch (error) {
           console.log(error)
         }
-        this.emitLoading(false)
         this.isChangeTab = false
       },
       async countTransaction(){
@@ -344,7 +339,7 @@ import { EventBus } from '../EventBus'
         const { page, itemsPerPage } = this.optionsTransaction
         try {
           var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
-          this.emitLoading(true)
+          // this.emitLoading(true)
           var { data } = await this.axios.post(this.$api_url + '/transaction/api/v1/countTransaction', {
             tax_id : tax_id,
             keyword: this.keyword,
@@ -371,7 +366,7 @@ import { EventBus } from '../EventBus'
         } catch (error) {
           this.isReady = true
         }
-        this.emitLoading(false)
+        // this.emitLoading(false)
       },
       changeTotalItem(){
         if(this.document_status == 'all') this.totalItemsTransaction = parseInt(this.count_transaction_total)
@@ -398,6 +393,7 @@ import { EventBus } from '../EventBus'
       },
       searchTypeDocs(){
         this.searchTransaction()
+        this.countTransaction()
       },
       changeBiz(){
         this.searchTransaction()
@@ -405,7 +401,10 @@ import { EventBus } from '../EventBus'
         this.getTypeDocs()
       },
       searchKeyword(){
-        if(this.optionsTransaction.page == 1) this.searchTransaction()
+        if(this.optionsTransaction.page == 1) {
+          this.searchTransaction()
+          this.countTransaction()
+        }
         else this.optionsTransaction.page = 1
       }
     }
