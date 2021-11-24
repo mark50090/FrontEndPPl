@@ -41,6 +41,7 @@
                     @num-pages="page_count = $event"
                     @loaded="loadedPDF"
                     @page-loaded="loaded"
+                    @error="error_pdf"
                     :page="page"
                     ref="pdfComponent"
                   />
@@ -419,6 +420,7 @@
     <DeleteMessage/>
     <showFormDeleteAttach/>
     <showFormConfirmCancelDoc/>
+    <PassPdf/>
   </div>
 </template>
 
@@ -434,6 +436,7 @@ import showFormReturn from '../components/ReturnCorrection'
 import DeleteMessage from '../components/DeleteMessage'
 import showFormDeleteAttach from '../components/ConfirmDeleteAttachFileModal.vue'
 import showFormConfirmCancelDoc from '../components/ConfirmCancelDocModal.vue'
+import PassPdf from '../components/PassPdf.vue'
 export default {
   computed: {
     textLang () {
@@ -450,7 +453,8 @@ export default {
     showFormReturn,
     DeleteMessage,
     showFormDeleteAttach,
-    showFormConfirmCancelDoc
+    showFormConfirmCancelDoc,
+    PassPdf
   },
   data: () => ({
     document_detail_tab: null,
@@ -471,7 +475,8 @@ export default {
     },
     new_attachment_file: [],
     attachment_file: [],
-    pdf_src: '',
+    pdf_src: null,
+    base64: '',
     select_page: [],
     token: '',
     transaction_id: '',
@@ -606,6 +611,12 @@ export default {
     deletemessage () {
       EventBus.$emit('deletemessage')
     },
+    password_pdf (updatePassword, reason) {
+      if (reason == 1) { EventBus.$emit('passpdf', updatePassword) } else { EventBus.$emit('passpdf', updatePassword, true) }
+    },
+    error_pdf (error) {
+      console.log(error)
+    },
     resize_window_fn () {
       clearTimeout(this.setTimeOutResize)
       this.setTimeOutResize = setTimeout(() => {
@@ -630,7 +641,7 @@ export default {
     },
     download_pdf_fn () {
       const a = document.createElement('a') // Create <a>
-      a.href = this.pdf_src // Image Base64 Goes here
+      a.href = this.base64 // Image Base64 Goes here
       a.download = this.doc_details.file_name // File name Here
       a.click() // Downloaded file
     },
@@ -772,54 +783,56 @@ export default {
           this.axios_pending--
         })
     },
-    async cancel_doc_fn () {
-      const data = {
-        document_id: this.doc_details.doc_id,
-        transaction_id: this.doc_details.transaction_id,
-        tracking: this.doc_details.tracking
-      }
-      const url = '/transaction/api/v1/deltransaction'
-      const config = {
-        headers: {
-          Authorization: `Bearer ${this.token}`
+    async cancel_doc_fn (isOnShowTemplate) {
+      if (!isOnShowTemplate) {
+        const data = {
+          document_id: this.doc_details.doc_id,
+          transaction_id: this.doc_details.transaction_id,
+          tracking: this.doc_details.tracking
         }
-      }
-      this.axios_pending++
-      this.axios.put(`${this.$api_url}${url}`, data, config)
-        .then((response) => {
-          console.log(response)
-          this.$router.replace({ name: 'inbox' })
-          this.$swal({
-            backdrop: false,
-            position: 'bottom-end',
-            width: '330px',
-            title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.succeed + '</strong>',
-            text: this.textLang.Successfullycancel,
-            showCloseButton: true,
-            showConfirmButton: false,
-            timer: 5000,
-            customClass: {
-              popup: 'alert-card',
-              title: 'alert-title-block',
-              closeButton: 'close-alert-btn',
-              htmlContainer: 'alert-text-block'
+        const url = '/transaction/api/v1/deltransaction'
+        const config = {
+          headers: {
+            Authorization: `Bearer ${this.token}`
+          }
+        }
+        this.axios_pending++
+        this.axios.put(`${this.$api_url}${url}`, data, config)
+          .then((response) => {
+            console.log(response)
+            this.$router.replace({ name: 'inbox' })
+            this.$swal({
+              backdrop: false,
+              position: 'bottom-end',
+              width: '330px',
+              title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.succeed + '</strong>',
+              text: this.textLang.Successfullycancel,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 5000,
+              customClass: {
+                popup: 'alert-card',
+                title: 'alert-title-block',
+                closeButton: 'close-alert-btn',
+                htmlContainer: 'alert-text-block'
+              }
+            })
+          })
+          .catch((error) => {
+            if (error.response) {
+              const errResponse = error.response.data
+              if (errResponse.message === 'error read pdf') {
+                this.error_swal_fn(this.textLang.cantread)
+              } else {
+                this.error_swal_fn(errResponse.message || this.textLang.erroroccurred)
+              }
+              this.$router.replace({ name: 'inbox' })
             }
           })
-        })
-        .catch((error) => {
-          if (error.response) {
-            const errResponse = error.response.data
-            if (errResponse.message === 'error read pdf') {
-              this.error_swal_fn(this.textLang.cantread)
-            } else {
-              this.error_swal_fn(errResponse.message || this.textLang.erroroccurred)
-            }
-            this.$router.replace({ name: 'inbox' })
-          }
-        })
-        .then(() => {
-          this.axios_pending--
-        })
+          .then(() => {
+            this.axios_pending--
+          })
+      }
     },
     async upload_attachment () {
       const url = '/file-component/api/saveFile'
@@ -912,7 +925,9 @@ export default {
             this.doc_details.comment = doc_data.comment
             this.doc_details.step_index = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.step_index : null
             this.doc_details.action = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.action : null
-            this.pdf_src = `data:application/pdf;base64,${data.data.pdfbase}`
+            this.base64 = `data:application/pdf;base64,${data.data.pdfbase}`
+            this.pdf_src = pdf.createLoadingTask(`data:application/pdf;base64,${data.data.pdfbase}`)
+            this.pdf_src.onPassword = this.password_pdf
             this.showCancelButton = doc_data.document_status == 'W' && this.my_name == `${doc_data.sender.split(' ')[0]} ${doc_data.sender.split(' ')[1]}`
           }
         })
@@ -1264,12 +1279,18 @@ export default {
     }
   },
   beforeDestroy () {
-    sessionStorage.removeItem('transaction_id')
-    EventBus.$off('confirm_deletemessage')
-    EventBus.$off('getstamp')
-    EventBus.$off('afterDeleteAttach')
-    EventBus.$off('cancelDoc')
-    window.removeEventListener('resize', this.resize_window_fn)
+    try {
+      sessionStorage.removeItem('transaction_id')
+      EventBus.$off('confirm_deletemessage')
+      EventBus.$off('getstamp')
+      EventBus.$off('afterDeleteAttach')
+      EventBus.$off('cancelDoc')
+      EventBus.$off('confirm_password')
+      window.removeEventListener('resize', this.resize_window_fn)
+      this.pdf_src.destroy()
+    } catch (error) {
+
+    }
   }
 }
 </script>

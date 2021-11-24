@@ -274,6 +274,13 @@
       "font_head_confirmcanceldoc2": "\" ?",
       "confirmcanceldoc_cancel": "Close",
       "confirmcanceldoc_confirm": "OK"
+    },
+    "PassPdf": {
+      "Password": "Password",
+      "Please_input_the_password":"Please input the password",
+      "Password_is_incorrect":"Password is incorrect. Please input password again.",
+      "Back":"Back",
+      "Confirm":"OK"
     }
   },
   "Create_Template": {
@@ -793,7 +800,11 @@
         "reject_fail": "Reject incompletely. Please try again later.",
         "eform_use": "This E-Form is used by ",
         "upload_fail" : "Uplaoding file is incomplete. Please try again later."
-      }
+      },
+      "Successfullycancel": "Cancel Success",
+      "succeed": "Success",
+      "cantread": "Can not read PDF.",
+      "erroroccurred": "Something went wrong. Please try again later."
     }
   },
   "ApprovalList":{
@@ -908,6 +919,8 @@
     "rejectapproval":"Rejected",
     "pending":"Incoming",
     "cancel_status": "Cancel",
+    "date_filter_title": "Date Range",
+    "join_date_text": " to ",
     "inboxheader":{
       "sender":"Sender",
       "type":"Workflow Type",

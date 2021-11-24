@@ -37,6 +37,7 @@ export default {
     },
     data: () => ({
         dialog: false,
+        onShowTemplate: false,
         textTest: 'testcodedev.pdf',
     }),
     mounted() {
@@ -46,9 +47,11 @@ export default {
         getConfirmCancelDoc(data) {
             this.dialog = true
             this.textTest = data.name
+            this.onShowTemplate = data.isShowTemplate
         },
         CancelDoc(){
-            EventBus.$emit('cancelDoc')
+            var isOnShowTemplate = this.onShowTemplate
+            EventBus.$emit('cancelDoc', isOnShowTemplate)
             this.dialog = false
         }
     },

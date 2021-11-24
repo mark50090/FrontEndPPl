@@ -26,7 +26,7 @@
     "ConfirmCancelDocumentModal": {
       "confirm_delete": "ยืนยันการยกเลิกเอกสาร",
       "sure_delete": "คุณต้องการยกเลิกเอกสาร \"",
-      "or_no": "\" หรือไม่\"?",
+      "or_no": "\" หรือไม่ ?",
       "cancel": "ปิด",
       "yes_canel": "ตกลง",
       "alert_error": "ไม่สำเร็จ",
@@ -274,6 +274,13 @@
       "font_head_confirmcanceldoc2": "\" หรือไม่ ?",
       "confirmcanceldoc_cancel": "ปิด",
       "confirmcanceldoc_confirm": "ตกลง"
+    },
+    "PassPdf": {
+      "Password": "รหัสผ่าน",
+      "Please_input_the_password":"กรุณากรอกรหัสผ่าน",
+      "Password_is_incorrect":"รหัสผ่านผิด กรุณากรอกรหัสผ่านใหม่",
+      "Back":"กลับ",
+      "Confirm":"ตกลง"
     }
   },
   "Create_Template": {
@@ -793,7 +800,11 @@
         "reject_fail": "ปฏิเสธอนุมัติไม่สำเเร็จ กรุณาลองใหม่ในภายหลัง",
         "eform_use": "แบบฟอร์มถูกใช้งานโดย ",
         "upload_fail" : "อัพโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ในภายหลัง"
-      }
+      },
+      "Successfullycancel": "ยกเลิกเอกสารสำเร็จ",
+      "succeed": "สำเร็จ",
+      "cantread": "ไม่สามารถอ่าน PDF ได้",
+      "erroroccurred": "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"
     }
   },
   "ApprovalList":{
@@ -908,6 +919,8 @@
     "rejectapproval":"ปฏิเสธอนุมัติ",
     "pending":"รอดำเนินการ",
     "cancel_status": "ยกเลิก",
+    "date_filter_title": "ช่วงวันที่",
+    "join_date_text": " ถึง ",
     "inboxheader":{
       "sender":"ผู้ส่ง",
       "type":"ประเภท",

@@ -14,11 +14,11 @@
         <v-icon>mdi-reply</v-icon>
         <span class="btn-return-edit">{{ textLang.tabMenubar.return_edit }}</span>
       </v-btn>
-      <v-btn v-if="currentStep != ''" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
+      <v-btn v-if="currentStep != '' && !skipFirstStep" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
         <v-icon>mdi-file-excel-outline</v-icon>
         <span class="btn-reject-doc save-draft-word">{{ textLang.tabMenubar.reject_doc }}</span>
       </v-btn>
-      <v-btn v-if="false" depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
+      <v-btn  v-if="currentStep != '' && isOwner && !skipFirstStep"  depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
         <v-icon>mdi-file-cancel-outline</v-icon>
         <span class="btn-cancel-doc">{{ textLang.tabMenubar.cancel_doc }}</span>
       </v-btn>
@@ -78,7 +78,7 @@
             <v-list-item-icon><v-icon>mdi-script-text-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
           </v-list-item>  -->
-          <v-list-item v-if="currentStep != '' && currentStep != '1'" @click="downloadFromEid()">
+          <v-list-item v-if="currentStep != '' && currentStep != '1' && !skipFirstStep" @click="downloadFromEid()">
             <v-list-item-icon><v-icon>mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item> 
@@ -128,11 +128,11 @@
               </v-badge>
             </v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="currentStep != ''" @click="openReverse()">
+          <v-list-item v-if="currentStep != '' && currentStep != 1 && !skipFirstStep" @click="openReverse()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-reply</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.return_edit }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="currentStep != ''" @click="openReject()">
+          <v-list-item v-if="currentStep != '' && !skipFirstStep" @click="openReject()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-excel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.reject_doc }}</v-list-item-title>
           </v-list-item>
@@ -156,7 +156,7 @@
             <v-list-item-icon><v-icon color="#4CAF50">mdi-script-text-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
           </v-list-item> -->
-          <v-list-item v-if="currentStep != '' && currentStep != '1'"  @click="downloadFromEid()">
+          <v-list-item v-if="currentStep != '' && currentStep != '1' && !skipFirstStep"  @click="downloadFromEid()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item>
@@ -800,9 +800,9 @@
     <RefDocumentModal/>
     <AttachFileModal/>
     <RejectModal/>
-    <ConfirmCancelDocumentModal/>
     <AddAttachFileModal/>
     <PermissionTransferenceDocumentModal />
+    <showFormConfirmCancelDoc/>
     <!-- <SignaturePadModal/> -->
 
     <!-- Import Image Modal -->
@@ -917,9 +917,9 @@
   import RejectModal from '../../components/eform/RejectModal'
   import RefDocumentModal from '../../components/eform/RefDocumentModal'
   import Editor from '@tinymce/tinymce-vue'
-  import ConfirmCancelDocumentModal from '../../components/eform/ConfirmCancelDocumentModal'
   import AddAttachFileModal from '../../components/eform/AddAttachFileModal'
   import PermissionTransferenceDocumentModal from '../../components/eform/PermissionTransferenceDocumentModal'
+  import showFormConfirmCancelDoc from '../../components/ConfirmCancelDocModal.vue'
   import { mapState } from 'vuex'
   import moment from 'moment'
 
@@ -934,10 +934,10 @@
       AttachFileModal,
       RejectModal,
       RefDocumentModal,
-      ConfirmCancelDocumentModal,
       'editor': Editor,
       AddAttachFileModal,
-      PermissionTransferenceDocumentModal
+      PermissionTransferenceDocumentModal,
+      showFormConfirmCancelDoc
     },
     data: () => ({
       textLang: {
@@ -1207,6 +1207,7 @@
       onSave: false,
       ext_template : {},
       isPaperview: true,
+      skipFirstStep: false,
       isSimpleFill: false,
       paperSizeIndex: 0,
       isOwner: false,
@@ -1268,6 +1269,7 @@
       EventBus.$off('changeAttachFiles')
       EventBus.$off('transferenceDone')
       EventBus.$off('removeAttachFiles')
+      EventBus.$off('cancelDoc')
       if(this.option.eform_id && !this.onSave && this.docReserved) {
         this.returnEform(this.option.eform_id)
       }
@@ -1326,6 +1328,7 @@
       EventBus.$on('changeAttachFiles', this.changeUploadingFiles)
       EventBus.$on('transferenceDone', this.transferenceDone)
       EventBus.$on('removeAttachFiles', this.removeAttachFiles)
+      EventBus.$on('cancelDoc', this.cancelDocument)
       this.changeLange()
     },
      watch: {
@@ -1665,6 +1668,11 @@
           if(data.status) {
             template = data.data
             this.template_option = template
+            this.getFlowData(true)
+            if(this.template_option.is_skip) {
+              this.skipFirstStep = true
+              this.currentStep = 1
+            }
             this.template_name = template.template_name
             var pageLength = template.orientation.length
             if(this.isOnlyForm) {
@@ -3071,7 +3079,6 @@
                 cmp.value = {show: cmp.value.show}
               }
               cmp.value = this.initailDatabind(cmp)
-              console.log(cmp.value)
               if(typeof cmp.value.show_index === 'undefined' || cmp.value.show_index == 'undefined') {
                 if(cmp.value.isUser) {
                   cmp.value = ""
@@ -7120,7 +7127,7 @@
           allValid = this.checkDocCondition(this.template_option.document_option['condition'] )
         }
         //New session
-        sessionStorage.setItem("firstSent", this.currentStep == "")
+        sessionStorage.setItem("firstSent", this.currentStep == "" || this.skipFirstStep)
         sessionStorage.setItem("isInstantSave", isToPreview != true)
         sessionStorage.setItem('isDraft',isDraft)
 
@@ -7136,6 +7143,7 @@
         sessionStorage.setItem('pageTemp',JSON.stringify(this.pages))
         sessionStorage.setItem('flow_permission',JSON.stringify(this.template_option.flow_permission))
         sessionStorage.setItem('paper_size',this.template_option.paper_size)
+        sessionStorage.setItem('isSkipFirstStep', this.skipFirstStep)
         this.template_option.template_body = this.template_option.template_header = this.template_option.template_footer = {}
         sessionStorage.setItem('template_option',JSON.stringify(this.template_option))
         sessionStorage.setItem('Folder_Attachment_Name',JSON.stringify(this.attachedFiles))
@@ -7686,8 +7694,62 @@
         EventBus.$emit('rejectDocument',eId)
       },
       openCancel() {
-        var tempOpt = this.option
-        EventBus.$emit('ConfirmCancelDoc',tempOpt)
+        var data = {
+          name: this.template_option.document_id,
+          isShowTemplate: true
+        }
+        EventBus.$emit('FormConfirmCancelDoc',data)
+      },
+      async cancelDocument (isOnShowTemplate) {
+        if(isOnShowTemplate) {
+          const data = {
+            document_id: this.template_option.document_id,
+            transaction_id: this.template_option.transaction_id,
+            tracking: ""
+          }
+          const url = '/transaction/api/v1/deltransaction'
+          const config = {
+            headers: {
+              Authorization: `Bearer ${this.token}`
+            }
+          }
+          this.axios_pending++
+          this.axios.put(`${this.$api_url}${url}`, data, config)
+            .then((response) => {
+              console.log(response)
+              this.$router.replace({ name: 'inbox' })
+              this.$swal({
+                backdrop: false,
+                position: 'bottom-end',
+                width: '330px',
+                title: '<svg style="width:24px;height:24px" class="alert-icon" viewBox="0 0 24 24"><path fill="#67C25D" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" /></svg><strong class="alert-title">' + this.textLang.succeed + '</strong>',
+                text: this.textLang.Successfullycancel,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 5000,
+                customClass: {
+                  popup: 'alert-card',
+                  title: 'alert-title-block',
+                  closeButton: 'close-alert-btn',
+                  htmlContainer: 'alert-text-block'
+                }
+              })
+            })
+            .catch((error) => {
+              if (error.response) {
+                const errResponse = error.response.data
+                if (errResponse.message === 'error read pdf') {
+                  this.error_swal_fn(this.textLang.cantread)
+                } else {
+                  this.error_swal_fn(errResponse.message || this.textLang.erroroccurred)
+                }
+                this.$router.replace({ name: 'inbox' })
+              }
+            })
+            .then(() => {
+              this.axios_pending--
+            })
+        }
       },
       async summitReject(detail) {
         try {
@@ -7929,26 +7991,26 @@
             if(this.cellUpload) {
               this.dataTableObjectArray[this.cellUpload].value = data.url[0].url
               this.dataTableObjectArray[this.cellUpload].show_value = data.url[0].url
-              let img = new Image()
-              img.src = data.url[0].url
-              img.onload = () => {
-                if(img.width > img.height) {
-                  this.dataTableObjectArray[this.cellUpload].style.image_width = String(this.cellSize.width) + "px"
-                  this.dataTableObjectArray[this.cellUpload].style.image_height = "auto"
-                } else if(img.width == img.height) {
-                  if(this.cellSize.width < this.cellSize.height) {
-                    this.dataTableObjectArray[this.cellUpload].style.image_width = String(this.cellSize.width) + "px"
-                    this.dataTableObjectArray[this.cellUpload].style.image_height = "auto"
-                  } else {
-                    this.dataTableObjectArray[this.cellUpload].style.image_width = "auto"
-                    this.dataTableObjectArray[this.cellUpload].style.image_height = String(this.cellSize.height) + "px"
-                  }
+              // let img = new Image()
+              // img.src = data.url[0].url
+              // img.onload = () => {
+              //   if(img.width > img.height) {
+              //     this.dataTableObjectArray[this.cellUpload].style.image_width = String(this.cellSize.width) + "px"
+              //     this.dataTableObjectArray[this.cellUpload].style.image_height = "auto"
+              //   } else if(img.width == img.height) {
+              //     if(this.cellSize.width < this.cellSize.height) {
+              //       this.dataTableObjectArray[this.cellUpload].style.image_width = String(this.cellSize.width) + "px"
+              //       this.dataTableObjectArray[this.cellUpload].style.image_height = "auto"
+              //     } else {
+              //       this.dataTableObjectArray[this.cellUpload].style.image_width = "auto"
+              //       this.dataTableObjectArray[this.cellUpload].style.image_height = String(this.cellSize.height) + "px"
+              //     }
                   
-                } else {
-                  this.dataTableObjectArray[this.cellUpload].style.image_width = "auto"
-                  this.dataTableObjectArray[this.cellUpload].style.image_height = String(this.cellSize.height) + "px"
-                }
-              }
+              //   } else {
+              //     this.dataTableObjectArray[this.cellUpload].style.image_width = "auto"
+              //     this.dataTableObjectArray[this.cellUpload].style.image_height = String(this.cellSize.height) + "px"
+              //   }
+              // }
             } else {
               this.objectArray[this.selected_array][this.selected_object].value = data.url[0].url
             }
@@ -7968,7 +8030,7 @@
               width: cellWidth,
               height: cellHeight
             }
-            this.dataTableObjectArray[obj.object_name].style.image_width = "auto"
+            this.dataTableObjectArray[obj.object_name].style.image_width = String(cellWidth) + "px"
             this.dataTableObjectArray[obj.object_name].style.image_height = String(cellHeight) + "px"
             this.dialogImageUpload = true
             this.cellUpload = obj.object_name
@@ -7988,6 +8050,28 @@
           
         }
         
+      },
+      async getFlowData(isCheckFlowStatus) {
+        try {
+          if(this.template_option.flow_id){
+            var tax_id = this.template_option.tax_id
+            var url = `/flowdata/api/v1/get1/?_id=${this.template_option.flow_id}&tax_id=${tax_id}&no_base=true`
+            var {data} = await this.axios.get(this.$api_url + url)
+            if(data.status){
+              if(isCheckFlowStatus) {
+                if(data.data.status != "active") {
+                  this.$router.push("/form")
+                }
+              }
+              if(data.data.flow_data[0].actor[0].permission_sender_status) {
+                this.skipFirstStep = true
+                this.currentStep = 1
+              }
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        }
       },
       async deleteUploadImage(obj, isCell) {
         if(!obj.disable) {

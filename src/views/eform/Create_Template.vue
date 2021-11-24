@@ -2028,8 +2028,36 @@
                     <v-list-item-icon class="mr-2 my-0 each-step-workflow-icon">
                       <v-icon>mdi-account</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-content class="py-0 each-step-workflow-mail">
+                    <v-list-item-content v-if="email.thai_email" class="py-0 each-step-workflow-mail">
                       {{ email.thai_email }}
+                    </v-list-item-content>
+                    <v-list-item-content v-else class="py-0 each-step-workflow-mail">
+                      -
+                    </v-list-item-content>
+                    <!-- <v-list-item-icon class="ml-2 my-0 alert-onechat-block">
+                      <img height="21px" src="https://www.img.in.th/images/a368504d4cdb93225bda2f04c665ead7.png" />
+                    </v-list-item-icon> -->
+                  </v-list-item>
+                  <v-list-item v-for="role in item.actor[0].permission" :key="role.role_id" dense class="pl-2 pr-0 each-step-workflow"> <!-- each mail in step -->
+                    <v-list-item-icon class="mr-2 my-0 each-step-workflow-icon">
+                      <v-icon>mdi-account</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content v-if="role.role_name " class="py-0 each-step-workflow-mail">
+                      {{ role.role_name }}
+                    </v-list-item-content>
+                    <v-list-item-content v-else class="py-0 each-step-workflow-mail">
+                      -
+                    </v-list-item-content>
+                    <!-- <v-list-item-icon class="ml-2 my-0 alert-onechat-block">
+                      <img height="21px" src="https://www.img.in.th/images/a368504d4cdb93225bda2f04c665ead7.png" />
+                    </v-list-item-icon> -->
+                  </v-list-item>
+                  <v-list-item v-if=" item.actor[0].permission_sender_status" dense class="pl-2 pr-0 each-step-workflow"> <!-- each mail in step -->
+                    <v-list-item-icon class="mr-2 my-0 each-step-workflow-icon">
+                      <v-icon>mdi-account</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content class="py-0 each-step-workflow-mail">
+                      {{textLang.property_type.sender_flow}}
                     </v-list-item-content>
                     <!-- <v-list-item-icon class="ml-2 my-0 alert-onechat-block">
                       <img height="21px" src="https://www.img.in.th/images/a368504d4cdb93225bda2f04c665ead7.png" />
@@ -3016,6 +3044,7 @@ export default {
     allEformList: [],
     TextType: [{text: 'ไม่กำหนด', value: ""},{text: 'อีเมล', value: "Email"}],
     currentSelectedFlow: {},
+    skipFirstStep: false,
     //Color Variable
     // color_dialog_header_bg: '#2ACA9F', //class dialog_title in DeleteModal.vue
     // color_dropdown_icon: '#1b9900 !important', //class dropdown-icon-color in Toolbar.vue
@@ -3988,6 +4017,7 @@ export default {
         this.prefixPattern = template.document_detail[0].pattern
         this.prefixDigit = template.document_detail[0].digit
         this.selected_ppltemplate = template.flow_id
+        this.skipFirstStep = template.is_skip
         await this.getFlowData()
         this.template_name = template.template_name
         if(template.document_option) {
@@ -5906,7 +5936,7 @@ export default {
         } else if(type == 'inputimagebox') {
           this.custom_cell_permission = true
           if(!this.dataTableObjectArray[obj.object_name].value) {
-            this.openUploadImage(this.dataTableObjectArray[obj.object_name], row)
+            this.openUploadImage(this.dataTableObjectArray[obj.object_name], row, col)
           }
          
           this.help_message = this.textLang.tips_help_message.picture_box
@@ -7631,6 +7661,7 @@ export default {
                   description: this.note_paperless,
                   document_type_code: this.selectedEformDocType,
                   ppl_sign: "",
+                  is_skip: this.skipFirstStep,
                   document_detail :[{prefix: this.prefix_code, pattern: this.prefixPattern, digit: this.prefixDigit, type: this.prefixType}],
                   role_id: this.allObjectRoles,
                   document_priority: this.docLevel,
@@ -7723,6 +7754,7 @@ export default {
                   description: this.note_paperless,
                   document_type_code: this.selectedEformDocType,
                   ppl_sign: "",
+                  is_skip: this.skipFirstStep,
                   document_detail :[{prefix: this.prefix_code, pattern: this.prefixPattern, digit: this.prefixDigit, type: this.prefixType}],
                   role_id: this.allObjectRoles,
                   document_priority: this.docLevel,
@@ -8119,7 +8151,7 @@ export default {
         this.objectArray[this.selected_array][this.selected_object].style.alterChoices = choiceDict
       }
     },
-    openUploadImage(obj, row) {
+    openUploadImage(obj, row, col) {
       if(obj.object_name == this.objectArray[this.selected_array][this.selected_object].object_name) {
         if(parseFloat(obj.width) > parseFloat(obj.height)) {
           this.objectArray[this.selected_array][this.selected_object].style.image_width = "auto"
@@ -8131,7 +8163,8 @@ export default {
         this.dialogImageUpload = true
       } else if(obj.object_name.startsWith('datatable')) {
         var cellHeight = this.objectArray[this.selected_array][this.selected_object].style.table.rowsize[Number(row) - 1].size
-        this.dataTableObjectArray[obj.object_name].style.image_width = "auto"
+        var cellWidth = this.objectArray[this.selected_array][this.selected_object].style.table.colsize[Number(col) - 1].size
+        this.dataTableObjectArray[obj.object_name].style.image_width = String(cellWidth) + "px"
         this.dataTableObjectArray[obj.object_name].style.image_height = String(cellHeight) + "px"
         this.dialogImageUpload = true
       }
@@ -8415,7 +8448,7 @@ export default {
           this.step_choices = [{text: this.textLang.property_type.sender_flow, value: ""}]
           if(this.selected_ppltemplate){
             var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
-            var url = `/flowdata/api/v1/get1/?_id=${this.selected_ppltemplate}&tax_id=${tax_id}`
+            var url = `/flowdata/api/v1/get1/?_id=${this.selected_ppltemplate}&tax_id=${tax_id}&no_base=true`
             var {data} = await this.axios.get(this.$api_url + url)
             this.currentSelectedFlow = data.data
             if(data.status){
@@ -8428,6 +8461,11 @@ export default {
                 }
                 
               })
+              if(data.data.flow_data[0].actor[0].permission_sender_status) {
+                this.skipFirstStep = true
+              } else {
+                this.skipFirstStep = false
+              }
             }
           }
         } catch (error) {
