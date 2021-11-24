@@ -274,6 +274,13 @@
       "font_head_confirmcanceldoc2": "\" ?",
       "confirmcanceldoc_cancel": "Close",
       "confirmcanceldoc_confirm": "OK"
+    },
+    "PassPdf": {
+      "Password": "Password",
+      "Please_input_the_password":"Please input the password",
+      "Password_is_incorrect":"Password is incorrect. Please input password again.",
+      "Back":"Back",
+      "Confirm":"OK"
     }
   },
   "Create_Template": {

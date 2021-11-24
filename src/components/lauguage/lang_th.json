@@ -274,6 +274,13 @@
       "font_head_confirmcanceldoc2": "\" หรือไม่ ?",
       "confirmcanceldoc_cancel": "ปิด",
       "confirmcanceldoc_confirm": "ตกลง"
+    },
+    "PassPdf": {
+      "Password": "รหัสผ่าน",
+      "Please_input_the_password":"กรุณากรอกรหัสผ่าน",
+      "Password_is_incorrect":"รหัสผ่านผิด กรุณากรอกรหัสผ่านใหม่",
+      "Back":"กลับ",
+      "Confirm":"ตกลง"
     }
   },
   "Create_Template": {
