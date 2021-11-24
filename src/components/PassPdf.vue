@@ -14,6 +14,7 @@
             <v-text-field
             outlined
             dense
+            v-model="text_password"
             color="#4caf50"
             :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
             :type="show3 ? 'text' : 'password'"
@@ -23,9 +24,9 @@
             class="text-box-pass height-pass"
             @click:append="show3 = !show3"
           ></v-text-field>
-        </v-col>    
+        </v-col>
     </v-row>
-</v-card-text>     
+</v-card-text>
     <v-card-actions class="pb-2 pt-1 ">
       <v-row class="all-pass">
           <v-spacer></v-spacer>
@@ -45,6 +46,7 @@
           lg="5"
           class="pl-2">
           <v-btn class="size-character-pass"
+                  @click="set_password(text_password);dialog = false"
                   color="#4caf50"
                   dark
                   depressed
@@ -53,7 +55,7 @@
                 >
                 </v-col><v-spacer></v-spacer>
         </v-row>
-      </v-card-actions>   
+      </v-card-actions>
 </v-card>
 </v-dialog>
 
@@ -62,28 +64,45 @@
 <script>
 import { EventBus } from '../EventBus'
 export default {
-    computed: {
-      textLang() {
-        return this.$store.getters.textLang.components.PassPdf
-      }
-    },
-    data: () => ({
-        dialog: false,
-        show3: false,
-        pass_error: true,
-        message_error: ""
-    }),
-    mounted() {
-        EventBus.$on('passpdf', this.pass_pdf)
-    },
-    methods: {
-        pass_pdf () {
-            this.dialog = true
-        },
-        back () {
-            this.$router.push({'path': '/inbox'})
-        }
+  computed: {
+    textLang () {
+      return this.$store.getters.textLang.components.PassPdf
     }
+  },
+  data: () => ({
+    dialog: false,
+    show3: false,
+    pass_error: true,
+    message_error: '',
+    text_password: ''
+  }),
+  mounted () {
+    EventBus.$on('passpdf', this.pass_pdf)
+  },
+  methods: {
+    pass_pdf (callback, incorrent = false) {
+      this.dialog = true
+      this.text_password = ''
+      this.pass_error = incorrent
+      this.message_error = incorrent ? this.textLang.Password_is_incorrect : ''
+      this.set_password = callback
+    },
+    back () {
+      this.set_password('')
+      this.$router.push({ path: '/inbox' })
+    },
+    set_password () {
+      // set callback
+      // EventBus.$emit('confirm_password', this.text_password)
+    }
+  },
+  watch: {
+    dialog (val) {
+      if (!val) {
+        this.set_password = null
+      }
+    }
+  }
 }
 </script>
 <style>
@@ -99,7 +118,7 @@ export default {
 .text-box-pass{
   font-family: 'Sarabun', sans-serif;
   font-size: 13px ;
-  }  
+  }
 .font-color-pass{
   color: black;
 }

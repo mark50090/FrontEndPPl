@@ -41,6 +41,7 @@
                     @num-pages="page_count = $event"
                     @loaded="loadedPDF"
                     @page-loaded="loaded"
+                    @error="error_pdf"
                     :page="page"
                     ref="pdfComponent"
                   />
@@ -474,7 +475,8 @@ export default {
     },
     new_attachment_file: [],
     attachment_file: [],
-    pdf_src: '',
+    pdf_src: null,
+    base64: '',
     select_page: [],
     token: '',
     transaction_id: '',
@@ -609,6 +611,12 @@ export default {
     deletemessage () {
       EventBus.$emit('deletemessage')
     },
+    password_pdf (updatePassword, reason) {
+      if (reason == 1) { EventBus.$emit('passpdf', updatePassword) } else { EventBus.$emit('passpdf', updatePassword, true) }
+    },
+    error_pdf (error) {
+      console.log(error)
+    },
     resize_window_fn () {
       clearTimeout(this.setTimeOutResize)
       this.setTimeOutResize = setTimeout(() => {
@@ -633,7 +641,7 @@ export default {
     },
     download_pdf_fn () {
       const a = document.createElement('a') // Create <a>
-      a.href = this.pdf_src // Image Base64 Goes here
+      a.href = this.base64 // Image Base64 Goes here
       a.download = this.doc_details.file_name // File name Here
       a.click() // Downloaded file
     },
@@ -776,7 +784,7 @@ export default {
         })
     },
     async cancel_doc_fn (isOnShowTemplate) {
-      if(!isOnShowTemplate) {
+      if (!isOnShowTemplate) {
         const data = {
           document_id: this.doc_details.doc_id,
           transaction_id: this.doc_details.transaction_id,
@@ -917,7 +925,9 @@ export default {
             this.doc_details.comment = doc_data.comment
             this.doc_details.step_index = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.step_index : null
             this.doc_details.action = doc_data.flow_step.length != this.last_step ? doc_data.flow_step[this.last_step].send_update.action : null
-            this.pdf_src = `data:application/pdf;base64,${data.data.pdfbase}`
+            this.base64 = `data:application/pdf;base64,${data.data.pdfbase}`
+            this.pdf_src = pdf.createLoadingTask(`data:application/pdf;base64,${data.data.pdfbase}`)
+            this.pdf_src.onPassword = this.password_pdf
             this.showCancelButton = doc_data.document_status == 'W' && this.my_name == `${doc_data.sender.split(' ')[0]} ${doc_data.sender.split(' ')[1]}`
           }
         })
@@ -1269,12 +1279,18 @@ export default {
     }
   },
   beforeDestroy () {
-    sessionStorage.removeItem('transaction_id')
-    EventBus.$off('confirm_deletemessage')
-    EventBus.$off('getstamp')
-    EventBus.$off('afterDeleteAttach')
-    EventBus.$off('cancelDoc')
-    window.removeEventListener('resize', this.resize_window_fn)
+    try {
+      sessionStorage.removeItem('transaction_id')
+      EventBus.$off('confirm_deletemessage')
+      EventBus.$off('getstamp')
+      EventBus.$off('afterDeleteAttach')
+      EventBus.$off('cancelDoc')
+      EventBus.$off('confirm_password')
+      window.removeEventListener('resize', this.resize_window_fn)
+      this.pdf_src.destroy()
+    } catch (error) {
+
+    }
   }
 }
 </script>
