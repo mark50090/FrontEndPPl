@@ -188,11 +188,10 @@
                                 <v-icon large>mdi-account</v-icon>
                               </template>
                             </v-text-field> -->
-                            <v-combobox dense outlined hide-details  color="#67C25D" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" append-icon="mdi-magnify" @click:append="search_citizen()" placeholder="@one.th" class="create-setting email-step-box each-email-icon email-search-icon" @keyup.enter="search_citizen()" @keyup="getEmail=[]" :items="getEmail" @change="isDirty = true" >
-                              <li v-model="findIndexArray=index"></li>
-                                <template v-slot:prepend>
-                                  <v-icon large>mdi-account</v-icon>
-                                </template>
+                            <v-combobox dense outlined hide-details auto-select-first color="#67C25D" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" @input.native="actor_email.thai_email=$event.srcElement.value" append-icon="mdi-magnify" @click:append="search_citizen(actor_email.thai_email)" placeholder="@one.th" class="create-setting email-step-box each-email-icon email-search-icon" @keyup.enter="search_citizen(actor_email.thai_email)" @keyup="getEmail=[]" :items="getEmail" >
+                              <template v-slot:prepend>
+                                <v-icon large>mdi-account</v-icon>
+                              </template>
                             </v-combobox>
                           </v-col>
                           <!-- <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-1 pr-0 pt-1 pb-0">
@@ -344,11 +343,10 @@
                               <v-icon large>mdi-account</v-icon>
                             </template>
                           </v-text-field> -->
-                          <v-combobox dense outlined hide-details color="#67C25D" append-icon="mdi-magnify" @click:append="search_citizen_custom()" @keyup.enter="search_citizen_custom()" @keyup="getEmail=[]" :items="getEmail" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon">
-                            <li v-model="findIndexArray=index"></li>
-                              <template v-slot:prepend>
-                                <v-icon large>mdi-account</v-icon>
-                              </template>
+                          <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-magnify" @click:append="search_citizen_custom(actor_email.thai_email)" @input.native="actor_email.thai_email=$event.srcElement.value" @keyup.enter="search_citizen_custom(actor_email.thai_email)" @keyup="getEmail=[]" :items="getEmail" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon">
+                            <template v-slot:prepend>
+                              <v-icon large>mdi-account</v-icon>
+                            </template>
                           </v-combobox>
                         </v-col>
                         <!-- <v-col cols="5" md="5" lg="5" align-self="center" class="pa-0">
@@ -459,7 +457,6 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       is_password: false,
       is_password_custom: false,
       getEmail: [],
-      findIndexArray:''
     }),
     mounted() {
       this.getDocumentType()
@@ -674,12 +671,10 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             }else{
               ele.actor[0].permission_email.forEach(el => {
                 this.actor_email.push(el.thai_email)
-                console.log(el.thai_email)
               })
             }
           })
         }else{
-          console.log(this.flow_datas_custom)
           this.flow_datas_custom.forEach((ele) => {
             ele.actor.permission_email.forEach(el => {
               this.actor_email.push(el.thai_email)
@@ -687,6 +682,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
           })
         }
         try {
+          console.log("actor_email",this.actor_email)
           this.emitLoading(true)
           var url = '/citizen/api/v1/check_citizen_email'
           var {data} = await this.axios.post(this.$api_url + url,{
@@ -1394,59 +1390,35 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 
         this.$set(this.signArray,arr_index,sign)
       },
-      async search_citizen() {
-        this.actor_email = []
-        let searchEmail = []
-        this.flow_datas.forEach(ele => {
-          ele.actor[0].permission_email.forEach(el => {
-            searchEmail.push(el.thai_email)
-          })
-        })
-        searchEmail = searchEmail[this.findIndexArray]
-        searchEmail = searchEmail.trim()
-        console.log("searchEmail",searchEmail)
+      async search_citizen(item) {
+        item = item.trim()
+        console.log(item)
         try {
           this.getEmail = []
           var url = `/citizen/api/v1/search_citizen`
-          var {data} = await this.axios.post(this.$api_url + url, {keyword: searchEmail} )
+          var {data} = await this.axios.post(this.$api_url + url, {keyword: item} )
           if(data.status) {
             let getEmail = data.result
             for (let index = 0; index < getEmail.length; index++) {
               this.getEmail.push(getEmail[index].citizen_data.thai_email)
             }
           }
-          searchEmail = []
-          console.log("getEmail",this.getEmail)
         } catch (error) {
           console.log(error);
         }
       },
-      async search_citizen_custom() {
-        this.actor_email = []
-        let searchEmail = []
-        console.log(this.flow_datas_custom)
-        this.flow_datas_custom.forEach(ele => {
-          ele.actor.permission_email.forEach(el => {
-            searchEmail.push(el.thai_email)
-          })
-        })
-        console.log("searchEmail",searchEmail)
-        searchEmail = searchEmail[this.findIndexArray]
-        searchEmail = searchEmail.trim()
-        console.log("findIndexArray",this.findIndexArray)
-        // console.log("searchEmail",this.searchEmail)
+      async search_citizen_custom(item) {
+        item = item.trim()
         try {
           this.getEmail = []
           var url = `/citizen/api/v1/search_citizen`
-          var {data} = await this.axios.post(this.$api_url + url, {keyword: searchEmail} )
+          var {data} = await this.axios.post(this.$api_url + url, {keyword: item} )
           if(data.status) {
             let getEmail = data.result
             for (let index = 0; index < getEmail.length; index++) {
               this.getEmail.push(getEmail[index].citizen_data.thai_email)
             }
           }
-          searchEmail = []
-          console.log("getEmail",this.getEmail)
         } catch (error) {
           console.log(error);
         }
