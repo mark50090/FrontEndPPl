@@ -29,29 +29,29 @@
               <v-select outlined hide-details dense color="#4caf50" append-icon="mdi-chevron-down" v-model="document_status" item-value="value" item-text="text" :menu-props="{ bottom: true, offsetY: true }" :items="docStatusOptions" class="status-doc-box type-doc-dropdown-icon"></v-select>
             </v-col>
             <!-- filter document period for mobile only -->
-            <!-- <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 doc-type-title display-mobile-only">{{ textLang.date_filter_title }}</v-col>
+            <v-col cols="5" md="auto" lg="auto" align-self="center" class="pl-0 pb-0 doc-type-title display-mobile-only">{{ textLang.date_filter_title }}</v-col>
             <v-col cols="7" md="4" lg="4" class="px-0 pb-0 display-mobile-only">
               <v-menu offset-y :close-on-content-click="false" v-model="date_filter_menu_mobile">
                 <template v-slot:activator="{ on }">
                   <v-text-field dense outlined hide-details color="#4caf50" append-icon="mdi-calendar-range-outline" v-on="on" v-model="date_filter_text" class="filter-date-box-mobile"></v-text-field>
                 </template>
-                <v-date-picker range show-current locale="th" color="#4caf50" :max="new Date().toISOString().substr(0, 10)" v-model="date_filter" @change="date_filter_menu_mobile=false" class="filter-date-calendar"></v-date-picker>
+                <v-date-picker range show-current locale="th" color="#4caf50" :max="new Date().toISOString().substr(0, 10)" v-model="date_filter" @change="changeDateRange" class="filter-date-calendar"></v-date-picker>
               </v-menu>
-            </v-col> -->
+            </v-col>
           </v-row>
           <v-row class="mt-3 inbox-row">
             <v-col cols="auto" md="auto" lg="auto" align-self="center" class="px-0 py-0 all-doc-header">{{textLang.alldocuments}} {{count_transaction_total}}</v-col>
             <!-- filter document period for pc only -->
-            <!-- <v-spacer class="display-pc-only"></v-spacer>
+            <v-spacer class="display-pc-only"></v-spacer>
             <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 py-0 doc-type-title display-pc-only">{{ textLang.date_filter_title }}</v-col>
             <v-col cols="4" md="4" lg="4" class="px-0 py-0 display-pc-only">
               <v-menu offset-y min-width="290" :close-on-content-click="false" v-model="date_filter_menu">
                 <template v-slot:activator="{ on }">
                   <v-text-field dense outlined hide-details color="#4caf50" append-icon="mdi-calendar-range-outline" v-on="on" v-model="date_filter_text" class="filter-data-box"></v-text-field>
                 </template>
-                <v-date-picker range show-current locale="th" color="#4caf50" :max="new Date().toISOString().substr(0, 10)" v-model="date_filter" @change="date_filter_menu=false" class="filter-date-calendar"></v-date-picker>
+                <v-date-picker range show-current locale="th" color="#4caf50" :max="new Date().toISOString().substr(0, 10)" v-model="date_filter" @change="changeDateRange" class="filter-date-calendar"></v-date-picker>
               </v-menu>
-            </v-col>  -->
+            </v-col> 
           </v-row>
           <!-- filter document status for pc only -->
           <v-row class="mt-5 inbox-row display-pc-only">
@@ -219,10 +219,24 @@ import { EventBus } from '../EventBus'
         this.searchTransaction({status:newValue}).then(data => {})
         this.changeTotalItem()
         this.isChangeTab = true
-      }
+      },
+      // "date_filter" (val) {
+      //   this.date_filter_text = this.formatDate(this.date_filter)
+      // },
     },
 
     methods: {
+      changeDateRange(){
+        this.optionsTransaction.page = 1
+        if(this.date_filter[0] && this.date_filter[1]) this.searchTransaction()
+        this.date_filter_menu = false
+        this.date_filter_menu_mobile = false
+      },
+      // formatDate (date) {
+      //   if (!date) return null
+      //   const [year, month, day] = date[0].split('-')
+      //   return `${month}/${day}/${year}`
+      // },
       emitLoading(isLoad) {
         EventBus.$emit('loadingOverlay', isLoad)
       },
@@ -298,7 +312,9 @@ import { EventBus } from '../EventBus'
             flow_id: this.selectedTypeDocs._id,
             lim: itemsPerPage, //เปลี่ยนค่าให้รองรับกับ footer ของตาราง (จำนวนข้อมูลต่อหน้าตาราง 1 หน้า)
             offset: (page-1)*itemsPerPage || 0, // ค่าเริ่มต้นของข้อมูลในหน้าตารางนั้นๆ เช่นหน้าที่ 1 เริ่มข้อมูลที่อาเรย์ 0, หน้าที่ 2 เริ่มข้อมูลที่อาเรย์ 10(ในกรณีที่ itemsPerpage = 10)
-            owned: false // เป็นค่าคงที่
+            owned: false, // เป็นค่าคงที่
+            start_date: this.date_filter[0],
+            end_date: this.date_filter[1]
           })
           if(data.status){ //ถ้า response status == true
             data.result.forEach(element => { //วนลูปข้อมูลที่ได้จาก api
@@ -336,7 +352,9 @@ import { EventBus } from '../EventBus'
             flow_id: this.selectedTypeDocs._id,
             lim: itemsPerPage,
             offset: (page-1)*itemsPerPage || 0,
-            owned: false
+            owned: false,
+            start_date: this.date_filter[0],
+            end_date: this.date_filter[1]
           })
           if(data.status){
             var res = data.result
