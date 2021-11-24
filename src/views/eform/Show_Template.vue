@@ -14,11 +14,11 @@
         <v-icon>mdi-reply</v-icon>
         <span class="btn-return-edit">{{ textLang.tabMenubar.return_edit }}</span>
       </v-btn>
-      <v-btn v-if="currentStep != ''" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
+      <v-btn v-if="currentStep != '' && !skipFirstStep" depressed rounded large dark color="red" class="send-back-btn-icon send-back-btn display-pc-only" @click="openReject()">
         <v-icon>mdi-file-excel-outline</v-icon>
         <span class="btn-reject-doc save-draft-word">{{ textLang.tabMenubar.reject_doc }}</span>
       </v-btn>
-      <v-btn  v-if="currentStep != '' && isOwner"  depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
+      <v-btn  v-if="currentStep != '' && isOwner && !skipFirstStep"  depressed rounded large dark color="#DC143C" class="send-back-btn-icon send-back-btn display-pc-only" @click="openCancel()">
         <v-icon>mdi-file-cancel-outline</v-icon>
         <span class="btn-cancel-doc">{{ textLang.tabMenubar.cancel_doc }}</span>
       </v-btn>
@@ -78,7 +78,7 @@
             <v-list-item-icon><v-icon>mdi-script-text-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
           </v-list-item>  -->
-          <v-list-item v-if="currentStep != '' && currentStep != '1'" @click="downloadFromEid()">
+          <v-list-item v-if="currentStep != '' && currentStep != '1' && !skipFirstStep" @click="downloadFromEid()">
             <v-list-item-icon><v-icon>mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item> 
@@ -128,11 +128,11 @@
               </v-badge>
             </v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="currentStep != ''" @click="openReverse()">
+          <v-list-item v-if="currentStep != '' && currentStep != 1 && !skipFirstStep" @click="openReverse()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-reply</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.return_edit }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="currentStep != ''" @click="openReject()">
+          <v-list-item v-if="currentStep != '' && !skipFirstStep" @click="openReject()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-excel-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.reject_doc }}</v-list-item-title>
           </v-list-item>
@@ -156,7 +156,7 @@
             <v-list-item-icon><v-icon color="#4CAF50">mdi-script-text-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.page_view }}</v-list-item-title>
           </v-list-item> -->
-          <v-list-item v-if="currentStep != '' && currentStep != '1'"  @click="downloadFromEid()">
+          <v-list-item v-if="currentStep != '' && currentStep != '1' && !skipFirstStep"  @click="downloadFromEid()">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-download</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.download_doc }}</v-list-item-title>
           </v-list-item>
@@ -1207,6 +1207,7 @@
       onSave: false,
       ext_template : {},
       isPaperview: true,
+      skipFirstStep: false,
       isSimpleFill: false,
       paperSizeIndex: 0,
       isOwner: false,
@@ -1667,6 +1668,11 @@
           if(data.status) {
             template = data.data
             this.template_option = template
+            this.getFlowData(true)
+            if(this.template_option.is_skip) {
+              this.skipFirstStep = true
+              this.currentStep = 1
+            }
             this.template_name = template.template_name
             var pageLength = template.orientation.length
             if(this.isOnlyForm) {
@@ -3073,7 +3079,6 @@
                 cmp.value = {show: cmp.value.show}
               }
               cmp.value = this.initailDatabind(cmp)
-              console.log(cmp.value)
               if(typeof cmp.value.show_index === 'undefined' || cmp.value.show_index == 'undefined') {
                 if(cmp.value.isUser) {
                   cmp.value = ""
@@ -7122,7 +7127,7 @@
           allValid = this.checkDocCondition(this.template_option.document_option['condition'] )
         }
         //New session
-        sessionStorage.setItem("firstSent", this.currentStep == "")
+        sessionStorage.setItem("firstSent", this.currentStep == "" || this.skipFirstStep)
         sessionStorage.setItem("isInstantSave", isToPreview != true)
         sessionStorage.setItem('isDraft',isDraft)
 
@@ -7138,6 +7143,7 @@
         sessionStorage.setItem('pageTemp',JSON.stringify(this.pages))
         sessionStorage.setItem('flow_permission',JSON.stringify(this.template_option.flow_permission))
         sessionStorage.setItem('paper_size',this.template_option.paper_size)
+        sessionStorage.setItem('isSkipFirstStep', this.skipFirstStep)
         this.template_option.template_body = this.template_option.template_header = this.template_option.template_footer = {}
         sessionStorage.setItem('template_option',JSON.stringify(this.template_option))
         sessionStorage.setItem('Folder_Attachment_Name',JSON.stringify(this.attachedFiles))
@@ -8044,6 +8050,28 @@
           
         }
         
+      },
+      async getFlowData(isCheckFlowStatus) {
+        try {
+          if(this.template_option.flow_id){
+            var tax_id = this.template_option.tax_id
+            var url = `/flowdata/api/v1/get1/?_id=${this.template_option.flow_id}&tax_id=${tax_id}&no_base=true`
+            var {data} = await this.axios.get(this.$api_url + url)
+            if(data.status){
+              if(isCheckFlowStatus) {
+                if(data.data.status != "active") {
+                  this.$router.push("/form")
+                }
+              }
+              if(data.data.flow_data[0].actor[0].permission_sender_status) {
+                this.skipFirstStep = true
+                this.currentStep = 1
+              }
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        }
       },
       async deleteUploadImage(obj, isCell) {
         if(!obj.disable) {
