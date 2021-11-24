@@ -228,7 +228,10 @@ import { EventBus } from '../EventBus'
     methods: {
       changeDateRange(){
         this.optionsTransaction.page = 1
-        if(this.date_filter[0] && this.date_filter[1]) this.searchTransaction()
+        if(this.date_filter[0] && this.date_filter[1]) {
+          this.searchTransaction()
+          this.countTransaction()
+        }
         this.date_filter_menu = false
         this.date_filter_menu_mobile = false
       },
