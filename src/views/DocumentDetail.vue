@@ -61,11 +61,13 @@
                         'display': item.show ? 'block' : 'none',
                         }"
                     >
-                      <v-row no-gutters justify="center" align="center">
-                        <span style="color: grey">
-                          {{textLang.no}} {{ index_sign + 1 }} {{`(${index + 1}/${signature.length})`}}
-                        </span>
-                      </v-row>
+                      <v-container fill-height fluid>
+                        <v-row no-gutters justify="center" align="center">
+                          <span style="color: grey">
+                            {{textLang.no}} {{ index_sign + 1 }} {{`(${index + 1}/${signature.length})`}}
+                          </span>
+                        </v-row>
+                      </v-container>
                     </vue-draggable-resizable>
                     </template>
                     <vue-draggable-resizable
@@ -142,6 +144,30 @@
                       </v-card>
                       </v-menu>
                       <img :src="item.base64" height="100%" width="100%" />
+                    </vue-draggable-resizable>
+                    <vue-draggable-resizable
+                      v-if="is_qrcode"
+                      id="position_Qrcode"
+                      :draggable="false"
+                      :resizable="false"
+                      :x="position_Qrcode.sign_position_x"
+                      :y="position_Qrcode.sign_position_y"
+                      :w="position_Qrcode.sign_box_width"
+                      :h="position_Qrcode.sign_box_heigth"
+                      :style="{
+                        'background-color': 'rgba(83, 186, 71, 0.2)',
+                        'display': position_Qrcode.show ? 'block' : 'none',
+                        }"
+                    >
+                      <v-container fill-height fluid>
+                        <v-row no-gutters justify="center" align="center">
+                          <v-col>
+                            <span style="color: grey">
+                              QR Code
+                            </span>
+                          </v-col>
+                        </v-row>
+                      </v-container>
                     </vue-draggable-resizable>
                 </div>
               </v-row>
@@ -506,7 +532,20 @@ export default {
     setTimeOutResize: null,
     showCancelButton: false,
     tax_id: '',
-    stampCAList: []
+    stampCAList: [],
+    is_qrcode: false,
+    position_Qrcode: {
+      sign_llx: 0.3,
+      sign_lly: 0.3,
+      sign_page: [1],
+      sign_urx: 0.3,
+      sign_ury: 0.3,
+      sign_position_x: 1,
+      sign_position_y: 1,
+      sign_box_heigth: 1,
+      sign_box_width: 1,
+      show: false
+    }
   }),
   mounted () {
     this.token = sessionStorage.getItem('access_token')
@@ -622,6 +661,7 @@ export default {
       this.setTimeOutResize = setTimeout(() => {
         this.reShowSign(this.sign_position)
         this.reShowStamp()
+        this.reShowQRCode()
       }, 100)
     },
     change_page_fn (type) {
@@ -881,7 +921,14 @@ export default {
             if (data.data.flow_step[0].status == 'W' || data.data.document_status == 'Y' || data.data.document_status == 'R') {
               this.isShowRevertButton = false
             }
-
+            if (doc_data.is_qrcode) {
+              this.is_qrcode = doc_data.is_qrcode
+              this.$set(this.position_Qrcode, 'sign_llx', doc_data.position_Qrcode.sign_llx)
+              this.$set(this.position_Qrcode, 'sign_lly', doc_data.position_Qrcode.sign_lly)
+              this.$set(this.position_Qrcode, 'sign_urx', doc_data.position_Qrcode.sign_urx)
+              this.$set(this.position_Qrcode, 'sign_ury', doc_data.position_Qrcode.sign_ury)
+              this.$set(this.position_Qrcode, 'sign_page', doc_data.position_Qrcode.sign_page)
+            }
             doc_data.flow_step.forEach((flowData, index) => {
               flowData.active_count = flowData.actor.filter(item => (item.approved === 'Y' || item.approved === 'R')).length
               this.$set(this.sign_position, index, flowData.sign_position)
@@ -1113,10 +1160,16 @@ export default {
         this.$set(this.sign_position, index, arr)
         this.select_page = Array.from({ length: this.page_count }, (_, i) => i + 1)
       })
+      if (this.position_Qrcode.sign_page !== 'all') {
+        this.position_Qrcode.sign_page = (typeof this.position_Qrcode.sign_page === 'string' ? this.position_Qrcode.sign_page : this.position_Qrcode.sign_page.toString()).split(',')
+        for (var i = 0; i < this.position_Qrcode.sign_page.length; i++) { this.position_Qrcode.sign_page[i] = +this.position_Qrcode.sign_page[i] }
+      } else this.position_Qrcode.sign_page = Array.from({ length: this.page_count }, (_, i) => i + 1)
+      // console.log(this.position_Qrcode)
     },
     loaded: function (e) {
       this.reShowSign(this.sign_position)
       this.reShowStamp()
+      this.reShowQRCode()
     },
     reShowSign (data) {
       this.signArray = []
@@ -1222,6 +1275,54 @@ export default {
     onDeactivated (index) {
       const stamp = this.stamp_position[index]
       this.$set(this.stamp_position, index, { ...stamp, active: false })
+    },
+    reShowQRCode () {
+      if (!this.is_qrcode) return null
+      const position = this.position_Qrcode
+      this.position_Qrcode = {
+        show: false,
+        sign_page: position.sign_page,
+        sign_llx: position.sign_llx || 0,
+        sign_lly: position.sign_lly || 0.95,
+        sign_urx: position.sign_urx || 0.2,
+        sign_ury: position.sign_ury || 0.05,
+        sign_position_x: position.sign_position_x || 0,
+        sign_position_y: position.sign_position_y || 0,
+        sign_box_heigth: position.sign_box_heigth || 0,
+        sign_box_width: position.sign_box_width || 0
+      }
+      var shownonPage = this.position_Qrcode.sign_page
+      console.log(this.transaction_detail)
+      var isShow = shownonPage.includes(this.page) && (this.transaction_detail.document_status !== 'Y' && this.transaction_detail.document_status !== 'C')
+      this.$set(this.position_Qrcode, 'show', isShow)
+      this.setPositionQRCode(
+        this.position_Qrcode.sign_llx,
+        this.position_Qrcode.sign_lly,
+        this.position_Qrcode.sign_urx,
+        this.position_Qrcode.sign_ury
+      )
+    },
+    setPositionQRCode (llx, lly, urx, ury) {
+
+      var clientWidth = $('#pdfDiv')[0].getBoundingClientRect().width
+      var clientHeight = $('#pdfDiv')[0].getBoundingClientRect().height
+
+      var setHeight = parseFloat(clientHeight) * lly
+
+      var stamp = this.position_Qrcode
+
+      stamp.sign_llx = llx
+      stamp.sign_lly = lly
+      stamp.sign_urx = urx
+      stamp.sign_ury = ury
+
+      stamp.sign_position_x = clientWidth * (+llx)
+      stamp.sign_position_y = ((-setHeight) + (Math.abs(ury - lly))) + (-clientHeight) * (+lly + (ury - lly))
+      stamp.sign_box_heigth = (clientHeight * (ury))
+      stamp.sign_box_width = (clientWidth * urx)
+
+      this.position_Qrcode = stamp
+      // console.log(`qrcode`, this.position_Qrcode)
     },
     reShowStamp () {
       for (let index = 0; index < this.stamp_position.length; index++) {
