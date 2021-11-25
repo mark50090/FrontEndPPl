@@ -8461,7 +8461,7 @@ export default {
                 }
                 
               })
-              if(data.data.flow_data[0].actor[0].permission_sender_status) {
+              if(data.data.flow_data[0].actor[0].permission_sender_status && data.data.flow_data[0].action == "Fill") {
                 this.skipFirstStep = true
               } else {
                 this.skipFirstStep = false
