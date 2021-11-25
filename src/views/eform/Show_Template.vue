@@ -50,7 +50,7 @@
             <v-list-item-icon><v-icon>mdi-file-import-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogImport = true">
+          <v-list-item  @click="dialogImport = true">
             <v-list-item-icon><v-icon>mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
           </v-list-item>
@@ -100,7 +100,7 @@
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-import-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogImport = true">
+          <v-list-item @click="dialogImport = true">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
           </v-list-item>
@@ -7956,12 +7956,12 @@
       },
       async importExcel() {
         let formData = new FormData()
-        formData.append('excel_file', this.excelFile)
+        formData.append('file', this.excelFile)
         formData.append('template_id', this.template_option.template_id)
         this.dialogImport = false
         this.notReady = true
         try {
-          var { data } = await this.axios.post(this.$eform_api_v2 + '/import_template_excel',
+          var { data } = await this.axios.post(this.$api_url + '/import_template_excel',
           formData)
           this.notReady = false
           if(data.messageER != 'ER') {
@@ -8063,7 +8063,7 @@
                   this.$router.push("/form")
                 }
               }
-              if(data.data.flow_data[0].actor[0].permission_sender_status) {
+              if(data.data.flow_data[0].actor[0].permission_sender_status && data.data.flow_data[0].action == "Fill") {
                 this.skipFirstStep = true
                 this.currentStep = 1
               }
