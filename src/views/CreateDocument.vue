@@ -188,7 +188,7 @@
                                 <v-icon large>mdi-account</v-icon>
                               </template>
                             </v-text-field> -->
-                            <v-combobox dense outlined hide-details auto-select-first no-data color="#67C25D" @mouseup="getEmail=[]" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" @input.native="actor_email.thai_email=$event.srcElement.value,getEmail=[]" append-icon="mdi-magnify" @click:append="search_citizen(actor_email.thai_email)" placeholder="@one.th" class="create-setting email-step-box each-email-icon email-search-icon" @keyup.enter="search_citizen(actor_email.thai_email)" :items="getEmail" @change="isDirty = true,getEmail=[]">
+                            <v-combobox dense outlined hide-details auto-select-first no-data color="#67C25D" @mouseup="getEmail=[]" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" @input.native="actor_email.thai_email=$event.srcElement.value,getEmail=[],isDirty = true" append-icon="mdi-magnify" @click:append="search_citizen(actor_email.thai_email)" placeholder="@one.th" class="create-setting email-step-box each-email-icon email-search-icon" @keyup.enter="search_citizen(actor_email.thai_email)" :items="getEmail" @change="isDirty = true,getEmail=[]">
                               <template v-slot:prepend>
                                 <v-icon large>mdi-account</v-icon>
                               </template>
@@ -343,7 +343,7 @@
                               <v-icon large>mdi-account</v-icon>
                             </template>
                           </v-text-field> -->
-                          <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-magnify" @mouseup="getEmail=[]" @click:append="search_citizen(actor_email.thai_email)" @input.native="actor_email.thai_email=$event.srcElement.value,getEmail=[]" @keyup.enter="search_citizen(actor_email.thai_email)" :items="getEmail" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon" @change="getEmail=[]">
+                          <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-magnify" @mouseup="getEmail=[]" @click:append="search_citizen(actor_email.thai_email)" @input.native="actor_email.thai_email=$event.srcElement.value,getEmail=[],isDirty = true" @keyup.enter="search_citizen(actor_email.thai_email)" :items="getEmail" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon" @change="getEmail=[]">
                             <template v-slot:prepend>
                               <v-icon large>mdi-account</v-icon>
                             </template>
