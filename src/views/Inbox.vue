@@ -33,9 +33,9 @@
             <v-col cols="7" md="4" lg="4" class="px-0 pb-0 display-mobile-only">
               <v-menu offset-y :close-on-content-click="false" v-model="date_filter_menu_mobile">
                 <template v-slot:activator="{ on }">
-                  <v-text-field dense outlined hide-details color="#4caf50" append-icon="mdi-calendar-range-outline" v-on="on" v-model="date_filter_text" class="filter-date-box-mobile"></v-text-field>
+                  <v-text-field dense outlined hide-details color="#4caf50" append-icon="mdi-calendar-range-outline" v-on="on" readonly :value="date_filter_text" class="filter-date-box-mobile"></v-text-field>
                 </template>
-                <v-date-picker range show-current locale="th" color="#4caf50" :max="new Date().toISOString().substr(0, 10)" v-model="date_filter" @change="changeDateRange" class="filter-date-calendar"></v-date-picker>
+                <v-date-picker range show-current :locale="currentLang" color="#4caf50" :max="new Date().toISOString().substr(0, 10)" v-model="date_filter" @change="changeDateRange" class="filter-date-calendar"></v-date-picker>
               </v-menu>
             </v-col>
           </v-row>
@@ -47,9 +47,9 @@
             <v-col cols="4" md="4" lg="4" class="px-0 py-0 display-pc-only">
               <v-menu offset-y min-width="290" :close-on-content-click="false" v-model="date_filter_menu">
                 <template v-slot:activator="{ on }">
-                  <v-text-field dense outlined hide-details color="#4caf50" append-icon="mdi-calendar-range-outline" v-on="on" v-model="date_filter_text" class="filter-data-box"></v-text-field>
+                  <v-text-field dense outlined hide-details color="#4caf50" append-icon="mdi-calendar-range-outline" readonly v-on="on" :value="date_filter_text" class="filter-data-box"></v-text-field>
                 </template>
-                <v-date-picker range show-current locale="th" color="#4caf50" :max="new Date().toISOString().substr(0, 10)" v-model="date_filter" @change="changeDateRange" class="filter-date-calendar"></v-date-picker>
+                <v-date-picker range show-current :locale="currentLang" color="#4caf50" :max="new Date().toISOString().substr(0, 10)" v-model="date_filter" @change="changeDateRange" class="filter-date-calendar"></v-date-picker>
               </v-menu>
             </v-col> 
           </v-row>
@@ -136,7 +136,11 @@ import { EventBus } from '../EventBus'
         }))
       },
       date_filter_text() {
-        return this.date_filter.join(this.textLang.join_date_text)
+        var date_formatted = this.date_filter.map(x => this.$options.filters.shortdate(x)) // using filter shortdate from dateFilters.js
+        return date_formatted.join(this.textLang.join_date_text)
+      },
+      currentLang(){
+        return this.$store.state.currentLanguage
       }
     },
     data: () => ({
@@ -223,6 +227,17 @@ import { EventBus } from '../EventBus'
         this.countTransaction()
         this.isChangeTab = true
       },
+      "date_filter" (val) {
+        var isSorted = value => { //sort value date_filter
+          var sortHmm = [...value].sort()
+          return value.reduce((x, y, i) => x && y == sortHmm[i], true)
+        }
+        if (!isSorted(val)) {
+          this.$nextTick(() => {
+            this.date_filter = val.sort()
+          })
+        }
+      }
     },
 
     methods: {
@@ -303,6 +318,7 @@ import { EventBus } from '../EventBus'
         try {
           var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
           this.emitLoading(true)
+          const dateRange = [...this.date_filter].sort(); //sort date_filter
           var { data } = await this.axios.post(this.$api_url + '/transaction/api/v1/searchTransaction', { //ตั้งค่าตัวแปร host ไว้แล้ว เรียกใช้เป็น this.$api_url ได้เลย
             tax_id: tax_id, //ต้องทดสอบอีกครั้งว่า ถ้าเปลี่ยน business แล้วค่านี้จะเปลี่ยนด้วยไหม (เพราะ set tax_id แค่ตอน mounted) ปกติจะเรียก get session มาใส่ในนี้โดยตรงเลย
             keyword: this.keyword, //คำในช่องค้นหา
@@ -311,8 +327,8 @@ import { EventBus } from '../EventBus'
             lim: itemsPerPage, //เปลี่ยนค่าให้รองรับกับ footer ของตาราง (จำนวนข้อมูลต่อหน้าตาราง 1 หน้า)
             offset: (page-1)*itemsPerPage || 0, // ค่าเริ่มต้นของข้อมูลในหน้าตารางนั้นๆ เช่นหน้าที่ 1 เริ่มข้อมูลที่อาเรย์ 0, หน้าที่ 2 เริ่มข้อมูลที่อาเรย์ 10(ในกรณีที่ itemsPerpage = 10)
             owned: false, // เป็นค่าคงที่
-            start_date: this.date_filter[0],
-            end_date: this.date_filter[1]
+            start_date: dateRange[0], //using first sorted date to be start_date
+            end_date: dateRange[1] //using last sorted date to be end date
           })
           if(data.status){ //ถ้า response status == true
             data.result.forEach(element => { //วนลูปข้อมูลที่ได้จาก api
@@ -340,6 +356,7 @@ import { EventBus } from '../EventBus'
         var status = ""
         if(this.document_status == 'all') status = ""
         const { page, itemsPerPage } = this.optionsTransaction
+        const dateRange = [...this.date_filter].sort();
         try {
           var tax_id = JSON.parse(sessionStorage.getItem('selected_business')).id_card_num
           // this.emitLoading(true)
@@ -351,8 +368,8 @@ import { EventBus } from '../EventBus'
             lim: itemsPerPage,
             offset: (page-1)*itemsPerPage || 0,
             owned: false,
-            start_date: this.date_filter[0],
-            end_date: this.date_filter[1]
+            start_date: dateRange[0],
+            end_date: dateRange[1]
           })
           if(data.status){
             var res = data.result
