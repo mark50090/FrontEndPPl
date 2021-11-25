@@ -898,7 +898,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                       "permission_email_status": false,
                       "permission_email": [],
                       "permission_sender_status": true,
-                      "permission_sender":{
+                      "permission_sender":[{
                         "account_id": null,
                         "account_title_eng": null,
                         "account_title_th": null,
@@ -907,7 +907,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
                         "last_name_eng": null,
                         "last_name_th": null,
                         "thai_email": null
-                      }
+                      }]
                     }
                   ],
                   "approver": {
