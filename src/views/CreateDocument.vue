@@ -188,7 +188,7 @@
                                 <v-icon large>mdi-account</v-icon>
                               </template>
                             </v-text-field> -->
-                            <v-combobox dense outlined hide-details auto-select-first no-data color="#67C25D" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" @input.native="actor_email.thai_email=$event.srcElement.value" append-icon="mdi-magnify" @click:append="search_citizen(actor_email.thai_email)" placeholder="@one.th" class="create-setting email-step-box each-email-icon email-search-icon" @keyup.enter="search_citizen(actor_email.thai_email)" @keyup="getEmail=[]" :items="getEmail" @change="isDirty = true,getEmail=[]">
+                            <v-combobox dense outlined hide-details auto-select-first no-data color="#67C25D" @mouseup="getEmail=[]" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" @input.native="actor_email.thai_email=$event.srcElement.value,getEmail=[]" append-icon="mdi-magnify" @click:append="search_citizen(actor_email.thai_email)" placeholder="@one.th" class="create-setting email-step-box each-email-icon email-search-icon" @keyup.enter="search_citizen(actor_email.thai_email)" :items="getEmail" @change="isDirty = true,getEmail=[]">
                               <template v-slot:prepend>
                                 <v-icon large>mdi-account</v-icon>
                               </template>
@@ -343,7 +343,7 @@
                               <v-icon large>mdi-account</v-icon>
                             </template>
                           </v-text-field> -->
-                          <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-magnify" @click:append="search_citizen_custom(actor_email.thai_email)" @input.native="actor_email.thai_email=$event.srcElement.value" @keyup.enter="search_citizen_custom(actor_email.thai_email)" @keyup="getEmail=[]" :items="getEmail" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon" @change="getEmail=[]">
+                          <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-magnify" @mouseup="getEmail=[]" @click:append="search_citizen(actor_email.thai_email)" @input.native="actor_email.thai_email=$event.srcElement.value,getEmail=[]" @keyup.enter="search_citizen(actor_email.thai_email)" :items="getEmail" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon" @change="getEmail=[]">
                             <template v-slot:prepend>
                               <v-icon large>mdi-account</v-icon>
                             </template>
@@ -1392,22 +1392,6 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.$set(this.signArray,arr_index,sign)
       },
       async search_citizen(item) {
-        item = item.trim()
-        try {
-          this.getEmail = []
-          var url = `/citizen/api/v1/search_citizen`
-          var {data} = await this.axios.post(this.$api_url + url, {keyword: item} )
-          if(data.status) {
-            let getEmail = data.result
-            for (let index = 0; index < getEmail.length; index++) {
-              this.getEmail.push(getEmail[index].citizen_data.thai_email)
-            }
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      },
-      async search_citizen_custom(item) {
         item = item.trim()
         try {
           this.getEmail = []
