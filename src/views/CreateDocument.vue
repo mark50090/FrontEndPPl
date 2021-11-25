@@ -551,6 +551,7 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         this.selected_document_type = ''
         this.is_password = false
         this.isDirty = false
+        this.document_template_list = []
       },
       async getDocumentType(){
         this.loading_type = true
