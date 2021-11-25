@@ -50,7 +50,7 @@
             <v-list-item-icon><v-icon>mdi-file-import-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogImport = true">
+          <v-list-item  @click="dialogImport = true">
             <v-list-item-icon><v-icon>mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
           </v-list-item>
@@ -100,7 +100,7 @@
             <v-list-item-icon><v-icon color="#4CAF50">mdi-file-import-outline</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">{{ textLang.tabMenubar.import_other }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="(!isSendStep || isComplete) && isSelf && false" @click="dialogImport = true">
+          <v-list-item @click="dialogImport = true">
             <v-list-item-icon><v-icon color="#4CAF50">mdi-microsoft-excel</v-icon></v-list-item-icon>
             <v-list-item-title class="menu-show-page">Import Excel</v-list-item-title>
           </v-list-item>
@@ -2963,7 +2963,8 @@
               disable: false,
               textHl: false,
               hideBysection: false,
-              page: e.page
+              page: e.page,
+              excel: e.excel
             }
             if(typeof cmp.valueShow === 'undefined') {
               cmp.valueShow = e.value
@@ -2997,7 +2998,8 @@
               disable: false,
               textHl: false,
               hideBysection: false,
-              page: e.page
+              page: e.page,
+              excel: e.excel
             }
             if(typeof cmp.valueShow === 'undefined') {
               cmp.valueShow = e.value
@@ -7954,18 +7956,78 @@
           }
         }
       },
+      getExcelRowCol(excelKey) {
+        let resRowCol = {
+          valid: false,
+          row: 0,
+          col: 0
+        }
+        let stringKey = excelKey
+        stringKey = stringKey.split("a").join("1_")
+        stringKey = stringKey.split("b").join("2_")
+        stringKey = stringKey.split("c").join("3_")
+        stringKey = stringKey.split("d").join("4_")
+        stringKey = stringKey.split("e").join("5_")
+        stringKey = stringKey.split("f").join("6_")
+        stringKey = stringKey.split("g").join("7_")
+        stringKey = stringKey.split("h").join("8_")
+        stringKey = stringKey.split("i").join("9_")
+        stringKey = stringKey.split("j").join("10_")
+        stringKey = stringKey.split("k").join("11_")
+        stringKey = stringKey.split("l").join("12_")
+        stringKey = stringKey.split("m").join("13_")
+        stringKey = stringKey.split("n").join("14_")
+        stringKey = stringKey.split("o").join("15_")
+        stringKey = stringKey.split("p").join("16_")
+        stringKey = stringKey.split("q").join("17_")
+        stringKey = stringKey.split("r").join("18_")
+        stringKey = stringKey.split("s").join("19_")
+        stringKey = stringKey.split("t").join("20_")
+        stringKey = stringKey.split("u").join("21_")
+        stringKey = stringKey.split("v").join("22_")
+        stringKey = stringKey.split("w").join("23_")
+        stringKey = stringKey.split("x").join("24_")
+        stringKey = stringKey.split("y").join("25_")
+        stringKey = stringKey.split("z").join("26_")
+        let arrayKey = stringKey.split("_")
+        if(arrayKey.length >= 2) {
+          resRowCol.valid = true
+          resRowCol.row = Number(arrayKey[arrayKey.length-1]) - 1
+          for(let i=0; i< arrayKey.length-1; i++) {
+            resRowCol.col += Number(arrayKey[i])
+          }
+          resRowCol.col -= 1
+        }
+
+        return resRowCol
+      },
       async importExcel() {
         let formData = new FormData()
-        formData.append('excel_file', this.excelFile)
+        formData.append('file', this.excelFile)
         formData.append('template_id', this.template_option.template_id)
         this.dialogImport = false
         this.notReady = true
         try {
-          var { data } = await this.axios.post(this.$eform_api_v2 + '/import_template_excel',
+          var { data } = await this.axios.post(this.$api_url + '/template_form/api/v1/import_template_excel',
           formData)
           this.notReady = false
-          if(data.messageER != 'ER') {
-            this.mappingExcelValue(data.messageText)
+          if(data.status) {
+            var excelData = data.data[0]
+            this.objectTypeInput.forEach(e => {
+              this.objectArray[e].forEach(e2 => {
+                if(e2.excel) {
+                  let excelKey = e2.excel.toLowerCase()
+                  let resRowCol = this.getExcelRowCol(excelKey)
+                  if(resRowCol.valid) {
+                    if(typeof excelData[resRowCol.row] !== 'undefined') {
+                      if(typeof excelData[resRowCol.row][resRowCol.col] !== 'undefined') {
+                        e2.value = excelData[resRowCol.row][resRowCol.col]
+                      }
+                    }
+                  }
+                }
+              })
+            })
           }
         } catch (error) {
           this.notReady = false
@@ -8063,7 +8125,7 @@
                   this.$router.push("/form")
                 }
               }
-              if(data.data.flow_data[0].actor[0].permission_sender_status) {
+              if(data.data.flow_data[0].actor[0].permission_sender_status && data.data.flow_data[0].action == "Fill") {
                 this.skipFirstStep = true
                 this.currentStep = 1
               }
