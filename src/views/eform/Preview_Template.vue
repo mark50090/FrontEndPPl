@@ -2537,11 +2537,6 @@ export default {
           orientationTemp[0][Okey] = this.pageOrientation[i - 1][Okey]
         }
         var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
-        if (temp_option.description_template) {
-          description = temp_option.description_template
-        } else if (temp_option.description) {
-          description = temp_option.description
-        }
         let isSkipFirstStep = false
         if(sessionStorage.getItem('isSkipFirstStep') == 'true') {
           isSkipFirstStep = true
