@@ -33,7 +33,7 @@
             <v-col cols="7" md="4" lg="4" class="px-0 pb-0 display-mobile-only">
               <v-menu offset-y :close-on-content-click="false" v-model="date_filter_menu_mobile">
                 <template v-slot:activator="{ on }">
-                  <v-text-field dense outlined hide-details color="#4caf50" append-icon="mdi-calendar-range-outline" v-on="on" readonly :value="date_filter_text" class="filter-date-box-mobile"></v-text-field>
+                  <v-text-field dense outlined hide-details clearable color="#4caf50" append-icon="mdi-calendar-range-outline" v-on="on" readonly :value="date_filter_text" @click:clear="clearDateFilter" class="filter-date-box-mobile"></v-text-field>
                 </template>
                 <v-date-picker range show-current :locale="currentLang" color="#4caf50" :max="new Date().toISOString().substr(0, 10)" v-model="date_filter" @change="changeDateRange" class="filter-date-calendar"></v-date-picker>
               </v-menu>
@@ -47,7 +47,7 @@
             <v-col cols="4" md="4" lg="4" class="px-0 py-0 display-pc-only">
               <v-menu offset-y min-width="290" :close-on-content-click="false" v-model="date_filter_menu">
                 <template v-slot:activator="{ on }">
-                  <v-text-field dense outlined hide-details color="#4caf50" append-icon="mdi-calendar-range-outline" readonly v-on="on" :value="date_filter_text" class="filter-data-box"></v-text-field>
+                  <v-text-field dense outlined hide-details clearable color="#4caf50" append-icon="mdi-calendar-range-outline" readonly v-on="on" :value="date_filter_text" @click:clear="clearDateFilter" class="filter-data-box"></v-text-field>
                 </template>
                 <v-date-picker range show-current :locale="currentLang" color="#4caf50" :max="new Date().toISOString().substr(0, 10)" v-model="date_filter" @change="changeDateRange" class="filter-date-calendar"></v-date-picker>
               </v-menu>
@@ -426,6 +426,12 @@ import { EventBus } from '../EventBus'
           this.countTransaction()
         }
         else this.optionsTransaction.page = 1
+      },
+      clearDateFilter() {
+        this.date_filter = []
+        this.optionsTransaction.page = 1
+        this.searchTransaction()
+        this.countTransaction()
       }
     }
   }
