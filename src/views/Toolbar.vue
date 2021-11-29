@@ -79,7 +79,7 @@
             <v-list-item-title class="menu-title">{{textLang.documentbox}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-group no-action color="#53ba47" :value="open_create_menu" active-class="menu-create-doc" :class="create_menu_active_class + ' menu-down-icon'">
+        <v-list-group no-action color="#53ba47" :value="open_create_menu" :disabled="!is_remaining_transaction" active-class="menu-create-doc" :class="create_menu_active_class + ' menu-down-icon'">
           <template v-slot:activator>
             <v-list-item-icon>
               <v-icon>mdi-file-edit-outline</v-icon>
@@ -197,7 +197,8 @@
       doc_style_active_class: '',
       allInfo: [],
       role_admin: false,
-      role_designer: false
+      role_designer: false,
+      is_remaining_transaction: true
     }),
     watch: {
       $route(to, from) {
@@ -236,6 +237,42 @@
       changeLoading(isLoad) {
         this.loading_overlay = isLoad
       },
+      async getPackageBusiness(){
+        try {
+          const url = `/package/api/v1/get_package_business?tax_id=${this.selectedBiz.id_card_num}`
+          var { data } = await this.axios.get(this.$api_url + url)
+          if(data.status){
+            if(data.data.transaction_remaining < 0){
+              sessionStorage.isTranRemaining = false
+              this.is_remaining_transaction = false
+              this.$swal({
+                backdrop: false,
+                width: '100%',
+                position: 'top',
+                background: '#FFCDD2',
+                title: '<svg style="width:35px;height:35px" viewBox="0 0 24 24"><path fill="#D50000" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="transaction-alert-text">' + this.textLang.transaction_alert + '</strong>',
+                showConfirmButton: false,
+                customClass: {
+                  container: 'transaction-alert-container',
+                  popup: 'transaction-alert-box',
+                  title: 'transaction-alert-text-block'
+                }
+              })
+              if(this.$route.name == 'create'){
+                this.$router.push({ name: 'inbox' })
+              }
+            }else{
+              sessionStorage.isTranRemaining = true
+              this.is_remaining_transaction = true
+              this.$swal.close()
+            }
+          }
+        } catch (error) {
+          sessionStorage.isTranRemaining = true
+          this.is_remaining_transaction = true
+          this.$swal.close()
+        }
+      },
       async getUserSetting(){
         try {
           const url = '/user_setting/api/v1/get_usersetting'
@@ -271,6 +308,7 @@
         this.isReady = true
         // this.getEmployeeInfo()
         this.loading_overlay = false
+        this.getPackageBusiness()
       },
       // async getEmployeeInfo(){
       //   try {
@@ -287,6 +325,7 @@
       changeBiz(){
         sessionStorage.setItem('selected_business', JSON.stringify(this.selectedBiz))
         EventBus.$emit('changeBiz')
+        this.getPackageBusiness()
         this.isReady = true
         // this.getEmployeeInfo()
         // this.$router.push({ path: '/inbox' })
