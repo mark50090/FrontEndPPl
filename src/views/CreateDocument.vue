@@ -188,7 +188,16 @@
                                 <v-icon large>mdi-account</v-icon>
                               </template>
                             </v-text-field> -->
-                            <v-combobox dense outlined hide-details auto-select-first no-data color="#67C25D" @mouseup="getEmail=[]" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" @input.native="actor_email.thai_email=$event.srcElement.value,getEmail=[],isDirty = true" append-icon="mdi-magnify" @click:append="search_citizen(actor_email.thai_email)" placeholder="@one.th" class="create-setting email-step-box each-email-icon email-search-icon" @keyup.enter="search_citizen(actor_email.thai_email)" :items="getEmail" @change="isDirty = true,getEmail=[]">
+                            <v-combobox dense outlined hide-details auto-select-first color="#67C25D" @mouseup="getEmail=[],loading_Email=false" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" @input.native="actor_email.thai_email=$event.srcElement.value,input_native_combobox()" append-icon="mdi-magnify" @click:append="search_citizen(actor_email.thai_email)" placeholder="@one.th" class="create-setting email-step-box each-email-icon email-search-icon" @keyup.enter="search_citizen(actor_email.thai_email)" :items="getEmail" @change="isDirty = true,getEmail=[]">
+                              <template v-slot:no-data v-if="loading_Email">
+                                <v-list-item>
+                                  <v-list-item-content>
+                                    <v-list-item-title>
+                                      {{status_in_combobox}}
+                                    </v-list-item-title>
+                                  </v-list-item-content>
+                                </v-list-item>
+                              </template>
                               <template v-slot:prepend>
                                 <v-icon large>mdi-account</v-icon>
                               </template>
@@ -343,7 +352,16 @@
                               <v-icon large>mdi-account</v-icon>
                             </template>
                           </v-text-field> -->
-                          <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-magnify" @mouseup="getEmail=[]" @click:append="search_citizen(actor_email.thai_email)" @input.native="actor_email.thai_email=$event.srcElement.value,getEmail=[],isDirty = true" @keyup.enter="search_citizen(actor_email.thai_email)" :items="getEmail" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon" @change="getEmail=[]">
+                          <v-combobox dense outlined hide-details auto-select-first color="#67C25D" append-icon="mdi-magnify" @mouseup="getEmail=[],loading_Email=false" @click:append="search_citizen(actor_email.thai_email)" @input.native="actor_email.thai_email=$event.srcElement.value,input_native_combobox()" @keyup.enter="search_citizen(actor_email.thai_email)" :items="getEmail" placeholder="@one.th" v-model="actor_email.thai_email" :error="actor_email.thai_email == ''" class="create-setting email-step-box each-email-icon email-search-icon" @change="getEmail=[]">
+                            <template v-slot:no-data v-if="loading_Email">
+                              <v-list-item>
+                                <v-list-item-content>
+                                  <v-list-item-title>
+                                    {{status_in_combobox}}
+                                  </v-list-item-title>
+                                </v-list-item-content>
+                              </v-list-item>
+                            </template>
                             <template v-slot:prepend>
                               <v-icon large>mdi-account</v-icon>
                             </template>
@@ -457,6 +475,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
       is_password: false,
       is_password_custom: false,
       getEmail: [],
+      loading_Email: false,
+      status_in_combobox: ''
     }),
     mounted() {
       this.getDocumentType()
@@ -1392,7 +1412,14 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 
         this.$set(this.signArray,arr_index,sign)
       },
+      input_native_combobox() {
+        this.getEmail = []
+        this.isDirty = true
+        this.loading_Email = false
+      },
       async search_citizen(item) {
+        this.loading_Email = true
+        this.status_in_combobox = this.textLang.Fetching
         item = item.trim()
         try {
           this.getEmail = []
@@ -1407,6 +1434,8 @@ import VueDraggableResizable from 'vue-draggable-resizable'
         } catch (error) {
           console.log(error);
         }
+        if (this.getEmail[0] != undefined) this.loading_Email = false
+        else this.status_in_combobox = this.textLang.noinformationfound
       },
     }
   }
