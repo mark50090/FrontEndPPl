@@ -79,7 +79,7 @@
             <v-list-item-title class="menu-title">{{textLang.documentbox}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-group no-action color="#53ba47" :value="open_create_menu" :disabled="!is_remaining_transaction" active-class="menu-create-doc" :class="create_menu_active_class + ' menu-down-icon'">
+        <v-list-group no-action color="#53ba47" :value="open_create_menu" active-class="menu-create-doc" :class="create_menu_active_class + ' menu-down-icon'">
           <template v-slot:activator>
             <v-list-item-icon>
               <v-icon>mdi-file-edit-outline</v-icon>
@@ -353,6 +353,21 @@
         sessionStorage.setItem('page_lang',item)
         this.setLanguage(item.toUpperCase())
         EventBus.$emit('changeLang')
+        if(sessionStorage.isTranRemaining == 'false'){
+          this.$swal({
+            backdrop: false,
+            width: '100%',
+            position: 'top',
+            background: '#FFCDD2',
+            title: '<svg style="width:35px;height:35px" viewBox="0 0 24 24"><path fill="#D50000" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg><strong class="transaction-alert-text">' + this.textLang.transaction_alert + '</strong>',
+            showConfirmButton: false,
+            customClass: {
+              container: 'transaction-alert-container',
+              popup: 'transaction-alert-box',
+              title: 'transaction-alert-text-block'
+            }
+          })
+        }
 		  },
       async setLanguage(lang){
         try {

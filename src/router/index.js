@@ -46,13 +46,13 @@ export default new VueRouter({
           path: '/create',
           name: 'create',
           component: CreateDocument,
-          beforeEnter: (to, from, next) =>{
-            if(sessionStorage.isTranRemaining == 'true'){
-              next()
-            }else{
-              next({name:'inbox'})
-            }
-          }
+          // beforeEnter: (to, from, next) =>{
+          //   if(sessionStorage.isTranRemaining == 'true'){
+          //     next()
+          //   }else{
+          //     next({name:'inbox'})
+          //   }
+          // }
         },
         {
           path: '/report',
