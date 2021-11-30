@@ -4068,7 +4068,7 @@
         }
       },
       getValueList(val) {
-        var valList = []
+        let valList = []
         for(let i=0; i<val.length; i++) { //row
           valList.push([])
           for(let j=0; j<val[i].length; j++) { //choice
@@ -4083,10 +4083,10 @@
           if(typeof  this.dataTableObjectArray[e].style.decimalShow === 'undefined') {
             this.dataTableObjectArray[e].style.decimalShow = this.dataTableObjectArray[e].style.decimal
           }
-          var objName = this.dataTableObjectArray[e].object_name.split('_')[0]
+          let objName = this.dataTableObjectArray[e].object_name.split('_')[0]
           this.dataTableObjectArray[e].font_style = this.change_fontstyle(this.dataTableObjectArray[e])
           if(typeof this.dataDict[objName] !== 'undefined') {
-            var tableObjIndex = this.dataDict[objName]
+            let tableObjIndex = this.dataDict[objName]
             if(this.dataTableObjectArray[e].style.showMobile) {
               this.isSimpleFill = true
             }
@@ -4096,9 +4096,9 @@
               $("<style type=\"text/css\">.v-text-field--outlined." + this.dataTableObjectArray[e].name + "-box > .v-input__control > .v-input__slot {font-size: " + this.dataTableObjectArray[e].style.font_size + "px; min-height: " + this.dataTableObjectArray[e].style.font_size + "px!important; max-height: " + (Number(this.dataTableObjectArray[e].style.font_size) + 6) + "px!important;}</style>").appendTo("head")
               $("<style type=\"text/css\">." + this.dataTableObjectArray[e].name + "-box.v-select.v-text-field input {text-align: " + this.dataTableObjectArray[e].style.font_align + ";}</style>").appendTo("head") //align of text in dropdown
               $("<style type=\"text/css\">." + this.dataTableObjectArray[e].name + "-icon .v-input__icon {max-height: " + (Number(this.dataTableObjectArray[e].style.font_size) + 6) + "px!important;}</style>").appendTo("head")
-              var tableObj = this.objectArray[tableObjIndex.objectType][tableObjIndex.arrayIndex]
-              var row = this.dataTableObjectArray[e].object_name.split('_')[1].split('C')[0].split('R')[1]
-              var col = this.dataTableObjectArray[e].object_name.split('_')[1].split('C')[1]
+              let tableObj = this.objectArray[tableObjIndex.objectType][tableObjIndex.arrayIndex]
+              let row = this.dataTableObjectArray[e].object_name.split('_')[1].split('C')[0].split('R')[1]
+              let col = this.dataTableObjectArray[e].object_name.split('_')[1].split('C')[1]
               this.dataTableObjectArray[e].valueList = []
               if(tableObj.style.isDefaultRow){
                 if(typeof tableObj.style.valueList[Number(tableObj.style.defaultRow)-1] !== 'undefined') {
@@ -4161,34 +4161,34 @@
                 this.dataTableObjectArray[e].choices = tempChoice.concat(this.dataTableObjectArray[e].choices)
               }
             } else if(this.dataTableObjectArray[e].object_type == 'calculatebox') {
-              var objArray = this.dataDict[objName].objectType
-              var objIndex = this.dataDict[objName].arrayIndex
+              let objArray = this.dataDict[objName].objectType
+              let objIndex = this.dataDict[objName].arrayIndex
               if(objArray == 'datatable' && typeof this.objectArray[objArray][objIndex] !== 'undefined') {
                 if(this.objectArray[objArray][objIndex].style.isDefaultRow) {
-                  var col = this.dataTableObjectArray[e].object_name.split('_')[1].split('C')[1]
-                  var row = this.dataTableObjectArray[e].object_name.split('_')[1].split('C')[0].split('R')[1]
-                  var defualtRow = this.objectArray[objArray][objIndex].style.defaultRow
-                  var defaultRowData = this.dataTableObjectArray[objName + '_' + 'R' + String(defualtRow) + 'C' + col]
+                  let col = this.dataTableObjectArray[e].object_name.split('_')[1].split('C')[1]
+                  let row = this.dataTableObjectArray[e].object_name.split('_')[1].split('C')[0].split('R')[1]
+                  let defualtRow = this.objectArray[objArray][objIndex].style.defaultRow
+                  let defaultRowData = this.dataTableObjectArray[objName + '_' + 'R' + String(defualtRow) + 'C' + col]
                   this.dataTableObjectArray[e].style.function = defaultRowData.style.function.split('R' + defualtRow).join('R' + row)
                   this.change_calculate(e, true)
                 }
               }
-              var fx = this.dataTableObjectArray[e].style.function
-              var operand = fx.split('(')[0]
+              let fx = this.dataTableObjectArray[e].style.function
+              let operand = fx.split('(')[0]
               if(operand == 'sum' || operand == 'sumif' || operand == 'sub' || operand == 'mul' || operand == 'dvd' || operand == 'avg' || 
               operand == 'min' || operand == 'max' || operand == 'diffDate' || operand == 'lenDate' || operand == 'diffMon' || operand == 'diffTime' || operand == 'diffTimeHr' || operand == 'diffTimeMn') {
-                var nums = fx.split('(')[1]
+                let nums = fx.split('(')[1]
                 nums = nums.split(')')[0]
-                var cond = ""
+                let cond = ""
                 if(operand == 'sumif') {
                   cond = nums.split(':')[1]
                   nums = nums.split(':')[0]
                 }
                 nums = nums.split(',')
                 if(cond) {
-                  var obj_name = ""
-                  var isHead = true
-                  var isTail = false
+                  let obj_name = ""
+                  let isHead = true
+                  let isTail = false
                   for(let j=0; j<cond.length; j++) {
                     if((cond.charAt(j) != "=" && cond.charAt(j) != "!" && cond.charAt(j) != "&"  && cond.charAt(j) != "|" 
                       && cond.charAt(j) != ">" && cond.charAt(j) != "<")
@@ -4196,10 +4196,10 @@
                         obj_name += cond.charAt(j)
                     } else if(!isTail && isHead){
                       if(obj_name.includes('RX')) {
-                        var dataObj = this.objectArray['datatable'].find(item => item.object_name == obj_name.split('_')[0])
+                        let dataObj = this.objectArray['datatable'].find(item => item.object_name == obj_name.split('_')[0])
                         if(dataObj) {
                           dataObj.style.table.crow = dataObj.style.table.rowsize.length
-                          var rowCount = Number(dataObj.style.table.crow)
+                          let rowCount = Number(dataObj.style.table.crow)
                           for(let r=1; r<=rowCount; r++) {
                             let subRow = obj_name.split('RX').join('R' + r)
                             this.setChangeObject(subRow,this.dataTableObjectArray[e].object_name)
@@ -4219,10 +4219,10 @@
                 nums.forEach(e2 => {
                   if(e2.startsWith('datatable')) {
                     if(e2.includes('RX')) {
-                      var dataObj = this.objectArray['datatable'].find(item => item.object_name == e2.split('_')[0])
+                      let dataObj = this.objectArray['datatable'].find(item => item.object_name == e2.split('_')[0])
                       if(dataObj) {
                         dataObj.style.table.crow = dataObj.style.table.rowsize.length
-                        var rowCount = Number(dataObj.style.table.crow)
+                        let rowCount = Number(dataObj.style.table.crow)
                         for(let r=1; r<=rowCount; r++) {
                           let subRow = e2.split('RX').join('R' + r)
                           this.setChangeObject(subRow,this.dataTableObjectArray[e].object_name)
@@ -4238,13 +4238,13 @@
                   }
                 })
               } else if(operand == 'calc') {
-                var nums = fx.split('calc(')[1].trim()
+                let nums = fx.split('calc(')[1].trim()
                 nums = "(" + nums
-                var num_array = nums.split('$')
+                let num_array = nums.split('$')
                 for(let i=0; i< num_array.length; i++) {
-                  var obj_name = ""
-                  var isHead = true
-                  var isTail = false
+                  let obj_name = ""
+                  let isHead = true
+                  let isTail = false
                   for(let j=0; j < num_array[i].length; j++) {
                     if((num_array[i].charAt(j) != "+" && num_array[i].charAt(j) != "-" && num_array[i].charAt(j) != "*"  && num_array[i].charAt(j) != ":" 
                       && num_array[i].charAt(j) != "/" && num_array[i].charAt(j) != "%" && num_array[i].charAt(j) != ")" && num_array[i].charAt(j) != "(")
@@ -4268,7 +4268,7 @@
               if(this.dataTableObjectArray[e].style.startDateType == "current") {
                 this.dataTableObjectArray[e].rangeDate = new Date().toISOString().substr(0, 10)
                 if(this.dataTableObjectArray[e].style.startDateFrom) {
-                  var tempDate = new Date()
+                  let tempDate = new Date()
                   tempDate.setDate(tempDate.getDate() + Number(this.dataTableObjectArray[e].style.startDateFrom))
                   this.dataTableObjectArray[e].rangeDate = tempDate.toISOString().substr(0, 10)
                 }
@@ -4286,9 +4286,9 @@
                     this.dataTableObjectArray[e].value = startDate
                   }
                 } else if(this.dataTableObjectArray[e].style.defaultDateSelect == 'ref_date' && !this.dataTableObjectArray[e].style.noDefaultDate) {
-                  var refDate = this.objectArray["datepickerbox"].find(item => item.object_name == this.dataTableObjectArray[e].style.defaultDateValue)
+                  let refDate = this.objectArray["datepickerbox"].find(item => item.object_name == this.dataTableObjectArray[e].style.defaultDateValue)
                   if(refDate) {
-                    var holdDate = new Date(refDate.value)
+                    let holdDate = new Date(refDate.value)
                     if(this.dataTableObjectArray[e].style.additionYear) {
                       holdDate.setFullYear(holdDate.getFullYear() + Number(this.dataTableObjectArray[e].style.additionYear))
                     }
@@ -4309,6 +4309,13 @@
                   this.changeDefaultDict[this.dataTableObjectArray[e].style.defaultValueObj].push(e)
                 } else {
                   this.changeDefaultDict[this.dataTableObjectArray[e].style.defaultValueObj] = [e]
+                }
+              }
+              if(this.dataTableObjectArray[e].style.defaultFromRow) {
+                if(!this.dataTableObjectArray[e].value) {
+                  let row = this.dataTableObjectArray[e].object_name.split('_')[1].split('C')[0].split('R')[1]
+                  this.dataTableObjectArray[e].value = row
+                  this.dataTableObjectArray[e].show_value = row
                 }
               }
             }
