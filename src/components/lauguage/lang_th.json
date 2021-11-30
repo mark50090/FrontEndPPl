@@ -887,6 +887,7 @@
     "warn":"แจ้งเตือน",
     "notuploadingfiles": "ไม่อนุญาตให้อัปโหลดไฟล์ ",
     "oversize": " เนื่องจากมีขนาดเกิน 30 MB",
+    "ca_name_label": "ชื่อ Certificate",
     "refuse":"ปฏิเสธ",
     "approvee": "อนุมัติ",
     "Successfullycancel": "ยกเลิกเอกสารสำเร็จ"
