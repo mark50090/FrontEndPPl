@@ -459,7 +459,7 @@
                 <v-autocomplete dense outlined hide-details append-icon="mdi-chevron-down" :placeholder="textLang.set_format_form.choose" color="#4caf50" :items="paper_size" class="prop-input create-prop-line-height create-prop-dropdown-icon" v-model="paperSizeIndex"></v-autocomplete>
               </v-col>
             </v-row> -->
-            <!-- <v-row class="row-prop">
+            <v-row class="row-prop">
               <v-radio-group row hide-details class="template-type-block" v-model="template_side">
                 <v-radio color="#4caf50" value="PORTRAIT">
                   <template v-slot:label>
@@ -472,7 +472,7 @@
                   </template>
                 </v-radio>
               </v-radio-group>
-            </v-row> -->
+            </v-row>
             <v-row class="row-prop">
               <v-checkbox hide-details class="check-grid-block" color="#4caf50" v-model="show_area">
                 <template v-slot:label>
