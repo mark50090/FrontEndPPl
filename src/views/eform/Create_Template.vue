@@ -1654,6 +1654,12 @@
                         <v-text-field dense height="25px" class="font-in-property" color="#4CAF50" @click="copyObject = ''" v-model="dataTableObjectArray[selectedCell].style.defaultValueObj" @input="changeSelected(selectedCell)"></v-text-field>
                       </td>
                     </tr>
+                    <tr v-if="(selectedCell && (dataTableObjectArray[selectedCell].object_type == 'inputbox'))">
+                      <td class="property-title no-border">{{ textLang.property_type.default_from_row }}:</td>
+                      <td class="no-border" v-if="selectedCell">
+                        <v-checkbox color="#4CAF50" hide-details class="property-check" v-model="dataTableObjectArray[selectedCell].style.defaultFromRow" @change="changeSelected(selectedCell)"></v-checkbox>
+                      </td>
+                    </tr>
                     <tr v-if="custom_object_textareavaliable">
                       <td class="property-title no-border">{{ textLang.property_type.variable_default }}:</td>
                       <td class="no-border">
@@ -2557,6 +2563,7 @@ export default {
         start_date_day: "วัน",
         no_default: "ไม่แสดงค่าเริ่มต้น",
         default_input: `ค่าเริ่มต้นจาก Object อื่น`,
+        default_from_row: "ค่าเริ่มต้นจากหมายเลขแถว",
         search_api: "API เชื่อมต่อข้อมูล"
       },
       tips_help_message: {
@@ -8101,7 +8108,7 @@ export default {
     },
     openDocCondition() {
       var docCond = []
-      var checkStep = this.step_api_send
+      var checkStep = this.step_choices_options
       if(typeof this.docOption['condition'] !== 'undefined') {
         docCond = this.docOption['condition']
       }

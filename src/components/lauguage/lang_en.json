@@ -505,6 +505,7 @@
       "start_date_day": "days",
       "no_default": "No Default Date",
       "default_input": "Default Value from Other Object",
+      "default_from_row": "Default Value from Row No.",
       "search_api": "Data Sync API"
     },
     "tips_help_message": {

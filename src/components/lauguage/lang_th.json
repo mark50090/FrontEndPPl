@@ -505,6 +505,7 @@
       "start_date_day": "วัน",
       "no_default": "ไม่แสดงค่าเริ่มต้น",
       "default_input": "ค่าเริ่มต้นจาก Object อื่น",
+      "default_from_row": "ค่าเริ่มต้นจากหมายเลขแถว",
       "search_api": "API เชื่อมต่อข้อมูล"
     },
     "tips_help_message": {
