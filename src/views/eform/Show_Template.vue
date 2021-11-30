@@ -3059,9 +3059,14 @@
                 cmp.style.permission_step = ""
               }
               if(typeof cmp.style.permission_step_section === 'undefined') {
-                cmp.style.permission_step_section = ""
+                cmp.style.permission_step_section = []
               }
-              if((cmp.style.permission_step == this.currentStep &&  !cmp.style.permission_step_section)||(!cmp.style.permission_step && cmp.style.permission_step_section == this.currentStep)) {
+              if(typeof cmp.style.permission_step_section !== 'object') {
+                let tempPss = []
+                tempPss.push(cmp.style.permission_step_section)
+                cmp.style.permission_step_section = tempPss
+              }
+              if((cmp.style.permission_step == this.currentStep &&  !cmp.style.permission_step_section.length)||(!cmp.style.permission_step && cmp.style.permission_step_section.includes(this.currentStep))) {
                 this.isSendBack = true
                 this.isEditable = true
                 cmp.textHl = true
@@ -3147,9 +3152,14 @@
                 this.dataTableObjectArray[k].style.permission_step = ""
               }
               if(typeof this.dataTableObjectArray[k].style.permission_step_section === 'undefined') {
-                this.dataTableObjectArray[k].style.permission_step_section = ""
+                this.dataTableObjectArray[k].style.permission_step_section = []
               }
-              if((this.dataTableObjectArray[k].style.permission_step == this.currentStep && !this.dataTableObjectArray[k].style.permission_step_section) || (this.dataTableObjectArray[k].style.permission_step_section == this.currentStep && !this.dataTableObjectArray[k].style.permission_step)) {
+              if(typeof this.dataTableObjectArray[k].style.permission_step_section !== 'object') {
+                let tempPss = []
+                tempPss.push(this.dataTableObjectArray[k].style.permission_step_section)
+                this.dataTableObjectArray[k].style.permission_step_section = tempPss
+              }
+              if((this.dataTableObjectArray[k].style.permission_step == this.currentStep && !this.dataTableObjectArray[k].style.permission_step_section.length) || (this.dataTableObjectArray[k].style.permission_step_section.includes(this.currentStep) && !this.dataTableObjectArray[k].style.permission_step)) {
                 this.isSendBack = true
                 this.isEditable = true
                 this.dataTableObjectArray[k].textHl = true
