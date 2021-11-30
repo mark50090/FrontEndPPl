@@ -73,7 +73,7 @@
                           </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <!-- <v-list-item @click="optionFormTransfer()">
+                    <v-list-item @click="optionFormTransfer(item)">
                       <v-list-item-icon>
                           <v-icon color="#4CAF50">mdi-account-edit</v-icon>
                         </v-list-item-icon>
@@ -82,7 +82,7 @@
                             {{textLang.transfercorrection}}
                           </v-list-item-title>
                         </v-list-item-content>
-                    </v-list-item> -->
+                    </v-list-item>
                     <v-list-item @click="deletTemplate(item)">
                       <v-list-item-icon>
                           <v-icon color="#4CAF50">mdi-delete</v-icon>
@@ -173,8 +173,8 @@ import showFormTransfer from '../components/TransferEdit.vue'
         }
     },
     methods: { 
-      optionFormTransfer() {
-        EventBus.$emit('FormTransfer')
+      optionFormTransfer(item) {
+        EventBus.$emit('FormTransfer', item)
       },
       emitLoading(isLoad) {
         EventBus.$emit('loadingOverlay', isLoad)
