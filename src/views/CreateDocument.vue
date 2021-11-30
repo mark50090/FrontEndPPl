@@ -85,6 +85,16 @@
                   </v-btn>
                 </template>
               </v-file-input>
+              <!-- <v-text-field dense outlined hide-details readonly color="#67C25D" :placeholder="textLang.selectfilea" @click="gopdf()" class="create-file num-doc-block delete-file-btn-block">
+                <template v-slot:append>
+                  <v-avatar size="28" color="#67C25D" class="white--text">80</v-avatar> <!-- number of pdf 
+                </template>
+                <template v-slot:append-outer>
+                  <v-btn icon :disabled="!uploadedFile" color="#424242" @click="clearUploadedFile"> <!-- delete pdf button 
+                    <v-icon size="28px">mdi-delete</v-icon>
+                  </v-btn>
+                </template>
+              </v-text-field> -->
             </v-col>
           </v-row>
           <v-card outlined class="mt-1">
@@ -1487,6 +1497,10 @@ import VueDraggableResizable from 'vue-draggable-resizable'
   .create-file {
     font-family: 'Sarabun', sans-serif;
     font-size: 13px;
+  }
+
+  .num-doc-block.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__append-inner {
+    margin-top: 6px !important;
   }
 
   .delete-file-btn-block.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__append-outer {
