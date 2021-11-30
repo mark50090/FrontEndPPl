@@ -525,6 +525,7 @@
   .transaction-alert-container {
     margin-left: 256px;
     top: 58px !important;
+    z-index: 11 !important;
   }
 
   .transaction-alert-box {
