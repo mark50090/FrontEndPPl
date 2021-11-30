@@ -392,12 +392,15 @@
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-2 pr-0 py-2">
                 <v-switch inset disabled hide-details label="Certificate (CA)"  v-if="!is_approve" v-model="ca_switch" class="mt-0 ca-switch"></v-switch>
               </v-col>
+              <!-- <v-col cols="6" md="4" lg="4" align-self="center" class="pl-2 pr-0 py-2">
+                <v-autocomplete auto-select-first dense hide-details outlined :label="textLang.ca_name_label" append-icon="mdi-chevron-down" class="sign-type sign-type-box sign-type-dropdown-icon ca-name-box ca-name-label"></v-autocomplete>
+              </v-col> -->
               <v-spacer></v-spacer>
-              <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-1 py-2">
-                <v-btn depressed color="#1CC6A9" :disabled="!(padStatus || all_sign[sign_type].default || is_approve)" class="approve-btn" @click="set_approve_fn('approve')">{{textLang.approvee}}</v-btn>
+              <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-1 py-2 approve-button-block">
+                <v-btn depressed color="#1CC6A9" :disabled="!(padStatus || all_sign[sign_type].default || is_approve)" class="px-2 approve-btn" @click="set_approve_fn('approve')">{{textLang.approvee}}</v-btn>
               </v-col>
               <v-col cols="auto" md="auto" lg="auto" align-self="center" class="pl-0 pr-2 py-2">
-                <v-btn depressed dark color="error" class="approve-btn" @click="set_approve_fn('reject')">{{textLang.refuse}}</v-btn>
+                <v-btn depressed dark color="error" class="px-2 approve-btn" @click="set_approve_fn('reject')">{{textLang.refuse}}</v-btn>
               </v-col>
             </v-row>
             <template v-if="!is_approve">
@@ -1592,6 +1595,20 @@ export default {
     font-family: 'Sarabun', sans-serif;
   }
 
+  .ca-name-box.v-text-field.v-text-field--enclosed:not(.v-text-field--rounded) > .v-input__control > .v-input__slot {
+    padding-left: 3% !important;
+    padding-right: 0% !important;
+  }
+
+  .ca-name-label.v-text-field--outlined.v-input--dense .v-label {
+    top: 4px !important;
+    left: 6px !important;
+  }
+
+  .ca-name-label.v-input .v-label {
+    line-height: 25px !important;
+  }
+
   .approve-btn {
     font-family: 'Sarabun', sans-serif;
     color: white !important;
@@ -1686,6 +1703,10 @@ export default {
       font-size: 11px !important;
       padding-left: 6% !important;
       padding-right: 6% !important;
+    }
+
+    .approve-button-block {
+      margin-left: auto;
     }
   }
 </style>

@@ -887,6 +887,7 @@
     "warn":"Warning",
     "notuploadingfiles": "Not allow to upload file name \"",
     "oversize": "\" because file size is over than 30MB.",
+    "ca_name_label": "Certificate Name",
     "refuse":"Reject",
     "approvee": "Approve",
     "Successfullycancel": "Cancel Success"
