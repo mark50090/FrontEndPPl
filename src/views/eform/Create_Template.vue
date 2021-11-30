@@ -7145,37 +7145,49 @@ export default {
     },
     getPermissionSection(selArray, selObj) {
       if(selArray != 'datacell') {
+          this.objectArray[selArray][selObj].style.permission_step_section = []
         var element = document.getElementById(this.objectArray[selArray][selObj].name)
         var position = element.getBoundingClientRect()
         for(var i=0; i<this.objectArray['sectionbox'].length-1; i++) {
-          if(this.objectArray['sectionbox'][i].style.permission_step && this.objectArray['sectionbox'][i].page == this.currentPage) {
+          if(!this.objectArray['sectionbox'][i].style.permission_step) {
+            this.objectArray['sectionbox'][i].style.permission_step = ""
+          }
+          if(this.objectArray['sectionbox'][i].page == this.currentPage) {
             var section = document.getElementById(this.objectArray['sectionbox'][i].name + '-section-box')
             var section_rect = section.getBoundingClientRect()
             if(position.top > section_rect.top && position.top < (section_rect.top + section_rect.height)) {
               if(position.left > section_rect.left && position.left < (section_rect.left + section_rect.width)) {
                 if(!this.objectArray[selArray][selObj].style.permission_step) {
-                  this.objectArray[selArray][selObj].style.permission_step_section = this.objectArray['sectionbox'][i].style.permission_step
+                  if(!this.objectArray[selArray][selObj].style.permission_step_section.includes(this.objectArray['sectionbox'][i].style.permission_step)) {
+                    this.objectArray[selArray][selObj].style.permission_step_section.push(this.objectArray['sectionbox'][i].style.permission_step)
+                  } 
                 } else {
-                  this.objectArray[selArray][selObj].style.permission_step_section = ""
+                  this.objectArray[selArray][selObj].style.permission_step_section = []
                 }
               } 
             }
           }
         }
       } else {
+        this.dataTableObjectArray[selObj].style.permission_step_section = []
         var element = document.getElementById(this.dataTableObjectArray[selObj].name)
         var position = element.getBoundingClientRect()
         for(var i=0; i<this.objectArray['sectionbox'].length-1; i++) {
           this.objectArray['sectionbox'][i].show = true
-          if(this.objectArray['sectionbox'][i].style.permission_step && this.dataTableObjectArray[selObj].page == this.objectArray['sectionbox'][i].page) {
+          if(!this.objectArray['sectionbox'][i].style.permission_step) {
+            this.objectArray['sectionbox'][i].style.permission_step = ""
+          }
+          if(this.dataTableObjectArray[selObj].page == this.objectArray['sectionbox'][i].page) {
             var section = document.getElementById(this.objectArray['sectionbox'][i].name + '-section-box')
             var section_rect = section.getBoundingClientRect()
             if(position.top >= section_rect.top && position.top <= (section_rect.top + section_rect.height)) {
               if(position.left >= section_rect.left && position.left <= (section_rect.left + section_rect.width)) {
                 if(!this.dataTableObjectArray[selObj].style.permission_step) {
-                  this.dataTableObjectArray[selObj].style.permission_step_section = this.objectArray['sectionbox'][i].style.permission_step
+                  if(!this.dataTableObjectArray[selObj].style.permission_step_section.includes(this.objectArray['sectionbox'][i].style.permission_step)) {
+                    this.dataTableObjectArray[selObj].style.permission_step_section.push(this.objectArray['sectionbox'][i].style.permission_step)
+                  }
                 } else {
-                  this.dataTableObjectArray[selObj].style.permission_step_section = ""
+                  this.dataTableObjectArray[selObj].style.permission_step_section = []
                 }
               }
             }
