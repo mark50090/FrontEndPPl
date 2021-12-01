@@ -571,7 +571,7 @@
       "ppl_message": "ข้อความ",
       "setting": "ตั้งค่าเริ่มต้นแบบฟอร์ม Digital Workflow",
       "doc_paperless": "ประเภทเอกสาร paperless",
-      "foermat_paperless": "รูปแบบ Workflow",
+      "foermat_paperless": "รูปแบบ Workflow เริ่มต้น",
       "note": "หมายเหตุ",
       "set_auto_flow": "ตั้งค่าประเภทและรูปแบบเอกสาร Paperless อัตโนมัติ",
       "set_auto_flow_btn": "ตั้งค่าประเภทและรูปแบบเอกสาร Paperless",
@@ -579,7 +579,10 @@
       "permission_approve": "ผู้มีสิทธิ์อนุมัติ",
       "permission_sign": "ผู้มีสิทธิ์เซ็น",
       "permission_input_form": "ผู้มีสิทธิ์กรอก",
-      "permission_sign_input": "ผู้มีสิทธิ์กรอกและเซ็น"
+      "permission_sign_input": "ผู้มีสิทธิ์กรอกและเซ็น",
+      "workflow_condition_title": "เงื่อนไข Workflow",
+      "workflow_condition_setting_button": "ตั้งค่าเงื่อนไข",
+      "other_workflow_title": "รูปแบบ Workflow เพิ่มเติม"
     },
     "modal": {
       "insert_picture": "แทรกรูปภาพ",
