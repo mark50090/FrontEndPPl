@@ -577,7 +577,7 @@
       "ppl_message": "Message",
       "setting": "Default Digital Workflow Setting",
       "doc_paperless": "Paperless Document Type",
-      "foermat_paperless": "Workflow",
+      "foermat_paperless": "Default Workflow",
       "note": "Note",
       "set_auto_flow": "Automation Paperless Flow Setting",
       "set_auto_flow_btn": "Set Automation Paperless Flow",
@@ -585,7 +585,10 @@
       "permission_approve": "Approve",
       "permission_sign": "Sign",
       "permission_input_form": "Fill",
-      "permission_sign_input": "Fill and Sign"
+      "permission_sign_input": "Fill and Sign",
+      "workflow_condition_title": "Workflow Condition",
+      "workflow_condition_setting_button": "Condition Setting",
+      "other_workflow_title": "Others Workflow"
     },
     "modal": {
       "insert_picture": "Insert Image",

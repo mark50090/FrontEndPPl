@@ -2072,6 +2072,26 @@
                 </v-list>
               </div>
             </v-card>
+            <!-- <v-row class="row-prop">
+              <v-col cols="4" align-self="center" class="title-prop-block">
+                <span class="title-prop">{{ textLang.set_doc_paperless.workflow_condition_title }}:</span>
+              </v-col>
+              <v-col cols="8" align-self="center" class="pl-0 pr-2">
+                <v-btn depressed dark small color="#525659" class="workflow-condition-setting-btn">{{ textLang.set_doc_paperless.workflow_condition_setting_button }}</v-btn>
+              </v-col>
+            </v-row> -->
+            <!-- <v-row class="mt-0 row-prop">
+              <v-col cols="4" class="title-prop-block">
+                <span class="title-prop">{{ textLang.set_doc_paperless.other_workflow_title }}:</span>
+              </v-col>
+              <v-col cols="8" align-self="center" class="pl-0 pr-2">
+                <v-autocomplete dense outlined hide-details multiple auto-select-first chips small-chips deletable-chips append-icon="mdi-chevron-down" color="#4CAF50" item-color="#4CAF50" :items="ppl_templatelist" class="prop-input create-prop-dropdown-icon other-flow-box">
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip dark x-small close color="#4CAF50" class="mb-1 other-flow-chip">{{ item.text }}</v-chip>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+            </v-row> -->
           </v-tab-item>
           <v-tab-item> <!-- Filling Mobile Tab -->
             <span class="pr-2 header-property"><b>{{ textLang.filling_mobile.title }}</b></span>
@@ -2619,7 +2639,7 @@ export default {
         ppl_message: "ข้อความ", 
         setting: "ตั้งค่าเริ่มต้นแบบฟอร์ม Digital Workflow",
         doc_paperless: "ประเภทเอกสาร paperless",
-        foermat_paperless: "รูปแบบ Workflow",
+        foermat_paperless: "รูปแบบ Workflow เริ่มต้น",
         note: "หมายเหตุ",
         set_auto_flow: "ตั้งค่าประเภทและรูปแบบเอกสาร Paperless อัตโนมัติ",
         set_auto_flow_btn: "ตั้งค่าประเภทและรูปแบบเอกสาร Paperless",
@@ -2627,7 +2647,10 @@ export default {
         permission_approve: "ผู้มีสิทธิ์อนุมัติ",
         permission_sign: "ผู้มีสิทธิ์เซ็น",
         permission_input_form: "ผู้มีสิทธิ์กรอก",
-        permission_sign_input: "ผู้มีสิทธิ์กรอกและเซ็น"
+        permission_sign_input: "ผู้มีสิทธิ์กรอกและเซ็น",
+        workflow_condition_title: "เงื่อนไข Workflow",
+        workflow_condition_setting_button: "ตั้งค่าเงื่อนไข",
+        other_workflow_title: "รูปแบบ Workflow เพิ่มเติม"
       },
       filling_mobile: {
         title: "ตั้งค่าการกรอกในมุมมองแบบฟอร์มอย่างง่าย",
@@ -9229,6 +9252,21 @@ export default {
 
 .v-text-field--outlined.textarea-default-value-row > .v-input__control > .v-input__slot {
   height: 75px !important;
+}
+
+.workflow-condition-setting-btn {
+  font-family: 'Sarabun', sans-serif;
+  text-transform: capitalize;
+}
+
+.other-flow-box.v-text-field.v-text-field--enclosed:not(.v-text-field--rounded) > .v-input__control > .v-input__slot {
+  padding-left: 2% !important;
+  padding-right: 0% !important;
+}
+
+.other-flow-chip {
+  white-space: normal !important;
+  height: auto !important;
 }
 
 .v-text-field.input-cell-name input {
