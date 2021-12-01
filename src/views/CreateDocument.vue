@@ -401,6 +401,7 @@
       </v-row>
     </v-card>
     <Showpdf/>
+    <showFormSelectFile/>
   </div>
 </template>
 
@@ -410,13 +411,15 @@ import Showpdf from '../components/ShowPdf'
 import pdf from 'vue-pdf'
 import vueSignature from 'vue-signature'
 import VueDraggableResizable from 'vue-draggable-resizable'
+import showFormSelectFile from '../components/SelectDocumentFile'
 
   export default {
     components: {
       Showpdf,
       pdf,
       vueSignature,
-      VueDraggableResizable
+      VueDraggableResizable,
+      showFormSelectFile
     },
     computed: {
       textLang() {
@@ -1362,6 +1365,9 @@ import VueDraggableResizable from 'vue-draggable-resizable'
             break
         }
         this.loaded()
+      },
+      optionFormSelectFile(){
+        EventBus.$emit('FormSelectFile')
       },
       gopdf() {
         EventBus.$emit('showpdf', this.pdf_src)

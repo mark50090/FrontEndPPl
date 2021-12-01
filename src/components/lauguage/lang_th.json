@@ -281,6 +281,12 @@
       "Password_is_incorrect":"รหัสผ่านผิด กรุณากรอกรหัสผ่านใหม่",
       "Back":"กลับ",
       "Confirm":"ตกลง"
+    },
+    "SelectDocumentFile": {
+      "font_head_selectdocumentfile": "เลือกไฟล์เอกสาร",
+      "select_selectdocumentfile": "เลือกไฟล์",
+      "selectdocumentfile_cancel": "ยกเลิก",
+      "selectdocumentfile_upload": "อัพโหลด"
     }
   },
   "Create_Template": {
