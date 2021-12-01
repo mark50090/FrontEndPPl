@@ -359,11 +359,11 @@
             <v-col cols="12" md="7" lg="7">
               <v-autocomplete dense outlined hide-details :color="color_type_paperless_title" append-icon="mdi-chevron-down" :placeholder="textLang.offer_dialog.choose" class="type-paperless autocomplete-pad icon-select dropdown-icon-color" :items="documentTypes" v-model="selectedDocumentType"></v-autocomplete>
             </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col cols="12" md="3" lg="3" class="pb-0 type-paperless-title">{{ textLang.offer_dialog.doc_format }}</v-col>
-            <v-col cols="12" md="7" lg="7">
-              <v-autocomplete dense outlined hide-details :color="color_document_format_paperless" append-icon="mdi-chevron-down" :placeholder="textLang.offer_dialog.choose" class="type-paperless autocomplete-pad icon-select dropdown-icon-color" :items="ppl_templatelist" v-model="template_paperless_code"></v-autocomplete>
+          </v-row> -->
+          <!-- <v-row class="mt-0 save-doc-row">
+            <v-col cols="12" md="4" lg="4" align-self="center" class="pl-0 pt-0 title-name-paperless">{{ textLang.offer_dialog.doc_format }}</v-col>
+            <v-col cols="12" md="8" lg="8" class="px-0 pt-0">
+              <v-autocomplete dense outlined hide-details auto-select-first color="#4CAF50" append-icon="mdi-chevron-down" :placeholder="textLang.offer_dialog.choose" class="type-paperless paperless-input-line preview-other-workflow-icon"></v-autocomplete>
             </v-col>
           </v-row> -->
           <!-- <br /> -->
@@ -4052,6 +4052,10 @@ export default {
 .type-paperless {
   font-family: "Sarabun", sans-serif;
   font-size: 13px;
+}
+
+.preview-other-workflow-icon .theme--light.v-icon {
+  color: rgba(0, 0, 0, 0.54) !important;
 }
 
 .v-input.note-paperless-title .v-label {
