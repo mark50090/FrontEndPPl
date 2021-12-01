@@ -2564,6 +2564,7 @@ export default {
             password: this.pdfPasswordSetting,
             is_skip_first_step: isSkipFirstStep,
             is_draft: this.isSaveDraft,
+            viewers: this.templates.document_option.viewers,
             object_text: {
               subject: this.pplSubject,
               message: this.pplBody
