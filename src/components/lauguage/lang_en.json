@@ -281,6 +281,12 @@
       "Password_is_incorrect":"Password is incorrect. Please input password again.",
       "Back":"Back",
       "Confirm":"OK"
+    },
+    "SelectDocumentFile": {
+      "font_head_selectdocumentfile": "Selecting Document File",
+      "select_selectdocumentfile": "Select file",
+      "selectdocumentfile_cancel": "Cancel",
+      "selectdocumentfile_upload": "Upload"
     }
   },
   "Create_Template": {
