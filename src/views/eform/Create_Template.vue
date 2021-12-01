@@ -559,7 +559,7 @@
                 </v-autocomplete>
               </v-col>
             </v-row> -->
-            <v-row class="row-prop" v-if="!isPublicForm && business.first_name_th != 'เฉพาะฉัน'">
+            <v-row class="row-prop">
               <v-col cols="4" align-self="end" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_sharing.permission_view_all_title }}:</span>
               </v-col>
