@@ -85,7 +85,7 @@
                   </v-btn>
                 </template>
               </v-file-input>
-              <!-- <v-text-field dense outlined hide-details readonly color="#67C25D" :placeholder="textLang.selectfilea" @click="gopdf()" class="create-file num-doc-block delete-file-btn-block">
+              <!-- <v-text-field dense outlined hide-details readonly color="#67C25D" :placeholder="textLang.selectfilea" @click="optionFormSelectFile()" class="create-file num-doc-block delete-file-btn-block">
                 <template v-slot:append>
                   <v-avatar size="28" color="#67C25D" class="white--text">80</v-avatar> <!-- number of pdf 
                 </template>
