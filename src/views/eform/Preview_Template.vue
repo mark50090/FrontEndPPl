@@ -360,7 +360,7 @@
               <v-autocomplete dense outlined hide-details :color="color_type_paperless_title" append-icon="mdi-chevron-down" :placeholder="textLang.offer_dialog.choose" class="type-paperless autocomplete-pad icon-select dropdown-icon-color" :items="documentTypes" v-model="selectedDocumentType"></v-autocomplete>
             </v-col>
           </v-row> -->
-          <v-row class="mt-0 save-doc-row">
+          <v-row v-if="flowChoices.length > 1" class="mt-0 save-doc-row">
             <v-col cols="12" md="4" lg="4" align-self="center" class="pl-0 pt-0 title-name-paperless">{{ textLang.offer_dialog.doc_format }}</v-col>
             <v-col cols="12" md="8" lg="8" class="px-0 pt-0">
               <v-autocomplete dense outlined hide-details auto-select-first color="#4CAF50" append-icon="mdi-chevron-down" :placeholder="textLang.offer_dialog.choose" :items="flowChoices" v-model="currentFlowId" @change="getFlowData()" class="type-paperless paperless-input-line preview-other-workflow-icon"></v-autocomplete>
