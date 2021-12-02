@@ -479,6 +479,7 @@
       "fuction": "Fuction",
       "condition": "Condition",
       "default": "Default Value",
+      "default_value": "Default Value",
       "variable_default": "Variable in Default Value",
       "cost": "value",
       "since": "from",
