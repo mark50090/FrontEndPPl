@@ -360,12 +360,12 @@
               <v-autocomplete dense outlined hide-details :color="color_type_paperless_title" append-icon="mdi-chevron-down" :placeholder="textLang.offer_dialog.choose" class="type-paperless autocomplete-pad icon-select dropdown-icon-color" :items="documentTypes" v-model="selectedDocumentType"></v-autocomplete>
             </v-col>
           </v-row> -->
-          <!-- <v-row class="mt-0 save-doc-row">
+          <v-row class="mt-0 save-doc-row">
             <v-col cols="12" md="4" lg="4" align-self="center" class="pl-0 pt-0 title-name-paperless">{{ textLang.offer_dialog.doc_format }}</v-col>
             <v-col cols="12" md="8" lg="8" class="px-0 pt-0">
-              <v-autocomplete dense outlined hide-details auto-select-first color="#4CAF50" append-icon="mdi-chevron-down" :placeholder="textLang.offer_dialog.choose" class="type-paperless paperless-input-line preview-other-workflow-icon"></v-autocomplete>
+              <v-autocomplete dense outlined hide-details auto-select-first color="#4CAF50" append-icon="mdi-chevron-down" :placeholder="textLang.offer_dialog.choose" :items="flowChoices" v-model="currentFlowId" @change="getFlowData()" class="type-paperless paperless-input-line preview-other-workflow-icon"></v-autocomplete>
             </v-col>
-          </v-row> -->
+          </v-row>
           <!-- <br /> -->
           <v-row v-if="templates.description" class="save-doc-row">
             <v-textarea outlined dense readonly hide-details no-resize :label="textLang.offer_dialog.note" color="#FF9800" rows="6" class="message-paperless-row digital-workflow-not-line note-paperless-title note-paperless-content note-paperless-box" :value="templates.description"></v-textarea>
@@ -536,6 +536,7 @@ export default {
         cancel: "ยกเลิก",
         ok: "ตกลง",
         default: "(ค่าเริ่มต้น)",
+        default_value: "ค่าเริ่มต้น",
         please_input: "กรุณากรอกข้อมูล Email ให้ครบถ้วน",
         email_found: "ไม่พบอีเมล์ต่อไปนี้ในระบบ",
         name_ppl_error: "กรุณากรอกชื่อเอกสาร",
@@ -664,6 +665,8 @@ export default {
     noFlowSignPic: "",
     thenOpenPpl: false,
     thenOpenPplNoFlow: false,
+    flowChoices: [],
+    currentFlowId: "",
     //Color Variable
     // color_dialog_header_bg: '#2ACA9F', //class dialog_title in DeleteModal.vue
     // color_dropdown_icon: '#1b9900 !important', //class dropdown-icon-color in Toolbar.vue
@@ -732,7 +735,6 @@ export default {
     this.currentStep = Number(sessionStorage.getItem('current_step'))
     this.getData()
     // this.getLocation()
-    this.getFlowData()
     this.currentUser = sessionStorage.getItem("oneuser")
     if (sessionStorage.getItem("all_user_step")) {
       this.allUserStep = JSON.parse(sessionStorage.getItem("all_user_step"))
@@ -956,6 +958,20 @@ export default {
         var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
         this.templates = temp_option
         this.templateId = this.templates.template_code
+        this.currentFlowId = this.templates.flow_id
+        this.flowChoices = [{
+          text: this.textLang.offer_dialog.default_value,
+          value: this.templates.flow_id
+        }]
+        if(typeof this.templates.document_option.extraWorkflow !== 'undefined') {
+          this.templates.document_option.extraWorkflow.forEach(e => {
+            this.flowChoices.push({
+              text: e.name,
+              value: e._id
+            })
+          })
+        }
+        this.getFlowData()
         if(this.templates.document_option && typeof this.templates.document_option['nextTemplates'] !== 'undefined') {
           this.nextTemplates = this.templates.document_option['nextTemplates']
         }
@@ -1252,9 +1268,9 @@ export default {
     },
     async getFlowData() {
         try {
-          if(JSON.parse(sessionStorage.getItem('template_option')).flow_id){
+          if(this.currentFlowId){
             var tax_id = JSON.parse(sessionStorage.getItem('template_option')).tax_id
-            var url = `/flowdata/api/v1/get1/?_id=${JSON.parse(sessionStorage.getItem('template_option')).flow_id}&tax_id=${tax_id}&no_base=true`
+            var url = `/flowdata/api/v1/get1/?_id=${this.currentFlowId}&tax_id=${tax_id}&no_base=true`
             var {data} = await this.axios.get(this.$api_url + url)
             if(data.status){
               this.flow_data = data.data.flow_data
@@ -2560,6 +2576,7 @@ export default {
             comment: temp_option.newComment,
             is_full: true,
             flow_data: this.flow_data,
+            flow_id: this.currentFlowId,
             is_password: this.isPassword,
             password: this.pdfPasswordSetting,
             is_skip_first_step: isSkipFirstStep,
