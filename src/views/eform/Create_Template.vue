@@ -2072,14 +2072,14 @@
                 </v-list>
               </div>
             </v-card>
-            <!-- <v-row class="row-prop">
+              <!--<v-row class="row-prop">
               <v-col cols="4" align-self="center" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_doc_paperless.workflow_condition_title }}:</span>
               </v-col>
               <v-col cols="8" align-self="center" class="pl-0 pr-2">
-                <v-btn depressed dark small color="#525659" class="workflow-condition-setting-btn">{{ textLang.set_doc_paperless.workflow_condition_setting_button }}</v-btn>
+                <v-btn depressed dark small color="#525659" class="workflow-condition-setting-btn" @click="conditionmodal()">{{ textLang.set_doc_paperless.workflow_condition_setting_button }}</v-btn>
               </v-col>
-            </v-row> -->
+            </v-row>--> 
             <!-- <v-row class="mt-0 row-prop">
               <v-col cols="4" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_doc_paperless.other_workflow_title }}:</span>
@@ -2159,6 +2159,7 @@
       <hideSettingModal/>
       <docConditionModal/>
       <sumifToolModal/>
+      <WorkflowConditionModal/>
       <!-- Import Image Modal -->
       <v-dialog v-model="dialogImageUpload" persistent max-width="450px">
         <v-card>
@@ -2334,7 +2335,7 @@ import BackFromCreateModal from '../../components/eform/BackFromCreateModal'
 import hideSettingModal from '../../components/eform/hideSettingModal'
 import docConditionModal from '../../components/eform/docConditionModal'
 import sumifToolModal from '../../components/eform/sumifToolModal'
-
+import WorkflowConditionModal from '../../components/WorkflowConditionModal'
 var ArrowEventHandle
 var CrtlEventHandle = false
 
@@ -2358,6 +2359,7 @@ export default {
     hideSettingModal,
     docConditionModal,
     sumifToolModal,
+    WorkflowConditionModal,
   },
 
   data: () => ({
@@ -7917,6 +7919,9 @@ export default {
     },
     openConfirmSave() {
       EventBus.$emit('openConfirmSave')
+    },
+    conditionmodal() {
+      EventBus.$emit('condition')
     },
     openBack() {
       EventBus.$emit('backFromCreate', this.textLang.alert.create_eform)

@@ -287,6 +287,34 @@
       "select_selectdocumentfile": "Select file",
       "selectdocumentfile_cancel": "Cancel",
       "selectdocumentfile_upload": "Upload"
+    },
+    "WorkflowConditionModal": {
+      "Workflow_Condition_Setting": "Workflow Condition Setting",
+      "Workflow_Condition_List": "Workflow Condition List",
+      "Condition": "Condition",
+      "Conditionon": "Condition",
+      "help_order": "It is condition for using Workflow in document which depend on specified conditon. It can use object name in condition by putting $ in front of object name. Operators which used in condition are following below.",
+      "Workflow": "Workflow",
+      "Add_Condition": "Add Condition",
+      "Delete_Condition": "Delete Condition",
+      "Cancel": "Cancel",
+      "Save": "Save",
+      "help_card": {
+        "plus_sign": "Addition",
+        "minus_sign": "Subtraction",
+        "multiple_sign": "Multiplication",
+        "divide_sign": "Division",
+        "equal_sign": "Equation",
+        "not_equal_sign": "Not equation",
+        "less_sign": "Less than",
+        "less_eq_sign": "Less than or equal",
+        "more_sign": "More than",
+        "more_eq_sign": "More than or equal",
+        "length_meaning": "Value of number characters in text. It must put after oject name.",
+        "and_sign": "And (Use to connect many sub-conditions together and put parentheses cover each sub-condition before connection)",
+        "or_sign": "Or (Use to connect many sub-conditions together and put parentheses cover each sub-condition before connection)",
+        "condition_example": "Condition Example"
+      }
     }
   },
   "Create_Template": {
