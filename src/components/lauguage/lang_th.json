@@ -287,6 +287,34 @@
       "select_selectdocumentfile": "เลือกไฟล์",
       "selectdocumentfile_cancel": "ยกเลิก",
       "selectdocumentfile_upload": "อัพโหลด"
+    },
+    "WorkflowConditionModal": {
+      "Workflow_Condition_Setting": "ตั้งค่าเงื่อนไข Workflow",
+      "Workflow_Condition_List": "รายการเงื่อนไข",
+      "Condition": "เงื่อนไขที่",
+      "Conditionon": "เงื่อนไข",
+      "help_order": "เป็นเงื่อนไขการใช้ Workflow ของเอกสาร ซึ่ง Workflow จะเป็นไปตามเงื่อนไขที่ได้กำหนดไว้ และสามารถใช้ชื่อ object ในการตั้งค่าเงื่อนไขได้ โดยการใส่เครื่องหมาย $ นำหน้าชื่อ object ส่วนเครื่องหมายต่างๆที่สามารถใช้ได้ในเงื่อนไขก็จะมีดังต่อไปนี้",
+      "Workflow": "รูปแบบ Workflow",
+      "Add_Condition": "เพิ่มเงื่อนไข",
+      "Delete_Condition": "ลบเงื่อนไข",
+      "Cancel": "ยกเลิก",
+      "Save": "บันทึกการตั้งค่า",
+      "help_card": {
+        "plus_sign": "บวก",
+        "minus_sign": "ลบ",
+        "multiple_sign": "คูณ",
+        "divide_sign": "หาร",
+        "equal_sign": "เท่ากับ",
+        "not_equal_sign": "ไม่เท่ากับ",
+        "less_sign": "น้อยกว่า",
+        "less_eq_sign": "น้อยกว่าหรือเท่ากับ",
+        "more_sign": "มากกว่า",
+        "more_eq_sign": "มากกว่าหรือเท่ากับ",
+        "length_meaning": "ค่าจำนวนตัวอักษรในข้อความ โดยใส่ต่อหลังจากชื่อ object ที่ต้องการค่า",
+        "and_sign": "และ (ใช้เชื่อมเงื่อนไขย่อยหลายๆเงื่อนไข โดยใส่วงเล็บครอบแต่ละเงื่อนไขก่อนที่จะใส่เครื่องหมายเชื่อม)",
+        "or_sign": "หรือ (ใช้เชื่อมเงื่อนไขย่อยหลายๆเงื่อนไข โดยใส่วงเล็บครอบแต่ละเงื่อนไขก่อนที่จะใส่เครื่องหมายเชื่อม)",
+        "condition_example": "ตัวอย่างเงื่อนไข"
+      }
     }
   },
   "Create_Template": {
