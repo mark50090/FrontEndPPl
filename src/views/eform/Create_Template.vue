@@ -559,7 +559,7 @@
                 </v-autocomplete>
               </v-col>
             </v-row> -->
-            <v-row class="row-prop" v-if="!isPublicForm && business.first_name_th != 'เฉพาะฉัน'">
+            <v-row class="row-prop">
               <v-col cols="4" align-self="end" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_sharing.permission_view_all_title }}:</span>
               </v-col>
@@ -2079,19 +2079,19 @@
               <v-col cols="8" align-self="center" class="pl-0 pr-2">
                 <v-btn depressed dark small color="#525659" class="workflow-condition-setting-btn" @click="conditionmodal()">{{ textLang.set_doc_paperless.workflow_condition_setting_button }}</v-btn>
               </v-col>
-            </v-row>--> 
-            <!-- <v-row class="mt-0 row-prop">
+            </v-row> -->
+            <v-row class="mt-0 row-prop">
               <v-col cols="4" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_doc_paperless.other_workflow_title }}:</span>
               </v-col>
               <v-col cols="8" align-self="center" class="pl-0 pr-2">
-                <v-autocomplete dense outlined hide-details multiple auto-select-first chips small-chips deletable-chips append-icon="mdi-chevron-down" color="#4CAF50" item-color="#4CAF50" :items="ppl_templatelist" class="prop-input create-prop-dropdown-icon other-flow-box">
+                <v-autocomplete dense outlined hide-details multiple auto-select-first chips small-chips deletable-chips append-icon="mdi-chevron-down" color="#4CAF50" item-color="#4CAF50" v-model="docOption.extraWorkflow" :items="ppl_templatelist_name" class="prop-input create-prop-dropdown-icon other-flow-box">
                   <template v-slot:selection="{ item, index }">
-                    <v-chip dark x-small close color="#4CAF50" class="mb-1 other-flow-chip">{{ item.text }}</v-chip>
+                    <v-chip dark x-small close color="#4CAF50" class="mb-1 other-flow-chip" @click:close="removeExtraWorkflow(index)">{{ item.text }}</v-chip>
                   </template>
                 </v-autocomplete>
               </v-col>
-            </v-row> -->
+            </v-row>
           </v-tab-item>
           <v-tab-item> <!-- Filling Mobile Tab -->
             <span class="pr-2 header-property"><b>{{ textLang.filling_mobile.title }}</b></span>
@@ -2963,6 +2963,7 @@ export default {
     current_paper_height : 1666,
     property_block_size: 0,
     ppl_templatelist: [],
+    ppl_templatelist_name: [],
     selected_ppltemplate: "",
     template_side: "PORTRAIT",
     help: false,
@@ -3022,6 +3023,7 @@ export default {
     departments: [],
     docDepartment: "",
     docLevel: [],
+    extraWorkflow: [],
     docUseDate: new Date().toISOString().substr(0, 10),
     selectedObjectEmail: "",
     allObjectEmails: [],
@@ -3068,7 +3070,8 @@ export default {
     docOption: {
       nextTemplates: [],
       viewers: [],
-      isPdfLock: false
+      isPdfLock: false,
+      extraWorkflow: []
     },
     addViewer: "",
     cellHideSetting: false,
@@ -3775,6 +3778,7 @@ export default {
     async pplLoadTemplate() {
       this.documentTypes = [{text: this.textLang.dropdown.no_setting , value: ""}]
       this.ppl_templatelist = [{text: this.textLang.dropdown.no_setting , value: ""}]
+      this.ppl_templatelist_name = []
       var storedDocumentType = this.$store.state.pplDocumentTypes
       storedDocumentType.forEach(e => {
         this.documentTypes.push({text: e.Document_Name.document_name, value: e.Document_Type})
@@ -3786,6 +3790,7 @@ export default {
     async digitalWorkflowLoad() {
       try {
         this.ppl_templatelist = [{text: this.textLang.dropdown.no_setting , value: ""}]
+        this.ppl_templatelist_name = []
         var url = '/flowdata/api/v1/getAllFlow?tax_id='
         var tax_id = JSON.parse(
           sessionStorage.getItem('selected_business')
@@ -3796,6 +3801,13 @@ export default {
             this.ppl_templatelist.push({
               text: e.name,
               value: e._id
+            })
+            this.ppl_templatelist_name.push({
+              text: e.name,
+              value: {
+                name: e.name,
+                _id: e._id
+              }
             })
           })
         }
@@ -4059,6 +4071,9 @@ export default {
           }
           if(typeof this.docOption['isPdfLock'] === 'undefined') {
             this.docOption['isPdfLock'] = false
+          }
+          if(typeof this.docOption['extraWorkflow'] === 'undefined') {
+            this.docOption['extraWorkflow'] = []
           }
         }
         if(template.webhook.length) {
@@ -6893,6 +6908,9 @@ export default {
       if(indx >= 0) {
         this.docOption.viewers.splice(indx, 1)
       }
+    },
+    removeExtraWorkflow(index) {
+      this.docOption.extraWorkflow.splice(index, 1)
     },
     deleteCheckGroup(item) {
       if(this.selectedCell) {
