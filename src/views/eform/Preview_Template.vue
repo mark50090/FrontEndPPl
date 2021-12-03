@@ -971,6 +971,10 @@ export default {
             })
           })
         }
+        let checkFlowId = this.checkDefaultWorkflow()
+        if(checkFlowId) {
+          this.currentFlowId = checkFlowId
+        }
         this.getFlowData()
         if(this.templates.document_option && typeof this.templates.document_option['nextTemplates'] !== 'undefined') {
           this.nextTemplates = this.templates.document_option['nextTemplates']
@@ -3316,10 +3320,10 @@ export default {
       var tempOpt = this.option
       EventBus.$emit('ConfirmCancelDoc',tempOpt)
     },
-    checkDefaultPplTemplate() {
+    checkDefaultWorkflow() {
       var temp_option = JSON.parse(sessionStorage.getItem("template_option"))
       var valid = false
-      var selectedFlow = {}
+      var selectedFlow = ""
       if(typeof temp_option.document_option["flowCondition"] !== 'undefined' && temp_option.document_option["flowCondition"].length) {
         temp_option.document_option["flowCondition"].every(e => {
           var inputCond = e.docCond
@@ -3345,7 +3349,7 @@ export default {
           try{
             valid = Function('"use strict";return (' + inputCond + '?true:false)')()
             if(valid) {
-              selectedFlow = e.pplSetting
+              selectedFlow = e.flow_id
               return false
             }
           } catch(err) {
@@ -3421,7 +3425,7 @@ export default {
       this.documentTypes = [{ text: "ไม่เลือก", value: "" }]
       this.ppl_templatelist = [{ text: "ไม่เลือก", value: "" }]
       var defaultDocType = ""
-      var checkPplSetting = this.checkDefaultPplTemplate()
+      var checkPplSetting = this.checkDefaultWorkflow()
       // if(this.templates.ppl_template_code && this.templates.ppl_template_code.length) {
       //   if(!this.selectedDocumentType && this.templates.ppl_template_code[0].document_type) {
       //     defaultDocType = this.templates.ppl_template_code[0].document_type

@@ -6,16 +6,16 @@
         </v-card-title>
         <v-card-text class="pt-4">
         <h3 class="condition-wf-hearder">{{textLang.Workflow_Condition_List}}</h3>
-        <v-row class="mt-0 workflow-condition-modal-row" >
+        <v-row v-for="item in flowConditions" :key="item.setIndex" class="mt-0 workflow-condition-modal-row" >
             <v-col cols="11" class="px-0">
                 <v-card outlined class="pa-3 workflow-condition-group-card">
-                    <u class="workflow-condition-group-title">{{textLang.Condition}} 1</u>
+                    <u class="workflow-condition-group-title">{{textLang.Condition}} {{item.setIndex}}</u>
                     <v-row class="workflow-condition-modal-row">
                     <v-col cols='3' align-self="start" class="pl-0 workflow-condition-title">
                     {{textLang.Conditionon}}:
                     </v-col>
                     <v-col cols='9' class="px-0">
-                                <v-textarea outlined dense no-resize rows="3" hide-details color="#4CAF50" class=" condition-help " >
+                                <v-textarea outlined dense no-resize rows="3" hide-details color="#4CAF50" class=" condition-help " v-model="item.docCond" >
                                 <template v-slot:append-outer>
                                     <v-menu >
                                     <template v-slot:activator="{ on }">
@@ -71,6 +71,8 @@
                         dense
                         auto-select-first
                         append-icon="mdi-chevron-down"
+                        v-model="item.flow_id"
+                        :items="flowList"
                         ></v-autocomplete>
                     </v-col>
                     </v-row>
@@ -79,7 +81,7 @@
                 <v-col cols="1" align-self="end" class="pr-0">
                 <v-tooltip top>
                     <template v-slot:activator="{ on }">
-                    <v-btn  outlined fab x-small v-on="on" color="#4CAF50" class="mb-2" >
+                    <v-btn v-show="item.setIndex != 1" outlined fab x-small v-on="on" color="#4CAF50" class="mb-2"  @click="deleteCondition(item.setIndex)">
                         <v-icon>mdi-minus</v-icon>
                     </v-btn>
                     </template>
@@ -87,7 +89,7 @@
                 </v-tooltip>
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-                    <v-btn  depressed fab dark x-small v-on="on" color="#4CAF50"  >
+                    <v-btn v-show="item.setIndex == flowConditions.length" depressed fab dark x-small v-on="on" color="#4CAF50"  @click="addCondition()">
                         <v-icon>mdi-plus</v-icon>
                     </v-btn>
                     </template>
@@ -100,7 +102,7 @@
         <v-card-actions class="py-5">
           <v-spacer></v-spacer>
           <v-btn outlined color="#67c25d" class="mr-4 workflow-condition-btn" @click="dialog=false">{{textLang.Cancel}}</v-btn>
-          <v-btn depressed dark color="#67c25d" class="ml-4 workflow-condition-btn" @click="save()">{{textLang.Save}}</v-btn>
+          <v-btn depressed dark color="#67c25d" class="ml-4 workflow-condition-btn" @click="saveCondition()">{{textLang.Save}}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
 </v-card>        
@@ -115,15 +117,49 @@ export default {
     }
     },
     data: () => ({
-        dialog: false
+        dialog: false,
+        flowList: [],
+        flowConditions: []
     }),
     mounted() {
-         EventBus.$on('condition',this.conditionmodal)
+        EventBus.$on('condition',this.conditionmodal)
     },
     methods: {
-        conditionmodal() {
+        conditionmodal(workflowList, flowCond) {
+            this.flowList = workflowList
+            this.flowConditions = flowCond
+            if(!this.flowConditions.length) {
+                this.flowConditions = [{
+                    setIndex: 1,
+                    docCond: "",
+                    flow_id: ""
+                }]
+            }
             this.dialog = true
+        },
+        addCondition() {
+            this.flowConditions.push({
+                setIndex: this.flowConditions.length + 1,
+                docCond: "",
+                flow_id: ""
+            })
+        },
+        deleteCondition(setIndex) {
+            this.flowConditions.splice(setIndex-1, 1)
+            let holdIndex = 1
+             this.flowConditions.forEach(e => {
+                 e.setIndex = holdIndex
+                 holdIndex++
+             })
+        },
+        saveCondition() {
+            let flowCond = this.flowConditions
+            EventBus.$emit('saveFlowCondition',flowCond)
+            this.dialog = false
         }
+    },
+    beforeDestroy() {
+         EventBus.$off('condition')
     }
 }
 </script>
