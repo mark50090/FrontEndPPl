@@ -2072,14 +2072,14 @@
                 </v-list>
               </div>
             </v-card>
-              <!--<v-row class="row-prop">
+              <v-row class="row-prop">
               <v-col cols="4" align-self="center" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_doc_paperless.workflow_condition_title }}:</span>
               </v-col>
               <v-col cols="8" align-self="center" class="pl-0 pr-2">
                 <v-btn depressed dark small color="#525659" class="workflow-condition-setting-btn" @click="conditionmodal()">{{ textLang.set_doc_paperless.workflow_condition_setting_button }}</v-btn>
               </v-col>
-            </v-row> -->
+            </v-row>
             <v-row class="mt-0 row-prop">
               <v-col cols="4" class="title-prop-block">
                 <span class="title-prop">{{ textLang.set_doc_paperless.other_workflow_title }}:</span>
@@ -7939,7 +7939,12 @@ export default {
       EventBus.$emit('openConfirmSave')
     },
     conditionmodal() {
-      EventBus.$emit('condition')
+      let workflowList = this.ppl_templatelist
+      let flowCond = []
+      if(typeof this.docOption['flowCondition'] !== 'undefined') {
+        flowCond = this.docOption['flowCondition'] 
+      }
+      EventBus.$emit('condition', workflowList, flowCond)
     },
     openBack() {
       EventBus.$emit('backFromCreate', this.textLang.alert.create_eform)
@@ -8170,8 +8175,8 @@ export default {
     saveDocCondition(docCont) {
       this.docOption['condition'] = docCont
     },
-    saveFlowCondition(flowCont) {
-      this.docOption['flowCondition'] = flowCont
+    saveFlowCondition(flowCond) {
+      this.docOption['flowCondition'] = flowCond
     },
     getDataTable(returnData) {
       this.objectArray[this.selected_array][this.selected_object].value = returnData
