@@ -78,7 +78,7 @@ export default {
     count_all_doc: 0,
     series: [0, 0, 0, 0],
     chartOptions: {
-      labels: ['Inprogress', 'Approved', 'Reject', 'Cancle', 'Delete'],
+      labels: ['Inprogress', 'Approved', 'Reject', 'Cancel', 'Delete'],
       dataLabels: {
         enabled: true,
         formatter: function (val, opts) {
